@@ -13,6 +13,7 @@ struct Bridge_iOSApp: App {
         WindowGroup {
             //MainView()
             LandingView()
+                .preferredColorScheme(.light)
         }
     }
 }

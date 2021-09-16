@@ -11,7 +11,8 @@ struct BoardView : View {
     var body : some View {
         VStack {
             LocationPicker()
-            Text("Board")
+            Spacer()
+            Text("Board View").font(.largeTitle)
             Spacer()
         }
     }

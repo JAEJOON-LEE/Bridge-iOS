@@ -11,7 +11,8 @@ struct HomeView : View {
     var body : some View {
         VStack {
             LocationPicker()
-            Text("Market")
+            Spacer()
+            Text("Market View").font(.largeTitle)
             Spacer()
         }
     }

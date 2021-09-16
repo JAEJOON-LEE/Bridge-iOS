@@ -26,15 +26,9 @@ struct WritingView : View {
                 .frame(height : UIScreen.main.bounds.height * 0.3)
                 .modifier(SignViewTextFieldStyle())
             Spacer()
-            Button("Upload") {
-                
-            }
-            .foregroundColor(.white)
-            .frame(width : UIScreen.main.bounds.width * 0.8)
-            .padding()
-            .background(Color.mainTheme)
-            .cornerRadius(20)
-            .shadow(radius: 3)
+            Button("Upload") { }
+                .modifier(SubmitButtonStyle())
+            Spacer()
         }.padding()
     }
 }

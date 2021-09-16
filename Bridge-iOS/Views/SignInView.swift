@@ -11,7 +11,8 @@ struct SignInView: View {
     @State private var email = ""
     @State private var password = ""
     @State private var checked = false
-
+    @State private var showPassword = false
+    
     var titleField : some View {
         Text("Log In")
             .font(.largeTitle)
@@ -22,12 +23,25 @@ struct SignInView: View {
         HStack {
             Image(systemName: "envelope")
             TextField("Email", text: $email)
+                .accentColor(.mainTheme)
         }.modifier(SignViewTextFieldStyle())
     }
     var passwordField : some View {
         HStack {
             Image(systemName: "lock")
-            SecureField("Password", text: $password)
+            if showPassword {
+                TextField("Password", text: $password)
+                    .accentColor(.mainTheme)
+            } else {
+                SecureField("Password", text: $password)
+                    .accentColor(.mainTheme)
+            }
+            Button {
+                showPassword.toggle()
+            } label : {
+                Image(systemName: showPassword ? "eye.slash" : "eye")
+                    .foregroundColor(.black)
+            }
         }.modifier(SignViewTextFieldStyle())
     }
     var remeberButton : some View {
@@ -39,15 +53,10 @@ struct SignInView: View {
         }.padding(.horizontal, 25)
     }
     var nextButton : some View {
-        // temporary linked to TabContainer
+        // temporary linked to TabContainer //
         NavigationLink(destination : TabContainer()) {
             Text("Next")
-                .frame(width : UIScreen.main.bounds.width * 0.8)
-                .padding()
-                .foregroundColor(.white)
-                .background(Color.mainTheme)
-                .cornerRadius(20)
-                .shadow(radius: 3)
+                .modifier(SubmitButtonStyle())
         }
     }
     var findPassword : some View {

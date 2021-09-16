@@ -11,6 +11,8 @@ struct SignUpView: View {
     @State private var name = ""
     @State private var email = ""
     @State private var password = ""
+    @State private var showPassword = false
+    @State private var secureFieldFocused = false
     
     var titleField : some View {
         Text("Create Account")
@@ -22,35 +24,49 @@ struct SignUpView: View {
         HStack {
             Image(systemName: "person")
             TextField("Full name", text: $name)
+                .accentColor(.mainTheme)
         }.modifier(SignViewTextFieldStyle())
     }
     var emailField : some View {
         HStack {
             Image(systemName: "envelope")
             TextField("Email", text: $email)
+                .accentColor(.mainTheme)
         }.modifier(SignViewTextFieldStyle())
     }
     var passwordField : some View {
         HStack {
             Image(systemName: "lock")
-            SecureField("Password", text: $password)
-        }.modifier(SignViewTextFieldStyle())
+            if showPassword {
+                TextField("Password", text: $password, onCommit : { withAnimation { secureFieldFocused = false } })
+                    .accentColor(.mainTheme)
+            } else {
+                SecureField("Password", text: $password, onCommit : { withAnimation { secureFieldFocused = false } })
+                    .accentColor(.mainTheme)
+            }
+            Button {
+                showPassword.toggle()
+            } label : {
+                Image(systemName: showPassword ? "eye.slash" : "eye")
+                    .foregroundColor(.black)
+            }
+        }
+        .modifier(SignViewTextFieldStyle())
+        .onTapGesture {
+            withAnimation {
+                secureFieldFocused = true
+            }
+        }
     }
     var nextButton : some View {
-        Button("Next") {
-            
-        }
-        .frame(width : UIScreen.main.bounds.width * 0.8)
-        .padding()
-        .foregroundColor(.white)
-        .background(Color.mainTheme)
-        .cornerRadius(20)
-        .shadow(radius: 3)
+        Button("Next") { }
+        .modifier(SubmitButtonStyle())
     }
     
     var body: some View {
         ZStack(alignment: .bottom) {
             Color.mainTheme // background
+            
             VStack(spacing : 30) {
                 titleField
                 nameField
@@ -67,16 +83,12 @@ struct SignUpView: View {
                 }
                 Spacer()
             }
-            .frame(
-                width : UIScreen.main.bounds.width,
-                height : UIScreen.main.bounds.height * 0.8
-            )
+            .frame(width : UIScreen.main.bounds.width, height : UIScreen.main.bounds.height * 0.8)
+            .padding(.bottom, secureFieldFocused ? 70 : 0)
             .background(Color.white)
             .cornerRadius(15)
             .shadow(radius: 15)
         }.edgesIgnoringSafeArea(.all)
-        
-    
     }
 }
 
