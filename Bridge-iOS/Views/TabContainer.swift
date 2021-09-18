@@ -11,8 +11,16 @@ struct TabContainer: View {
     @StateObject var viewModel = TabContainerViewModel()
     
     @State var isNotificationShow : Bool = false
+    @State var isSlideShow : Bool = false
+    
+    //For slide menu
+    @State var width = UIScreen.main.bounds.width - 90
+    @State var x = -UIScreen.main.bounds.width + 90
     
     var body: some View {
+        
+        GeometryReader { geometry in
+            
         ZStack(alignment : .bottom) {
             switch viewModel.selectedTabIndex {
             case 1 :
@@ -43,6 +51,7 @@ struct TabContainer: View {
         .navigationBarItems(
             leading: Button {
                 print("leading button clicked")
+                isSlideShow.toggle()
             } label : {
                 Image(systemName: "text.justify")
                     .foregroundColor(.black)
@@ -61,6 +70,27 @@ struct TabContainer: View {
         .sheet(isPresented: $isNotificationShow) {
             NotificationView()
                 .preferredColorScheme(.light)
+            }
+            
+            ZStack(alignment: .leading) {
+                
+                if self.isSlideShow {
+                    SlideView()
+                        .frame(
+                            width: UIScreen.main.bounds.width * 2/3,
+                            height: UIScreen.main.bounds.height)
+                        .transition(.move(edge: .leading))
+//                        .shadow(color: Color.black.opacity(self.isSlideShow ? 0.1 : 0), radius: 5, x:5, y:0)
+//                        .offset(x: x)
+//                        .background(Color.black.opacity(self.isSlideShow ? 0.5 : 0).ignoresSafeArea(.all, edges: .vertical).onTapGesture {
+//                            withAnimation {
+//                                x = -width
+//                                self.isSlideShow.toggle()
+//                            }
+//                        })
+                }
+            }
+        
         }
     }
 }
