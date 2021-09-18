@@ -7,21 +7,6 @@
 
 import SwiftUI
 
-struct ListHeader : View {
-    @State var name : String
-    
-    var body: some View {
-        HStack{
-            Text(name)
-                .foregroundColor(Color.yellow)
-            Spacer()
-            Button(action: {}, label: {
-                Text("more")
-            })
-        }
-    }
-}
-
 struct HotContent : View {
     var body: some View {
         HStack {
@@ -64,10 +49,14 @@ struct GeneralContent : View {
 
 struct BoardView : View {
     var body : some View {
-        VStack {
+        
+        VStack(spacing: 0) {
             LocationPicker()
             
-            HStack{
+            // style이 section 컴포넌트들 각각에 적용되는거 해결해야함
+            VStack{
+                Spacer()
+                
                 List {
                     //Hot board
                     Section(header: ListHeader(name : "Hot Board")){
@@ -75,22 +64,30 @@ struct BoardView : View {
                         HotContent()
                         HotContent()
                     }
-                    
+                }
+                .frame(width : UIScreen.main.bounds.width * 0.95)
+                .cornerRadius(20)
+                .shadow(radius: 3)
+                
+                List {
                     //Bug report
                     Section(header: ListHeader(name : "Bug Report")){
                         HotContent()
                         HotContent()
                         HotContent()
                     }
-                    
-                    //others
-                    Spacer()
-                    
-                    GeneralContent()
-                    GeneralContent()
-                    GeneralContent()
-                    GeneralContent()
-                    GeneralContent()
+                }
+                .frame(width : UIScreen.main.bounds.width * 0.95)
+                .cornerRadius(20)
+                .shadow(radius: 3)
+                
+                List {
+                    //일반 게시물
+                    Section(header: ListHeader(name : "Bulltein")){
+                        GeneralContent()
+                        GeneralContent()
+                        GeneralContent()
+                    }
                 }
             }
         }
