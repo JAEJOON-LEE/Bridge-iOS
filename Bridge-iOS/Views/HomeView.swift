@@ -13,20 +13,28 @@ struct ItemRow : View {
     @State var camp : String
     @State var time : String
     @State var clicked : Bool = false
+    @State var cnt : Int = 1
+    
     var body : some View {
         HStack {
             Image("LOGO")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
             
             VStack(alignment: .leading) {
                 Text("\(name)")
+                    .font(.title2)
                 Text("$\(price)")
+                    .font(.title)
                 
                 HStack {
                     Text("\(camp)")
                     Text("\(time)")
+                    Image(systemName: "eye.fill")
+                    Text("\(cnt)")
                 }
+                .font(.caption)
             }
-            .font(.caption)
             
             Spacer()
             
@@ -36,22 +44,24 @@ struct ItemRow : View {
                 self.clicked = !self.clicked
             } label : {
                 if self.clicked {
-                    Image(systemName: "heart")
-                 } else {
                     Image(systemName: "heart.fill")
+                 } else {
+                    Image(systemName: "heart")
                  }
             }
         }
+        .frame(height : UIScreen.main.bounds.height * 0.1)
+        .modifier(ContentsListStyle())
     }
 }
 
 struct HomeView : View {
     var body : some View {
-        VStack {
+        VStack(spacing: 0) {
             LocationPicker()
             
             List {
-                Section(header: Text("What's new today?")){
+                Section(header: ListHeader(name : "WHAT'S NEW TODAY?")){
                     ItemRow(name: "Item1", price: 30, camp: "Camp Humphreys", time: "24:00")
                     ItemRow(name: "Item2", price: 30, camp: "Camp Carroll", time: "24:00")
                     ItemRow(name: "Item3", price: 30, camp: "Camp Casey", time: "24:00")
