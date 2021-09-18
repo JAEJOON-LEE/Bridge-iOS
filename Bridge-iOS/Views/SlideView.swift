@@ -49,11 +49,11 @@ struct TabList : View {
                 .foregroundColor(.gray)
             }
         }
-        .padding(.vertical, 7)
-        .padding(.horizontal, 10)
+        .padding(.horizontal, 5)
         .background(Color.systemDefaultGray)
         .cornerRadius(20)
         .shadow(radius: 1)
+        .frame(width: UIScreen.main.bounds.width * 0.6)
     }
 }
 
@@ -62,7 +62,7 @@ struct SlideView : View {
     @State var isSlideShow : Bool = true
     
     var body : some View {
-        VStack {
+        VStack(alignment: .trailing) {
             
             //개인정보 수정 버튼
             HStack {
@@ -76,28 +76,29 @@ struct SlideView : View {
                 .foregroundColor(.black)
             }
             
-            HStack(alignment: .bottom) {
+            HStack {
                 Image("LOGO")
-                    .frame(width: 100, height: 100)
-                    .aspectRatio(contentMode: .fit)
+                    .resizable()
+                    .frame(width: 70, height: 70)
                 
                 VStack {
                     Text("name")
                         .padding()
+                        .font(.body)
                     Text("hello")
                         .padding()
+                        .font(.caption)
                 }
-                .font(.title2)
             }
-            .frame(height : UIScreen.main.bounds.height * 0.2)
-                        
+            .frame(width: UIScreen.main.bounds.width * 0.75,
+                   height : UIScreen.main.bounds.height * 0.2)
+                        //너무 끼워맞추기,,?
             //tab
             TabList()
             
-            VStack(alignment: .leading, spacing: 0) {
+            VStack(alignment: .leading) {
             Group {
                 HStack {
-                    
                     Image(systemName: "house") //나중에 버튼으로 바꾸기
                     Text("Home")
                 }
@@ -142,6 +143,7 @@ struct SlideView : View {
                 .padding()
                 }
             }
+            .frame(width: UIScreen.main.bounds.width * 0.75)
         }
         .padding()
         .background(Color.white)
