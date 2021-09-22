@@ -13,84 +13,72 @@ struct TabContainer: View {
     @State var isNotificationShow : Bool = false
     @State var isSlideShow : Bool = false
     
-//    //For slide menu
-//    @State var width = UIScreen.main.bounds.width - 90
-//    @State var x = -UIScreen.main.bounds.width + 90
-    
     var body: some View {
-        
-        GeometryReader { geometry in
-            
-        ZStack(alignment : .bottom) {
-            switch viewModel.selectedTabIndex {
-            case 1 :
-                HomeView()
-            case 2 :
-                BoardView()
-            case 3 :
-                WritingView()
-            case 4 :
-                VStack {
-                    Spacer()
-                    Text("Seller View").font(.largeTitle)
-                    Spacer()
+        ZStack {
+            ZStack(alignment : .bottom) {
+                switch viewModel.selectedTabIndex {
+                case 1 :
+                    HomeView()
+                case 2 :
+                    BoardView()
+                case 3 :
+                    WritingView()
+                case 4 :
+                    VStack {
+                        Spacer()
+                        Text("Seller View").font(.largeTitle)
+                        Spacer()
+                    }
+                case 5 :
+                    VStack {
+                        Spacer()
+                        Text("Message View").font(.largeTitle)
+                        Spacer()
+                    }
+                default:
+                    HomeView()
                 }
-            case 5 :
-                VStack {
-                    Spacer()
-                    Text("Message View").font(.largeTitle)
-                    Spacer()
-                }
-            default:
-                HomeView()
-            }
-            
-            TabSelector
-        }
-        .accentColor(.mainTheme)
-        .navigationBarItems(
-            leading: Button {
-                print("leading button clicked")
-                withAnimation {
-                    isSlideShow.toggle()
-                }
-            } label : {
-                Image(systemName: "text.justify")
-                    .foregroundColor(.black)
-            },
-            trailing: Button {
-                print("trailing button clicked")
-                isNotificationShow.toggle()
-            } label : {
-                Image(systemName: "bell.fill")
-                    .foregroundColor(.black)
-            }
-        )
-        // temp navigation bar title
-        .navigationBarTitle(viewModel.navigationBarTitleText(), displayMode: .inline)
-        .navigationBarBackButtonHidden(true)
-        .sheet(isPresented: $isNotificationShow) {
-            NotificationView()
-                .preferredColorScheme(.light)
-            }
-            
-            ZStack(alignment: .leading) {
                 
-                if self.isSlideShow {
-                    SlideView()
-                        .transition(.move(edge: .leading))
-                        .shadow(color: Color.black.opacity(self.isSlideShow ? 0.1 : 0), radius: 5, x:5, y:0)
-                        .offset(x: -UIScreen.main.bounds.width * 1/3)
-                        .background(Color.black.opacity(self.isSlideShow ? 0.5 : 0))
-                        .onTapGesture {
-                                withAnimation {
-                                    self.isSlideShow.toggle()
-                                }
-                        }
-                        .edgesIgnoringSafeArea(.bottom)
-                }
+                TabSelector
             }
-        
+            .accentColor(.mainTheme)
+            .navigationBarItems(
+                leading: Button {
+                    print("leading button clicked")
+                    withAnimation {
+                        isSlideShow.toggle()
+                    }
+                } label : {
+                    Image(systemName: "text.justify")
+                        .foregroundColor(.black)
+                },
+                trailing: Button {
+                    print("trailing button clicked")
+                    isNotificationShow.toggle()
+                } label : {
+                    Image(systemName: "bell.fill")
+                        .foregroundColor(.black)
+                }
+            )
+            .navigationBarTitle(viewModel.navigationBarTitleText(), displayMode: .inline)
+            .navigationBarBackButtonHidden(true)
+            .sheet(isPresented: $isNotificationShow) {
+                NotificationView()
+                    .preferredColorScheme(.light)
+            }
+            .overlay(
+                Color.black.opacity(isSlideShow ? 0.5 : 0)
+                    .edgesIgnoringSafeArea(.bottom)
+                    .onTapGesture {withAnimation { isSlideShow = false }}
+            )
+            
+            if isSlideShow {
+                SlideView()
+                    .transition(.move(edge: .leading))
+                    .offset(x: -UIScreen.main.bounds.width * 1/3)
+                    .edgesIgnoringSafeArea(.bottom)
+                    .zIndex(2.0)
+            }
         }
     }
 }
