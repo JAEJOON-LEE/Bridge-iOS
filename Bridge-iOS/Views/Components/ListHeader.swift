@@ -23,6 +23,6 @@ struct ListHeader : View {
             .padding()
         }
         .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.05)
-        .background(Color.white)
+        //.background(Color.white)
     }
 }

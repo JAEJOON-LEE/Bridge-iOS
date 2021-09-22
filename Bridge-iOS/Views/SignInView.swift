@@ -13,6 +13,11 @@ struct SignInView: View {
     @State private var checked = false
     @State private var showPassword = false
     
+    // need validating method in view model
+    private var isValid : Bool {
+        withAnimation(Animation.linear(duration: 2.0)) {password.count > 2}
+    }
+    
     var titleField : some View {
         Text("Log In")
             .font(.largeTitle)
@@ -58,6 +63,8 @@ struct SignInView: View {
             Text("Next")
                 .modifier(SubmitButtonStyle())
         }
+        .disabled(!isValid)
+        .opacity(isValid ? 1.0 : 0.4)
     }
     var findPassword : some View {
         NavigationLink(destination:

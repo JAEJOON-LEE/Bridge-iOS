@@ -22,7 +22,7 @@ struct WritingView : View {
                     .font(.largeTitle)
                     .fontWeight(.bold)
                 Spacer()
-            }.padding(.horizontal, 20)
+            }.padding(20)
             TextField("title", text: $contentTitle)
                 .modifier(SignViewTextFieldStyle())
             TextField("titleContent", text: $content)
@@ -34,20 +34,18 @@ struct WritingView : View {
                 Toggle("Bug Report", isOn: $isOn2)
                 Image(systemName: "camera").padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 0))
             }
-            .padding(10)
+            .padding(.horizontal, 30)
             .font(.caption)
-            
-            Spacer()
-            
+                        
             Button("Upload") { }
                 .modifier(SubmitButtonStyle())
+                
+            Text("Policy Text Area : asdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddas")
+                .font(.caption2)
+                .padding(.horizontal, 30)
             
             Spacer()
-            
-            // 탭 가려지는거 해결해야함
-            Text("asdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddas")
-                .font(.caption2)
-        }.padding()
+        }
     }
 }
 

@@ -68,7 +68,7 @@ struct HomeView : View {
                     ItemRow(name: "Item4", price: 30, camp: "Camp Walker", time: "24:00")
                     ItemRow(name: "Item5", price: 30, camp: "Osan A/B", time: "24:00")
                 }
-            }
+            }.listStyle(PlainListStyle()) // iOS 15 대응
         }
     }
 }
