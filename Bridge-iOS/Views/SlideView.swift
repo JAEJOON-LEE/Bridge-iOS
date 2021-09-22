@@ -57,6 +57,18 @@ struct TabList : View {
     }
 }
 
+struct SlideItem : View {
+    @State var ImageName : String
+    @State var text : String
+    
+    var body : some View {
+        HStack{
+            Image(systemName: ImageName)
+            Text(text)
+        }
+    }
+}
+
 struct SlideView : View {
     
     @State var isSlideShow : Bool = true
@@ -70,8 +82,7 @@ struct SlideView : View {
                 Button{
                     print("edit button is clicked")
                 } label : {
-                    Image(systemName : "pencil.circle")
-                        .font(.title2)
+                    SlideItem(ImageName: "pencil.circle", text: "")
                 }
                 .foregroundColor(.black)
             }
@@ -98,52 +109,67 @@ struct SlideView : View {
             
             VStack(alignment: .leading) {
             Group {
-                HStack {
-                    Image(systemName: "house") //나중에 버튼으로 바꾸기
-                    Text("Home")
+                Button{
+                    print("home is clicked")
+                } label : {
+                    SlideItem(ImageName: "house", text: "Home")
                 }
+                .foregroundColor(Color.black)
                 .padding()
                 
-                HStack {
-                    Image(systemName: "creditcard")
-                    Text("Membership")
+                Button{
+                    print("Membership is clicked")
+                } label : {
+                    SlideItem(ImageName: "creditcard", text: "Membership")
                 }
+                .foregroundColor(Color.black)
                 .padding()
                 
-                HStack {
-                    Image(systemName: "person")
-                    Text("Seller Page")
+                Button{
+                    print("Seller Page is clicked")
+                } label : {
+                    SlideItem(ImageName: "person", text: "Seller page")
                 }
+                .foregroundColor(Color.black)
                 .padding()
                 
-                HStack {
-                    Image(systemName: "person")
-                    Text("Invite friends")
+                Button{
+                    print("Invite friends is clicked")
+                } label : {
+                    SlideItem(ImageName: "person", text: "Invite friends")
                 }
+                .foregroundColor(Color.black)
                 .padding()
                 
-                HStack {
-                    Image(systemName: "info.circle")
-                    Text("Customer Service")
+                Button{
+                    print("Customer Service is clicked")
+                } label : {
+                    SlideItem(ImageName: "info.circle", text: "Customer Service")
                 }
+                .foregroundColor(Color.black)
                 .padding()
                 
-                HStack {
-                    Image(systemName: "gearshape")
-                    Text("setting")
+                Button{
+                    print("setting is clicked")
+                } label : {
+                    SlideItem(ImageName: "gearshape", text: "setting")
                 }
+                .foregroundColor(Color.black)
                 .padding()
                 
                 Spacer()
                 
-                HStack {
-                    Image(systemName: "x.circle")
-                    Text("Logout")
+                Button{
+                    print("Logout is clicked")
+                } label : {
+                    SlideItem(ImageName: "x.circle", text: "Logout")
                 }
+                .foregroundColor(Color.black)
                 .padding()
+                
                 }
             }
-            .frame(width: UIScreen.main.bounds.width * 0.75)
+            .frame(width: UIScreen.main.bounds.width * 0.64)
         }
         .padding()
         .background(Color.white)
