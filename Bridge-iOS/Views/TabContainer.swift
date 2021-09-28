@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct TabContainer: View {
+    @EnvironmentObject var signInViewModel : SignInViewModel
     @StateObject var viewModel = TabContainerViewModel()
     
     @State var isNotificationShow : Bool = false
@@ -25,6 +26,10 @@ struct TabContainer: View {
                     WritingView()
                 case 4 :
                     VStack {
+                        Spacer()
+                        Text("email : \(signInViewModel.email)")
+                        Text("password : \(signInViewModel.password)")
+                        Text("test : \(signInViewModel.signInResponse?.name ?? "d")")
                         Spacer()
                         Text("Seller View").font(.largeTitle)
                         Spacer()

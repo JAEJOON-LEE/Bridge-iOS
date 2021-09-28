@@ -7,13 +7,15 @@
 
 import SwiftUI
 
-struct ContentsListStyle : ViewModifier {
+struct ItemCardStyle : ViewModifier {
     func body(content : Content) -> some View {
         return content
-            .frame(width : UIScreen.main.bounds.width * 0.8)
+            .frame(width : UIScreen.main.bounds.width * 0.8,
+                   height: UIScreen.main.bounds.height * 0.1)
+
             .padding()
             .foregroundColor(Color.white)
-            .background(Color.mainTheme)
+            .background(Color.systemDefaultGray)
             .cornerRadius(20)
             .shadow(radius: 3)
     }

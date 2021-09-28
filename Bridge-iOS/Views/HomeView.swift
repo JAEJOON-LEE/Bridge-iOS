@@ -6,69 +6,65 @@
 //
 
 import SwiftUI
+import URLImage
 
-struct ItemRow : View {
-    @State var name : String
-    @State var price : Int
-    @State var camp : String
-    @State var time : String
-    @State var clicked : Bool = false
-    @State var cnt : Int = 1
+struct ItemCard : View {
+    private let viewModel : ItemCardViewModel
+    
+    init(viewModel : ItemCardViewModel) {
+        self.viewModel = viewModel
+    }
     
     var body : some View {
-        HStack {
-            Image("LOGO")
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-            
-            VStack(alignment: .leading) {
-                Text("\(name)")
-                    .font(.title2)
-                Text("$\(price)")
-                    .font(.title)
-                
+        HStack(spacing : 15) {
+            URLImage(URL(string : viewModel.imageUrl)!) { image in
+                image
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+            }
+            .frame(width : UIScreen.main.bounds.width * 0.25,
+                   height: UIScreen.main.bounds.height * 0.1)
+            .cornerRadius(10)
+
+            VStack(alignment : .leading){
+                Text(viewModel.itemTitle)
+                    .fontWeight(.bold)
+                Spacer()
+                Text("$ \(viewModel.itemPrice)")
+                    .font(.system(size: 20, weight : .medium))
+                Spacer()
                 HStack {
-                    Text("\(camp)")
-                    Text("\(time)")
-                    Image(systemName: "eye.fill")
-                    Text("\(cnt)")
-                }
-                .font(.caption)
-            }
-            
-            Spacer()
-            
-            // 하트 클릭하면 전체 클릭되는 문제 고쳐야함
-            Button{
-                print("heart is clicked")
-                self.clicked = !self.clicked
-            } label : {
-                if self.clicked {
-                    Image(systemName: "heart.fill")
-                 } else {
-                    Image(systemName: "heart")
-                 }
-            }
+                    Text(viewModel.camp)
+                    Image(systemName : "eye")
+                    Text("\(viewModel.viewCount)")
+                    Spacer()
+                    Image(systemName : viewModel.isLiked ? "heart" : "heart.fill")
+                        .font(.system(size : 20))
+                }.font(.system(size : 12))
+            }.foregroundColor(.secondary)
         }
-        .frame(height : UIScreen.main.bounds.height * 0.1)
-        .modifier(ContentsListStyle())
+        .modifier(ItemCardStyle())
     }
 }
 
 struct HomeView : View {
+    @StateObject private var viewModel = HomeViewModel()
+    
     var body : some View {
         VStack(spacing: 0) {
             LocationPicker()
-            
+            ListHeader(name: "What's new today?").padding(.vertical, 10)
             List {
-                Section(header: ListHeader(name : "WHAT'S NEW TODAY?")){
-                    ItemRow(name: "Item1", price: 30, camp: "Camp Humphreys", time: "24:00")
-                    ItemRow(name: "Item2", price: 30, camp: "Camp Carroll", time: "24:00")
-                    ItemRow(name: "Item3", price: 30, camp: "Camp Casey", time: "24:00")
-                    ItemRow(name: "Item4", price: 30, camp: "Camp Walker", time: "24:00")
-                    ItemRow(name: "Item5", price: 30, camp: "Osan A/B", time: "24:00")
+                ForEach(viewModel.Posts, id : \.self) { Post in
+                    ItemCard(viewModel : ItemCardViewModel(post: Post))
                 }
             }.listStyle(PlainListStyle()) // iOS 15 대응
         }
+    }
+}
+
+struct HomeView_Previews: PreviewProvider {
+    static var previews: some View {
+        HomeView()
     }
 }

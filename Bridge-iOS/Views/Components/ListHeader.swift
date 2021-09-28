@@ -8,13 +8,14 @@
 import SwiftUI
 
 struct ListHeader : View {
-    @State var name : String
+    var name : String
     
     var body: some View {
         HStack{
             Text(name)
                 .foregroundColor(Color.yellow)
                 .font(.title2)
+                .fontWeight(.semibold)
                 .padding()
             Spacer()
             Button(action: {}, label: {

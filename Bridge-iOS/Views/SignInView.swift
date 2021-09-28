@@ -8,15 +8,8 @@
 import SwiftUI
 
 struct SignInView: View {
-    @State private var email = ""
-    @State private var password = ""
-    @State private var checked = false
-    @State private var showPassword = false
-    
-    // need validating method in view model
-    private var isValid : Bool {
-        withAnimation(Animation.linear(duration: 2.0)) {password.count > 2}
-    }
+    @StateObject private var viewModel = SignInViewModel()
+    @State var isLinkActive : Bool = false
     
     var titleField : some View {
         Text("Log In")
@@ -27,24 +20,27 @@ struct SignInView: View {
     var emailField : some View {
         HStack {
             Image(systemName: "envelope")
-            TextField("Email", text: $email)
+            TextField("Email", text: $viewModel.email)
+                .autocapitalization(.none)
                 .accentColor(.mainTheme)
         }.modifier(SignViewTextFieldStyle())
     }
     var passwordField : some View {
         HStack {
             Image(systemName: "lock")
-            if showPassword {
-                TextField("Password", text: $password)
+            if viewModel.showPassword {
+                TextField("Password", text: $viewModel.password)
+                    .autocapitalization(.none)
                     .accentColor(.mainTheme)
             } else {
-                SecureField("Password", text: $password)
+                SecureField("Password", text: $viewModel.password)
+                    .autocapitalization(.none)
                     .accentColor(.mainTheme)
             }
             Button {
-                showPassword.toggle()
+                viewModel.showPassword.toggle()
             } label : {
-                Image(systemName: showPassword ? "eye.slash" : "eye")
+                Image(systemName: viewModel.showPassword ? "eye.slash" : "eye")
                     .foregroundColor(.black)
             }
         }.modifier(SignViewTextFieldStyle())
@@ -52,19 +48,32 @@ struct SignInView: View {
     var remeberButton : some View {
         HStack {
             Spacer()
-            Toggle(isOn: $checked) {
+            Toggle(isOn: $viewModel.checked) {
                 Text("Remember Me")
             }.frame(width : UIScreen.main.bounds.width * 0.45)
         }.padding(.horizontal, 25)
     }
     var nextButton : some View {
         // temporary linked to TabContainer //
-        NavigationLink(destination : TabContainer()) {
+        Button {
+            isLinkActive = true
+//            print(viewModel.email)
+//            print(viewModel.password)
+            viewModel.SignIn(email: viewModel.email, password: viewModel.password)
+        } label : {
             Text("Next")
                 .modifier(SubmitButtonStyle())
-        }
-        .disabled(!isValid)
-        .opacity(isValid ? 1.0 : 0.4)
+                .disabled(!viewModel.isValid())
+                .opacity(viewModel.isValid() ? 1.0 : 0.4)
+        }.background(
+            NavigationLink(
+                destination: TabContainer()
+                                .environmentObject(viewModel),
+                isActive : $isLinkActive
+            ) {
+                // label
+            }
+        )
     }
     var findPassword : some View {
         NavigationLink(destination:

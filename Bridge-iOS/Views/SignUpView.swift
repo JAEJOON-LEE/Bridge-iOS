@@ -24,6 +24,7 @@ struct SignUpView: View {
         HStack {
             Image(systemName: "person")
             TextField("Full name", text: $name)
+                .autocapitalization(.none)
                 .accentColor(.mainTheme)
         }.modifier(SignViewTextFieldStyle())
     }
@@ -31,6 +32,7 @@ struct SignUpView: View {
         HStack {
             Image(systemName: "envelope")
             TextField("Email", text: $email)
+                .autocapitalization(.none)
                 .accentColor(.mainTheme)
         }.modifier(SignViewTextFieldStyle())
     }
@@ -39,9 +41,11 @@ struct SignUpView: View {
             Image(systemName: "lock")
             if showPassword {
                 TextField("Password", text: $password, onCommit : { withAnimation { secureFieldFocused = false } })
+                    .autocapitalization(.none)
                     .accentColor(.mainTheme)
             } else {
                 SecureField("Password", text: $password, onCommit : { withAnimation { secureFieldFocused = false } })
+                    .autocapitalization(.none)
                     .accentColor(.mainTheme)
             }
             Button {
