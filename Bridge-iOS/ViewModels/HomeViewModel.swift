@@ -21,7 +21,7 @@ final class HomeViewModel : ObservableObject {
     
     func getPosts() {
         let header: HTTPHeaders = [
-            "X-AUTH-TOKEN": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QGdtYWlsLmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE2MzI4NDQ0NTUsImV4cCI6MTYzMjg0NjI1NX0.hWbcEfiBzRGliOLipmcIF7owZpSrfc-wQF0eAcurWgs",
+            "X-AUTH-TOKEN": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QGdtYWlsLmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE2MzMzNjA1ODMsImV4cCI6MTYzMzM2MjM4M30.25pel5ejOY3SHBQ6NQFvkBu1Vy1fRa1-bxTi9yzVd_4",
         ]
         
         AF.request(url,
@@ -44,7 +44,7 @@ final class HomeViewModel : ObservableObject {
             } receiveValue: { [weak self] (recievedValue : [Post]) in
 //                print(recievedValue)
                 self?.Posts = recievedValue
-                print(self?.Posts[0])
+//                print(self?.Posts[0])
             }.store(in: &subscription)
     }
 }
