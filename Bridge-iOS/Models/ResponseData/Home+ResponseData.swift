@@ -17,7 +17,7 @@ struct Post : Codable, Hashable {
     let postId : Int
     let memberId : Int
     let title : String
-    let price : Int
+    let price : Float
     let camp : String
     let viewCount : Int
     let image : String

@@ -14,15 +14,15 @@ final class HomeViewModel : ObservableObject {
     
     private let url = "http://3.36.233.180:8080/used-posts?"
     private var subscription = Set<AnyCancellable>()
-
-    init() {
-        getPosts()
+    let token : String
+    
+    init(accessToken : String) {
+        self.token = accessToken
+        getPosts(token : accessToken)
     }
     
-    func getPosts() {
-        let header: HTTPHeaders = [
-            "X-AUTH-TOKEN": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QGdtYWlsLmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE2MzMzNjA1ODMsImV4cCI6MTYzMzM2MjM4M30.25pel5ejOY3SHBQ6NQFvkBu1Vy1fRa1-bxTi9yzVd_4",
-        ]
+    func getPosts(token : String) {
+        let header: HTTPHeaders = [ "X-AUTH-TOKEN": token ]
         
         AF.request(url,
                    method: .get,

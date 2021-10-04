@@ -14,7 +14,7 @@ final class ItemCardViewModel : ObservableObject {
     }
     var imageUrl : String { post.image }
     var itemTitle : String { post.title }
-    var itemPrice : Int { post.price }
+    var itemPrice : String { String(format: "%.1f", post.price) }
     var camp : String { post.camp }
     var isLiked : Bool { post.liked }
     var viewCount : Int { post.viewCount }

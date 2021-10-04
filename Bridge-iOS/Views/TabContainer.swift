@@ -19,7 +19,7 @@ struct TabContainer: View {
             ZStack(alignment : .bottom) {
                 switch viewModel.selectedTabIndex {
                 case 1 :
-                    HomeView()
+                    HomeView(viewModel: HomeViewModel(accessToken: signInViewModel.signInResponse?.token.accessToken ?? ""))
                 case 2 :
                     BoardView()
                 case 3 :
@@ -41,7 +41,7 @@ struct TabContainer: View {
                         Spacer()
                     }
                 default:
-                    HomeView()
+                    BoardView()
                 }
                 
                 TabSelector
