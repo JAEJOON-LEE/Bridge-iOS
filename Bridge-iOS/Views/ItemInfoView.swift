@@ -9,6 +9,7 @@ import SwiftUI
 import URLImage
 
 struct ItemInfoView: View {
+    @Environment(\.presentationMode) var presentationMode
     @StateObject private var viewModel : ItemInfoViewModel
     
     init(viewModel : ItemInfoViewModel) {
@@ -20,19 +21,24 @@ struct ItemInfoView: View {
             // Image Area
             VStack {
                 ScrollView(.horizontal, showsIndicators: true) {
-                    ForEach(viewModel.itemInfo?.usedPostDetail.postImages ?? [], id : \.self) { imageInfo in
-                        URLImage(
-                            URL(string : imageInfo.image) ??
-                            URL(string: "https://static.thenounproject.com/png/741653-200.png")!
-                        ) { image in
-                            image
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
+                    HStack {
+                        ForEach(viewModel.itemInfo?.usedPostDetail.postImages ?? [], id : \.self) { imageInfo in
+                            URLImage(
+                                URL(string : imageInfo.image) ??
+                                URL(string: "https://static.thenounproject.com/png/741653-200.png")!
+                            ) { image in
+                                image
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                            }
+                            .frame(width : UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.35)
                         }
-                        .frame(width : UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.42)
                     }
                 }
                 Spacer()
+            }.blur(radius: viewModel.isMemberInfoClicked ? 5 : 0)
+            .onTapGesture {
+                viewModel.isImageTap.toggle() // 이미지 확대 보기 기능
             }
             
             // Text Area
@@ -42,7 +48,7 @@ struct ItemInfoView: View {
                     // Title
                     HStack {
                         VStack(alignment : .leading, spacing: 10) {
-                            Text((viewModel.itemInfo?.usedPostDetail.title)!)
+                            Text(viewModel.itemInfo?.usedPostDetail.title ?? "Title not found")
                                 .font(.largeTitle)
                                 .fontWeight(.bold)
                             HStack{
@@ -71,8 +77,16 @@ struct ItemInfoView: View {
                             Text((viewModel.itemInfo?.member.description)!)
                         }
                         Spacer()
-                        Image(systemName: "i.circle.fill")
-                            .font(.system(size: 20))
+                        Button {
+                            viewModel.isMemberInfoClicked = true
+                        } label : {
+                            Image(systemName: "info.circle")
+                                .font(.system(size: 20))
+                                .padding(8)
+                                .background(Color.gray)
+                                .cornerRadius(10)
+                                .padding(.trailing, 5)
+                        }
                     }
                     .padding(5)
                     .background(Color.systemDefaultGray)
@@ -81,30 +95,56 @@ struct ItemInfoView: View {
                     .padding(.bottom, 10)
                     
                     // Camp Info
-                    Text("Camp list area")
-                    
+                    ScrollView(.horizontal, showsIndicators: true) {
+                        HStack {
+                            ForEach(viewModel.itemInfo?.usedPostDetail.camps ?? [], id : \.self) { camp in
+                                Text(camp)
+                                    .foregroundColor(.mainTheme)
+                                    .font(.system(size : 12, weight : .semibold))
+                                    .padding(6)
+                                    .background(Color.systemDefaultGray)
+                                    .cornerRadius(10)
+                                    .shadow(radius: 1)
+                                    .padding(.leading, 2)
+                            }
+                        }.frame(height : 30)
+                    }
+
                     Divider()
                     
                     // Item Desc.
                     VStack(alignment : .leading, spacing: 10) {
+                        HStack {
                         Text("About Item")
                             .font(.title2)
                             .fontWeight(.semibold)
                             .foregroundColor(.mainTheme)
+                            Spacer()
+                            Button {
+                                // 수정 삭제 API
+                            } label : {
+                                Image(systemName : "ellipsis")
+                                    .foregroundColor(.black)
+                                    .font(.system(size : 15, weight : .bold))
+                            }
+                        }
                         Text(viewModel.itemInfo?.usedPostDetail.description ?? "error")
                     }
                     
                     Spacer()
-                    // Knock button # TEMP
+                    
                     HStack {
                         Spacer()
                         Button { } label : {
-                            Text("Knock Now!")
-                                .font(.title2)
-                                .fontWeight(.semibold)
-                                .frame(width: UIScreen.main.bounds.width * 0.8, height: UIScreen.main.bounds.height * 0.07)
-                                .background(Color.mainTheme)
-                                .cornerRadius(25)
+                            HStack {
+                                Text("Knock Now!")
+                                    .font(.system(size : 20, weight : .bold))
+                                Image(systemName : "hand.wave.fill")
+                                    .font(.system(size : 20, weight : .bold))
+                            }
+                            .frame(width: UIScreen.main.bounds.width * 0.8, height: UIScreen.main.bounds.height * 0.07)
+                            .background(Color.mainTheme)
+                            .cornerRadius(25)
                         }
                         Spacer()
                     }
@@ -112,19 +152,68 @@ struct ItemInfoView: View {
                 }
                 .padding(.horizontal, 20)
                 .padding(.top, 20)
-                .frame(width : UIScreen.main.bounds.width, height : UIScreen.main.bounds.height * 0.5)
+                .frame(width : UIScreen.main.bounds.width, height : UIScreen.main.bounds.height * 0.58)
                 .background(Color.systemDefaultGray)
                 .cornerRadius(25)
             }
             .edgesIgnoringSafeArea(.bottom)
             .shadow(radius: 5)
+            .blur(radius: viewModel.isMemberInfoClicked ? 5 : 0)
+            
+            
+            // Seller Information
+            if viewModel.isMemberInfoClicked {
+                VStack {
+                    HStack {
+                        Spacer()
+                        Button {
+                            viewModel.isMemberInfoClicked = false
+                        } label : {
+                            Image(systemName: "xmark.circle")
+                                .font(.system(size : 20, weight : .bold))
+                        }.padding()
+                    }.frame(height: 50)
+                    
+                    URLImage(
+                        URL(string : viewModel.itemInfo?.member.profileImage ?? "https://static.thenounproject.com/png/741653-200.png")!
+                    ) { image in
+                        image
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                    }
+                    .clipShape(Circle())
+                    .frame(width: UIScreen.main.bounds.width * 0.25, height: UIScreen.main.bounds.width * 0.25)
+                    .shadow(radius: 5)
+                    
+                    Text(viewModel.itemInfo?.member.username ?? "Unknown UserName")
+                        .font(.system(size : 20, weight : .bold))
+                        .foregroundColor(.white)
+                    Text("\"" + (viewModel.itemInfo?.member.description  ?? "User not found") + "\"")
+                        .foregroundColor(.gray)
+                    Spacer()
+                }
+                .frame(width : UIScreen.main.bounds.width * 0.7, height: UIScreen.main.bounds.height * 1/3)
+                .background(Color.mainTheme)
+                .cornerRadius(15)
+                .shadow(radius: 5)
+            }
         }
         .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(true)
+        .navigationBarItems(leading : Button {
+            self.presentationMode.wrappedValue.dismiss()
+        } label : {
+            Image(systemName : "chevron.backward")
+                .foregroundColor(.mainTheme)
+                .font(.system(size : 15, weight : .bold))
+        }, trailing: Button {
+            viewModel.isLiked?.toggle()
+            viewModel.likePost(isliked: (viewModel.itemInfo?.usedPostDetail.like ?? true))
+        } label: {
+            //Image(systemName: (viewModel.itemInfo?.usedPostDetail.like ?? true) ? "heart.fill" : "heart")
+            Image(systemName: (viewModel.isLiked ?? true) ? "heart.fill" : "heart")
+                .font(.system(size : 15, weight : .bold))
+                .foregroundColor(.black)
+        })
     }
 }
-//
-//struct ItemInfoView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ItemInfoView()
-//    }
-//}

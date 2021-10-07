@@ -11,6 +11,9 @@ import Alamofire
 
 final class ItemInfoViewModel : ObservableObject {
     @Published var itemInfo : ItemInfo?
+    @Published var isMemberInfoClicked : Bool = false
+    @Published var isLiked : Bool?
+    @Published var isImageTap : Bool = false
     
     //private let url = "http://3.36.233.180:8080/used-posts/291"
     private var subscription = Set<AnyCancellable>()
@@ -44,7 +47,22 @@ final class ItemInfoViewModel : ObservableObject {
             } receiveValue: { [weak self] recievedValue in
                 print(recievedValue)
                 self?.itemInfo = recievedValue
+                self?.isLiked = recievedValue.usedPostDetail.like
                 print(self?.itemInfo as Any)
             }.store(in: &subscription)
+    }
+    
+    func likePost(isliked : Bool) {
+        let url = "http://3.36.233.180:8080/used-posts/\(postId)/likes"
+        let header: HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
+        let method : HTTPMethod = isliked ? .delete : .post
+        
+        AF.request(url,
+                   method: method,
+                   encoding: URLEncoding.default,
+                   headers: header
+        ).response { json in
+            print(json)
+        }
     }
 }

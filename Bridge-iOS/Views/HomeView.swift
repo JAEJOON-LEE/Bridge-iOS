@@ -29,6 +29,8 @@ struct HomeView : View {
                     }
                 }
             }.listStyle(PlainListStyle()) // iOS 15 대응
+        }.onAppear {
+            viewModel.getPosts(token: viewModel.token)
         }
     }
 }
@@ -66,7 +68,7 @@ struct ItemCard : View {
                     Image(systemName : "eye")
                     Text("\(viewModel.viewCount)")
                     Spacer()
-                    Image(systemName : viewModel.isLiked ? "heart" : "heart.fill")
+                    Image(systemName : viewModel.isLiked ? "heart.fill" : "heart")
                         .font(.system(size : 20))
                 }.font(.system(size : 12))
             }.foregroundColor(.secondary)
