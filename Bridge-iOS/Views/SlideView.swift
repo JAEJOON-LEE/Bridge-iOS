@@ -6,172 +6,169 @@
 //
 
 import SwiftUI
-
-struct TabList : View {
-    var body : some View {
-        HStack {
-            Button {
-                print("first button is clicked")
-            } label : {
-                VStack {
-                    Image(systemName : "cart")
-                        .font(.system(size : 25))
-                    Text("Shelling list")
-                        .font(.system(size : 7))
-                }
-                .padding()
-                .foregroundColor(.gray)
-            }
-            
-            Button {
-                print("second button is clicked")
-            } label : {
-                VStack {
-                    Image(systemName : "list.bullet.rectangle")
-                        .font(.system(size : 25))
-                    Text("Post list")
-                        .font(.system(size : 7))
-                }
-                .padding()
-                .foregroundColor(.gray)
-            }
-            
-            Button {
-                print("third button is clicked")
-            } label : {
-                VStack {
-                    Image(systemName : "heart")
-                        .font(.system(size : 25))
-                    Text("Like item")
-                        .font(.system(size : 7))
-                }
-                .padding()
-                .foregroundColor(.gray)
-            }
-        }
-        .padding(.horizontal, 5)
-        .background(Color.systemDefaultGray)
-        .cornerRadius(20)
-        .shadow(radius: 1)
-        .frame(width: UIScreen.main.bounds.width * 0.6)
-    }
-}
+import URLImage
 
 struct SlideItem : View {
-    @State var ImageName : String
-    @State var text : String
+    var ImageName : String
+    var text : String
     
     var body : some View {
         HStack{
             Image(systemName: ImageName)
+                .foregroundColor(.mainTheme)
             Text(text)
+                .foregroundColor(.gray)
+                .fontWeight(.semibold)
         }
     }
 }
 
 struct SlideView : View {
+    @StateObject private var viewModel : SlideViewModel
     
-    @State var isSlideShow : Bool = true
+    init(viewModel : SlideViewModel) {
+        self._viewModel = StateObject(wrappedValue: viewModel)
+    }
     
     var body : some View {
-        VStack(alignment: .trailing) {
-            
-            //개인정보 수정 버튼
-            HStack {
-                Spacer()
-                Button{
-                    print("edit button is clicked")
-                } label : {
-                    SlideItem(ImageName: "pencil.circle", text: "")
+        HStack {
+            Spacer()
+            VStack(alignment: .leading, spacing : 15) {
+                HStack {
+                    Spacer()
+                    Button{
+                        // user info edit api call!
+                    } label : {
+                        HStack {
+                            Text("Edit")
+                            Image(systemName: "pencil.circle")
+                        }
+                        .foregroundColor(.gray)
+                        .font(.system(size : 12, weight: .semibold))
+                    }
                 }
-                .foregroundColor(.black)
+                
+                HStack(spacing : 20) {
+                    URLImage(URL(string: viewModel.userInfo.profileImage)!) { image in
+                        image
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                    }
+                    .frame(width : UIScreen.main.bounds.width * 0.2, height : UIScreen.main.bounds.width * 0.2)
+                    .clipShape(Circle())
+                    .shadow(radius: 5)
+                    
+                    VStack(alignment: .leading, spacing : 15) {
+                        Text(viewModel.userInfo.username)
+                            .font(.system(size : 20, weight : .bold))
+                            //.fontWeight(.bold)
+                        Text("\"" + viewModel.userInfo.description + "\"")
+                    }
+                }
+                .padding(.leading, 10)
+                
+                HStack {
+                    Button {
+                        print("first button is clicked")
+                    } label : {
+                        VStack {
+                            Image(systemName : "cart")
+                                .font(.system(size : 30))
+                            Text("Selling list")
+                                .font(.system(size : 10))
+                        }
+                        .padding()
+                        .foregroundColor(.gray)
+                    }
+                    
+                    Button {
+                        print("second button is clicked")
+                    } label : {
+                        VStack {
+                            Image(systemName : "list.bullet.rectangle")
+                                .font(.system(size : 30))
+                            Text("Post list")
+                                .font(.system(size : 10))
+                        }
+                        .padding()
+                        .foregroundColor(.gray)
+                    }
+                    
+                    Button {
+                        print("third button is clicked")
+                    } label : {
+                        VStack {
+                            Image(systemName : "heart")
+                                .font(.system(size : 30))
+                            Text("Like item")
+                                .font(.system(size : 10))
+                        }
+                        .padding()
+                        .foregroundColor(.gray)
+                    }
+                }
+                .frame(width : UIScreen.main.bounds.width * 0.7, height : UIScreen.main.bounds.height * 0.1)
+                .background(Color.white)
+                .cornerRadius(10)
+                .shadow(radius: 1)
+                .padding(.vertical, 10)
+                
+                
+                VStack(alignment : .leading,spacing : 30) {
+                    Button{
+                        print("home is clicked")
+                    } label : {
+                        SlideItem(ImageName: "house", text: "Home")
+                    }
+                    
+                    Button{
+                        print("Membership is clicked")
+                    } label : {
+                        SlideItem(ImageName: "creditcard", text: "Membership")
+                    }
+                    
+                    Button{
+                        print("Seller Page is clicked")
+                    } label : {
+                        SlideItem(ImageName: "person", text: "Seller page")
+                    }
+                    
+                    Button{
+                        print("Invite friends is clicked")
+                    } label : {
+                        SlideItem(ImageName: "person", text: "Invite friends")
+                    }
+                    
+                    Button{
+                        print("Customer Service is clicked")
+                    } label : {
+                        SlideItem(ImageName: "info.circle", text: "Customer Service")
+                    }
+                    
+                    Spacer()
+                    
+                    Button{
+                        print("setting is clicked")
+                    } label : {
+                        SlideItem(ImageName: "gearshape", text: "Setting")
+                    }.padding(.bottom, 20)
+                }
+                .padding(.leading, 10)
             }
-            
-            HStack {
-                Image("LOGO")
+            .padding(20)
+            .frame(width: UIScreen.main.bounds.width * 0.75)
+            .background(
+                Image("myPage_bg")
                     .resizable()
-                    .frame(width: 70, height: 70)
-                
-                VStack {
-                    Text("name")
-                        .padding()
-                        .font(.body)
-                    Text("hello")
-                        .padding()
-                        .font(.caption)
-                }
-            }
-            .frame(width: UIScreen.main.bounds.width * 0.75,
-                   height : UIScreen.main.bounds.height * 0.2)
-                        //너무 끼워맞추기,,?
-            //tab
-            TabList()
-            
-            VStack(alignment: .leading) {
-            Group {
-                Button{
-                    print("home is clicked")
-                } label : {
-                    SlideItem(ImageName: "house", text: "Home")
-                }
-                .foregroundColor(Color.black)
-                .padding()
-                
-                Button{
-                    print("Membership is clicked")
-                } label : {
-                    SlideItem(ImageName: "creditcard", text: "Membership")
-                }
-                .foregroundColor(Color.black)
-                .padding()
-                
-                Button{
-                    print("Seller Page is clicked")
-                } label : {
-                    SlideItem(ImageName: "person", text: "Seller page")
-                }
-                .foregroundColor(Color.black)
-                .padding()
-                
-                Button{
-                    print("Invite friends is clicked")
-                } label : {
-                    SlideItem(ImageName: "person", text: "Invite friends")
-                }
-                .foregroundColor(Color.black)
-                .padding()
-                
-                Button{
-                    print("Customer Service is clicked")
-                } label : {
-                    SlideItem(ImageName: "info.circle", text: "Customer Service")
-                }
-                .foregroundColor(Color.black)
-                .padding()
-                
-                Button{
-                    print("setting is clicked")
-                } label : {
-                    SlideItem(ImageName: "gearshape", text: "setting")
-                }
-                .foregroundColor(Color.black)
-                .padding()
-                
-                Spacer()
-                
-                Button{
-                    print("Logout is clicked")
-                } label : {
-                    SlideItem(ImageName: "x.circle", text: "Logout")
-                }
-                .foregroundColor(Color.black)
-                .padding()
-                
-                }
-            }
-            .frame(width: UIScreen.main.bounds.width * 0.64)
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: UIScreen.main.bounds.width * 0.75)
+            )
         }
-        .padding()
-        .background(Color.white)
     }
 }
+
+//struct SlideView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        SlideView(viewModel: SlideViewModel())
+//    }
+//}

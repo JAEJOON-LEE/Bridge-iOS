@@ -78,9 +78,9 @@ struct TabContainer: View {
             )
             
             if isSlideShow {
-                SlideView()
+                SlideView(viewModel : SlideViewModel(userInfo: signInViewModel.signInResponse!))
                     .transition(.move(edge: .leading))
-                    .offset(x: -UIScreen.main.bounds.width * 1/3)
+                    .offset(x: -UIScreen.main.bounds.width * 0.25)
                     .edgesIgnoringSafeArea(.bottom)
                     .zIndex(2.0)
             }
