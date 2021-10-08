@@ -8,11 +8,8 @@
 import SwiftUI
 
 struct SignUpView: View {
-    @State private var name = ""
-    @State private var email = ""
-    @State private var password = ""
-    @State private var showPassword = false
-    @State private var secureFieldFocused = false
+    @State var isLinkActive : Bool = false
+    @ObservedObject var viewModel = SignUpViewModel()
     
     var titleField : some View {
         Text("Create Account")
@@ -23,7 +20,7 @@ struct SignUpView: View {
     var nameField : some View {
         HStack {
             Image(systemName: "person")
-            TextField("Full name", text: $name)
+            TextField("Full name", text: $viewModel.name)
                 .autocapitalization(.none)
                 .accentColor(.mainTheme)
         }.modifier(SignViewTextFieldStyle())
@@ -31,7 +28,7 @@ struct SignUpView: View {
     var emailField : some View {
         HStack {
             Image(systemName: "envelope")
-            TextField("Email", text: $email)
+            TextField("Email", text: $viewModel.email)
                 .autocapitalization(.none)
                 .accentColor(.mainTheme)
         }.modifier(SignViewTextFieldStyle())
@@ -39,32 +36,58 @@ struct SignUpView: View {
     var passwordField : some View {
         HStack {
             Image(systemName: "lock")
-            if showPassword {
-                TextField("Password", text: $password, onCommit : { withAnimation { secureFieldFocused = false } })
+            if viewModel.showPassword {
+                TextField("Password", text: $viewModel.password)
                     .autocapitalization(.none)
                     .accentColor(.mainTheme)
-            } else {
-                SecureField("Password", text: $password, onCommit : { withAnimation { secureFieldFocused = false } })
+            }
+            else {
+                SecureField("Password", text: $viewModel.password)
                     .autocapitalization(.none)
                     .accentColor(.mainTheme)
             }
             Button {
-                showPassword.toggle()
+                viewModel.showPassword.toggle()
             } label : {
-                Image(systemName: showPassword ? "eye.slash" : "eye")
+                Image(systemName: viewModel.showPassword ? "eye.slash" : "eye")
                     .foregroundColor(.black)
             }
         }
         .modifier(SignViewTextFieldStyle())
-        .onTapGesture {
-            withAnimation {
-                secureFieldFocused = true
-            }
-        }
     }
+    
+    var verifyPasswordField : some View {
+            HStack {
+                Image(systemName: "lock")
+                if viewModel.showPassword {
+                    TextField("Verify Password", text: $viewModel.password2)
+                        .autocapitalization(.none)
+                        .accentColor(.mainTheme)
+                } else {
+                    SecureField("Verify Password", text: $viewModel.password2)
+                        .autocapitalization(.none)
+                        .accentColor(.mainTheme)
+                }
+            }
+            .modifier(SignViewTextFieldStyle())
+    }
+    
     var nextButton : some View {
-        Button("Next") { }
-        .modifier(SubmitButtonStyle())
+        Button {
+                    isLinkActive = true
+                    viewModel.SendEmail(email: viewModel.email)
+                } label : {
+                    Text("Next")
+                        .modifier(SubmitButtonStyle())
+                }.background(
+                    NavigationLink(
+                        destination: SignUpAppendixView(viewModel: viewModel)
+                                        .environmentObject(viewModel),
+                        isActive : $isLinkActive
+                    ) {
+                        // label
+                    }
+                )
     }
     
     var body: some View {
@@ -76,6 +99,7 @@ struct SignUpView: View {
                 nameField
                 emailField
                 passwordField
+                verifyPasswordField
                 nextButton
                 Divider()
                 HStack {
@@ -88,7 +112,7 @@ struct SignUpView: View {
                 Spacer()
             }
             .frame(width : UIScreen.main.bounds.width, height : UIScreen.main.bounds.height * 0.8)
-            .padding(.bottom, secureFieldFocused ? 70 : 0)
+            .padding(.bottom)
             .background(Color.white)
             .cornerRadius(15)
             .shadow(radius: 15)
