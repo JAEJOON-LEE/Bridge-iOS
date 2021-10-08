@@ -26,11 +26,18 @@ class WritingViewModel : ObservableObject {
     @Published var description = ""
     @Published var anonymous = false
     @Published var files : Data?
+    @Published var selectedImage: UIImage? // 일단 이미지 하나만
+    @Published var isBugReport = false
     @Published var writing : WritingInfo?
     
     private let url : String = "http://3.36.233.180:8080/board-posts"
     
     private var subscription = Set<AnyCancellable>()
+    
+    func loadImage() {
+        guard let selectedImage = selectedImage else { return }
+            files = selectedImage.jpegData(compressionQuality: 1)!
+        }
     
     func post(title : String, description : String, anonymous : Bool, files : Data?) {
         let header: HTTPHeaders = [

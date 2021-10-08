@@ -9,11 +9,9 @@ import SwiftUI
 
 struct WritingView : View {
     @StateObject private var viewModel = WritingViewModel()
+    
     @State var isLinkActive : Bool = false
     @State var imagePickerPresented = false
-    @State var selectedImage: UIImage?
-    
-    @State var isOn2 = false
     
     var uploadButton : some View {
         // temporary linked to TabContainer //
@@ -46,11 +44,11 @@ struct WritingView : View {
         })
         .sheet(isPresented: $imagePickerPresented,
                onDismiss: loadImage,
-               content: { ImagePicker(image: $selectedImage) })
+               content: { ImagePicker(image: $viewModel.selectedImage) })
     }
     
     func loadImage() {
-            guard let selectedImage = selectedImage else { return }
+        guard let selectedImage = viewModel.selectedImage else { return }
             viewModel.files = selectedImage.jpegData(compressionQuality: 1)!
         }
     
@@ -71,7 +69,7 @@ struct WritingView : View {
             HStack{
                 Toggle("Anonymous", isOn: $viewModel.anonymous)
                 Spacer()
-                Toggle("Bug Report", isOn: $isOn2)
+                Toggle("Bug Report", isOn: $viewModel.isBugReport)
                 
                 imageButton
             }
