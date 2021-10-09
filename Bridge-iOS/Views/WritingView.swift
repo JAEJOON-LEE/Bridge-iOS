@@ -8,7 +8,12 @@
 import SwiftUI
 
 struct WritingView : View {
-    @StateObject private var viewModel = WritingViewModel()
+    
+    @StateObject private var viewModel : WritingViewModel
+    
+    init(viewModel : WritingViewModel) {
+        self._viewModel = StateObject(wrappedValue: viewModel)
+    }
     
     @State var isLinkActive : Bool = false
     @State var imagePickerPresented = false
@@ -85,12 +90,5 @@ struct WritingView : View {
             
             Spacer()
         }
-    }
-}
-
-
-struct Previews: PreviewProvider {
-    static var previews: some View {
-        WritingView()
     }
 }
