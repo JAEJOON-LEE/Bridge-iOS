@@ -15,9 +15,11 @@ final class HomeViewModel : ObservableObject {
     private let url = "http://3.36.233.180:8080/used-posts?"
     private var subscription = Set<AnyCancellable>()
     let token : String
+    let memberId : Int
     
-    init(accessToken : String) {
+    init(accessToken : String, memberId : Int) {
         self.token = accessToken
+        self.memberId = memberId
         getPosts(token : accessToken)
     }
     

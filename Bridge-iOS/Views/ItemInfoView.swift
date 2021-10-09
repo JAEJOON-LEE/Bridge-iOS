@@ -78,7 +78,7 @@ struct ItemInfoView: View {
                         }
                         Spacer()
                         Button {
-                            viewModel.isMemberInfoClicked = true
+                            withAnimation { viewModel.isMemberInfoClicked = true }
                         } label : {
                             Image(systemName: "info.circle")
                                 .font(.system(size: 20))
@@ -120,12 +120,12 @@ struct ItemInfoView: View {
                             .fontWeight(.semibold)
                             .foregroundColor(.mainTheme)
                             Spacer()
-                            Button {
-                                // 수정 삭제 API
-                            } label : {
-                                Image(systemName : "ellipsis")
-                                    .foregroundColor(.black)
-                                    .font(.system(size : 15, weight : .bold))
+                            if viewModel.isMyPost {
+                                Button { viewModel.showAction = true } label : {
+                                    Image(systemName : "ellipsis")
+                                        .foregroundColor(.black)
+                                        .font(.system(size : 15, weight : .bold))
+                                }
                             }
                         }
                         Text(viewModel.itemInfo?.usedPostDetail.description ?? "error")
@@ -167,7 +167,7 @@ struct ItemInfoView: View {
                     HStack {
                         Spacer()
                         Button {
-                            viewModel.isMemberInfoClicked = false
+                            withAnimation { viewModel.isMemberInfoClicked = false }
                         } label : {
                             Image(systemName: "xmark.circle")
                                 .font(.system(size : 20, weight : .bold))
@@ -210,10 +210,37 @@ struct ItemInfoView: View {
             viewModel.isLiked?.toggle()
             viewModel.likePost(isliked: (viewModel.itemInfo?.usedPostDetail.like ?? true))
         } label: {
-            //Image(systemName: (viewModel.itemInfo?.usedPostDetail.like ?? true) ? "heart.fill" : "heart")
-            Image(systemName: (viewModel.isLiked ?? true) ? "heart.fill" : "heart")
-                .font(.system(size : 15, weight : .bold))
-                .foregroundColor(.black)
+            if !viewModel.isMyPost {
+                //Image(systemName: (viewModel.itemInfo?.usedPostDetail.like ?? true) ? "heart.fill" : "heart")
+                Image(systemName: (viewModel.isLiked ?? true) ? "heart.fill" : "heart")
+                    .font(.system(size : 15, weight : .bold))
+                    .foregroundColor(.black)
+            }
         })
+        .actionSheet(isPresented: $viewModel.showAction) {
+            ActionSheet(
+                title: Text("Post Options"),
+                buttons: [
+                    .default(Text("Modify Post")) { viewModel.showPostModify = true },
+                    .destructive(Text("Delete Post")) { viewModel.showConfirmDeletion = true },
+                    .cancel()
+                ]
+            )
+        }
+        .alert(isPresented: $viewModel.showConfirmDeletion) {
+            Alert(
+                title: Text("Confirmation"),
+                message: Text("Do you want to delete this item?"),
+                primaryButton: .destructive(Text("Yes"), action : {
+                    viewModel.deletePost()
+                    self.presentationMode.wrappedValue.dismiss()
+                }),
+                secondaryButton: .cancel(Text("No")))
+        }
+        .background(
+            NavigationLink(
+                destination : VStack {Text(viewModel.token) }.navigationBarTitle(Text("Modify used-Post")),
+                isActive : $viewModel.showPostModify) { }
+        )
     }
 }

@@ -14,15 +14,20 @@ final class ItemInfoViewModel : ObservableObject {
     @Published var isMemberInfoClicked : Bool = false
     @Published var isLiked : Bool?
     @Published var isImageTap : Bool = false
+    @Published var showAction : Bool = false
+    @Published var showConfirmDeletion : Bool = false
+    @Published var showPostModify : Bool = false
     
     //private let url = "http://3.36.233.180:8080/used-posts/291"
     private var subscription = Set<AnyCancellable>()
-    private let token : String
+    let token : String
     private let postId : Int
+    let isMyPost : Bool
     
-    init(token : String, postId : Int) {
+    init(token : String, postId : Int, isMyPost : Bool) {
         self.token = token
         self.postId = postId
+        self.isMyPost = isMyPost
         getItemInfo()
     }
     
@@ -62,6 +67,19 @@ final class ItemInfoViewModel : ObservableObject {
                    encoding: URLEncoding.default,
                    headers: header
         ).response { json in
+            print(json)
+        }
+    }
+    
+    func deletePost() {
+        let url = "http://3.36.233.180:8080/used-posts/\(postId)"
+        let header: HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
+        
+        AF.request(url,
+                   method: .delete,
+                   encoding: URLEncoding.default,
+                   headers: header
+        ).responseJSON { json in
             print(json)
         }
     }

@@ -23,7 +23,13 @@ struct HomeView : View {
                 ForEach(viewModel.Posts, id : \.self) { Post in
                     NavigationLink(
                         destination:
-                            ItemInfoView(viewModel: ItemInfoViewModel(token: viewModel.token, postId : Post.postId))
+                            ItemInfoView(viewModel:
+                                            ItemInfoViewModel(
+                                                token: viewModel.token,
+                                                postId : Post.postId,
+                                                isMyPost : (viewModel.memberId == Post.memberId)
+                                            )
+                            )
                     ) {
                         ItemCard(viewModel : ItemCardViewModel(post: Post))
                     }
