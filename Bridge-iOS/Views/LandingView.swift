@@ -55,7 +55,7 @@ struct LandingView: View {
                 .shadow(radius: 10)
             }.edgesIgnoringSafeArea(.bottom)
         } // NavigationView
-        .accentColor(.white)
+        .accentColor(.black)
         .navigationViewStyle(StackNavigationViewStyle())
     }
 }

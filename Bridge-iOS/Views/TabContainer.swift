@@ -124,11 +124,11 @@ extension TabContainer {
             } label : {
                 VStack {
                     Image(systemName : "pencil")
-                        .font(.system(size : 25))
-
-                    Text("Write")
-                        .font(.system(size : 15))
-
+                        .font(.system(size : 35))
+                        .padding(10)
+                        .background(Color.white)
+                        .clipShape(Circle())
+                        .shadow(radius: 3)
                 }.foregroundColor(viewModel.selectedTabIndex == 3 ? .mainTheme : .gray)
             }
             Button {

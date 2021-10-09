@@ -53,8 +53,8 @@ struct ItemInfoView: View {
                                 .fontWeight(.bold)
                             HStack{
                                 Text("time")
-                                Text("| \((viewModel.itemInfo?.usedPostDetail.viewCount)!) View")
-                                Text("| \((viewModel.itemInfo?.usedPostDetail.likeCount)!) Likes")
+                                Text("| \(viewModel.itemInfo?.usedPostDetail.viewCount ?? 0) View")
+                                Text("| \(viewModel.itemInfo?.usedPostDetail.likeCount ?? 0) Likes")
                             }.font(.system(size : 13))
                         }
                         Spacer()
@@ -81,6 +81,7 @@ struct ItemInfoView: View {
                             withAnimation { viewModel.isMemberInfoClicked = true }
                         } label : {
                             Image(systemName: "info.circle")
+                                .foregroundColor(.white)
                                 .font(.system(size: 20))
                                 .padding(8)
                                 .background(Color.gray)
@@ -142,6 +143,7 @@ struct ItemInfoView: View {
                                 Image(systemName : "hand.wave.fill")
                                     .font(.system(size : 20, weight : .bold))
                             }
+                            .foregroundColor(.white)
                             .frame(width: UIScreen.main.bounds.width * 0.8, height: UIScreen.main.bounds.height * 0.07)
                             .background(Color.mainTheme)
                             .cornerRadius(25)
@@ -171,6 +173,7 @@ struct ItemInfoView: View {
                         } label : {
                             Image(systemName: "xmark.circle")
                                 .font(.system(size : 20, weight : .bold))
+                                .foregroundColor(.white)
                         }.padding()
                     }.frame(height: 50)
                     
@@ -199,24 +202,28 @@ struct ItemInfoView: View {
             }
         }
         .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden(true)
-        .navigationBarItems(leading : Button {
-            self.presentationMode.wrappedValue.dismiss()
-        } label : {
-            Image(systemName : "chevron.backward")
-                .foregroundColor(.mainTheme)
-                .font(.system(size : 15, weight : .bold))
-        }, trailing: Button {
-            viewModel.isLiked?.toggle()
-            viewModel.likePost(isliked: (viewModel.itemInfo?.usedPostDetail.like ?? true))
-        } label: {
-            if !viewModel.isMyPost {
-                //Image(systemName: (viewModel.itemInfo?.usedPostDetail.like ?? true) ? "heart.fill" : "heart")
-                Image(systemName: (viewModel.isLiked ?? true) ? "heart.fill" : "heart")
-                    .font(.system(size : 15, weight : .bold))
-                    .foregroundColor(.black)
-            }
-        })
+        //.navigationBarBackButtonHidden(true)
+        .navigationBarItems(
+//            leading :
+//                Button {
+//                    self.presentationMode.wrappedValue.dismiss()
+//                } label : {
+//                    Image(systemName : "chevron.backward")
+//                        .foregroundColor(.mainTheme)
+//                        .font(.system(size : 15, weight : .bold))
+//                },
+            trailing:
+                Button {
+                    viewModel.isLiked?.toggle()
+                    viewModel.likePost(isliked: (viewModel.itemInfo?.usedPostDetail.like ?? true))
+                } label: {
+                    if !viewModel.isMyPost {
+                        Image(systemName: (viewModel.isLiked ?? true) ? "heart.fill" : "heart")
+                            .font(.system(size : 15, weight : .bold))
+                            .foregroundColor(.black)
+                    }
+                }
+        )
         .actionSheet(isPresented: $viewModel.showAction) {
             ActionSheet(
                 title: Text("Post Options"),
