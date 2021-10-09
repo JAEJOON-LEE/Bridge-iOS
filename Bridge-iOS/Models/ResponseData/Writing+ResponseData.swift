@@ -8,12 +8,6 @@
 import Foundation
 
 struct WritingInfo : Codable {
-    var info : PostInfo
+    var info : BoardPostInfo
     var files : Data?
-}
-
-struct PostInfo : Codable {
-    var title : String
-    var description : String
-    var anonymous : Bool
 }

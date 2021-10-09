@@ -29,6 +29,11 @@ class WritingViewModel : ObservableObject {
     @Published var selectedImage: UIImage? // 일단 이미지 하나만
     @Published var isBugReport = false
     @Published var writing : WritingInfo?
+    private let token : String
+        
+        init(accessToken : String) {
+            self.token = accessToken
+        }
     
     private let url : String = "http://3.36.233.180:8080/board-posts"
     
@@ -41,7 +46,7 @@ class WritingViewModel : ObservableObject {
     
     func post(title : String, description : String, anonymous : Bool, files : Data?) {
         let header: HTTPHeaders = [
-            "X-AUTH-TOKEN": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QGdtYWlsLmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE2MzMzNjA1ODMsImV4cCI6MTYzMzM2MjM4M30.25pel5ejOY3SHBQ6NQFvkBu1Vy1fRa1-bxTi9yzVd_4",
+            "X-AUTH-TOKEN": token,
             "Accept": "multipart/form-data",
             "Content-Type": "multipart/form-data"
         ]
