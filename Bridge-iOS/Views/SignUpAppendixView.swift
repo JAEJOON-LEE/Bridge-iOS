@@ -18,7 +18,7 @@ struct SignUpAppendixView: View {
         Text("Your Profile")
             .font(.largeTitle)
             .fontWeight(.semibold)
-            .padding(.vertical, 60)
+            .padding(.top, 60)
     }
     
     var profileImageField : some View {
@@ -35,7 +35,8 @@ struct SignUpAppendixView: View {
             }
         })
         .foregroundColor(.black)
-        .frame(width: 100, height:100, alignment: .center)
+        .frame(width : UIScreen.main.bounds.width * 0.35, height : UIScreen.main.bounds.width * 0.35, alignment: .center)
+        .clipShape(Circle())
         .sheet(isPresented: $imagePickerPresented,
                onDismiss: loadImage,
                content: { ImagePicker(image: $viewModel.profileImage) })
@@ -88,7 +89,7 @@ struct SignUpAppendixView: View {
         ZStack(alignment: .bottom) {
             Color.mainTheme // background
             
-            VStack(spacing : 30) {
+            VStack(spacing : 10) {
                 titleField
                 profileImageField
                 nicknameField
