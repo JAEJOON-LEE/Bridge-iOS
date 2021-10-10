@@ -6,90 +6,197 @@
 //
 
 import SwiftUI
-
-struct HotContent : View {
-    var body: some View {
-        HStack {
-            VStack(alignment: .leading) {
-                Text("내용")
-                
-                HStack {
-                    Image(systemName: "hand.thumbsup.fill")
-                    Text("10")
-                    
-                    Image(systemName: "message")
-                    Text("5")
-                }
-            }
-            
-            Spacer()
-            
-            Button(action:{print("clicked details")}){
-                            Image(systemName: "arrow.forward")
-                                .padding()
-            }
-        }
-    }
-}
-
-struct GeneralContent : View {
-    var body : some View {
-        HStack{
-            Text("내용")
-            Spacer()
-            
-            Image(systemName: "hand.thumbsup.fill")
-            Text("10")
-            
-            Image(systemName: "message")
-            Text("5")
-        }
-    }
-}
+import URLImage
 
 struct BoardView : View {
+    @StateObject private var viewModel : BoardViewModel
+    
+    init(viewModel : BoardViewModel) {
+        self._viewModel = StateObject(wrappedValue: viewModel)
+//        print("test message" + String(viewModel.totalPostList[0].boardPostInfo.postId))
+    }
+    
     var body : some View {
-        
         VStack(spacing: 0) {
-            LocationPicker()
             
-            // style이 section 컴포넌트들 각각에 적용되는거 해결해야함
-            VStack{
-                Spacer()
-                
-                List {
-                    //Hot board
-                    Section(header: ListHeader(name : "Hot Board")){
-                        HotContent()
-                        HotContent()
-                        HotContent()
+            //Hot Board
+            List {
+                Section(header: Text("Hot board")) {
+                    ForEach(viewModel.hotLists, id : \.self) { HotList in
+//                    NavigationLink(
+//                        destination:
+////                            PostInfoView(viewModel: PostInfoViewModel(token: viewModel.token, postId : WantList.postInfo.postId))
+//                    ) {
+                            SpecialPost(viewModel : GeneralPostViewModel(postList: HotList))
+//                    }
                     }
                 }
-                .frame(width : UIScreen.main.bounds.width * 0.95)
-                .cornerRadius(20)
-                .shadow(radius: 3)
-                
-                List {
-                    //Bug report
-                    Section(header: ListHeader(name : "Bug Report")){
-                        HotContent()
-                        HotContent()
-                        HotContent()
+            }.foregroundColor(Color.mainTheme)
+            .listStyle(PlainListStyle()) // iOS 15 대응
+            .frame(height:UIScreen.main.bounds.height * 1/6 )
+            
+            //WantU Posts
+            List {
+                Section(header: Text("Want U")) {
+                    ForEach(viewModel.wantLists, id : \.self) { WantList in
+//                    NavigationLink(
+//                        destination:
+////                            PostInfoView(viewModel: PostInfoViewModel(token: viewModel.token, postId : WantList.postInfo.postId))
+//                    ) {
+                            WantUPost(viewModel : WantUViewModel(postList: WantList))
+//                    }
                     }
                 }
-                .frame(width : UIScreen.main.bounds.width * 0.95)
-                .cornerRadius(20)
-                .shadow(radius: 3)
-                
-                List {
-                    //일반 게시물
-                    Section(header: ListHeader(name : "Bulltein")){
-                        GeneralContent()
-                        GeneralContent()
-                        GeneralContent()
+            }.foregroundColor(Color.mainTheme)
+            .listStyle(PlainListStyle()) // iOS 15 대응
+            .frame(height:UIScreen.main.bounds.height * 1/6 )
+            
+            Divider()
+            
+            //General Posts
+            List {
+                ForEach(viewModel.postLists, id : \.self) { PostList in
+                    NavigationLink(
+                        destination:
+                            PostInfoView(viewModel: PostInfoViewModel(token: viewModel.token, postId : PostList.postInfo.postId))
+                    ) {
+                        GeneralPost(viewModel : GeneralPostViewModel(postList: PostList))
                     }
                 }
-            }
+            }.listStyle(PlainListStyle()) // iOS 15 대응
+        }.onAppear {
+            viewModel.getBoardPosts(token: viewModel.token)
         }
     }
 }
+
+
+struct GeneralPost : View {
+    private let viewModel : GeneralPostViewModel
+    
+    init(viewModel : GeneralPostViewModel) {
+        self.viewModel = viewModel
+    }
+    
+    var body : some View {
+        VStack(spacing: 5) {
+            HStack(alignment: .firstTextBaseline){
+                URLImage( //프로필 이미지
+                    URL(string : viewModel.profileImage) ??
+                    URL(string: "https://static.thenounproject.com/png/741653-200.png")!
+                ) { image in
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                }
+                .frame(width : 40,
+                       height: 40)
+                .cornerRadius(20)
+                
+                Group{
+                    Text(viewModel.userName)
+                        .font(.system(size: 20, weight : .medium))
+                        
+                    Text(viewModel.createdAt)
+                        .font(.system(size: 10))
+                }
+            }
+            .foregroundColor(.black)
+            
+            URLImage(
+                URL(string : viewModel.imageUrl) ??
+                URL(string: "https://static.thenounproject.com/png/741653-200.png")!
+            ) { image in
+                image
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+            }
+            .frame(width : UIScreen.main.bounds.width * 0.83,
+                   height: UIScreen.main.bounds.height * 0.15)
+            .cornerRadius(10)
+            
+            HStack(alignment: .top){
+                Text(viewModel.postTitle)
+                    .font(.system(size: 15, weight : .medium))
+                
+                Spacer()
+                
+                Image(systemName: "message.fill")
+                    .font(.system(size: 10, weight : .medium))
+                Text(String(viewModel.commentCount))
+                    .font(.system(size: 10, weight : .medium))
+                
+                Image(systemName: "hand.thumbsup.fill")
+                    .font(.system(size: 10, weight : .medium))
+                Text(String(viewModel.likeCount))
+                    .font(.system(size: 10, weight : .medium))
+            }.foregroundColor(.black)
+        }
+        .modifier(GeneralPostStyle())
+    }
+}
+
+struct WantUPost : View {
+    private let viewModel : WantUViewModel
+    
+    init(viewModel : WantUViewModel) {
+        self.viewModel = viewModel
+    }
+    
+    var body : some View {
+        VStack(alignment: .leading) {
+                Text(viewModel.postTitle)
+                    .font(.system(size: 15, weight : .medium))
+            
+                HStack{
+                    Group{
+                        Image(systemName: "message.fill")
+                            .font(.system(size: 10))
+                        Text(String(viewModel.commentCount))
+                            .font(.system(size: 10, weight : .medium))
+                    }
+                    
+                    Group{
+                        Image(systemName: "hand.thumbsup.fill")
+                            .font(.system(size: 10))
+                        Text(String(viewModel.likeCount))
+                            .font(.system(size: 10, weight : .medium))
+                    }
+                }.foregroundColor(.black)
+            
+                Divider()
+            }
+        .modifier(SpecialPostStyle())
+    }
+}
+
+struct SpecialPost : View {
+    private let viewModel : GeneralPostViewModel
+    
+    init(viewModel : GeneralPostViewModel) {
+        self.viewModel = viewModel
+    }
+    
+    var body : some View {
+        VStack(spacing: 5) {
+            HStack(alignment: .top){
+                Text(viewModel.postTitle)
+                    .font(.system(size: 10, weight : .medium))
+                
+                Spacer()
+                
+                Image(systemName: "message.fill")
+                    .font(.system(size: 5, weight : .medium))
+                Text(String(viewModel.commentCount))
+                    .font(.system(size: 5, weight : .medium))
+                
+                Image(systemName: "hand.thumbsup.fill")
+                    .font(.system(size: 5, weight : .medium))
+                Text(String(viewModel.likeCount))
+                    .font(.system(size: 5, weight : .medium))
+            }.foregroundColor(.black)
+        }
+        .modifier(SpecialPostStyle())
+    }
+}
+
