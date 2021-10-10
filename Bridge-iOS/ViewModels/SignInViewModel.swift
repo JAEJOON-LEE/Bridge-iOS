@@ -39,7 +39,7 @@ final class SignInViewModel : ObservableObject {
                 case let .failure(error) :
                     print(error.localizedDescription)
                 case .finished :
-                    print("finished sign in")
+                    print("Sign in Finished")
                 }
             } receiveValue: { [weak self] (receivedValue : SignInResponse) in
                 //print(receivedValue)

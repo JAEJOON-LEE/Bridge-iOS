@@ -47,13 +47,13 @@ final class ItemInfoViewModel : ObservableObject {
                 case let .failure(error) :
                     print(error.localizedDescription)
                 case .finished :
-                    print("finished")
+                    print("Get Item Info Finished")
                 }
             } receiveValue: { [weak self] recievedValue in
-                print(recievedValue)
+                //print(recievedValue)
                 self?.itemInfo = recievedValue
                 self?.isLiked = recievedValue.usedPostDetail.like
-                print(self?.itemInfo as Any)
+                //print(self?.itemInfo as Any)
             }.store(in: &subscription)
     }
     

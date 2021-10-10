@@ -246,7 +246,7 @@ struct ItemInfoView: View {
         }
         .background(
             NavigationLink(
-                destination : VStack {Text(viewModel.token) }.navigationBarTitle(Text("Modify used-Post")),
+                destination : VStack {Text(viewModel.token) }.navigationBarTitle(Text("Modify Post")),
                 isActive : $viewModel.showPostModify) { }
         )
     }

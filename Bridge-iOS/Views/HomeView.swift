@@ -19,19 +19,6 @@ struct HomeView : View {
         VStack(spacing: 0) {
             LocationPicker()
             ListHeader(name: "What's new today?").padding(.vertical, 10)
-            HStack {
-                Spacer()
-                NavigationLink {
-                    UsedWritingView()
-                } label: {
-                    Image(systemName : "plus")
-                        .foregroundColor(.white)
-                        .padding()
-                        .background(Color.mainTheme)
-                        .clipShape(Circle())
-                        .padding()
-                }
-            }
 
             List {
                 ForEach(viewModel.Posts, id : \.self) { Post in
@@ -43,7 +30,9 @@ struct HomeView : View {
                                                 postId : Post.postId,
                                                 isMyPost : (viewModel.memberId == Post.memberId)
                                             )
-                            )
+                            ).onDisappear(perform: {
+                                viewModel.getPosts(token: viewModel.token)
+                            })
                     ) {
                         ItemCard(viewModel : ItemCardViewModel(post: Post))
                     }

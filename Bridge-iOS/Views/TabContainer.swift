@@ -76,6 +76,23 @@ struct TabContainer: View {
                 NotificationView()
                     .preferredColorScheme(.light)
             }
+            //.sheet(isPresented: $viewModel.showUsedPostWriting, content: {
+            .background(
+                NavigationLink(destination :
+                    UsedWritingView(viewModel : UsedWritingViewModel(accessToken: signInViewModel.signInResponse?.token.accessToken ?? ""))
+                                .onDisappear(perform: {
+                                    viewModel.selectedTabIndex = 1
+                                }),
+                               isActive : $viewModel.showUsedPostWriting) { }
+            )
+//            .sheet(isPresented: $viewModel.showUsedPostWriting, content: {
+//                NavigationView {
+//                    UsedWritingView(viewModel : UsedWritingViewModel(accessToken: signInViewModel.signInResponse?.token.accessToken ?? ""))
+//                        .navigationBarItems(trailing:
+//                            Button { viewModel.showUsedPostWriting = false } label : { Text("Cancel") }
+//                        )
+//                }
+//            })
             .overlay(
                 Color.black.opacity(isSlideShow ? 0.5 : 0)
                     .edgesIgnoringSafeArea(.bottom)
@@ -119,17 +136,30 @@ extension TabContainer {
 
                 }.foregroundColor(viewModel.selectedTabIndex == 2 ? .mainTheme : .gray)
             }
-            Button {
-                viewModel.selectedTabIndex = 3
-            } label : {
-                VStack {
+            if viewModel.selectedTabIndex == 1 {
+                Button {
+                    viewModel.showUsedPostWriting = true
+                } label : {
+                    Image(systemName : "plus")
+                        .font(.system(size : 35))
+                        .padding(10)
+                        .background(Color.white)
+                        .clipShape(Circle())
+                        .shadow(radius: 3)
+                        .foregroundColor(.mainTheme)
+                }
+            } else {
+                Button {
+                    viewModel.selectedTabIndex = 3
+                } label : {
                     Image(systemName : "pencil")
                         .font(.system(size : 35))
                         .padding(10)
                         .background(Color.white)
                         .clipShape(Circle())
                         .shadow(radius: 3)
-                }.foregroundColor(viewModel.selectedTabIndex == 3 ? .mainTheme : .gray)
+                        .foregroundColor(viewModel.selectedTabIndex == 3 ? .mainTheme : .gray)
+                }
             }
             Button {
                 viewModel.selectedTabIndex = 4

@@ -9,6 +9,7 @@ import Foundation
 
 final class TabContainerViewModel : ObservableObject {
     @Published var selectedTabIndex = 2 // Home ( Market )
+    @Published var showUsedPostWriting : Bool = false
     
     func navigationBarTitleText() -> String {
         switch selectedTabIndex {

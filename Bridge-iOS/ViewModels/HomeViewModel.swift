@@ -41,7 +41,7 @@ final class HomeViewModel : ObservableObject {
                 case let .failure(error) :
                     print(error.localizedDescription)
                 case .finished :
-                    print("finished")
+                    print("Get Posts Finished")
                 }
             } receiveValue: { [weak self] (recievedValue : [Post]) in
 //                print(recievedValue)
