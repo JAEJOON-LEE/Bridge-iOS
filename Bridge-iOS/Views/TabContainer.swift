@@ -26,9 +26,9 @@ struct TabContainer: View {
                                 )
                     )
                 case 2 :
-                    BoardView()
+                    BoardView(viewModel: BoardViewModel(accessToken: signInViewModel.signInResponse?.token.accessToken ?? ""))
                 case 3 :
-                    WritingView()
+                    WritingView(viewModel: WritingViewModel(accessToken: signInViewModel.signInResponse?.token.accessToken ?? ""))
                 case 4 :
                     VStack {
                         Spacer()
@@ -46,7 +46,7 @@ struct TabContainer: View {
                         Spacer()
                     }
                 default:
-                    BoardView()
+                    BoardView(viewModel: BoardViewModel(accessToken: signInViewModel.signInResponse?.token.accessToken ?? ""))
                 }
                 
                 TabSelector
@@ -77,14 +77,14 @@ struct TabContainer: View {
                     .preferredColorScheme(.light)
             }
             //.sheet(isPresented: $viewModel.showUsedPostWriting, content: {
-            .background(
-                NavigationLink(destination :
-                    UsedWritingView(viewModel : UsedWritingViewModel(accessToken: signInViewModel.signInResponse?.token.accessToken ?? ""))
-                                .onDisappear(perform: {
-                                    viewModel.selectedTabIndex = 1
-                                }),
-                               isActive : $viewModel.showUsedPostWriting) { }
-            )
+//            .background(
+//                NavigationLink(destination :
+//                    UsedWritingView(viewModel : UsedWritingViewModel(accessToken: signInViewModel.signInResponse?.token.accessToken ?? ""))
+//                                .onDisappear(perform: {
+//                                    viewModel.selectedTabIndex = 1
+//                                }),
+//                               isActive : $viewModel.showUsedPostWriting) { }
+//            )
 //            .sheet(isPresented: $viewModel.showUsedPostWriting, content: {
 //                NavigationView {
 //                    UsedWritingView(viewModel : UsedWritingViewModel(accessToken: signInViewModel.signInResponse?.token.accessToken ?? ""))

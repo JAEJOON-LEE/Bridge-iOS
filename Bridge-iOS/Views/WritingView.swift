@@ -8,7 +8,13 @@
 import SwiftUI
 
 struct WritingView : View {
-    @StateObject private var viewModel = WritingViewModel()
+//    @Environment(\.presentationMode) var presentationMode
+    @StateObject private var viewModel : WritingViewModel
+    @EnvironmentObject private var signInViewModel : SignInViewModel
+        
+        init(viewModel : WritingViewModel) {
+            self._viewModel = StateObject(wrappedValue: viewModel)
+        }
     
     @State var isLinkActive : Bool = false
     @State var imagePickerPresented = false
@@ -16,19 +22,25 @@ struct WritingView : View {
     var uploadButton : some View {
         // temporary linked to TabContainer //
         Button {
+//            self.presentationMode.wrappedValue.dismiss()
             isLinkActive = true
 //            print(viewModel.email)
 //            print(viewModel.password)
-            viewModel.post(title: viewModel.title, description: viewModel.description, anonymous: viewModel.anonymous, files: viewModel.files)
+            viewModel.isWant ?
+                viewModel.wantPost(title: viewModel.title, description: viewModel.description, anonymous: viewModel.anonymous, files: viewModel.files)
+             :
+                viewModel.post(title: viewModel.title, description: viewModel.description, anonymous: viewModel.anonymous, files: viewModel.files)
+            
         } label : {
             Text("Upload")
                 .modifier(SubmitButtonStyle())
 //                .disabled(!viewModel.isValid())
 //                .opacity(viewModel.isValid() ? 1.0 : 0.4)
-        }.background(
+        }
+        .background(
             NavigationLink(
                 destination: TabContainer()
-                                .environmentObject(viewModel),
+                                .environmentObject(signInViewModel),
                 isActive : $isLinkActive
             ) {
                 // label
@@ -69,7 +81,7 @@ struct WritingView : View {
             HStack{
                 Toggle("Anonymous", isOn: $viewModel.anonymous)
                 Spacer()
-                Toggle("Bug Report", isOn: $viewModel.isBugReport)
+                Toggle("Want U", isOn: $viewModel.isWant)
                 
                 imageButton
             }
@@ -88,9 +100,3 @@ struct WritingView : View {
     }
 }
 
-
-struct Previews: PreviewProvider {
-    static var previews: some View {
-        WritingView()
-    }
-}
