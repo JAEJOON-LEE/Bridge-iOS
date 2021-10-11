@@ -11,11 +11,15 @@ import Alamofire
 
 final class PostInfoViewModel : ObservableObject {
     @Published var totalBoardPostDetail : TotalBoardPostDetail?
-    @Published var isMemberInfoClicked : Bool = false
     @Published var isLiked : Bool?
     @Published var likeCount : Int = 0
     @Published var commentCount : Int = 0
+    @Published var isMemberInfoClicked : Bool = false
+    @Published var isMenuClicked : Bool = false
     @Published var isImageTap : Bool = false
+    @Published var showAction : Bool = false
+    @Published var showConfirmDeletion : Bool = false
+    @Published var showPostModify : Bool = false
     
 //    @Published var comment : Comments?
     @Published var commentLists : [CommentList] = []
@@ -23,12 +27,14 @@ final class PostInfoViewModel : ObservableObject {
     @Published var isAnonymous : Bool = false
     
     private var subscription = Set<AnyCancellable>()
-    private let token : String
+    let token : String
     private let postId : Int
+    let isMyPost : Bool
     
-    init(token : String, postId : Int) {
+    init(token : String, postId : Int, isMyPost : Bool) {
         self.token = token
         self.postId = postId
+        self.isMyPost = isMyPost
         getBoardPostDetail()
         getComment()
     }
@@ -70,7 +76,20 @@ final class PostInfoViewModel : ObservableObject {
                    encoding: URLEncoding.default,
                    headers: header
         ).response { json in
-            print(json)
+//            print(json)
+        }
+    }
+    
+    func deletePost() {
+        let url = "http://3.36.233.180:8080/board-posts/\(postId)"
+        let header: HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
+        
+        AF.request(url,
+                   method: .delete,
+                   encoding: URLEncoding.default,
+                   headers: header
+        ).responseJSON { json in
+//            print(json)
         }
     }
     
@@ -88,7 +107,7 @@ final class PostInfoViewModel : ObservableObject {
 
             guard let statusCode = response.response?.statusCode else { return }
 
-            print("SendComment statuscode = " + String(statusCode))
+//            print("SendComment statuscode = " + String(statusCode))
         }
         
         //refresh

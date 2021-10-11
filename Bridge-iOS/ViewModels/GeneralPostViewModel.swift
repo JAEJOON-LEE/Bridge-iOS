@@ -9,11 +9,9 @@ import Foundation
 
 final class GeneralPostViewModel : ObservableObject {
     let postList : PostList
-//    let member : PostMember
     
     init(postList : PostList) {
         self.postList = postList
-//        self.member = member
     }
     
     var imageUrl : String { postList.postInfo.image }

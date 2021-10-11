@@ -19,16 +19,19 @@ struct BoardView : View {
     var body : some View {
         VStack(spacing: 0) {
             
-            //Hot Board
+            //Hot Posts
             List {
                 Section(header: Text("Hot board")) {
                     ForEach(viewModel.hotLists, id : \.self) { HotList in
-//                    NavigationLink(
-//                        destination:
-////                            PostInfoView(viewModel: PostInfoViewModel(token: viewModel.token, postId : WantList.postInfo.postId))
-//                    ) {
-                            SpecialPost(viewModel : GeneralPostViewModel(postList: HotList))
-//                    }
+                    NavigationLink(
+                        destination:
+                            PostInfoView(viewModel: PostInfoViewModel(
+                                            token: viewModel.token,
+                                            postId : HotList.postInfo.postId,
+                                            isMyPost : (viewModel.memberId == HotList.member?.memberId)))
+                    ) {
+                        SpecialPost(viewModel : GeneralPostViewModel(postList: HotList))
+                    }
                     }
                 }
             }.foregroundColor(Color.mainTheme)
@@ -39,12 +42,15 @@ struct BoardView : View {
             List {
                 Section(header: Text("Want U")) {
                     ForEach(viewModel.wantLists, id : \.self) { WantList in
-//                    NavigationLink(
-//                        destination:
-////                            PostInfoView(viewModel: PostInfoViewModel(token: viewModel.token, postId : WantList.postInfo.postId))
-//                    ) {
-                            WantUPost(viewModel : WantUViewModel(postList: WantList))
-//                    }
+                    NavigationLink(
+                        destination:
+                            WantUInfoView(viewModel: WantUInfoViewModel(
+                                            token: viewModel.token,
+                                            postId : WantList.postInfo.postId,
+                                            isMyPost : (viewModel.memberId == WantList.member?.memberId)))
+                    ) {
+                        WantUPost(viewModel : WantUViewModel(postList: WantList))
+                    }
                     }
                 }
             }.foregroundColor(Color.mainTheme)
@@ -58,7 +64,10 @@ struct BoardView : View {
                 ForEach(viewModel.postLists, id : \.self) { PostList in
                     NavigationLink(
                         destination:
-                            PostInfoView(viewModel: PostInfoViewModel(token: viewModel.token, postId : PostList.postInfo.postId))
+                            PostInfoView(viewModel: PostInfoViewModel(
+                                            token: viewModel.token,
+                                            postId : PostList.postInfo.postId,
+                                            isMyPost : (viewModel.memberId == PostList.member?.memberId)))
                     ) {
                         GeneralPost(viewModel : GeneralPostViewModel(postList: PostList))
                     }
@@ -163,8 +172,6 @@ struct WantUPost : View {
                             .font(.system(size: 10, weight : .medium))
                     }
                 }.foregroundColor(.black)
-            
-                Divider()
             }
         .modifier(SpecialPostStyle())
     }

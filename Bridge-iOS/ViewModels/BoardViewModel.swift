@@ -17,9 +17,11 @@ final class BoardViewModel : ObservableObject {
     
     private var subscription = Set<AnyCancellable>()
     let token : String
+    let memberId : Int
     
-    init(accessToken : String) {
+    init(accessToken : String, memberId : Int) {
         self.token = accessToken
+        self.memberId = memberId
         getBoardPosts(token : accessToken)
         getWantPosts(token : accessToken)
         getHotPosts(token : accessToken)
@@ -38,8 +40,8 @@ final class BoardViewModel : ObservableObject {
                 
                     guard let statusCode = response.response?.statusCode else { return }
                     
-                    print(statusCode)
-                print(response)
+//                    print(statusCode)
+//                print(response)
             }
             .publishDecodable(type : TotalPostList.self)
             .compactMap { $0.value }
@@ -53,7 +55,7 @@ final class BoardViewModel : ObservableObject {
                 }
             } receiveValue: { [weak self] (recievedValue : [PostList]) in
                 self?.postLists = recievedValue
-                print(recievedValue)
+//                print(recievedValue)
                 
             }.store(in: &subscription)
     }
@@ -73,7 +75,7 @@ final class BoardViewModel : ObservableObject {
                     guard let statusCode = response.response?.statusCode else { return }
                     
                     print(statusCode)
-                print(response)
+//                print(response)
             }
             .publishDecodable(type : TotalPostList.self)
             .compactMap { $0.value }
@@ -87,7 +89,7 @@ final class BoardViewModel : ObservableObject {
                 }
             } receiveValue: { [weak self] (recievedValue : [PostList]) in
                 self?.hotLists = recievedValue
-                print(recievedValue)
+//                print(recievedValue)
                 
             }.store(in: &subscription)
     }
@@ -106,7 +108,7 @@ final class BoardViewModel : ObservableObject {
                     guard let statusCode = response.response?.statusCode else { return }
 
                     print(statusCode)
-                print(response)
+//                print(response)
             }
             .publishDecodable(type : WantUTotalPostList.self)
             .compactMap { $0.value }

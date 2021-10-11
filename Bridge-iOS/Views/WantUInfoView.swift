@@ -1,19 +1,19 @@
 //
-//  PostInfoView.swift
+//  WantUInfoView.swift
 //  Bridge-iOS
 //
-//  Created by 이재준 on 2021/10/08.
+//  Created by 이재준 on 2021/10/11.
 //
 
 import SwiftUI
 import URLImage
 
-struct PostInfoView: View { // 게시글 상세 페이지
+struct WantUInfoView: View { // 게시글 상세 페이지
     @Environment(\.presentationMode) var presentationMode
-    @StateObject private var viewModel : PostInfoViewModel
+    @StateObject private var viewModel : WantUInfoViewModel
     @State var isLinkActive : Bool = false
     
-    init(viewModel : PostInfoViewModel) {
+    init(viewModel : WantUInfoViewModel) {
         self._viewModel = StateObject(wrappedValue: viewModel)
     }
     
@@ -23,7 +23,7 @@ struct PostInfoView: View { // 게시글 상세 페이지
                 //Profile
                 HStack{
                     URLImage( //프로필 이미지
-                        URL(string : viewModel.totalBoardPostDetail?.member?.profileImg ?? "https://static.thenounproject.com/png/741653-200.png") ??
+                        URL(string : viewModel.totalWantPostDetail?.member?.profileImg ?? "https://static.thenounproject.com/png/741653-200.png") ??
                         URL(string: "https://static.thenounproject.com/png/741653-200.png")!
                     ) { image in
                         image
@@ -36,12 +36,11 @@ struct PostInfoView: View { // 게시글 상세 페이지
                     
                     HStack{
                         VStack(alignment: .leading){
-                            Text(viewModel.totalBoardPostDetail?.member?.username ?? "Anonymous")
+                            Text(viewModel.totalWantPostDetail?.member?.username ?? "Anonymous")
                                 .fontWeight(.bold)
-                            Text(viewModel.totalBoardPostDetail?.boardPostDetail.createdAt ?? "time not found")
+                            Text(viewModel.totalWantPostDetail?.wantPostDetail.createdAt ?? "time not found")
                         }
                         Spacer()
-                        
                     }
                     
                 }
@@ -51,7 +50,7 @@ struct PostInfoView: View { // 게시글 상세 페이지
                 //Images
                 ScrollView(.horizontal, showsIndicators: true) {
                     HStack {
-                        ForEach(viewModel.totalBoardPostDetail?.boardPostDetail.postImages ?? [], id : \.self) { imageInfo in
+                        ForEach(viewModel.totalWantPostDetail?.wantPostDetail.postImages ?? [], id : \.self) { imageInfo in
                             URLImage(
                                 URL(string : imageInfo.image) ??
                                 URL(string: "https://static.thenounproject.com/png/741653-200.png")!
@@ -67,23 +66,23 @@ struct PostInfoView: View { // 게시글 상세 페이지
                 
                 //Contents
                 VStack(alignment: .leading){
-                    Text(viewModel.totalBoardPostDetail?.boardPostDetail.title ?? "Title not found")
+                    Text(viewModel.totalWantPostDetail?.wantPostDetail.title ?? "Title not found")
                         .font(.title2)
                         .fontWeight(.bold)
                 
                     
                     HStack(alignment: .lastTextBaseline){
-                        Text(viewModel.totalBoardPostDetail?.boardPostDetail.description ?? "No description")
+                        Text(viewModel.totalWantPostDetail?.wantPostDetail.description ?? "No description")
                             .padding()
                         Button{
                             //라이크 버튼 클릭
                             viewModel.isLiked?.toggle()
-                            viewModel.likePost(isliked: (viewModel.totalBoardPostDetail?.boardPostDetail.like ?? true))
+                            viewModel.likeWantPost(isliked: (viewModel.totalWantPostDetail?.wantPostDetail.like ?? true))
                         } label : {
                             Image(systemName: (viewModel.isLiked ?? true) ? "hand.thumbsup.fill" : "hand.thumbsup")
                                 .foregroundColor(.black)
                         }
-                        Text(String((viewModel.totalBoardPostDetail?.boardPostDetail.likeCount)!) )
+                        Text(String((viewModel.totalWantPostDetail?.wantPostDetail.likeCount)!) )
                     }
                 }
                 .frame(width : UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.15)
@@ -96,7 +95,7 @@ struct PostInfoView: View { // 게시글 상세 페이지
                     .fontWeight(.bold)
                 ScrollView(.vertical, showsIndicators: false) {
                     ForEach(viewModel.commentLists, id : \.self) { Comment in
-                            CommentView(viewModel : CommentViewModel(commentList: Comment))
+                            WantCommentView(viewModel : CommentViewModel(commentList: Comment))
                         
                     }
                 }.listStyle(PlainListStyle()) // iOS 15 대응
@@ -118,7 +117,7 @@ struct PostInfoView: View { // 게시글 상세 페이지
                     }
                     Text("Anonymous")
                     Button{
-                        viewModel.sendComment(content: viewModel.commentInput, anonymous: String(viewModel.isAnonymous))
+                        viewModel.sendWantComment(content: viewModel.commentInput, anonymous: String(viewModel.isAnonymous))
                     } label : {
                         Image(systemName: "paperplane")
                             .foregroundColor(.black)
@@ -172,7 +171,7 @@ struct PostInfoView: View { // 게시글 상세 페이지
                 title: Text("Confirmation"),
                 message: Text("Do you want to delete this post?"),
                 primaryButton: .destructive(Text("Yes"), action : {
-                    viewModel.deletePost()
+                    viewModel.deleteWantPost()
                     self.presentationMode.wrappedValue.dismiss()
                 }),
                 secondaryButton: .cancel(Text("No")))
@@ -186,7 +185,7 @@ struct PostInfoView: View { // 게시글 상세 페이지
     }
 }
 
-struct CommentView : View {
+struct WantCommentView : View {
     private let viewModel : CommentViewModel
     
     init(viewModel : CommentViewModel) {
