@@ -26,9 +26,18 @@ struct TabContainer: View {
                                 )
                     )
                 case 2 :
-                    BoardView(viewModel: BoardViewModel(accessToken: signInViewModel.signInResponse?.token.accessToken ?? ""))
+                    BoardView(viewModel:
+                                BoardViewModel(
+                                    accessToken: signInViewModel.signInResponse?.token.accessToken ?? "",
+                                    memberId : signInViewModel.signInResponse?.memberId ?? -1
+                                )
+                    )
                 case 3 :
-                    WritingView(viewModel: WritingViewModel(accessToken: signInViewModel.signInResponse?.token.accessToken ?? ""))
+                    WritingView(viewModel: WritingViewModel(
+                                    accessToken: signInViewModel.signInResponse?.token.accessToken ?? "",
+                                    isForModifying : false
+                        )
+                    )
                 case 4 :
                     VStack {
                         Spacer()
@@ -46,7 +55,12 @@ struct TabContainer: View {
                         Spacer()
                     }
                 default:
-                    BoardView(viewModel: BoardViewModel(accessToken: signInViewModel.signInResponse?.token.accessToken ?? ""))
+                    BoardView(viewModel:
+                                BoardViewModel(
+                                    accessToken: signInViewModel.signInResponse?.token.accessToken ?? "",
+                                    memberId : signInViewModel.signInResponse?.memberId ?? -1
+                                )
+                    )
                 }
                 
                 TabSelector

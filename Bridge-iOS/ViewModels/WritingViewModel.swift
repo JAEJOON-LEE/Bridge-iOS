@@ -29,11 +29,13 @@ class WritingViewModel : ObservableObject {
     @Published var selectedImage: UIImage? // 일단 이미지 하나만
     @Published var isWant = false
     @Published var writing : WritingInfo?
-    private let token : String
+    let isForModifying : Bool
+    let token : String
         
-        init(accessToken : String) {
+    init(accessToken : String, isForModifying : Bool) {
             self.token = accessToken
-        }
+            self.isForModifying = isForModifying
+    }
 //    let url : String = "http://3.36.233.180:8080/board-posts"
     
     private var subscription = Set<AnyCancellable>()
@@ -72,6 +74,36 @@ class WritingViewModel : ObservableObject {
             print(statusCode)
         }
     }
+//    
+//    func modifyPost(title : String, description : String, anonymous : Bool, files : Data?) {
+//        let header: HTTPHeaders = [
+//            "X-AUTH-TOKEN": token,
+//            "Accept": "multipart/form-data",
+//            "Content-Type": "multipart/form-data"
+//        ]
+//        
+//        param = ["title" : title,
+//                 "description" : description,
+//                 "anonymous" : String(anonymous)]
+//        
+//        AF.upload(multipartFormData: { multipartFormData in
+//            
+//                        multipartFormData.append("{ \"title\" : \"\(title)\", \"description\" : \"\(description)\", \"anonymous\" : \"\(anonymous)\" }".data(using: .utf8)!, withName: "postInfo", mimeType: "application/json")
+//                        
+//                        if(files != nil){
+//                            multipartFormData.append(files!, withName: "files", fileName: "From_iOS", mimeType: "image/jpg")
+//                        }
+//                        
+//                    }, to:"http://3.36.233.180:8080/board-posts/",
+//                    method: .post,
+//                    headers: header)
+//            .responseString{ (response) in
+//            
+//            guard let statusCode = response.response?.statusCode else { return }
+//            
+//            print(statusCode)
+//        }
+//    }
     
     func wantPost(title : String, description : String, anonymous : Bool, files : Data?) {
         let header: HTTPHeaders = [

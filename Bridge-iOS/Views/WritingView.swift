@@ -39,8 +39,8 @@ struct WritingView : View {
         }
         .background(
             NavigationLink(
-                destination: TabContainer()
-                                .environmentObject(signInViewModel),
+                destination: TabContainer(),
+                // .environmentObject(signInViewModel),
                 isActive : $isLinkActive
             ) {
                 // label
@@ -66,18 +66,36 @@ struct WritingView : View {
     
     var body: some View {
         VStack(spacing : 20) {
-            //LocationPicker()
-            HStack {
-                Text("Board Writing")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                Spacer()
-            }.padding(20)
+            if(!viewModel.isForModifying){
+                HStack{
+                    Spacer()
+                }.padding()
+            }else{
+                HStack {
+                    Text("Modify Post")
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
+                    Spacer()
+                }.padding(20)
+            }
             TextField("title", text: $viewModel.title)
                 .modifier(SignViewTextFieldStyle())
             TextField("titleContent", text: $viewModel.description)
-                .frame(height : UIScreen.main.bounds.height * 0.3)
+                .frame(height : (viewModel.isForModifying) ? (UIScreen.main.bounds.height * 0.3) : (UIScreen.main.bounds.height * 0.18) )
                 .modifier(SignViewTextFieldStyle())
+            
+            if(viewModel.selectedImage != nil){
+                Image(uiImage: viewModel.selectedImage!)
+                    .resizable()
+                    .foregroundColor(.black)
+                    .frame(width: 70, height: 70, alignment: .center)
+                    .cornerRadius(10)
+            }else{
+                Image(systemName: "photo")
+                    .foregroundColor(.black)
+                    .frame(width: 70, height: 70, alignment: .center)
+            }
+            
             HStack{
                 Toggle("Anonymous", isOn: $viewModel.anonymous)
                 Spacer()
@@ -87,16 +105,16 @@ struct WritingView : View {
             }
             .padding(.horizontal, 30)
             .font(.caption)
-                        
+            
+            if(!viewModel.isForModifying){
+                Text("Policy Text Area : asdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddas")
+                    .font(.caption2)
+                    .padding(.horizontal, 30)
+            }
+            
             uploadButton
 //                .modifier(SubmitButtonStyle())
-                
-            Text("Policy Text Area : asdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddas")
-                .font(.caption2)
-                .padding(.horizontal, 30)
-            
             Spacer()
         }
     }
 }
-
