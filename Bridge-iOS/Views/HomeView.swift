@@ -34,26 +34,29 @@ struct HomeView : View {
                 }
             }.foregroundColor(.mainTheme)
             .padding(20)
+            .padding(.vertical, 10)
             .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.05)
             
-            List {
-                ForEach(viewModel.Posts, id : \.self) { Post in
-                    NavigationLink(
-                        destination:
-                            ItemInfoView(viewModel:
-                                            ItemInfoViewModel(
-                                                token: viewModel.token,
-                                                postId : Post.postId,
-                                                isMyPost : (viewModel.memberId == Post.memberId)
-                                            )
-                            ).onDisappear(perform: {
-                                viewModel.getPosts(token: viewModel.token)
-                            })
-                    ) {
-                        ItemCard(viewModel : ItemCardViewModel(post: Post))
+            ScrollView {
+                LazyVStack {
+                    ForEach(viewModel.Posts, id : \.self) { Post in
+                        NavigationLink(
+                            destination:
+                                ItemInfoView(viewModel:
+                                                ItemInfoViewModel(
+                                                    token: viewModel.token,
+                                                    postId : Post.postId,
+                                                    isMyPost : (viewModel.memberId == Post.memberId)
+                                                )
+                                ).onDisappear(perform: {
+                                    viewModel.getPosts(token: viewModel.token)
+                                })
+                        ) {
+                            ItemCard(viewModel : ItemCardViewModel(post: Post))
+                        }.buttonStyle(.plain)
                     }
                 }
-            }.listStyle(PlainListStyle()) // iOS 15 대응
+            }
         }.onAppear {
             viewModel.getPosts(token: viewModel.token)
         }
