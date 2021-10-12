@@ -11,7 +11,7 @@ import URLImage
 struct ItemInfoView: View {
     @Environment(\.presentationMode) var presentationMode
     @StateObject private var viewModel : ItemInfoViewModel
-    
+
     init(viewModel : ItemInfoViewModel) {
         self._viewModel = StateObject(wrappedValue: viewModel)
     }
@@ -51,20 +51,32 @@ struct ItemInfoView: View {
                             Text(viewModel.itemInfo?.usedPostDetail.title ?? "Title not found")
                                 .font(.largeTitle)
                                 .fontWeight(.bold)
-                            HStack{
-                                Text("time")
-                                Text("| \(viewModel.itemInfo?.usedPostDetail.viewCount ?? 0) View")
-                                Text("| \(viewModel.itemInfo?.usedPostDetail.likeCount ?? 0) Likes")
-                            }.font(.system(size : 13))
+                            HStack(spacing : 5) {
+                                Text(viewModel.convertReturnedDateString(viewModel.itemInfo?.usedPostDetail.createdAt ?? "2021-10-01 00:00:00"))
+                                Text("|").foregroundColor(.mainTheme)
+                                Text("\(viewModel.itemInfo?.usedPostDetail.viewCount ?? 0) View")
+                                Text("|").foregroundColor(.mainTheme)
+                                Text("\(viewModel.itemInfo?.usedPostDetail.likeCount ?? 0) Likes")
+                            }.font(.system(size : 13, weight : .semibold))
                         }
                         Spacer()
-                        Text("$ " + String(format: "%.1f", (viewModel.itemInfo?.usedPostDetail.price)!))
-                            .font(.largeTitle)
+                        HStack(spacing : 5) {
+                            Text("$")
+                                .font(.largeTitle)
+                                .fontWeight(.bold)
+                            Text(viewModel.formattedPrice)
+                                .foregroundColor(.mainTheme)
+                                .font(.largeTitle)
+                                .fontWeight(.bold)
+                        }
                     }
+
                     
                     // User Area
                     HStack {
-                        URLImage(URL(string: viewModel.itemInfo?.member.profileImage ?? "")!) { image in
+                        URLImage(
+                            URL(string: viewModel.itemInfo?.member.profileImage ?? "https://static.thenounproject.com/png/741653-200.png")!
+                        ) { image in
                             image
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)

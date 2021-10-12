@@ -18,8 +18,24 @@ struct HomeView : View {
     var body : some View {
         VStack(spacing: 0) {
             LocationPicker()
-            ListHeader(name: "What's new today?").padding(.vertical, 10)
-
+            //ListHeader(name: "What's new today?").padding(.vertical, 10)
+            HStack{
+                Text("What's new today?")
+                    .font(.title2)
+                    .fontWeight(.semibold)
+                Spacer()
+                Button {
+                    viewModel.getPosts(token: viewModel.token)
+                } label : {
+                    HStack(spacing : 5) {
+                        Text("refresh")
+                        Image(systemName: "arrow.clockwise")
+                    }
+                }
+            }.foregroundColor(.mainTheme)
+            .padding(20)
+            .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.05)
+            
             List {
                 ForEach(viewModel.Posts, id : \.self) { Post in
                     NavigationLink(

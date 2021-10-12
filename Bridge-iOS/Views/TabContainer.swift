@@ -90,7 +90,6 @@ struct TabContainer: View {
                 NotificationView()
                     .preferredColorScheme(.light)
             }
-            //.sheet(isPresented: $viewModel.showUsedPostWriting, content: {
 //            .background(
 //                NavigationLink(destination :
 //                    UsedWritingView(viewModel : UsedWritingViewModel(accessToken: signInViewModel.signInResponse?.token.accessToken ?? ""))
