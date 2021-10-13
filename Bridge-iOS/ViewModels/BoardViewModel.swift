@@ -33,7 +33,7 @@ final class BoardViewModel : ObservableObject {
         
         AF.request(url,
                    method: .get,
-                   parameters: ["lastPost": 1000],
+//                   parameters: ["lastPost": 1000],
                    encoding: URLEncoding.default,
                    headers: header)
             .responseString{ (response) in
@@ -66,7 +66,7 @@ final class BoardViewModel : ObservableObject {
         
         AF.request(url,
                    method: .get,
-                   parameters: ["lastPost": 1000,
+                   parameters: [ //"lastPost": 1000,
                                 "hot": true ],
                    encoding: URLEncoding.default,
                    headers: header)

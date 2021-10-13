@@ -22,6 +22,7 @@ extension String{
 class WritingViewModel : ObservableObject {
     var param: Dictionary<String, Any> = Dictionary<String, Any>()
     
+    @Published var infoForModifying : TotalBoardPostDetail?
     @Published var title = ""
     @Published var description = ""
     @Published var anonymous = false
@@ -29,12 +30,18 @@ class WritingViewModel : ObservableObject {
     @Published var selectedImage: UIImage? // 일단 이미지 하나만
     @Published var isWant = false
     @Published var writing : WritingInfo?
+    
+    let postId : Int
     let isForModifying : Bool
     let token : String
         
-    init(accessToken : String, isForModifying : Bool) {
-            self.token = accessToken
-            self.isForModifying = isForModifying
+    init(accessToken : String, postId : Int, isForModifying : Bool) {
+        self.token = accessToken
+        self.postId = postId
+        self.isForModifying = isForModifying
+        
+        getBoardPostDetail()
+        
     }
 //    let url : String = "http://3.36.233.180:8080/board-posts"
     
@@ -74,36 +81,72 @@ class WritingViewModel : ObservableObject {
             print(statusCode)
         }
     }
-//    
-//    func modifyPost(title : String, description : String, anonymous : Bool, files : Data?) {
-//        let header: HTTPHeaders = [
-//            "X-AUTH-TOKEN": token,
-//            "Accept": "multipart/form-data",
-//            "Content-Type": "multipart/form-data"
-//        ]
-//        
+    
+    func getBoardPostDetail() {
+        
+        let url = "http://3.36.233.180:8080/board-posts/\(postId)"
+        let header: HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
+        
+        AF.request(url,
+                   method: .get,
+                   encoding: URLEncoding.default,
+                   headers: header
+        )
+            .publishDecodable(type : TotalBoardPostDetail.self)
+            .compactMap { $0.value }
+            .sink { completion in
+                switch completion {
+                case let .failure(error) :
+                    print(error.localizedDescription)
+                case .finished :
+                    print("finished")
+                }
+            } receiveValue: { [weak self] recievedValue in
+                print(recievedValue)
+                self?.infoForModifying = recievedValue
+//                print(self?.totalBoardPostDetail as Any)
+            }.store(in: &subscription)
+    }
+    
+    func modifyPost(title : String?, description : String?, anonymous : Bool, files : Data?) {
+        let header: HTTPHeaders = [
+            "X-AUTH-TOKEN": token,
+            "Accept": "multipart/form-data",
+            "Content-Type": "multipart/form-data"
+        ]
+//
 //        param = ["title" : title,
 //                 "description" : description,
 //                 "anonymous" : String(anonymous)]
-//        
-//        AF.upload(multipartFormData: { multipartFormData in
-//            
-//                        multipartFormData.append("{ \"title\" : \"\(title)\", \"description\" : \"\(description)\", \"anonymous\" : \"\(anonymous)\" }".data(using: .utf8)!, withName: "postInfo", mimeType: "application/json")
-//                        
-//                        if(files != nil){
-//                            multipartFormData.append(files!, withName: "files", fileName: "From_iOS", mimeType: "image/jpg")
-//                        }
-//                        
-//                    }, to:"http://3.36.233.180:8080/board-posts/",
-//                    method: .post,
-//                    headers: header)
-//            .responseString{ (response) in
-//            
-//            guard let statusCode = response.response?.statusCode else { return }
-//            
-//            print(statusCode)
-//        }
-//    }
+        
+        var query : String = "{ "
+        if(title != nil && title != ""){
+            query.append("\"title\" : \"\(title!)\", ")
+        }
+        if(description != nil && description != ""){
+            query.append("\"description\" : \"\(description!)\", ")
+        }
+        query.append(" \"anonymous\" : \"\(anonymous)\" }");
+        
+        print(query)
+        AF.upload(multipartFormData: { multipartFormData in
+            
+                        multipartFormData.append(query.data(using: .utf8)!, withName: "postInfo", mimeType: "application/json")
+                        
+                        if(files != nil){
+                            multipartFormData.append(files!, withName: "files", fileName: "From_iOS", mimeType: "image/jpg")
+                        }
+                        
+                    }, to:"http://3.36.233.180:8080/board-posts/\(postId)",
+                    method: .post,
+                    headers: header)
+            .responseString{ (response) in
+            
+            guard let statusCode = response.response?.statusCode else { return }
+            
+            print(statusCode)
+        }
+    }
     
     func wantPost(title : String, description : String, anonymous : Bool, files : Data?) {
         let header: HTTPHeaders = [
@@ -134,5 +177,7 @@ class WritingViewModel : ObservableObject {
             print(statusCode)
         }
     }
+    
+    
 
 }

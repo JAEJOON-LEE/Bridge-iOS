@@ -45,7 +45,7 @@ final class SignUpViewModel : ObservableObject {
             guard let statusCode = response.response?.statusCode else { return }
         
             print("email check = " + String(statusCode))
-            print(self.email)
+//            print(self.email)
         }
     }
     /* ------------------------------------------------------------------------------------------------*/
@@ -62,8 +62,8 @@ final class SignUpViewModel : ObservableObject {
             guard let statusCode = response.response?.statusCode else { return }
         
             print("email verify = " + String(statusCode))
-            print(self.email)
-            print(self.verifyCode)
+//            print(self.email)
+//            print(self.verifyCode)
         }
     }
     /* ------------------------------------------------------------------------------------------------*/

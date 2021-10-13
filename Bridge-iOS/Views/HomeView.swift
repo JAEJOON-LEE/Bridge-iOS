@@ -53,7 +53,7 @@ struct HomeView : View {
                                 })
                         ) {
                             ItemCard(viewModel : ItemCardViewModel(post: Post))
-                        }.buttonStyle(.plain)
+                        }//.buttonStyle(.plain)
                     }
                 }
             }

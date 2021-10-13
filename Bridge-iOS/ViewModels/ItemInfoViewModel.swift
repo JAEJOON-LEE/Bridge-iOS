@@ -104,7 +104,7 @@ final class ItemInfoViewModel : ObservableObject {
                    encoding: URLEncoding.default,
                    headers: header
         ).response { json in
-            print(json)
+//            print(json)
         }
     }
     
@@ -117,7 +117,7 @@ final class ItemInfoViewModel : ObservableObject {
                    encoding: URLEncoding.default,
                    headers: header
         ).responseJSON { json in
-            print(json)
+//            print(json)
         }
     }
 }

@@ -52,7 +52,7 @@ final class SignInViewModel : ObservableObject {
                     description: receivedValue.description,
                     createdAt: receivedValue.createdAt
                 )
-                print(self?.signInResponse as Any)
+//                print(self?.signInResponse as Any)
             }
             .store(in: &subscription)
     }

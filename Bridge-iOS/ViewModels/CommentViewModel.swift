@@ -6,18 +6,47 @@
 //
 
 import Foundation
+import Combine
+import Alamofire
 
 final class CommentViewModel : ObservableObject {
     let commentList : CommentList
+    let token : String
+    let isMyComment : Bool
+    private let postId : Int
+    private let commentId : Int
     
-    init(commentList : CommentList) {
+    @Published var isMenuClicked : Bool = false
+    @Published var showAction : Bool = false
+    @Published var showConfirmDeletion : Bool = false
+    @Published var showPostModify : Bool = false
+    
+    init(token : String, commentList : CommentList, postId : Int, commentId : Int, isMyComment : Bool) {
+        self.token = token
         self.commentList = commentList
+        self.postId = postId
+        self.commentId = commentId
+        self.isMyComment = isMyComment
     }
     
     var content : String { commentList.content }
     var createdAt : String { commentList.createdAt }
     var profileImage : String { commentList.member?.profileImage ?? "nil"}
     var userName : String { commentList.member?.username ?? "nil" }
+    
+    
+    func deleteComment() {
+        let url = "http://3.36.233.180:8080/board-posts/\(postId)/comments/\(commentId)"
+        let header: HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
+        
+        AF.request(url,
+                   method: .delete,
+                   encoding: URLEncoding.default,
+                   headers: header
+        ).responseJSON { json in
+//            print(json)
+        }
+    }
 }
 
 /*

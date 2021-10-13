@@ -35,6 +35,7 @@ struct TabContainer: View {
                 case 3 :
                     WritingView(viewModel: WritingViewModel(
                                     accessToken: signInViewModel.signInResponse?.token.accessToken ?? "",
+                                    postId : -1,
                                     isForModifying : false
                         )
                     )
@@ -90,6 +91,7 @@ struct TabContainer: View {
                 NotificationView()
                     .preferredColorScheme(.light)
             }
+            //.sheet(isPresented: $viewModel.showUsedPostWriting, content: {
 //            .background(
 //                NavigationLink(destination :
 //                    UsedWritingView(viewModel : UsedWritingViewModel(accessToken: signInViewModel.signInResponse?.token.accessToken ?? ""))

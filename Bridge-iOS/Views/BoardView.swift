@@ -28,6 +28,7 @@ struct BoardView : View {
                             PostInfoView(viewModel: PostInfoViewModel(
                                             token: viewModel.token,
                                             postId : HotList.postInfo.postId,
+                                            memberId : viewModel.memberId,
                                             isMyPost : (viewModel.memberId == HotList.member?.memberId)))
                     ) {
                         SpecialPost(viewModel : GeneralPostViewModel(postList: HotList))
@@ -47,6 +48,7 @@ struct BoardView : View {
                             WantUInfoView(viewModel: WantUInfoViewModel(
                                             token: viewModel.token,
                                             postId : WantList.postInfo.postId,
+                                            memberId : viewModel.memberId,
                                             isMyPost : (viewModel.memberId == WantList.member?.memberId)))
                     ) {
                         WantUPost(viewModel : WantUViewModel(postList: WantList))
@@ -67,6 +69,7 @@ struct BoardView : View {
                             PostInfoView(viewModel: PostInfoViewModel(
                                             token: viewModel.token,
                                             postId : PostList.postInfo.postId,
+                                            memberId : viewModel.memberId,
                                             isMyPost : (viewModel.memberId == PostList.member?.memberId)))
                     ) {
                         GeneralPost(viewModel : GeneralPostViewModel(postList: PostList))

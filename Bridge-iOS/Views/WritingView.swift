@@ -6,15 +6,15 @@
 //
 
 import SwiftUI
+import URLImage
 
 struct WritingView : View {
-//    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.presentationMode) var presentationMode
     @StateObject private var viewModel : WritingViewModel
-    @EnvironmentObject private var signInViewModel : SignInViewModel
         
-        init(viewModel : WritingViewModel) {
-            self._viewModel = StateObject(wrappedValue: viewModel)
-        }
+    init(viewModel : WritingViewModel) {
+        self._viewModel = StateObject(wrappedValue: viewModel)
+    }
     
     @State var isLinkActive : Bool = false
     @State var imagePickerPresented = false
@@ -22,13 +22,15 @@ struct WritingView : View {
     var uploadButton : some View {
         // temporary linked to TabContainer //
         Button {
-//            self.presentationMode.wrappedValue.dismiss()
+            self.presentationMode.wrappedValue.dismiss()
             isLinkActive = true
 //            print(viewModel.email)
 //            print(viewModel.password)
             viewModel.isWant ?
                 viewModel.wantPost(title: viewModel.title, description: viewModel.description, anonymous: viewModel.anonymous, files: viewModel.files)
              :
+                viewModel.isForModifying ? viewModel.modifyPost(title: viewModel.title, description: viewModel.description, anonymous: viewModel.anonymous, files: viewModel.files)
+                :
                 viewModel.post(title: viewModel.title, description: viewModel.description, anonymous: viewModel.anonymous, files: viewModel.files)
             
         } label : {
@@ -37,15 +39,15 @@ struct WritingView : View {
 //                .disabled(!viewModel.isValid())
 //                .opacity(viewModel.isValid() ? 1.0 : 0.4)
         }
-        .background(
-            NavigationLink(
-                destination: TabContainer(),
-                // .environmentObject(signInViewModel),
-                isActive : $isLinkActive
-            ) {
-                // label
-            }
-        )
+//        .background(
+//            NavigationLink(
+//                destination: TabContainer()
+//                 .environmentObject(signInViewModel),
+//                isActive : $isLinkActive
+//            ) {
+//                // label
+//            }
+//        )
     }
     
     var imageButton : some View {
@@ -78,22 +80,47 @@ struct WritingView : View {
                     Spacer()
                 }.padding(20)
             }
-            TextField("title", text: $viewModel.title)
+            TextField(viewModel.isForModifying ? (viewModel.infoForModifying?.boardPostDetail.title ?? "Title not found") : "title",
+                      text:  $viewModel.title)
                 .modifier(SignViewTextFieldStyle())
-            TextField("titleContent", text: $viewModel.description)
+            TextField(viewModel.isForModifying ? (viewModel.infoForModifying?.boardPostDetail.description ?? "Contents not found") : "content", text: $viewModel.description)
                 .frame(height : (viewModel.isForModifying) ? (UIScreen.main.bounds.height * 0.3) : (UIScreen.main.bounds.height * 0.18) )
                 .modifier(SignViewTextFieldStyle())
             
-            if(viewModel.selectedImage != nil){
-                Image(uiImage: viewModel.selectedImage!)
-                    .resizable()
-                    .foregroundColor(.black)
-                    .frame(width: 70, height: 70, alignment: .center)
-                    .cornerRadius(10)
+            if(viewModel.isForModifying){
+                if(viewModel.infoForModifying?.boardPostDetail.postImages != nil){
+                    HStack{
+                    ForEach(viewModel.infoForModifying?.boardPostDetail.postImages ?? [], id : \.self) { imageInfo in
+                        URLImage(
+                            URL(string : imageInfo.image) ??
+                            URL(string: "https://static.thenounproject.com/png/741653-200.png")!
+                        ) { image in
+                            image
+                                .resizable()
+                                .foregroundColor(.black)
+                                .frame(width: 70, height: 70, alignment: .center)
+                                .cornerRadius(10)
+                        }
+                    }
+                    }
+                }else{
+                    Image(systemName: "photo")
+                        .foregroundColor(.black)
+                        .frame(width: 70, height: 70, alignment: .center)
+                }
+
             }else{
-                Image(systemName: "photo")
-                    .foregroundColor(.black)
-                    .frame(width: 70, height: 70, alignment: .center)
+                if(viewModel.selectedImage != nil){
+                    Image(uiImage: viewModel.selectedImage!)
+                        .resizable()
+                        .foregroundColor(.black)
+                        .frame(width: 70, height: 70, alignment: .center)
+                        .cornerRadius(10)
+                }else{
+                    Image(systemName: "photo")
+                        .foregroundColor(.black)
+                        .frame(width: 70, height: 70, alignment: .center)
+                }
             }
             
             HStack{

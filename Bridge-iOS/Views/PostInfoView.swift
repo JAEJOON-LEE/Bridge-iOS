@@ -11,10 +11,12 @@ import URLImage
 struct PostInfoView: View { // 게시글 상세 페이지
     @Environment(\.presentationMode) var presentationMode
     @StateObject private var viewModel : PostInfoViewModel
+//    @StateObject private var commentViewModel : CommentViewModel
     @State var isLinkActive : Bool = false
     
     init(viewModel : PostInfoViewModel) {
         self._viewModel = StateObject(wrappedValue: viewModel)
+//        self._commentViewModel = StateObject(wrappedValue: commentViewModel)
     }
     
     var body: some View {
@@ -96,8 +98,28 @@ struct PostInfoView: View { // 게시글 상세 페이지
                     .fontWeight(.bold)
                 ScrollView(.vertical, showsIndicators: false) {
                     ForEach(viewModel.commentLists, id : \.self) { Comment in
-                            CommentView(viewModel : CommentViewModel(commentList: Comment))
-                        
+                        HStack{
+                        CommentView(viewModel : CommentViewModel(token: viewModel.token,
+                                                                 commentList: Comment,
+                                                                 postId : (viewModel.totalBoardPostDetail?.boardPostDetail.postId)!,
+                                                                 commentId : Comment.commentId,
+                                                                 isMyComment: viewModel.memberId == Comment.member?.memberId))
+                        Button {
+                            withAnimation {
+                                viewModel.isMenuClicked = true
+                                viewModel.showAction = true
+                                viewModel.isMyComment = true
+                                viewModel.commentId = Comment.commentId
+                            }
+                            //menu toggle
+                        } label: {
+                            if viewModel.memberId == Comment.member?.memberId {
+                                Image(systemName : "ellipsis")
+                                    .foregroundColor(.black)
+                                    .font(.system(size : 15, weight : .bold))
+                            }
+                        }
+                        }
                     }
                 }.listStyle(PlainListStyle()) // iOS 15 대응
 //                .frame(width : UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.3)
@@ -159,10 +181,10 @@ struct PostInfoView: View { // 게시글 상세 페이지
         
         .actionSheet(isPresented: $viewModel.showAction) {
             ActionSheet(
-                title: Text("Post Options"),
+                title: (viewModel.isMyComment) ? Text("Comment Options") : Text("Post Options"),
                 buttons: [
-                    .default(Text("Modify Post")) { viewModel.showPostModify = true },
-                    .destructive(Text("Delete Post")) { viewModel.showConfirmDeletion = true },
+                    .default((viewModel.isMyComment) ? Text("Modify Comment") : Text("Modify Post")) { viewModel.showPostModify = true },
+                    .destructive((viewModel.isMyComment) ? Text("Delete Comment") : Text("Delete Post")) { viewModel.showConfirmDeletion = true },
                     .cancel()
                 ]
             )
@@ -170,9 +192,9 @@ struct PostInfoView: View { // 게시글 상세 페이지
         .alert(isPresented: $viewModel.showConfirmDeletion) {
             Alert(
                 title: Text("Confirmation"),
-                message: Text("Do you want to delete this post?"),
+                message: Text((viewModel.isMyComment) ? "Do you want to delete this comment?" : "Do you want to delete this post?"),
                 primaryButton: .destructive(Text("Yes"), action : {
-                    viewModel.deletePost()
+                    (viewModel.isMyComment) ? viewModel.deleteComment() : viewModel.deletePost()
                     self.presentationMode.wrappedValue.dismiss()
                 }),
                 secondaryButton: .cancel(Text("No")))
@@ -180,17 +202,23 @@ struct PostInfoView: View { // 게시글 상세 페이지
         .background(
             NavigationLink(
                 destination :
-                    WritingView(viewModel: WritingViewModel(accessToken: viewModel.token, isForModifying: true)).navigationBarTitle(Text("Modify Post")),
+                    WritingView(viewModel: WritingViewModel(accessToken: viewModel.token,
+                                                            postId : viewModel.postId,
+                                                            isForModifying: true))
+                    .navigationBarTitle((viewModel.isMyComment) ? Text("Modify Comment") : Text("Modify Post")),
                 isActive : $viewModel.showPostModify) { }
         )
     }
 }
 
 struct CommentView : View {
-    private let viewModel : CommentViewModel
+    @StateObject private var viewModel : CommentViewModel
     
+//    init(viewModel : CommentViewModel) {
+//        self.viewModel = viewModel
+//    }
     init(viewModel : CommentViewModel) {
-        self.viewModel = viewModel
+        self._viewModel = StateObject(wrappedValue: viewModel)
     }
     
     var body : some View {
@@ -208,7 +236,7 @@ struct CommentView : View {
                        height: 40)
                 .cornerRadius(20)
                 
-                Group{
+                VStack{
                     Text(viewModel.userName)
                         .font(.system(size: 20, weight : .medium))
                         
@@ -217,11 +245,15 @@ struct CommentView : View {
                 }
             }
             .foregroundColor(.black)
-            
+ 
             Text(viewModel.content)
             Divider()
         }
+        
+        
         .modifier(CommentStyle())
+        
+        
     }
 }
 
