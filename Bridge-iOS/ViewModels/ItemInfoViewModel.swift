@@ -21,7 +21,7 @@ final class ItemInfoViewModel : ObservableObject {
     private var subscription = Set<AnyCancellable>()
     
     let token : String
-    private let postId : Int
+    let postId : Int
     let isMyPost : Bool
     
     init(token : String, postId : Int, isMyPost : Bool) {
@@ -37,7 +37,7 @@ final class ItemInfoViewModel : ObservableObject {
         let len = src.count
         var count = 1
 
-        while (len >= (4 * count - 1)) { //
+        while (len > (4 * count - 1)) { //
             src.insert(",", at: src.index(src.endIndex, offsetBy: (4 * count - 1) * -1))
             count += 1
         }

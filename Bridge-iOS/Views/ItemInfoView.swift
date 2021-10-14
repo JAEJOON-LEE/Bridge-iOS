@@ -57,7 +57,7 @@ struct ItemInfoView: View {
                                 Text("\(viewModel.itemInfo?.usedPostDetail.viewCount ?? 0) View")
                                 Text("|").foregroundColor(.mainTheme)
                                 Text("\(viewModel.itemInfo?.usedPostDetail.likeCount ?? 0) Likes")
-                            }.font(.system(size : 13, weight : .semibold))
+                            }.font(.system(size : 11, weight : .semibold))
                         }
                         Spacer()
                         HStack(spacing : 5) {
@@ -214,17 +214,7 @@ struct ItemInfoView: View {
             }
         }
         .navigationBarTitleDisplayMode(.inline)
-        //.navigationBarBackButtonHidden(true)
-        .navigationBarItems(
-//            leading :
-//                Button {
-//                    self.presentationMode.wrappedValue.dismiss()
-//                } label : {
-//                    Image(systemName : "chevron.backward")
-//                        .foregroundColor(.mainTheme)
-//                        .font(.system(size : 15, weight : .bold))
-//                },
-            trailing:
+        .navigationBarItems(trailing:
                 Button {
                     viewModel.isLiked?.toggle()
                     viewModel.likePost(isliked: (viewModel.itemInfo?.usedPostDetail.like ?? true))
@@ -256,10 +246,16 @@ struct ItemInfoView: View {
                 }),
                 secondaryButton: .cancel(Text("No")))
         }
-        .background(
-            NavigationLink(
-                destination : VStack {Text(viewModel.token) }.navigationBarTitle(Text("Modify Post")),
-                isActive : $viewModel.showPostModify) { }
-        )
+        .sheet(isPresented: $viewModel.showPostModify, content: {
+            NavigationView {
+                ModifyUsedPostView(
+                    viewModel: ModifyUsedPostViewModel(
+                        accessToken : viewModel.token,
+                        postId : viewModel.postId,
+                        contents: viewModel.itemInfo!.usedPostDetail
+                    )
+                )
+            }
+        })
     }
 }

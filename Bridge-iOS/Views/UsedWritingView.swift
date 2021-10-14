@@ -11,7 +11,6 @@ import PhotosUI
 struct UsedWritingView: View {
     @Environment(\.presentationMode) var presentationMode
     @StateObject private var viewModel : UsedWritingViewModel
-    @State var isProgressShow : Bool = false
     
     init(viewModel : UsedWritingViewModel) {
         self._viewModel = StateObject(wrappedValue: viewModel)
@@ -20,6 +19,7 @@ struct UsedWritingView: View {
     var body: some View {
         ZStack {
             VStack {
+                Spacer().frame(height: UIScreen.main.bounds.height * 0.02)
                 Button {
                     viewModel.selectedImages.removeAll()
                     viewModel.showImagePicker.toggle()
@@ -39,11 +39,13 @@ struct UsedWritingView: View {
                                 Image(uiImage: $0)
                                     .resizable()
                                     .aspectRatio(contentMode: .fill)
+                                    .frame(width : UIScreen.main.bounds.width * 0.3, height : UIScreen.main.bounds.width * 0.3)
+                                    .clipped()
                             }
                         }.padding(10)
                     }
                 }
-                .frame(width : UIScreen.main.bounds.width * 0.95, height : UIScreen.main.bounds.height * 0.3)
+                .frame(width : UIScreen.main.bounds.width * 0.95, height : UIScreen.main.bounds.width * 0.35)
                 .background(
                     ZStack {
                         Color.mainTheme.opacity(0.05)
@@ -123,7 +125,7 @@ struct UsedWritingView: View {
                     Button {
                         // API Call
                         viewModel.upload()
-                        withAnimation { self.isProgressShow = true }
+                        withAnimation { viewModel.isProgressShow = true }
                     } label : {
                         Text("DONE")
                             .font(.system(size: 20, weight: .semibold))
@@ -189,7 +191,7 @@ struct UsedWritingView: View {
                 }
             }
             
-            if isProgressShow {
+            if viewModel.isProgressShow {
                 ProgressView()
                     .progressViewStyle(CircularProgressViewStyle(tint: .white))
                     .frame(width : UIScreen.main.bounds.width * 0.7,
