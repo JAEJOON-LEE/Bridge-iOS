@@ -92,23 +92,15 @@ struct TabContainer: View {
                 NotificationView()
                     .preferredColorScheme(.light)
             }
-            //.sheet(isPresented: $viewModel.showUsedPostWriting, content: {
-//            .background(
-//                NavigationLink(destination :
-//                    UsedWritingView(viewModel : UsedWritingViewModel(accessToken: signInViewModel.signInResponse?.token.accessToken ?? ""))
+            .background(
+                NavigationLink(destination :
+                    UsedWritingView(viewModel : UsedWritingViewModel(accessToken: signInViewModel.signInResponse?.token.accessToken ?? ""))
 //                                .onDisappear(perform: {
 //                                    viewModel.selectedTabIndex = 1
-//                                }),
-//                               isActive : $viewModel.showUsedPostWriting) { }
-//            )
-//            .sheet(isPresented: $viewModel.showUsedPostWriting, content: {
-//                NavigationView {
-//                    UsedWritingView(viewModel : UsedWritingViewModel(accessToken: signInViewModel.signInResponse?.token.accessToken ?? ""))
-//                        .navigationBarItems(trailing:
-//                            Button { viewModel.showUsedPostWriting = false } label : { Text("Cancel") }
-//                        )
-//                }
-//            })
+//                                })
+                               ,
+                               isActive : $viewModel.showUsedPostWriting) { }
+            )
             .overlay(
                 Color.black.opacity(isSlideShow ? 0.5 : 0)
                     .edgesIgnoringSafeArea(.bottom)

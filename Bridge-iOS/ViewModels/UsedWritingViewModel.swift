@@ -22,6 +22,9 @@ final class UsedWritingViewModel : ObservableObject {
     @Published var selectedCamps : [Int] = []
     @Published var selectedCategory = ""
     
+    @Published var isUploadDone : Bool = false
+    @Published var isProgressShow : Bool = false
+    
     private let token : String
     init(accessToken : String) {
         self.token = accessToken
@@ -86,11 +89,12 @@ final class UsedWritingViewModel : ObservableObject {
                     .data(withJSONObject: payload["postInfo"]!), withName: "postInfo", mimeType: "application/json"
             )
         }, to: URL(string : url)!, usingThreshold: UInt64.init(), method : .post, headers: header)
-            .responseJSON { (response) in
+            .responseJSON { [weak self] (response) in
                 guard let statusCode = response.response?.statusCode else { return }
                 switch statusCode {
                 case 200 :
                     print("Post Upload Success : \(statusCode)")
+                    self?.isUploadDone = true
                 default :
                     print("Post Upload Fail : \(statusCode)")
                 }

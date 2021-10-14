@@ -53,7 +53,6 @@
 		6D2B89EC271349B200319907 /* BoardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2B89E6271349B200319907 /* BoardViewModel.swift */; };
 		6D2B89EE2714038C00319907 /* WantUInfo+ResponseData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2B89ED2714038C00319907 /* WantUInfo+ResponseData.swift */; };
 		6D2B89F0271405CD00319907 /* WantUInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2B89EF271405CD00319907 /* WantUInfoView.swift */; };
-		6D2B89F2271408F300319907 /* WantUPostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2B89F1271408F300319907 /* WantUPostViewModel.swift */; };
 		6D6BA4ED26F57BB10008B25E /* ItemCardStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6BA4EC26F57BB10008B25E /* ItemCardStyle.swift */; };
 		6D6BA4EF26F590F90008B25E /* ListHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6BA4EE26F590F90008B25E /* ListHeader.swift */; };
 		6D6BA4F126F5A13A0008B25E /* SlideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6BA4F026F5A13A0008B25E /* SlideView.swift */; };
@@ -113,7 +112,6 @@
 		6D2B89E6271349B200319907 /* BoardViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoardViewModel.swift; sourceTree = "<group>"; };
 		6D2B89ED2714038C00319907 /* WantUInfo+ResponseData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WantUInfo+ResponseData.swift"; sourceTree = "<group>"; };
 		6D2B89EF271405CD00319907 /* WantUInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WantUInfoView.swift; sourceTree = "<group>"; };
-		6D2B89F1271408F300319907 /* WantUPostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WantUPostViewModel.swift; sourceTree = "<group>"; };
 		6D6BA4EC26F57BB10008B25E /* ItemCardStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemCardStyle.swift; sourceTree = "<group>"; };
 		6D6BA4EE26F590F90008B25E /* ListHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListHeader.swift; sourceTree = "<group>"; };
 		6D6BA4F026F5A13A0008B25E /* SlideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideView.swift; sourceTree = "<group>"; };
@@ -252,7 +250,6 @@
 				6D2B89E5271349B200319907 /* WantUViewModel.swift */,
 				6D2B89E2271349B200319907 /* CommentViewModel.swift */,
 				6D2B89E3271349B200319907 /* GeneralPostViewModel.swift */,
-				6D2B89F1271408F300319907 /* WantUPostViewModel.swift */,
 				6D2B89E1271349B200319907 /* PostInfoViewModel.swift */,
 				6D2B89E4271349B200319907 /* WanUInfoViewModel.swift */,
 			);
@@ -411,7 +408,6 @@
 				6DAD1F3D270412D1006B01FC /* Writing+ResponseData.swift in Sources */,
 				6DAD1F5627102918006B01FC /* SignUpAppendixView.swift in Sources */,
 				1AA8B42126F32F1600C28E02 /* WritingView.swift in Sources */,
-				6D2B89F2271408F300319907 /* WantUPostViewModel.swift in Sources */,
 				1AA8B43526F3688200C28E02 /* TabContainerViewModel.swift in Sources */,
 				6D2B89D22713476A00319907 /* Board+ResponseData.swift in Sources */,
 				6D2B89E02713493200319907 /* PostInfoView.swift in Sources */,

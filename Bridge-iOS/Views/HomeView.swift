@@ -15,9 +15,31 @@ struct HomeView : View {
         self._viewModel = StateObject(wrappedValue: viewModel)
     }
     
+    
+    var LocationPicker : some View {
+            HStack (spacing : 15) {
+                // Location Picker
+                Picker("\(viewModel.selectedCamp) ▼", selection: $viewModel.selectedCamp) {
+                    ForEach(viewModel.locations, id: \.self) {
+                        Text($0)
+                    }
+                }.font(.system(size : 15, weight : .bold))
+                .pickerStyle(MenuPickerStyle())
+                Spacer()
+                Button{
+                    print("search button clicked")
+                } label : {
+                    Image(systemName: "magnifyingglass")
+                }
+            }
+            .foregroundColor(.black)
+            .padding()
+            .background(Color.systemDefaultGray)
+    }
+    
     var body : some View {
         VStack(spacing: 0) {
-            LocationPicker()
+            LocationPicker
             //ListHeader(name: "What's new today?").padding(.vertical, 10)
             HStack{
                 Text("What's new today?")
@@ -35,7 +57,7 @@ struct HomeView : View {
             }.foregroundColor(.mainTheme)
             .padding(20)
             .padding(.vertical, 10)
-            .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.05)
+            .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.06)
             
             ScrollView {
                 LazyVStack {
@@ -58,6 +80,9 @@ struct HomeView : View {
                 }
             }
         }.onAppear {
+            viewModel.getPosts(token: viewModel.token)
+        }.onChange(of: viewModel.selectedCamp) { newValue in
+            print(newValue)
             viewModel.getPosts(token: viewModel.token)
         }
     }
