@@ -95,8 +95,28 @@ struct WantUInfoView: View { // 게시글 상세 페이지
                     .fontWeight(.bold)
                 ScrollView(.vertical, showsIndicators: false) {
                     ForEach(viewModel.commentLists, id : \.self) { Comment in
-                            WantCommentView(viewModel : CommentViewModel(commentList: Comment))
-                        
+                        HStack{
+                            CommentView(viewModel : CommentViewModel(token: viewModel.token,
+                                                                     commentList: Comment,
+                                                                     postId : (viewModel.totalWantPostDetail?.wantPostDetail.postId)!,
+                                                                     commentId : Comment.commentId,
+                                                                     isMyComment: viewModel.memberId == Comment.member?.memberId))
+                        Button {
+                            withAnimation {
+                                viewModel.isMenuClicked = true
+                                viewModel.showAction = true
+                                viewModel.isMyComment = true
+                                viewModel.commentId = Comment.commentId
+                            }
+                            //menu toggle
+                        } label: {
+                            if viewModel.memberId == Comment.member?.memberId {
+                                Image(systemName : "ellipsis")
+                                    .foregroundColor(.black)
+                                    .font(.system(size : 15, weight : .bold))
+                            }
+                        }
+                        }
                     }
                 }.listStyle(PlainListStyle()) // iOS 15 대응
 //                .frame(width : UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.3)
@@ -158,10 +178,10 @@ struct WantUInfoView: View { // 게시글 상세 페이지
         
         .actionSheet(isPresented: $viewModel.showAction) {
             ActionSheet(
-                title: Text("Post Options"),
+                title: (viewModel.isMyComment) ? Text("Comment Options") : Text("Post Options"),
                 buttons: [
-                    .default(Text("Modify Post")) { viewModel.showPostModify = true },
-                    .destructive(Text("Delete Post")) { viewModel.showConfirmDeletion = true },
+                    .default((viewModel.isMyComment) ? Text("Modify Comment") : Text("Modify Post")) { viewModel.showPostModify = true },
+                    .destructive((viewModel.isMyComment) ? Text("Delete Comment") : Text("Delete Post")) { viewModel.showConfirmDeletion = true },
                     .cancel()
                 ]
             )
@@ -169,9 +189,9 @@ struct WantUInfoView: View { // 게시글 상세 페이지
         .alert(isPresented: $viewModel.showConfirmDeletion) {
             Alert(
                 title: Text("Confirmation"),
-                message: Text("Do you want to delete this post?"),
+                message: Text((viewModel.isMyComment) ? "Do you want to delete this comment?" : "Do you want to delete this post?"),
                 primaryButton: .destructive(Text("Yes"), action : {
-                    viewModel.deleteWantPost()
+                    (viewModel.isMyComment) ? viewModel.deleteWantComment() : viewModel.deleteWantPost()
                     self.presentationMode.wrappedValue.dismiss()
                 }),
                 secondaryButton: .cancel(Text("No")))
@@ -179,9 +199,14 @@ struct WantUInfoView: View { // 게시글 상세 페이지
         .background(
             NavigationLink(
                 destination :
-                    WritingView(viewModel: WritingViewModel(accessToken: viewModel.token, isForModifying: true)).navigationBarTitle(Text("Modify Post")),
+                    WritingView(viewModel: WritingViewModel(accessToken: viewModel.token,
+                                                            postId : (viewModel.totalWantPostDetail?.wantPostDetail.postId)!,
+                                                            isForModifying: true,
+                                                            isForWantModifying: true))
+                    .navigationBarTitle((viewModel.isMyComment) ? Text("Modify Comment") : Text("Modify Post")),
                 isActive : $viewModel.showPostModify) { }
         )
+
     }
 }
 

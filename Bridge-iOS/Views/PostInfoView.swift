@@ -204,7 +204,8 @@ struct PostInfoView: View { // 게시글 상세 페이지
                 destination :
                     WritingView(viewModel: WritingViewModel(accessToken: viewModel.token,
                                                             postId : viewModel.postId,
-                                                            isForModifying: true))
+                                                            isForModifying: true,
+                                                            isForWantModifying : false))
                     .navigationBarTitle((viewModel.isMyComment) ? Text("Modify Comment") : Text("Modify Post")),
                 isActive : $viewModel.showPostModify) { }
         )

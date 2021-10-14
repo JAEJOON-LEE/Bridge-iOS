@@ -25,15 +25,19 @@ final class WantUInfoViewModel : ObservableObject {
     @Published var commentLists : [CommentList] = []
     @Published var commentInput : String = ""
     @Published var isAnonymous : Bool = false
+    @Published var commentId : Int?
     
     private var subscription = Set<AnyCancellable>()
     let token : String
     private let postId : Int
     let isMyPost : Bool
+    @Published var isMyComment : Bool = false
+    let memberId : Int
     
-    init(token : String, postId : Int, isMyPost : Bool) {
+    init(token : String, postId : Int, memberId:Int, isMyPost : Bool) {
         self.token = token
         self.postId = postId
+        self.memberId = memberId
         self.isMyPost = isMyPost
         getWantPostDetail()
         getWantComment()
@@ -143,6 +147,19 @@ final class WantUInfoViewModel : ObservableObject {
             }.store(in: &subscription)
     }
     
+    func deleteWantComment() {
+        let url = "http://3.36.233.180:8080/want-posts/\(postId)/comments/\(commentId!)"
+        let header: HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
+        
+        AF.request(url,
+                   method: .delete,
+                   encoding: URLEncoding.default,
+                   headers: header
+        ).responseJSON { json in
+//            print(json)
+        }
+    }
+
 }
 
 

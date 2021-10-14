@@ -36,7 +36,8 @@ struct TabContainer: View {
                     WritingView(viewModel: WritingViewModel(
                                     accessToken: signInViewModel.signInResponse?.token.accessToken ?? "",
                                     postId : -1,
-                                    isForModifying : false
+                                    isForModifying : false,
+                                    isForWantModifying : nil
                         )
                     )
                 case 4 :

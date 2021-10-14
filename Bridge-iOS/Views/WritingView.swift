@@ -26,13 +26,22 @@ struct WritingView : View {
             isLinkActive = true
 //            print(viewModel.email)
 //            print(viewModel.password)
-            viewModel.isWant ?
-                viewModel.wantPost(title: viewModel.title, description: viewModel.description, anonymous: viewModel.anonymous, files: viewModel.files)
-             :
-                viewModel.isForModifying ? viewModel.modifyPost(title: viewModel.title, description: viewModel.description, anonymous: viewModel.anonymous, files: viewModel.files)
-                :
-                viewModel.post(title: viewModel.title, description: viewModel.description, anonymous: viewModel.anonymous, files: viewModel.files)
-            
+            if(viewModel.isForModifying){
+                if(viewModel.isForWantModifying!){
+                    viewModel.modifyWantPost(title: viewModel.title, description: viewModel.description, anonymous: viewModel.anonymous, files: viewModel.files)
+                }
+                else {
+                    viewModel.modifyPost(title: viewModel.title, description: viewModel.description, anonymous: viewModel.anonymous, files: viewModel.files)
+                }
+            }
+            else{
+                if(viewModel.isWant){
+                    viewModel.wantPost(title: viewModel.title, description: viewModel.description, anonymous: viewModel.anonymous, files: viewModel.files)
+                }
+                else {
+                    viewModel.post(title: viewModel.title, description: viewModel.description, anonymous: viewModel.anonymous, files: viewModel.files)
+                }
+            }
         } label : {
             Text("Upload")
                 .modifier(SubmitButtonStyle())
@@ -80,12 +89,33 @@ struct WritingView : View {
                     Spacer()
                 }.padding(20)
             }
-            TextField(viewModel.isForModifying ? (viewModel.infoForModifying?.boardPostDetail.title ?? "Title not found") : "title",
-                      text:  $viewModel.title)
-                .modifier(SignViewTextFieldStyle())
-            TextField(viewModel.isForModifying ? (viewModel.infoForModifying?.boardPostDetail.description ?? "Contents not found") : "content", text: $viewModel.description)
-                .frame(height : (viewModel.isForModifying) ? (UIScreen.main.bounds.height * 0.3) : (UIScreen.main.bounds.height * 0.18) )
-                .modifier(SignViewTextFieldStyle())
+            
+            if(viewModel.isForModifying){
+                if(viewModel.isForWantModifying!){
+                    TextField(viewModel.infoForWantUModifying?.wantPostDetail.title ?? "Title not found",
+                              text:  $viewModel.title)
+                        .modifier(SignViewTextFieldStyle())
+                    TextField(viewModel.infoForWantUModifying?.wantPostDetail.description ?? "Contents not found",
+                              text: $viewModel.description)
+                        .frame(height : (viewModel.isForModifying) ? (UIScreen.main.bounds.height * 0.3) : (UIScreen.main.bounds.height * 0.18) )
+                        .modifier(SignViewTextFieldStyle())
+                }
+                else {
+                    TextField(viewModel.isForModifying ? (viewModel.infoForModifying?.boardPostDetail.title ?? "Title not found") : "title",
+                              text:  $viewModel.title)
+                        .modifier(SignViewTextFieldStyle())
+                    TextField(viewModel.isForModifying ? (viewModel.infoForModifying?.boardPostDetail.description ?? "Contents not found") : "content", text: $viewModel.description)
+                        .frame(height : (viewModel.isForModifying) ? (UIScreen.main.bounds.height * 0.3) : (UIScreen.main.bounds.height * 0.18) )
+                        .modifier(SignViewTextFieldStyle())
+                }
+            }
+            else {
+                TextField("title", text:  $viewModel.title)
+                    .modifier(SignViewTextFieldStyle())
+                TextField("content", text: $viewModel.description)
+                    .frame(height : UIScreen.main.bounds.height * 0.18 )
+                    .modifier(SignViewTextFieldStyle())
+            }
             
             if(viewModel.isForModifying){
                 if(viewModel.infoForModifying?.boardPostDetail.postImages != nil){
@@ -125,8 +155,11 @@ struct WritingView : View {
             
             HStack{
                 Toggle("Anonymous", isOn: $viewModel.anonymous)
-                Spacer()
-                Toggle("Want U", isOn: $viewModel.isWant)
+                
+                if(!viewModel.isForModifying){
+                    Spacer()
+                    Toggle("Want U", isOn: $viewModel.isWant)
+                }
                 
                 imageButton
             }

@@ -23,6 +23,7 @@ class WritingViewModel : ObservableObject {
     var param: Dictionary<String, Any> = Dictionary<String, Any>()
     
     @Published var infoForModifying : TotalBoardPostDetail?
+    @Published var infoForWantUModifying : TotalWantPostDetail?
     @Published var title = ""
     @Published var description = ""
     @Published var anonymous = false
@@ -34,14 +35,21 @@ class WritingViewModel : ObservableObject {
     let postId : Int
     let isForModifying : Bool
     let token : String
+    let isForWantModifying : Bool?
         
-    init(accessToken : String, postId : Int, isForModifying : Bool) {
+    init(accessToken : String, postId : Int, isForModifying : Bool, isForWantModifying : Bool?) {
         self.token = accessToken
         self.postId = postId
         self.isForModifying = isForModifying
+        self.isForWantModifying = isForWantModifying
         
-        getBoardPostDetail()
-        
+        if(self.isForWantModifying != nil){
+            if(self.isForWantModifying!){
+                getWantPostDetail()
+            }else{
+                getBoardPostDetail()
+            }
+        }
     }
 //    let url : String = "http://3.36.233.180:8080/board-posts"
     
@@ -108,6 +116,32 @@ class WritingViewModel : ObservableObject {
             }.store(in: &subscription)
     }
     
+    func getWantPostDetail() {
+        
+        let url = "http://3.36.233.180:8080/want-posts/\(postId)"
+        let header: HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
+        
+        AF.request(url,
+                   method: .get,
+                   encoding: URLEncoding.default,
+                   headers: header
+        )
+            .publishDecodable(type : TotalWantPostDetail.self)
+            .compactMap { $0.value }
+            .sink { completion in
+                switch completion {
+                case let .failure(error) :
+                    print(error.localizedDescription)
+                case .finished :
+                    print("finished")
+                }
+            } receiveValue: { [weak self] recievedValue in
+                print(recievedValue)
+                self?.infoForWantUModifying = recievedValue
+//                print(self?.totalBoardPostDetail as Any)
+            }.store(in: &subscription)
+    }
+    
     func modifyPost(title : String?, description : String?, anonymous : Bool, files : Data?) {
         let header: HTTPHeaders = [
             "X-AUTH-TOKEN": token,
@@ -138,6 +172,46 @@ class WritingViewModel : ObservableObject {
                         }
                         
                     }, to:"http://3.36.233.180:8080/board-posts/\(postId)",
+                    method: .post,
+                    headers: header)
+            .responseString{ (response) in
+            
+            guard let statusCode = response.response?.statusCode else { return }
+            
+            print(statusCode)
+        }
+    }
+    
+    func modifyWantPost(title : String?, description : String?, anonymous : Bool, files : Data?) {
+        let header: HTTPHeaders = [
+            "X-AUTH-TOKEN": token,
+            "Accept": "multipart/form-data",
+            "Content-Type": "multipart/form-data"
+        ]
+//
+//        param = ["title" : title,
+//                 "description" : description,
+//                 "anonymous" : String(anonymous)]
+        
+        var query : String = "{ "
+        if(title != nil && title != ""){
+            query.append("\"title\" : \"\(title!)\", ")
+        }
+        if(description != nil && description != ""){
+            query.append("\"description\" : \"\(description!)\", ")
+        }
+        query.append(" \"anonymous\" : \"\(anonymous)\" }");
+        
+        print(query)
+        AF.upload(multipartFormData: { multipartFormData in
+            
+                        multipartFormData.append(query.data(using: .utf8)!, withName: "postInfo", mimeType: "application/json")
+                        
+                        if(files != nil){
+                            multipartFormData.append(files!, withName: "files", fileName: "From_iOS", mimeType: "image/jpg")
+                        }
+                        
+                    }, to:"http://3.36.233.180:8080/want-posts/\(postId)",
                     method: .post,
                     headers: header)
             .responseString{ (response) in
