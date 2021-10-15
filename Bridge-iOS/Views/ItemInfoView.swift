@@ -11,7 +11,8 @@ import URLImage
 struct ItemInfoView: View {
     @Environment(\.presentationMode) var presentationMode
     @StateObject private var viewModel : ItemInfoViewModel
-
+    @State var isModifyDone : Bool = false
+    
     init(viewModel : ItemInfoViewModel) {
         self._viewModel = StateObject(wrappedValue: viewModel)
     }
@@ -213,6 +214,9 @@ struct ItemInfoView: View {
                 .shadow(radius: 5)
             }
         }
+        .onChange(of: self.isModifyDone, perform: { _ in
+            self.presentationMode.wrappedValue.dismiss()
+        })
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarItems(trailing:
                 Button {
@@ -253,7 +257,8 @@ struct ItemInfoView: View {
                         accessToken : viewModel.token,
                         postId : viewModel.postId,
                         contents: viewModel.itemInfo!.usedPostDetail
-                    )
+                    ),
+                    isModifyDone : self.$isModifyDone
                 )
             }
         })

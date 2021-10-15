@@ -19,10 +19,8 @@ final class ModifyUsedPostViewModel : ObservableObject {
     @Published var title : String = ""
     @Published var price : String = ""
     @Published var description : String = ""
-//    @Published var category : String = ""
-//    @Published var camps : [String] = []
     @Published var postImages : [postImages] = []
-    
+    @Published var previousSelectedCamps : [Int] = []
     @Published var selectedCamps : [Int] = []
     @Published var selectedCategory = ""
     
@@ -60,42 +58,58 @@ final class ModifyUsedPostViewModel : ObservableObject {
         10 : "Camp Worker",
         11 : "Gunsan A/B"
     ]
+    
     private let token : String
     private let postId : Int
 
+    var addList : [Int] = []
+    var removeList : [Int] = []
+    var removeImage : [Int] = []
+    
     init(accessToken : String, postId : Int, contents : UsedPostDetail) {
         self.token = accessToken
         self.postId = postId
         
         self.title = contents.title
-        self.price = String(contents.price)
+        self.price = String(Int(contents.price))
         self.description = contents.description
 //        self.category = contents.category
-//        self.camps = contents.camps
         self.postImages = contents.postImages
         self.selectedCategory = contents.category
-        self.selectedCamps = contents.camps.map{
-            self.campToNum[$0]!
-        }
+        self.previousSelectedCamps = contents.camps.map{ self.campToNum[$0]! }
+        self.selectedCamps = contents.camps.map{ self.campToNum[$0]! }
     }
     
     func upload() { //(with payload : PostPayload)
         let url = "http://3.36.233.180:8080/used-posts/\(postId)"
-
         let header : HTTPHeaders = [
             "Content-Type": "multipart/form-data",
             "X-AUTH-TOKEN": token
+        ]
+        for c in selectedCamps {
+            if !previousSelectedCamps.contains(c) { addList.append(c) }
+        }
+        
+        for c in previousSelectedCamps {
+            if !selectedCamps.contains(c) { removeList.append(c) }
+        }
+        
+        let editedCamps : [String : [Int]] = [
+            "addList" : addList,
+            "removeList" : removeList
         ]
         
         let payload : [String : [String : Any]] = [
             "postInfo" : [
                 "title" : title,
-                "price" : Float(price) ?? Float(-1),
+                "price" : price,
                 "description" : description,
                 "category" : selectedCategory,
-                //"camps" : selectedCamps
+                "camps" : editedCamps,
+                "removeImage" : removeImage
             ]
         ]
+        print(payload)
         
         AF.upload(multipartFormData: { (multipartFormData) in
             //guard let self = self else { return }
@@ -107,10 +121,7 @@ final class ModifyUsedPostViewModel : ObservableObject {
 //            }
             
             // postInfo
-            multipartFormData.append(
-                try! JSONSerialization
-                    .data(withJSONObject: payload["postInfo"]!), withName: "postInfo", mimeType: "application/json"
-            )
+            multipartFormData.append(try! JSONSerialization.data(withJSONObject: payload["postInfo"]!), withName: "postInfo", mimeType: "application/json")
         }, to: URL(string : url)!, usingThreshold: UInt64.init(), method : .post, headers: header)
             .responseJSON { [weak self] (response) in
                 guard let statusCode = response.response?.statusCode else { return }

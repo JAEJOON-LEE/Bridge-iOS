@@ -11,9 +11,11 @@ import URLImage
 struct ModifyUsedPostView: View {
     @Environment(\.presentationMode) var presentationMode
     @StateObject private var viewModel : ModifyUsedPostViewModel
-
-    init(viewModel : ModifyUsedPostViewModel) {
+    @Binding var isModifyDone : Bool
+    
+    init(viewModel : ModifyUsedPostViewModel, isModifyDone : Binding<Bool>) {
         self._viewModel = StateObject(wrappedValue: viewModel)
+        self._isModifyDone = Binding(projectedValue: isModifyDone)
     }
 
     var body: some View {
@@ -147,6 +149,7 @@ struct ModifyUsedPostView: View {
         }
         .onChange(of: viewModel.isUploadDone, perform: { _ in
             self.presentationMode.wrappedValue.dismiss()
+            self.isModifyDone = true
         })
         .navigationBarTitle(Text("Modify your post"), displayMode: .inline)
         .sheet(isPresented: $viewModel.showCampPicker) {
