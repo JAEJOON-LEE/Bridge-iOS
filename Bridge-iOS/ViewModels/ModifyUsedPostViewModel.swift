@@ -8,13 +8,6 @@
 import Foundation
 import Alamofire
 
-//- var camps : [String]
-//- var category : String
-//- var postImages : [postImages]
-//- var price : Float
-//- var title : String
-//- var description : String
-
 final class ModifyUsedPostViewModel : ObservableObject {
     @Published var title : String = ""
     @Published var price : String = ""
@@ -73,7 +66,6 @@ final class ModifyUsedPostViewModel : ObservableObject {
         self.title = contents.title
         self.price = String(Int(contents.price))
         self.description = contents.description
-//        self.category = contents.category
         self.postImages = contents.postImages
         self.selectedCategory = contents.category
         self.previousSelectedCamps = contents.camps.map{ self.campToNum[$0]! }

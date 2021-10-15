@@ -11,7 +11,6 @@ import Alamofire
 
 final class HomeViewModel : ObservableObject {
     @Published var Posts : [Post] = []
-    @Published var isProgressShow : Bool = true
     @Published var selectedCamp : String = "Camp Casey"
     
     private let url = "http://3.36.233.180:8080/used-posts?"
@@ -40,13 +39,12 @@ final class HomeViewModel : ObservableObject {
             .publishDecodable(type : Element.self)
             .compactMap { $0.value }
             .map { $0.postList }
-            .sink { [weak self] completion in
+            .sink { completion in
                 switch completion {
                 case let .failure(error) :
                     print(error.localizedDescription)
                 case .finished :
                     print("Get Posts Finished")
-                    self?.isProgressShow = false
                 }
             } receiveValue: { [weak self] (recievedValue : [Post]) in
 //                print(recievedValue)

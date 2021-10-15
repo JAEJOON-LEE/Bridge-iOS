@@ -9,6 +9,7 @@ import SwiftUI
 
 struct TabContainer: View {
     @EnvironmentObject var signInViewModel : SignInViewModel
+
     @StateObject var viewModel = TabContainerViewModel()
     
     @State var isNotificationShow : Bool = false
@@ -41,21 +42,19 @@ struct TabContainer: View {
                         )
                     )
                 case 4 :
+                    // temp
                     VStack {
-                        Spacer()
-                        Text("email : \(signInViewModel.email)")
-                        Text("password : \(signInViewModel.password)")
-                        Text("test : \(signInViewModel.signInResponse?.name ?? "d")")
                         Spacer()
                         Text("Seller View").font(.largeTitle)
                         Spacer()
-                    }
+                    }.frame(width : UIScreen.main.bounds.width)
                 case 5 :
+                    // temp
                     VStack {
                         Spacer()
                         Text("Message View").font(.largeTitle)
                         Spacer()
-                    }
+                    }.frame(width : UIScreen.main.bounds.width)
                 default:
                     BoardView(viewModel:
                                 BoardViewModel(
@@ -66,8 +65,7 @@ struct TabContainer: View {
                 }
                 
                 TabSelector
-            }
-            .accentColor(.mainTheme)
+            }.accentColor(.mainTheme)
             .navigationBarItems(
                 leading: Button {
                     print("leading button clicked")
@@ -93,13 +91,9 @@ struct TabContainer: View {
                     .preferredColorScheme(.light)
             }
             .background(
-                NavigationLink(destination :
-                    UsedWritingView(viewModel : UsedWritingViewModel(accessToken: signInViewModel.signInResponse?.token.accessToken ?? ""))
-//                                .onDisappear(perform: {
-//                                    viewModel.selectedTabIndex = 1
-//                                })
-                               ,
-                               isActive : $viewModel.showUsedPostWriting) { }
+                NavigationLink(
+                    destination : UsedWritingView(viewModel : UsedWritingViewModel(accessToken: signInViewModel.signInResponse?.token.accessToken ?? "")),
+                    isActive : $viewModel.showUsedPostWriting) { }
             )
             .overlay(
                 Color.black.opacity(isSlideShow ? 0.5 : 0)
@@ -199,11 +193,5 @@ extension TabContainer {
         .background(Color.systemDefaultGray)
         .cornerRadius(20)
         .shadow(radius: 1)
-    }
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        TabContainer()
     }
 }

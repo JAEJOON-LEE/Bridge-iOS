@@ -9,7 +9,6 @@ import SwiftUI
 
 struct SignInView: View {
     @StateObject private var viewModel = SignInViewModel()
-    @State var isLinkActive : Bool = false
     
     var titleField : some View {
         Text("Log In")
@@ -54,25 +53,17 @@ struct SignInView: View {
         }.padding(.horizontal, 25)
     }
     var nextButton : some View {
-        // temporary linked to TabContainer //
         Button {
-            isLinkActive = true
-//            print(viewModel.email)
-//            print(viewModel.password)
+            viewModel.showPrgoressView = true
             viewModel.SignIn(email: viewModel.email, password: viewModel.password)
         } label : {
             Text("Next")
                 .modifier(SubmitButtonStyle())
-                .disabled(!viewModel.isValid())
-                .opacity(viewModel.isValid() ? 1.0 : 0.4)
         }.background(
             NavigationLink(
-                destination: TabContainer()
-                                .environmentObject(viewModel),
-                isActive : $isLinkActive
-            ) {
-                // label
-            }
+                destination: TabContainer().environmentObject(viewModel),
+                isActive : $viewModel.signInDone
+            ) { }
         )
     }
     var findPassword : some View {
@@ -117,13 +108,20 @@ struct SignInView: View {
             .background(Color.white)
             .cornerRadius(15)
             .shadow(radius: 15)
-        }.edgesIgnoringSafeArea(.all)
-    }
-}
-
-
-struct SignInView_Previews: PreviewProvider {
-    static var previews: some View {
-        SignInView()
+            
+            if viewModel.showPrgoressView {
+                VStack {
+                    Spacer()
+                    ProgressView()
+                    Spacer()
+                }
+            }
+        }
+        .edgesIgnoringSafeArea(.all)
+        .alert(isPresented: $viewModel.showSignInFailAlert) {
+            Alert(title: Text("Sign-In Failed"),
+                  message: Text("Incorrect Email or Password"),
+                  dismissButton: .cancel(Text("Retry")))
+        }
     }
 }

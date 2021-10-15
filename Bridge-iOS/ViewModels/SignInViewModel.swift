@@ -15,15 +15,13 @@ final class SignInViewModel : ObservableObject {
     @Published var checked = false
     @Published var showPassword = false
     @Published var signInResponse : SignInResponse?
+    @Published var signInDone : Bool = false
+    @Published var showSignInFailAlert : Bool = false
+    @Published var showPrgoressView : Bool = false
     
     private let signInUrl : String = "http://3.36.233.180:8080/sign-in"
     
     private var subscription = Set<AnyCancellable>()
-    
-    // need validating method in view model
-    func isValid() -> Bool {
-        return password.count > 2
-    }
     
     func SignIn(email : String, password : String) {
         AF.request(signInUrl,
@@ -31,15 +29,27 @@ final class SignInViewModel : ObservableObject {
                    parameters: ["email" : email, "password" : password],
                    encoder: JSONParameterEncoder.prettyPrinted
         )
+            .responseJSON { [weak self] (response) in
+                guard let statusCode = response.response?.statusCode else { return }
+                switch statusCode {
+                case 200 :
+                    print("SignIn Success : \(statusCode)")
+                    self?.signInDone = true
+                default :
+                    print("SignIn Fail : \(statusCode)")
+                    self?.showSignInFailAlert = true
+                }
+            }
             .publishDecodable(type: SignInResponse.self)
             .compactMap{ $0.value }
             //.map { $0 }
-            .sink { completion in
+            .sink { [weak self] completion in
                 switch completion {
                 case let .failure(error) :
                     print(error.localizedDescription)
                 case .finished :
                     print("Sign in Finished")
+                    self?.showPrgoressView = false
                 }
             } receiveValue: { [weak self] (receivedValue : SignInResponse) in
                 //print(receivedValue)

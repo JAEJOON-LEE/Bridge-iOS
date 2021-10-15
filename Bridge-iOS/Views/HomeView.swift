@@ -15,26 +15,28 @@ struct HomeView : View {
         self._viewModel = StateObject(wrappedValue: viewModel)
     }
     
-    
     var LocationPicker : some View {
-            HStack (spacing : 15) {
-                // Location Picker
-                Picker("\(viewModel.selectedCamp) ▼", selection: $viewModel.selectedCamp) {
-                    ForEach(viewModel.locations, id: \.self) {
-                        Text($0)
-                    }
-                }.font(.system(size : 15, weight : .bold))
-                .pickerStyle(MenuPickerStyle())
-                Spacer()
-                Button{
-                    print("search button clicked")
-                } label : {
-                    Image(systemName: "magnifyingglass")
+        HStack(spacing : 5) {
+            // Location Picker
+            Picker("\(viewModel.selectedCamp )", selection: $viewModel.selectedCamp) {
+                ForEach(viewModel.locations, id: \.self) {
+                    Text($0)
                 }
+            }.font(.system(size : 15, weight : .bold))
+            .pickerStyle(MenuPickerStyle())
+            Image(systemName: "arrowtriangle.down.circle")
+                .font(.system(size : 12))
+                .foregroundColor(.mainTheme)
+            Spacer()
+            Button{
+                print("search button clicked")
+            } label : {
+                Image(systemName: "magnifyingglass")
             }
-            .foregroundColor(.black)
-            .padding()
-            .background(Color.systemDefaultGray)
+        }
+        .foregroundColor(.black)
+        .padding()
+        .background(Color.systemDefaultGray)
     }
     
     var body : some View {
@@ -70,7 +72,7 @@ struct HomeView : View {
                                                     postId : Post.postId,
                                                     isMyPost : (viewModel.memberId == Post.memberId)
                                                 )
-                                ).onDisappear(perform: {
+                                ).onDisappear(perform: { // 일반 작업시에는 필요없는데, 삭제 작업 즉시 반영을 위해서 필요함
                                     viewModel.getPosts(token: viewModel.token)
                                 })
                         ) {
@@ -78,6 +80,7 @@ struct HomeView : View {
                         }//.buttonStyle(.plain)
                     }
                 }
+                Spacer().frame(height : UIScreen.main.bounds.height * 0.1)
             }
         }.onAppear {
             viewModel.getPosts(token: viewModel.token)

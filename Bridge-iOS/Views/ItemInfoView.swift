@@ -86,8 +86,8 @@ struct ItemInfoView: View {
                         .cornerRadius(15)
                         
                         VStack(alignment : .leading, spacing: 5) {
-                            Text((viewModel.itemInfo?.member.username)!).fontWeight(.semibold)
-                            Text((viewModel.itemInfo?.member.description)!)
+                            Text(viewModel.itemInfo?.member.username ?? "Unknown").fontWeight(.semibold)
+                            Text(viewModel.itemInfo?.member.description ?? "Error occur")
                         }
                         Spacer()
                         Button {
@@ -250,6 +250,18 @@ struct ItemInfoView: View {
                 }),
                 secondaryButton: .cancel(Text("No")))
         }
+//        .fullScreenCover(isPresented: $viewModel.showPostModify, content: {
+//            NavigationView {
+//                ModifyUsedPostView(
+//                    viewModel: ModifyUsedPostViewModel(
+//                        accessToken : viewModel.token,
+//                        postId : viewModel.postId,
+//                        contents: viewModel.itemInfo!.usedPostDetail
+//                    ),
+//                    isModifyDone : self.$isModifyDone
+//                )
+//            }
+//        })
         .sheet(isPresented: $viewModel.showPostModify, content: {
             NavigationView {
                 ModifyUsedPostView(
