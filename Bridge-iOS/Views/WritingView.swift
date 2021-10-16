@@ -72,7 +72,7 @@ struct WritingView : View {
     
     func loadImage() {
         guard let selectedImage = viewModel.selectedImage else { return }
-            viewModel.files = selectedImage.jpegData(compressionQuality: 1)!
+            viewModel.files = selectedImage.jpegData(compressionQuality: 1)
         }
     
     var body: some View {

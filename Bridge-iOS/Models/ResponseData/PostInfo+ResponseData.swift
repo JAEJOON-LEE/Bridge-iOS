@@ -20,7 +20,7 @@ struct BoardPostDetail : Codable {
     var anonymous : Bool
     var like : Bool
     var likeCount : Int
-    var postImages : [PostImages]
+    var postImages : [PostImages]?
 }
 
 struct PostMember : Codable, Hashable {

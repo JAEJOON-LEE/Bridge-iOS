@@ -41,7 +41,7 @@ final class BoardViewModel : ObservableObject {
                     guard let statusCode = response.response?.statusCode else { return }
                     
 //                    print(statusCode)
-//                print(response)
+                print(response)
             }
             .publishDecodable(type : TotalPostList.self)
             .compactMap { $0.value }
@@ -55,7 +55,7 @@ final class BoardViewModel : ObservableObject {
                 }
             } receiveValue: { [weak self] (recievedValue : [PostList]) in
                 self?.postLists = recievedValue
-//                print(recievedValue)
+                print(recievedValue)
                 
             }.store(in: &subscription)
     }
@@ -66,7 +66,7 @@ final class BoardViewModel : ObservableObject {
         
         AF.request(url,
                    method: .get,
-                   parameters: [ //"lastPost": 1000,
+                   parameters: [ "testHotLimit": 4,
                                 "hot": true ],
                    encoding: URLEncoding.default,
                    headers: header)
@@ -74,7 +74,7 @@ final class BoardViewModel : ObservableObject {
                 
                     guard let statusCode = response.response?.statusCode else { return }
                     
-                    print(statusCode)
+//                    print(statusCode)
 //                print(response)
             }
             .publishDecodable(type : TotalPostList.self)
@@ -107,7 +107,7 @@ final class BoardViewModel : ObservableObject {
 
                     guard let statusCode = response.response?.statusCode else { return }
 
-                    print(statusCode)
+//                    print(statusCode)
 //                print(response)
             }
             .publishDecodable(type : WantUTotalPostList.self)
@@ -126,4 +126,14 @@ final class BoardViewModel : ObservableObject {
 
             }.store(in: &subscription)
     }
+    
+    
+//    func stringToDate(time : String) -> Date {
+//        let isoFormatter = DateFormatter()
+//        var date : Date
+//        isoFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssX"
+//        date = isoFormatter.date(from: time)!
+//        
+//        return date;
+//    }
 }

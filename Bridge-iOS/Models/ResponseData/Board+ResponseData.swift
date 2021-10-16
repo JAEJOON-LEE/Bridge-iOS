@@ -22,7 +22,7 @@ struct BoardPostInfo : Codable, Hashable{
     var likeCount : Int
     var commentCount : Int
     var description : String
-    var image : String
+    var image : String?
     var anonymous : Bool
     var createdAt : String
 }

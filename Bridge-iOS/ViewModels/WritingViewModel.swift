@@ -27,8 +27,8 @@ class WritingViewModel : ObservableObject {
     @Published var title = ""
     @Published var description = ""
     @Published var anonymous = false
-    @Published var files : Data?
-    @Published var selectedImage: UIImage? // 일단 이미지 하나만
+    @Published var files : Data? = nil
+    @Published var selectedImage: UIImage?  = nil// 일단 이미지 하나만
     @Published var isWant = false
     @Published var writing : WritingInfo?
     
@@ -57,7 +57,7 @@ class WritingViewModel : ObservableObject {
     
     func loadImage() {
         guard let selectedImage = selectedImage else { return }
-            files = selectedImage.jpegData(compressionQuality: 1)!
+            files = selectedImage.jpegData(compressionQuality: 1)
         }
     
     func post(title : String, description : String, anonymous : Bool, files : Data?) {
@@ -71,6 +71,7 @@ class WritingViewModel : ObservableObject {
                  "description" : description,
                  "anonymous" : String(anonymous)]
         
+        //anonymous이면 나중에 수정할 때 참조 못하는 에러 생김 ==> anonymous일때 프로필사진 nil, 이름 anonymous로 강제로 보낼까..?
         AF.upload(multipartFormData: { multipartFormData in
             
                         multipartFormData.append("{ \"title\" : \"\(title)\", \"description\" : \"\(description)\", \"anonymous\" : \"\(anonymous)\" }".data(using: .utf8)!, withName: "postInfo", mimeType: "application/json")

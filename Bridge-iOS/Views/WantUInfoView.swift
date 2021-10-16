@@ -38,7 +38,7 @@ struct WantUInfoView: View { // 게시글 상세 페이지
                         VStack(alignment: .leading){
                             Text(viewModel.totalWantPostDetail?.member?.username ?? "Anonymous")
                                 .fontWeight(.bold)
-                            Text(viewModel.totalWantPostDetail?.wantPostDetail.createdAt ?? "time not found")
+                            Text(viewModel.totalWantPostDetail?.wantPostDetail.createdAt ?? "2021-10-01 00:00:00")
                         }
                         Spacer()
                     }
@@ -236,7 +236,7 @@ struct WantCommentView : View {
                     Text(viewModel.userName)
                         .font(.system(size: 20, weight : .medium))
                         
-                    Text(viewModel.createdAt)
+                    Text(viewModel.createdAt ?? "2021-10-01 00:00:00")
                         .font(.system(size: 10))
                 }
             }
