@@ -58,7 +58,7 @@ struct SignUpVerifyView: View {
             NavigationLink(
                 destination: SignInView()
                                 .environmentObject(viewModel),
-                isActive : $isLinkActive
+                isActive : $viewModel.signUpDone
             ) {
                 // label
             }
@@ -83,7 +83,13 @@ struct SignUpVerifyView: View {
             .background(Color.white)
             .cornerRadius(15)
             .shadow(radius: 15)
-        }.edgesIgnoringSafeArea(.all)
+        }
+        .edgesIgnoringSafeArea(.all)
+        .alert(isPresented: $viewModel.showSignUpFailAlert) {
+            Alert(title: Text("Failed to create your account"),
+                  message: Text("Please check the verify code"),
+                  dismissButton: .cancel(Text("Retry")))
+        }
     }
 }
 

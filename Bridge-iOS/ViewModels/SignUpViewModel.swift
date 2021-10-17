@@ -24,6 +24,8 @@ final class SignUpViewModel : ObservableObject {
     @Published var verifyCode = ""
     @Published var showPassword = false
     @Published var signUpInfo : SignUpInfo?
+    @Published var showSignUpFailAlert : Bool = false
+    @Published var signUpDone : Bool = false
     
     private var subscription = Set<AnyCancellable>()
     
@@ -35,6 +37,16 @@ final class SignUpViewModel : ObservableObject {
     //statusCode 맞춰서 핸들링 필요 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     /* ------------------------------------------------------------------------------------------------*/
     func SendEmail(email : String){ //회원가입 이메일 전송 (API number 43)
+        
+        if(self.name.count == 0 || self.email.count == 0 || !self.email.contains("@") || self.password.count == 0 || self.password2.count == 0 || self.password != self.password2){
+            self.showSignUpFailAlert = true
+            
+            print("email check error")
+            return
+        }else{
+            self.signUpDone = true
+        }
+        
         AF.request("http://3.36.233.180:8080/email-auth/sign-up",
                    method: .post,
                    parameters: ["email" : email],
@@ -52,6 +64,10 @@ final class SignUpViewModel : ObservableObject {
     
     /* ------------------------------------------------------------------------------------------------*/
     func VerifyEmail(email : String, verifyCode : String){ //회원가입 이메일 인증 코드 확인 (API number 44)
+        
+        self.signUpDone = false
+        self.showSignUpFailAlert = false
+        
         AF.request("http://3.36.233.180:8080/email-auth/sign-up/confirm",
                    method: .post,
                    parameters: ["email" : email, "key" : verifyCode],
@@ -61,15 +77,29 @@ final class SignUpViewModel : ObservableObject {
         
             guard let statusCode = response.response?.statusCode else { return }
         
-            print("email verify = " + String(statusCode))
 //            print(self.email)
 //            print(self.verifyCode)
+//            
+//            if(self.nickname.count == 0){
+//                self.showSignUpFailAlert = true
+//            }
+            switch statusCode {
+                case 200, 201 :
+                    print("email verify =  \(statusCode)")
+                    self.signUpDone = true
+                default :
+                    print("email verify =  \(statusCode)")
+                    self.showSignUpFailAlert = true
+            }
         }
     }
     /* ------------------------------------------------------------------------------------------------*/
     
     /* ------------------------------------------------------------------------------------------------*/
     func SignUp(name : String, email : String, password : String, role : String, nickname : String, description : String, profileImage : UIImage?, verifyCode : String) {
+        
+        self.signUpDone = false
+        self.showSignUpFailAlert = false
         
         let header: HTTPHeaders = [
             "Accept": "multipart/form-data",
@@ -97,8 +127,16 @@ final class SignUpViewModel : ObservableObject {
             .responseString{ (response) in
             
             guard let statusCode = response.response?.statusCode else { return }
-            
-            print("sign up status = " + String(statusCode))
+                
+                
+                switch statusCode {
+                    case 200, 201 :
+                        print("sign up status =  \(statusCode)")
+                        self.signUpDone = true
+                    default :
+                        print("sign up status =  \(statusCode)")
+                        self.showSignUpFailAlert = true
+                }
         }
     }
     /* ------------------------------------------------------------------------------------------------*/

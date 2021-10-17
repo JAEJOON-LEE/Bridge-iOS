@@ -83,7 +83,7 @@ struct SignUpView: View {
                     NavigationLink(
                         destination: SignUpAppendixView(viewModel: viewModel)
                                         .environmentObject(viewModel),
-                        isActive : $isLinkActive
+                        isActive : $viewModel.signUpDone
                     ) {
                         // label
                     }
@@ -116,7 +116,13 @@ struct SignUpView: View {
             .background(Color.white)
             .cornerRadius(15)
             .shadow(radius: 15)
-        }.edgesIgnoringSafeArea(.all)
+        }
+        .edgesIgnoringSafeArea(.all)
+        .alert(isPresented: $viewModel.showSignUpFailAlert) {
+            Alert(title: Text("Failed to create your account"),
+                  message: Text("Please check your inputs again"),
+                  dismissButton: .cancel(Text("Retry")))
+        }
     }
 }
 

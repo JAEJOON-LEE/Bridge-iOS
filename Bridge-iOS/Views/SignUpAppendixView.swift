@@ -68,8 +68,13 @@ struct SignUpAppendixView: View {
     }
     
     var doneButton : some View {
+        
         Button {
-            isLinkActive = true
+            if(viewModel.nickname.count == 0){
+                viewModel.showSignUpFailAlert = true
+            }else{
+                isLinkActive = true
+            }
         } label : {
             Text("Done")
                 .modifier(SubmitButtonStyle())
@@ -103,7 +108,13 @@ struct SignUpAppendixView: View {
             .background(Color.white)
             .cornerRadius(15)
             .shadow(radius: 15)
-        }.edgesIgnoringSafeArea(.all)
+        }
+        .edgesIgnoringSafeArea(.all)
+        .alert(isPresented: $viewModel.showSignUpFailAlert) {
+            Alert(title: Text("Failed to create your account"),
+                  message: Text("Please check your nickname"),
+                  dismissButton: .cancel(Text("Retry")))
+        }
     }
 }
 
