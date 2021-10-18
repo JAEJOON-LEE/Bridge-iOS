@@ -25,8 +25,7 @@ struct PostInfoView: View { // 게시글 상세 페이지
                 //Profile
                 HStack{
                     URLImage( //프로필 이미지
-                        URL(string : viewModel.totalBoardPostDetail?.member?.profileImg ?? "https://static.thenounproject.com/png/741653-200.png") ??
-                        URL(string: "https://static.thenounproject.com/png/741653-200.png")!
+                        URL(string : viewModel.totalBoardPostDetail!.member?.profileImage ?? "https://static.thenounproject.com/png/741653-200.png")!
                     ) { image in
                         image
                             .resizable()
@@ -38,22 +37,31 @@ struct PostInfoView: View { // 게시글 상세 페이지
                     
                     HStack{
                         VStack(alignment: .leading){
-                            Text(viewModel.totalBoardPostDetail?.member?.username ?? "Anonymous")
+                            Text(viewModel.totalBoardPostDetail!.member?.username ?? "Anonymous")
                                 .fontWeight(.bold)
-                            Text(viewModel.totalBoardPostDetail?.boardPostDetail.createdAt ?? "2021-10-01 00:00:00")
+                            
+                            Text(viewModel.convertReturnedDateString(viewModel.totalBoardPostDetail?.boardPostDetail.createdAt ?? "2021-10-01 00:00:00"))
                         }
                         Spacer()
                         
+                        Button{
+                            //라이크 버튼 클릭
+                            viewModel.isLiked?.toggle()
+                            viewModel.likePost(isliked: (viewModel.totalBoardPostDetail!.boardPostDetail.like ?? true))
+                        } label : {
+                            Image(systemName: (viewModel.isLiked ?? true) ? "hand.thumbsup.fill" : "hand.thumbsup")
+                                .foregroundColor(.mainTheme)
+                        }
+                        Text(String((viewModel.totalBoardPostDetail!.boardPostDetail.likeCount)) )
                     }
-                    
                 }
-                .padding(.top)
+                .padding()
                 .frame(width : UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.1)
                 
                 //Images
                 ScrollView(.horizontal, showsIndicators: true) {
                     HStack {
-                        ForEach(viewModel.totalBoardPostDetail?.boardPostDetail.postImages ?? [], id : \.self) { imageInfo in
+                        ForEach(viewModel.totalBoardPostDetail!.boardPostDetail.postImages ?? [], id : \.self) { imageInfo in
                             URLImage(
                                 URL(string : imageInfo.image) ??
                                 URL(string: "https://static.thenounproject.com/png/741653-200.png")!
@@ -68,24 +76,15 @@ struct PostInfoView: View { // 게시글 상세 페이지
                 }
                 
                 //Contents
-                VStack(alignment: .leading){
-                    Text(viewModel.totalBoardPostDetail?.boardPostDetail.title ?? "Title not found")
+                VStack{
+                    Text(viewModel.totalBoardPostDetail!.boardPostDetail.title ?? "Title not found")
                         .font(.title2)
                         .fontWeight(.bold)
                 
                     
                     HStack(alignment: .lastTextBaseline){
-                        Text(viewModel.totalBoardPostDetail?.boardPostDetail.description ?? "No description")
+                        Text(viewModel.totalBoardPostDetail!.boardPostDetail.description ?? "No description")
                             .padding()
-                        Button{
-                            //라이크 버튼 클릭
-                            viewModel.isLiked?.toggle()
-                            viewModel.likePost(isliked: (viewModel.totalBoardPostDetail?.boardPostDetail.like ?? true))
-                        } label : {
-                            Image(systemName: (viewModel.isLiked ?? true) ? "hand.thumbsup.fill" : "hand.thumbsup")
-                                .foregroundColor(.black)
-                        }
-                        Text(String((viewModel.totalBoardPostDetail?.boardPostDetail.likeCount)!) )
                     }
                 }
                 .frame(width : UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.15)
@@ -215,19 +214,19 @@ struct PostInfoView: View { // 게시글 상세 페이지
 struct CommentView : View {
     @StateObject private var viewModel : CommentViewModel
     
-//    init(viewModel : CommentViewModel) {
-//        self.viewModel = viewModel
-//    }
+    //    init(viewModel : CommentViewModel) {
+    //        self.viewModel = viewModel
+    //    }
     init(viewModel : CommentViewModel) {
         self._viewModel = StateObject(wrappedValue: viewModel)
     }
     
     var body : some View {
-        VStack{
-            HStack(alignment: .firstTextBaseline){
+        VStack{ //(alignment: .leading)
+            
+            HStack{
                 URLImage( //프로필 이미지
-                    URL(string : viewModel.profileImage) ??
-                    URL(string: "https://static.thenounproject.com/png/741653-200.png")!
+                    URL(string : viewModel.profileImage)!
                 ) { image in
                     image
                         .resizable()
@@ -241,20 +240,16 @@ struct CommentView : View {
                     Text(viewModel.userName)
                         .font(.system(size: 20, weight : .medium))
                     
-                    Text(viewModel.createdAt ?? "2021-10-01 00:00:00")
+                    Text(viewModel.convertReturnedDateString(viewModel.createdAt ?? "2021-10-01 00:00:00"))
                         .font(.system(size: 10))
                 }
             }
             .foregroundColor(.black)
- 
+            
             Text(viewModel.content)
             Divider()
         }
-        
-        
         .modifier(CommentStyle())
-        
-        
     }
 }
 

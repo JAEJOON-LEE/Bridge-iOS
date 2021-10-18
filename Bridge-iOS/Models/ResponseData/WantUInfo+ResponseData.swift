@@ -26,7 +26,7 @@ struct WantPostMember : Codable, Hashable {
     var memberId : Int?
     var username : String?
     var description : String?
-    var profileImg : String?
+    var profileImage : String?
 }
 
 struct WantPostImages : Codable, Hashable {

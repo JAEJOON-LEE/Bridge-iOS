@@ -31,8 +31,8 @@ final class CommentViewModel : ObservableObject {
     
     var content : String { commentList.content }
     var createdAt : String { commentList.createdAt }
-    var profileImage : String { commentList.member?.profileImage ?? "nil"}
-    var userName : String { commentList.member?.username ?? "nil" }
+    var profileImage : String { commentList.member?.profileImage! ?? "https://static.thenounproject.com/png/741653-200.png"}
+    var userName : String { commentList.member?.username! ?? "Anonymous" }
     
     
     func deleteComment() {

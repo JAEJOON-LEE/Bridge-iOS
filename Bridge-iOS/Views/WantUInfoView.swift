@@ -23,8 +23,7 @@ struct WantUInfoView: View { // 게시글 상세 페이지
                 //Profile
                 HStack{
                     URLImage( //프로필 이미지
-                        URL(string : viewModel.totalWantPostDetail?.member?.profileImg ?? "https://static.thenounproject.com/png/741653-200.png") ??
-                        URL(string: "https://static.thenounproject.com/png/741653-200.png")!
+                        URL(string : viewModel.totalWantPostDetail!.member?.profileImage ?? "https://static.thenounproject.com/png/741653-200.png")!
                     ) { image in
                         image
                             .resizable()
@@ -36,15 +35,26 @@ struct WantUInfoView: View { // 게시글 상세 페이지
                     
                     HStack{
                         VStack(alignment: .leading){
-                            Text(viewModel.totalWantPostDetail?.member?.username ?? "Anonymous")
+                            Text(viewModel.totalWantPostDetail!.member?.username ?? "Anonymous")
                                 .fontWeight(.bold)
-                            Text(viewModel.totalWantPostDetail?.wantPostDetail.createdAt ?? "2021-10-01 00:00:00")
+                            
+                            Text(viewModel.convertReturnedDateString(viewModel.totalWantPostDetail?.wantPostDetail.createdAt ?? "2021-10-01 00:00:00"))
                         }
                         Spacer()
+                        
+                        Button{
+                            //라이크 버튼 클릭
+                            viewModel.isLiked?.toggle()
+                            viewModel.likeWantPost(isliked: (viewModel.totalWantPostDetail!.wantPostDetail.like ?? true))
+                        } label : {
+                            Image(systemName: (viewModel.isLiked ?? true) ? "hand.thumbsup.fill" : "hand.thumbsup")
+                                .foregroundColor(.mainTheme)
+                        }
+                        Text(String((viewModel.totalWantPostDetail!.wantPostDetail.likeCount)) )
                     }
                     
                 }
-                .padding(.top)
+                .padding()
                 .frame(width : UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.1)
                 
                 //Images
@@ -74,15 +84,6 @@ struct WantUInfoView: View { // 게시글 상세 페이지
                     HStack(alignment: .lastTextBaseline){
                         Text(viewModel.totalWantPostDetail?.wantPostDetail.description ?? "No description")
                             .padding()
-                        Button{
-                            //라이크 버튼 클릭
-                            viewModel.isLiked?.toggle()
-                            viewModel.likeWantPost(isliked: (viewModel.totalWantPostDetail?.wantPostDetail.like ?? true))
-                        } label : {
-                            Image(systemName: (viewModel.isLiked ?? true) ? "hand.thumbsup.fill" : "hand.thumbsup")
-                                .foregroundColor(.black)
-                        }
-                        Text(String((viewModel.totalWantPostDetail?.wantPostDetail.likeCount)!) )
                     }
                 }
                 .frame(width : UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.15)
@@ -218,11 +219,11 @@ struct WantCommentView : View {
     }
     
     var body : some View {
-        VStack{
-            HStack(alignment: .firstTextBaseline){
+        VStack{ //(alignment: .leading)
+            
+            HStack{
                 URLImage( //프로필 이미지
-                    URL(string : viewModel.profileImage) ??
-                    URL(string: "https://static.thenounproject.com/png/741653-200.png")!
+                    URL(string : viewModel.profileImage)!
                 ) { image in
                     image
                         .resizable()
@@ -232,11 +233,11 @@ struct WantCommentView : View {
                        height: 40)
                 .cornerRadius(20)
                 
-                Group{
+                VStack{
                     Text(viewModel.userName)
                         .font(.system(size: 20, weight : .medium))
-                        
-                    Text(viewModel.createdAt ?? "2021-10-01 00:00:00")
+                    
+                    Text(viewModel.convertReturnedDateString(viewModel.createdAt ?? "2021-10-01 00:00:00"))
                         .font(.system(size: 10))
                 }
             }
