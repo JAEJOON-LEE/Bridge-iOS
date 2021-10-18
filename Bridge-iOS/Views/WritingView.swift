@@ -79,8 +79,11 @@ struct WritingView : View {
         VStack(spacing : 20) {
             if(!viewModel.isForModifying){
                 HStack{
+                    Text("Make a your bridge")
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
                     Spacer()
-                }.padding()
+                }.padding(20)
             }else{
                 HStack {
                     Text("Modify Post")
@@ -166,11 +169,11 @@ struct WritingView : View {
             .padding(.horizontal, 30)
             .font(.caption)
             
-            if(!viewModel.isForModifying){
+//            if(!viewModel.isForModifying){
                 Text("Policy Text Area : asdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddas")
                     .font(.caption2)
                     .padding(.horizontal, 30)
-            }
+//            }
             
             uploadButton
 //                .modifier(SubmitButtonStyle())

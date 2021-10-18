@@ -33,14 +33,14 @@ struct TabContainer: View {
                                     memberId : signInViewModel.signInResponse?.memberId ?? -1
                                 )
                     )
-                case 3 :
-                    WritingView(viewModel: WritingViewModel(
-                                    accessToken: signInViewModel.signInResponse?.token.accessToken ?? "",
-                                    postId : -1,
-                                    isForModifying : false,
-                                    isForWantModifying : nil
-                        )
-                    )
+//                case 3 :
+//                    WritingView(viewModel: WritingViewModel(
+//                                    accessToken: signInViewModel.signInResponse?.token.accessToken ?? "",
+//                                    postId : -1,
+//                                    isForModifying : false,
+//                                    isForWantModifying : nil
+//                        )
+//                    )
                 case 4 :
                     // temp
                     VStack {
@@ -90,11 +90,11 @@ struct TabContainer: View {
                 NotificationView()
                     .preferredColorScheme(.light)
             }
-            .background(
-                NavigationLink(
-                    destination : UsedWritingView(viewModel : UsedWritingViewModel(accessToken: signInViewModel.signInResponse?.token.accessToken ?? "")),
-                    isActive : $viewModel.showUsedPostWriting) { }
-            )
+//            .background(
+//                NavigationLink(
+////                    destination : UsedWritingView(viewModel : UsedWritingViewModel(accessToken: signInViewModel.signInResponse?.token.accessToken ?? "")),
+////                    isActive : $viewModel.showUsedPostWriting) { }
+//            )
             .overlay(
                 Color.black.opacity(isSlideShow ? 0.5 : 0)
                     .edgesIgnoringSafeArea(.bottom)
@@ -151,16 +151,27 @@ extension TabContainer {
                         .foregroundColor(.mainTheme)
                 }
             } else {
-                Button {
+                Button { // 여기에서 뷰 넘어가도록 -> writing view에서 글 작성완료 후 Parent로 돌아갈 수 있게
                     viewModel.selectedTabIndex = 3
                 } label : {
-                    Image(systemName : "pencil")
-                        .font(.system(size : 35))
-                        .padding(10)
-                        .background(Color.white)
-                        .clipShape(Circle())
-                        .shadow(radius: 3)
-                        .foregroundColor(viewModel.selectedTabIndex == 3 ? .mainTheme : .gray)
+                    NavigationLink(
+                        destination:
+                                WritingView(viewModel: WritingViewModel(
+                                                accessToken: signInViewModel.signInResponse?.token.accessToken ?? "",
+                                                postId : -1,
+                                                isForModifying : false,
+                                                isForWantModifying : nil
+                                    )
+                                )
+                    ) {
+                        Image(systemName : "pencil")
+                            .font(.system(size : 35))
+                            .padding(10)
+                            .background(Color.white)
+                            .clipShape(Circle())
+                            .shadow(radius: 3)
+                            .foregroundColor(viewModel.selectedTabIndex == 3 ? .mainTheme : .gray)
+                    }
                 }
             }
             Button {
