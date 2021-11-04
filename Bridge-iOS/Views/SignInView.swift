@@ -67,13 +67,7 @@ struct SignInView: View {
         )
     }
     var findPassword : some View {
-        NavigationLink(destination:
-                        Color.mainTheme
-                        .ignoresSafeArea(.all)
-                        .overlay(
-                            Text("Find password")
-                        )
-        ){
+        NavigationLink(destination: FindPasswordView()){
             Text("Forgot Password?")
                 .foregroundColor(.mainTheme)
                 .padding(10)

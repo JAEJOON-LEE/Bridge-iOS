@@ -12,6 +12,8 @@
 		1A572DDD270B6629009E2465 /* ItemInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A572DDC270B6629009E2465 /* ItemInfoViewModel.swift */; };
 		1A572DDF270B679E009E2465 /* ItemInfo+ResponseData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A572DDE270B679E009E2465 /* ItemInfo+ResponseData.swift */; };
 		1A572E0B270ECDC6009E2465 /* SlideViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A572E0A270ECDC5009E2465 /* SlideViewModel.swift */; };
+		1A5B7DF62733C73900AA8B43 /* FindPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A5B7DF52733C73900AA8B43 /* FindPasswordView.swift */; };
+		1A5B7DF82733CE0B00AA8B43 /* FindPasswordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A5B7DF72733CE0B00AA8B43 /* FindPasswordViewModel.swift */; };
 		1A936DC5271877C300750DE6 /* ModifyUsedPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A936DC4271877C300750DE6 /* ModifyUsedPostView.swift */; };
 		1A936DC7271878A600750DE6 /* ModifyUsedPostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A936DC6271878A500750DE6 /* ModifyUsedPostViewModel.swift */; };
 		1AA8B40D26F32AF500C28E02 /* Bridge_iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA8B40C26F32AF500C28E02 /* Bridge_iOSApp.swift */; };
@@ -74,6 +76,8 @@
 		1A572DDC270B6629009E2465 /* ItemInfoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemInfoViewModel.swift; sourceTree = "<group>"; };
 		1A572DDE270B679E009E2465 /* ItemInfo+ResponseData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ItemInfo+ResponseData.swift"; sourceTree = "<group>"; };
 		1A572E0A270ECDC5009E2465 /* SlideViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideViewModel.swift; sourceTree = "<group>"; };
+		1A5B7DF52733C73900AA8B43 /* FindPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindPasswordView.swift; sourceTree = "<group>"; };
+		1A5B7DF72733CE0B00AA8B43 /* FindPasswordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindPasswordViewModel.swift; sourceTree = "<group>"; };
 		1A936DC4271877C300750DE6 /* ModifyUsedPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifyUsedPostView.swift; sourceTree = "<group>"; };
 		1A936DC6271878A500750DE6 /* ModifyUsedPostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifyUsedPostViewModel.swift; sourceTree = "<group>"; };
 		1AA8B40926F32AF500C28E02 /* Bridge-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Bridge-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -190,6 +194,7 @@
 				1AA8B42426F3417400C28E02 /* LandingView.swift */,
 				1AA8B40E26F32AF500C28E02 /* TabContainer.swift */,
 				1AA8B42B26F3521B00C28E02 /* SignInView.swift */,
+				1A5B7DF52733C73900AA8B43 /* FindPasswordView.swift */,
 				1AA8B42926F348F100C28E02 /* SignUpView.swift */,
 				6DAD1F5527102918006B01FC /* SignUpAppendixView.swift */,
 				6DAD1F5927102985006B01FC /* SignUpVerifyView.swift */,
@@ -244,6 +249,7 @@
 			children = (
 				1AA8B43426F3688200C28E02 /* TabContainerViewModel.swift */,
 				1ADD9DDB2703220F008342A7 /* SignInViewModel.swift */,
+				1A5B7DF72733CE0B00AA8B43 /* FindPasswordViewModel.swift */,
 				1ADD9DE527034B8A008342A7 /* HomeViewModel.swift */,
 				6DAD1F3A27041289006B01FC /* WritingViewModel.swift */,
 				1A318F9027131A4C00ADF60E /* UsedWritingViewModel.swift */,
@@ -365,6 +371,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1A5B7DF62733C73900AA8B43 /* FindPasswordView.swift in Sources */,
 				1A318F9127131A4D00ADF60E /* UsedWritingViewModel.swift in Sources */,
 				1A936DC5271877C300750DE6 /* ModifyUsedPostView.swift in Sources */,
 				1A572DDB270B6496009E2465 /* ItemInfoView.swift in Sources */,
@@ -386,6 +393,7 @@
 				1ABDEA5326F3B9310031DF0B /* SubmitButtonStyle.swift in Sources */,
 				1A936DC7271878A600750DE6 /* ModifyUsedPostViewModel.swift in Sources */,
 				1AA8B42E26F3598600C28E02 /* SignViewTextFieldStyle.swift in Sources */,
+				1A5B7DF82733CE0B00AA8B43 /* FindPasswordViewModel.swift in Sources */,
 				1ADD9DE827034C63008342A7 /* Home+ResponseData.swift in Sources */,
 				6D2B89D42713477100319907 /* WantU+ResponseData.swift in Sources */,
 				6D2B89E8271349B200319907 /* CommentViewModel.swift in Sources */,

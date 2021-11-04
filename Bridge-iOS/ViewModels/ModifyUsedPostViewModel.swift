@@ -97,7 +97,7 @@ final class ModifyUsedPostViewModel : ObservableObject {
                 "price" : price,
                 "description" : description,
                 "category" : selectedCategory,
-                "camps" : editedCamps,
+                "camp" : editedCamps,
                 "removeImage" : removeImage
             ]
         ]
