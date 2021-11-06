@@ -11,48 +11,53 @@ struct LandingView: View {
     var body: some View {
         NavigationView {
             VStack {
+                // Logo
                 Image("LOGO")
                     .resizable()
-                    .frame(width: 150, height: 150)
+                    .frame(width: 140, height: 140)
+                    .padding()
                 
-                Spacer()
-                    .frame(height : UIScreen.main.bounds.height * 0.1)
+                // Text Area
+                VStack(alignment : .leading, spacing : 20) {
+                    Text("Welcome !")
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
+                    Text("Thanks for using our app, Here you can sell your own items, or participate in various activities led by your partner")
+                        .kerning(1) // 자간
+                        .lineSpacing(5) // 행간
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                .foregroundColor(.mainTheme)
+                .padding(30)
                 
-                VStack {
-                    VStack(alignment : .leading, spacing : 20) {
-                        Text("Welcome!")
-                            .font(.largeTitle)
-                        Text("Thanks for using our app, Here you can sell your own items, or participate in various activities led by your partner")
+                // Sign in and Sing up link
+                VStack (spacing : 20) {
+                    NavigationLink(destination : SignInView()) {
+                        Text("Sign In")
+                            .font(.system(size : 20))
+                            .foregroundColor(.white)
+                            .frame(
+                                width : UIScreen.main.bounds.width * 0.8,
+                                height : UIScreen.main.bounds.height * 0.07)
+                            .background(Color.mainTheme)
+                            .cornerRadius(30)
                     }
-                    .foregroundColor(.white)
-                    .padding(20)
-                    .padding(.vertical, 40)
-                    
-                    HStack(spacing : 50) {
-                        NavigationLink(destination : SignUpView()) {
-                            Text("Sign Up")
-                                .font(.system(size : 20, weight: .bold))
-                                .foregroundColor(.white)
-                                .frame(width : UIScreen.main.bounds.width * 0.35, height : UIScreen.main.bounds.height * 0.07)
-                                .background(Color.gray)
-                                .cornerRadius(20)
-                        }
-                        NavigationLink(destination : SignInView()) {
-                            Text("Sign In")
-                                .font(.system(size : 20, weight: .bold))
-                                .foregroundColor(.black)
-                                .frame(width : UIScreen.main.bounds.width * 0.35, height : UIScreen.main.bounds.height * 0.07)
-                                .background(Color.white)
-                                .cornerRadius(20)
-                        }
+                    NavigationLink(destination : SignUpView()) {
+                        Text("Sign Up")
+                            .font(.system(size : 20))
+                            .foregroundColor(.black)
+                            .frame(
+                                width : UIScreen.main.bounds.width * 0.8,
+                                height : UIScreen.main.bounds.height * 0.07)
+                            .background(Color.systemDefaultGray)
+                            .cornerRadius(30)
                     }
-                    .shadow(radius : 10)
-                    .padding(.top, 30)
-                    Spacer()
-                }.frame(maxWidth : UIScreen.main.bounds.width)
-                .background(Color.mainTheme)
-                .cornerRadius(15)
-                .shadow(radius: 10)
+                }
+                .shadow(radius : 3)
+                .padding(.vertical, 50)
+            
+            
+                .frame(maxWidth : UIScreen.main.bounds.width)
             }.edgesIgnoringSafeArea(.bottom)
         } // NavigationView
         .accentColor(.black)
