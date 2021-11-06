@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="90.438" height="90.438" viewBox="0 0 90.438 90.438">
+  <defs>
+    <linearGradient id="linear-gradient" x1="0.5" x2="0.5" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#f8d447"/>
+      <stop offset="1" stop-color="#e86b31"/>
+    </linearGradient>
+  </defs>
+  <g id="组_546" data-name="组 546" transform="translate(-139.182 -241.6)">
+    <ellipse id="椭圆_67" data-name="椭圆 67" cx="40.417" cy="40.417" rx="40.417" ry="40.417" transform="translate(143.984 246.402)" fill="#ebebeb"/>
+    <ellipse id="椭圆_68" data-name="椭圆 68" cx="33.263" cy="33.263" rx="33.263" ry="33.263" transform="matrix(0.875, -0.485, 0.485, 0.875, 139.182, 273.853)" fill="url(#linear-gradient)"/>
+    <g id="check_black_24dp" transform="translate(163.994 264.266)">
+      <path id="路径_250" data-name="路径 250" d="M0,0H45.106V45.106H0Z" fill="none"/>
+      <path id="路径_251" data-name="路径 251" d="M13.916,25.474,6.079,17.637,3.41,20.287,13.916,30.793,36.469,8.24l-2.65-2.65Z" transform="translate(2.999 4.916)" fill="#fff"/>
+    </g>
+  </g>
+</svg>

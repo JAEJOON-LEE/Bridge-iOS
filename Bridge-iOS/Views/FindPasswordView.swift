@@ -21,19 +21,18 @@ struct FindPasswordView: View {
     }
     var submitButton : some View {
         Button {
-            viewModel.buttonAction += 1
+            // API Calling and increase buttonAction value
+//            withAnimation { viewModel.apiCalling(viewModel.buttonAction) }
+            withAnimation {viewModel.buttonAction += 1}
         } label : {
             Text("Next").modifier(SubmitButtonStyle())
         }
     }
     var dissmissButton : some View {
         HStack {
-            Text("Already have an account?")
-                .foregroundColor(.gray)
-            Button { self.presentationMode.wrappedValue.dismiss() } label : {
-                Text("Sign in")
-                    .foregroundColor(.mainTheme)
-            }
+            Text("Already have an account?").foregroundColor(.gray)
+            Button { self.presentationMode.wrappedValue.dismiss() }
+                label : { Text("Sign in").foregroundColor(.mainTheme) }
         }
     }
     
@@ -41,8 +40,18 @@ struct FindPasswordView: View {
         ZStack(alignment: .bottom) {
             Color.systemDefaultGray
             VStack(spacing : 40) {
-                titleField
+                // title
+                if (viewModel.buttonAction != 3) {
+                    titleField
+                } else {
+                    Image("Check")
+                        .resizable()
+                        .frame(width : 100, height : 100)
+                }
+                
+                // textfield
                 switch viewModel.buttonAction {
+                // "Reset Password"
                 case 0 :
                     HStack {
                         Image(systemName: "envelope")
@@ -50,14 +59,18 @@ struct FindPasswordView: View {
                             .autocapitalization(.none)
                             .accentColor(.mainTheme)
                     }.modifier(SignViewTextFieldStyle())
+                
+                // "Check your mail box"
                 case 1 :
                     HStack {
-                        TextField("Enter your code", text: $viewModel.email)
+                        TextField("Enter your code", text: $viewModel.key)
                             .autocapitalization(.none)
                             .accentColor(.mainTheme)
                     }.modifier(SignViewTextFieldStyle())
+                
+                // "Enter your new Password"
                 case 2 :
-                    VStack {
+                    VStack (spacing : 20) {
                         HStack {
                             Image(systemName: "lock.fill")
                             if viewModel.showPassword {
@@ -95,24 +108,35 @@ struct FindPasswordView: View {
                             }
                         }.modifier(SignViewTextFieldStyle())
                     }
+                    
+                // Done
                 case 3 :
-                    HStack {
-                        
-                    }
+                    Text("You have successfully changed your password")
+                        .foregroundColor(.mainTheme)
+                        .font(.system(size : 25, weight : .semibold))
+                        .padding(20)
+                        .padding(.vertical, 10)
+                // Got error
                 default:
-                    HStack {
-                        
+                    Text("Got Error go back to previous page").font(.largeTitle)
+                }
+                
+                if (viewModel.buttonAction != 3) {
+                    submitButton
+                } else {
+                    Button {
+                        self.presentationMode.wrappedValue.dismiss()
+                    } label : {
+                        Text("Done").modifier(SubmitButtonStyle())
                     }
                 }
-                submitButton
+                
+                // show "back to sign in" button till second flow
                 if (viewModel.buttonAction == 0 || viewModel.buttonAction == 1) {
                     dissmissButton
                 }
             } // VStack
-            .frame(
-                width : UIScreen.main.bounds.width,
-                height : UIScreen.main.bounds.height * 0.8
-            )
+            .frame(width : UIScreen.main.bounds.width, height : UIScreen.main.bounds.height * 0.8)
             .background(Color.white)
             .cornerRadius(15)
             .shadow(radius: 15)

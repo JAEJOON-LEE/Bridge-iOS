@@ -90,11 +90,11 @@ struct TabContainer: View {
                 NotificationView()
                     .preferredColorScheme(.light)
             }
-//            .background(
-//                NavigationLink(
-////                    destination : UsedWritingView(viewModel : UsedWritingViewModel(accessToken: signInViewModel.signInResponse?.token.accessToken ?? "")),
-////                    isActive : $viewModel.showUsedPostWriting) { }
-//            )
+            .background(
+                NavigationLink(
+                    destination : UsedWritingView(viewModel : UsedWritingViewModel(accessToken: signInViewModel.signInResponse?.token.accessToken ?? "")),
+                    isActive : $viewModel.showUsedPostWriting) { }
+            )
             .overlay(
                 Color.black.opacity(isSlideShow ? 0.5 : 0)
                     .edgesIgnoringSafeArea(.bottom)
