@@ -1,5 +1,5 @@
 //
-//  WantU+ResponseData.swift
+//  Secret+ResponseData.swift
 //  Bridge-iOS
 //
 //  Created by 이재준 on 2021/10/10.
@@ -7,16 +7,16 @@
 
 import Foundation
 
-struct WantUTotalPostList : Codable, Hashable {
-    var postList : [WantUPostList]
+struct SecretTotalPostList : Codable, Hashable {
+    var postList : [SecretPostList]
 }
 
-struct WantUPostList : Codable, Hashable {
-    var postInfo : WantUBoardPostInfo
-    var member : WantUBoardMember?
+struct SecretPostList : Codable, Hashable {
+    var postInfo : SecretBoardPostInfo
+    var member : SecretBoardMember?
 }
 
-struct WantUBoardPostInfo : Codable, Hashable{
+struct SecretBoardPostInfo : Codable, Hashable{
     var postId : Int
     var title : String
     var likeCount : Int
@@ -26,7 +26,7 @@ struct WantUBoardPostInfo : Codable, Hashable{
     var createdAt : String
 }
 
-struct WantUBoardMember : Codable, Hashable {
+struct SecretBoardMember : Codable, Hashable {
     var memberId : Int?
     var username : String?
     var description : String?

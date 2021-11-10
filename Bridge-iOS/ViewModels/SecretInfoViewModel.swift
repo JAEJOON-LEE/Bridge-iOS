@@ -1,5 +1,5 @@
 //
-//  WanUInfoViewModel.swift
+//  SecretInfoViewModel.swift
 //  Bridge-iOS
 //
 //  Created by 이재준 on 2021/10/10.
@@ -9,8 +9,8 @@ import Foundation
 import Combine
 import Alamofire
 
-final class WantUInfoViewModel : ObservableObject {
-    @Published var totalWantPostDetail : TotalWantPostDetail?
+final class SecretInfoViewModel : ObservableObject {
+    @Published var totalSecretPostDetail : TotalSecretPostDetail?
     @Published var isLiked : Bool?
     @Published var likeCount : Int = 0
     @Published var commentCount : Int = 0
@@ -39,13 +39,13 @@ final class WantUInfoViewModel : ObservableObject {
         self.postId = postId
         self.memberId = memberId
         self.isMyPost = isMyPost
-        getWantPostDetail()
-        getWantComment()
+        getSecretPostDetail()
+        getSecretComment()
     }
     
-    func getWantPostDetail() {
+    func getSecretPostDetail() {
         
-        let url = "http://3.36.233.180:8080/want-posts/\(postId)"
+        let url = "http://3.36.233.180:8080/secret-posts/\(postId)"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
         
         AF.request(url,
@@ -53,7 +53,7 @@ final class WantUInfoViewModel : ObservableObject {
                    encoding: URLEncoding.default,
                    headers: header
         )
-            .publishDecodable(type : TotalWantPostDetail.self)
+            .publishDecodable(type : TotalSecretPostDetail.self)
             .compactMap { $0.value }
             .sink { completion in
                 switch completion {
@@ -64,14 +64,14 @@ final class WantUInfoViewModel : ObservableObject {
                 }
             } receiveValue: { [weak self] recievedValue in
 //                print(recievedValue)
-                self?.totalWantPostDetail = recievedValue
-                self?.isLiked = recievedValue.wantPostDetail.like
+                self?.totalSecretPostDetail = recievedValue
+                self?.isLiked = recievedValue.secretPostDetail.like
 //                print(self?.totalBoardPostDetail as Any)
             }.store(in: &subscription)
     }
     
-    func likeWantPost(isliked : Bool) {
-        let url = "http://3.36.233.180:8080/want-posts/\(postId)/likes"
+    func likeSecretPost(isliked : Bool) {
+        let url = "http://3.36.233.180:8080/secret-posts/\(postId)/likes"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
         let method : HTTPMethod = isliked ? .delete : .post
         
@@ -84,8 +84,8 @@ final class WantUInfoViewModel : ObservableObject {
         }
     }
     
-    func deleteWantPost() {
-        let url = "http://3.36.233.180:8080/want-posts/\(postId)"
+    func deleteSecretPost() {
+        let url = "http://3.36.233.180:8080/secret-posts/\(postId)"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
         
         AF.request(url,
@@ -97,9 +97,9 @@ final class WantUInfoViewModel : ObservableObject {
         }
     }
     
-    func sendWantComment(content : String, anonymous : String) {
+    func sendSecretComment(content : String, anonymous : String) {
         
-        let url = "http://3.36.233.180:8080/want-posts/\(postId)/comments"
+        let url = "http://3.36.233.180:8080/secret-posts/\(postId)/comments"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
         
         AF.request(url,
@@ -119,9 +119,9 @@ final class WantUInfoViewModel : ObservableObject {
 //        getComment()
     }
 
-    func getWantComment() {
+    func getSecretComment() {
         
-        let url = "http://3.36.233.180:8080/want-posts/\(postId)/comments?"
+        let url = "http://3.36.233.180:8080/secret-posts/\(postId)/comments?"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
         
         AF.request(url,
@@ -147,8 +147,8 @@ final class WantUInfoViewModel : ObservableObject {
             }.store(in: &subscription)
     }
     
-    func deleteWantComment() {
-        let url = "http://3.36.233.180:8080/want-posts/\(postId)/comments/\(commentId!)"
+    func deleteSecretComment() {
+        let url = "http://3.36.233.180:8080/secret-posts/\(postId)/comments/\(commentId!)"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
         
         AF.request(url,

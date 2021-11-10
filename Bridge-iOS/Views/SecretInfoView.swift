@@ -1,5 +1,5 @@
 //
-//  WantUInfoView.swift
+//  SecretInfoView.swift
 //  Bridge-iOS
 //
 //  Created by 이재준 on 2021/10/11.
@@ -8,12 +8,12 @@
 import SwiftUI
 import URLImage
 
-struct WantUInfoView: View { // 게시글 상세 페이지
+struct SecretInfoView: View { // 게시글 상세 페이지
     @Environment(\.presentationMode) var presentationMode
-    @StateObject private var viewModel : WantUInfoViewModel
+    @StateObject private var viewModel : SecretInfoViewModel
     @State var isLinkActive : Bool = false
     
-    init(viewModel : WantUInfoViewModel) {
+    init(viewModel : SecretInfoViewModel) {
         self._viewModel = StateObject(wrappedValue: viewModel)
     }
     
@@ -23,7 +23,7 @@ struct WantUInfoView: View { // 게시글 상세 페이지
                 //Profile
                 HStack{
                     URLImage( //프로필 이미지
-                        URL(string : viewModel.totalWantPostDetail!.member?.profileImage ?? "https://static.thenounproject.com/png/741653-200.png")!
+                        URL(string : viewModel.totalSecretPostDetail!.member?.profileImage ?? "https://static.thenounproject.com/png/741653-200.png")!
                     ) { image in
                         image
                             .resizable()
@@ -35,22 +35,22 @@ struct WantUInfoView: View { // 게시글 상세 페이지
                     
                     HStack{
                         VStack(alignment: .leading){
-                            Text(viewModel.totalWantPostDetail!.member?.username ?? "Anonymous")
+                            Text(viewModel.totalSecretPostDetail!.member?.username ?? "Anonymous")
                                 .fontWeight(.bold)
                             
-                            Text(viewModel.convertReturnedDateString(viewModel.totalWantPostDetail?.wantPostDetail.createdAt ?? "2021-10-01 00:00:00"))
+                            Text(viewModel.convertReturnedDateString(viewModel.totalSecretPostDetail?.secretPostDetail.createdAt ?? "2021-10-01 00:00:00"))
                         }
                         Spacer()
                         
                         Button{
                             //라이크 버튼 클릭
                             viewModel.isLiked?.toggle()
-                            viewModel.likeWantPost(isliked: (viewModel.totalWantPostDetail!.wantPostDetail.like ?? true))
+                            viewModel.likeSecretPost(isliked: (viewModel.totalSecretPostDetail!.secretPostDetail.like ?? true))
                         } label : {
                             Image(systemName: (viewModel.isLiked ?? true) ? "hand.thumbsup.fill" : "hand.thumbsup")
                                 .foregroundColor(.mainTheme)
                         }
-                        Text(String((viewModel.totalWantPostDetail!.wantPostDetail.likeCount)) )
+                        Text(String((viewModel.totalSecretPostDetail!.secretPostDetail.likeCount)) )
                     }
                     
                 }
@@ -60,7 +60,7 @@ struct WantUInfoView: View { // 게시글 상세 페이지
                 //Images
                 ScrollView(.horizontal, showsIndicators: true) {
                     HStack {
-                        ForEach(viewModel.totalWantPostDetail?.wantPostDetail.postImages ?? [], id : \.self) { imageInfo in
+                        ForEach(viewModel.totalSecretPostDetail?.secretPostDetail.postImages ?? [], id : \.self) { imageInfo in
                             URLImage(
                                 URL(string : imageInfo.image) ??
                                 URL(string: "https://static.thenounproject.com/png/741653-200.png")!
@@ -76,13 +76,13 @@ struct WantUInfoView: View { // 게시글 상세 페이지
                 
                 //Contents
                 VStack(alignment: .leading){
-                    Text(viewModel.totalWantPostDetail?.wantPostDetail.title ?? "Title not found")
+                    Text(viewModel.totalSecretPostDetail?.secretPostDetail.title ?? "Title not found")
                         .font(.title2)
                         .fontWeight(.bold)
                 
                     
                     HStack(alignment: .lastTextBaseline){
-                        Text(viewModel.totalWantPostDetail?.wantPostDetail.description ?? "No description")
+                        Text(viewModel.totalSecretPostDetail?.secretPostDetail.description ?? "No description")
                             .padding()
                     }
                 }
@@ -99,7 +99,7 @@ struct WantUInfoView: View { // 게시글 상세 페이지
                         HStack{
                             CommentView(viewModel : CommentViewModel(token: viewModel.token,
                                                                      commentList: Comment,
-                                                                     postId : (viewModel.totalWantPostDetail?.wantPostDetail.postId)!,
+                                                                     postId : (viewModel.totalSecretPostDetail?.secretPostDetail.postId)!,
                                                                      commentId : Comment.commentId,
                                                                      isMyComment: viewModel.memberId == Comment.member?.memberId))
                         Button {
@@ -138,7 +138,7 @@ struct WantUInfoView: View { // 게시글 상세 페이지
                     }
                     Text("Anonymous")
                     Button{
-                        viewModel.sendWantComment(content: viewModel.commentInput, anonymous: String(viewModel.isAnonymous))
+                        viewModel.sendSecretComment(content: viewModel.commentInput, anonymous: String(viewModel.isAnonymous))
                     } label : {
                         Image(systemName: "paperplane")
                             .foregroundColor(.black)
@@ -192,7 +192,7 @@ struct WantUInfoView: View { // 게시글 상세 페이지
                 title: Text("Confirmation"),
                 message: Text((viewModel.isMyComment) ? "Do you want to delete this comment?" : "Do you want to delete this post?"),
                 primaryButton: .destructive(Text("Yes"), action : {
-                    (viewModel.isMyComment) ? viewModel.deleteWantComment() : viewModel.deleteWantPost()
+                    (viewModel.isMyComment) ? viewModel.deleteSecretComment() : viewModel.deleteSecretPost()
                     self.presentationMode.wrappedValue.dismiss()
                 }),
                 secondaryButton: .cancel(Text("No")))
@@ -201,9 +201,9 @@ struct WantUInfoView: View { // 게시글 상세 페이지
             NavigationLink(
                 destination :
                     WritingView(viewModel: WritingViewModel(accessToken: viewModel.token,
-                                                            postId : (viewModel.totalWantPostDetail?.wantPostDetail.postId)!,
+                                                            postId : (viewModel.totalSecretPostDetail?.secretPostDetail.postId)!,
                                                             isForModifying: true,
-                                                            isForWantModifying: true))
+                                                            isForSecretModifying: true))
                     .navigationBarTitle((viewModel.isMyComment) ? Text("Modify Comment") : Text("Modify Post")),
                 isActive : $viewModel.showPostModify) { }
         )
@@ -211,7 +211,7 @@ struct WantUInfoView: View { // 게시글 상세 페이지
     }
 }
 
-struct WantCommentView : View {
+struct SecretCommentView : View {
     private let viewModel : CommentViewModel
     
     init(viewModel : CommentViewModel) {

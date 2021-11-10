@@ -1,5 +1,5 @@
 //
-//  WantUViewModel.swift
+//  SecretViewModel.swift
 //  Bridge-iOS
 //
 //  Created by 이재준 on 2021/10/10.
@@ -7,11 +7,11 @@
 
 import Foundation
 
-final class WantUViewModel : ObservableObject {
-    let postList : WantUPostList
+final class SecretViewModel : ObservableObject {
+    let postList : SecretPostList
 //    let member : PostMember
     
-    init(postList : WantUPostList) {
+    init(postList : SecretPostList) {
         self.postList = postList
 //        self.member = member
     }

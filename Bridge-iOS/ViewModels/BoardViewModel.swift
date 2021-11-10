@@ -12,7 +12,7 @@ import Alamofire
 final class BoardViewModel : ObservableObject {
     @Published var postLists : [PostList] = []
     @Published var hotLists : [PostList] = []
-    @Published var wantLists : [WantUPostList] = []
+    @Published var secretLists : [SecretPostList] = []
 //    @Published var postMembers : [PostMember] = []
     
     private var subscription = Set<AnyCancellable>()
@@ -23,7 +23,7 @@ final class BoardViewModel : ObservableObject {
         self.token = accessToken
         self.memberId = memberId
         getBoardPosts(token : accessToken)
-        getWantPosts(token : accessToken)
+        getSecretPosts(token : accessToken)
         getHotPosts(token : accessToken)
     }
     
@@ -66,7 +66,8 @@ final class BoardViewModel : ObservableObject {
         
         AF.request(url,
                    method: .get,
-                   parameters: [ "testHotLimit": 4,
+                   parameters: [
+//                                "testHotLimit": 2,
                                 "hot": true ],
                    encoding: URLEncoding.default,
                    headers: header)
@@ -74,8 +75,8 @@ final class BoardViewModel : ObservableObject {
                 
                     guard let statusCode = response.response?.statusCode else { return }
                     
-//                    print(statusCode)
-//                print(response)
+                    print(statusCode)
+                print(response)
             }
             .publishDecodable(type : TotalPostList.self)
             .compactMap { $0.value }
@@ -94,8 +95,8 @@ final class BoardViewModel : ObservableObject {
             }.store(in: &subscription)
     }
     
-    func getWantPosts(token : String) {
-        let url = "http://3.36.233.180:8080/want-posts?"
+    func getSecretPosts(token : String) {
+        let url = "http://3.36.233.180:8080/secret-posts?lastPost=1"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN": token ]
 
         AF.request(url,
@@ -110,7 +111,7 @@ final class BoardViewModel : ObservableObject {
 //                    print(statusCode)
 //                print(response)
             }
-            .publishDecodable(type : WantUTotalPostList.self)
+            .publishDecodable(type : SecretTotalPostList.self)
             .compactMap { $0.value }
             .map { $0.postList }
             .sink { completion in
@@ -118,10 +119,10 @@ final class BoardViewModel : ObservableObject {
                 case let .failure(error) :
                     print(error.localizedDescription)
                 case .finished :
-                    print("finished wantPost")
+                    print("finished secretPost")
                 }
-            } receiveValue: { [weak self] (recievedValue : [WantUPostList]) in
-                self?.wantLists = recievedValue
+            } receiveValue: { [weak self] (recievedValue : [SecretPostList]) in
+                self?.secretLists = recievedValue
 //                print(recievedValue)
 
             }.store(in: &subscription)

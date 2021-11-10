@@ -13,31 +13,28 @@ struct BoardView : View {
     
     init(viewModel : BoardViewModel) {
         self._viewModel = StateObject(wrappedValue: viewModel)
-//        print("test message" + String(viewModel.totalPostList[0].boardPostInfo.postId))
     }
     
     var body : some View {
-        VStack(spacing: 0) {
+        VStack {
+            List {
             
             //Hot Posts
             HStack{
-                Text("Hot board")
+                Text("Hot")
                     .font(.title2)
                     .fontWeight(.semibold)
                 Spacer()
                 Button {
 //                    viewModel.getPosts(token: viewModel.token)
                 } label : {
-                    HStack(spacing : 5) {
-                        Text("MORE")
-                    }
+                    Text("MORE")
                 }
             }.foregroundColor(.mainTheme)
-            .padding(20)
             .padding(.vertical, 10)
-            .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.06)
+            .frame(height: UIScreen.main.bounds.height * 0.06)
             
-            List {
+//            List {
                     ForEach(viewModel.hotLists, id : \.self) { HotList in
                     NavigationLink(
                         destination:
@@ -50,49 +47,46 @@ struct BoardView : View {
                         HotPost(viewModel : GeneralPostViewModel(postList: HotList))
                         }
                     }
-            }.foregroundColor(Color.mainTheme)
+//            }
+            .foregroundColor(Color.mainTheme)
             .listStyle(PlainListStyle()) // iOS 15 대응
             .frame(height:UIScreen.main.bounds.height * 1/7 )
             
-            //WantU Posts
+            //Secret Posts
             HStack{
-                Text("Want U")
+                Text("Secret")
                     .font(.title2)
                     .fontWeight(.semibold)
                 Spacer()
                 Button {
 //                    viewModel.getPosts(token: viewModel.token)
                 } label : {
-                    HStack(spacing : 5) {
-                        Text("MORE")
-                    }
+                    Text("MORE")
                 }
             }.foregroundColor(.mainTheme)
-            .padding(20)
             .padding(.vertical, 10)
-            .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.06)
+            .frame(height: UIScreen.main.bounds.height * 0.06)
             
-            List {
-                    ForEach(viewModel.wantLists, id : \.self) { WantList in
+//            List {
+                ForEach(viewModel.secretLists, id : \.self) { SecretList in
                     NavigationLink(
                         destination:
-                            WantUInfoView(viewModel: WantUInfoViewModel(
+                            SecretInfoView(viewModel: SecretInfoViewModel(
                                             token: viewModel.token,
-                                            postId : WantList.postInfo.postId,
+                                            postId : SecretList.postInfo.postId,
                                             memberId : viewModel.memberId,
-                                            isMyPost : (viewModel.memberId == WantList.member?.memberId)))
+                                            isMyPost : (viewModel.memberId == SecretList.member?.memberId)))
                     ) {
-                        WantUPost(viewModel : WantUViewModel(postList: WantList))
+                        SecretPost(viewModel : SecretViewModel(postList: SecretList))
                     }
-                    }
-            }.foregroundColor(Color.mainTheme)
+                }
+//            }
+            .foregroundColor(Color.mainTheme)
             .listStyle(PlainListStyle()) // iOS 15 대응
             .frame(height:UIScreen.main.bounds.height * 1/7 )
             
-            Divider()
-            
             //General Posts
-            List {
+//            List {
                 ForEach(viewModel.postLists, id : \.self) { PostList in
                     NavigationLink(
                         destination:
@@ -191,10 +185,10 @@ struct GeneralPost : View {
     }
 }
 
-struct WantUPost : View {
-    private let viewModel : WantUViewModel
+struct SecretPost : View {
+    private let viewModel : SecretViewModel
     
-    init(viewModel : WantUViewModel) {
+    init(viewModel : SecretViewModel) {
         self.viewModel = viewModel
     }
     
