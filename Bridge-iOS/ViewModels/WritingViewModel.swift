@@ -9,6 +9,7 @@ import Foundation
 import Combine
 import Alamofire
 import SwiftUI
+import PhotosUI
 
 extension String{
     func toImage() -> UIImage? {
@@ -23,29 +24,38 @@ class WritingViewModel : ObservableObject {
     var param: Dictionary<String, Any> = Dictionary<String, Any>()
     
     @Published var infoForModifying : TotalBoardPostDetail?
-    @Published var infoForWantUModifying : TotalWantPostDetail?
+    @Published var infoForSecretModifying : TotalSecretPostDetail?
     @Published var title = ""
     @Published var description = ""
     @Published var anonymous = false
     @Published var files : Data? = nil
-    @Published var selectedImage: UIImage?  = nil// 일단 이미지 하나만
-    @Published var isWant = false
+    @Published var selectedImages : [UIImage] = []
+    @Published var showImagePicker : Bool = false
+    @Published var isSecret = false
     @Published var writing : WritingInfo?
     
     let postId : Int
     let isForModifying : Bool
     let token : String
-    let isForWantModifying : Bool?
+    let isForSecretModifying : Bool?
+    
+    var configuration : PHPickerConfiguration {
+        var configuration = PHPickerConfiguration(photoLibrary: .shared())
+        configuration.filter = .images
+        configuration.selectionLimit = 3
         
-    init(accessToken : String, postId : Int, isForModifying : Bool, isForWantModifying : Bool?) {
+        return configuration
+    }
+        
+    init(accessToken : String, postId : Int, isForModifying : Bool, isForSecretModifying : Bool?) {
         self.token = accessToken
         self.postId = postId
         self.isForModifying = isForModifying
-        self.isForWantModifying = isForWantModifying
+        self.isForSecretModifying = isForSecretModifying
         
-        if(self.isForWantModifying != nil){
-            if(self.isForWantModifying!){
-                getWantPostDetail()
+        if(self.isForSecretModifying != nil){
+            if(self.isForSecretModifying!){
+                getSecretPostDetail()
             }else{
                 getBoardPostDetail()
             }
@@ -55,11 +65,13 @@ class WritingViewModel : ObservableObject {
     
     private var subscription = Set<AnyCancellable>()
     
-    func loadImage() {
-        guard let selectedImage = selectedImage else { return }
-            files = selectedImage.jpegData(compressionQuality: 1)
-        }
-    
+//    func loadImage() {
+//        for image in self.selectedImages {
+//            multipartFormData.append(image.jpegData(compressionQuality: 1.0)!,
+//                        withName : "files", fileName: "payloadImage.jpg", mimeType: "image/jpeg")
+//        }
+//    }
+//
     func post(title : String, description : String, anonymous : Bool, files : Data?) {
         let header: HTTPHeaders = [
             "X-AUTH-TOKEN": token,
@@ -76,8 +88,9 @@ class WritingViewModel : ObservableObject {
             
                         multipartFormData.append("{ \"title\" : \"\(title)\", \"description\" : \"\(description)\", \"anonymous\" : \"\(anonymous)\" }".data(using: .utf8)!, withName: "postInfo", mimeType: "application/json")
                         
-                        if(files != nil){
-                            multipartFormData.append(files!, withName: "files", fileName: "From_iOS", mimeType: "image/jpg")
+                        for image in self.selectedImages {
+                            multipartFormData.append(image.jpegData(compressionQuality: 1.0)!,
+                                        withName : "files", fileName: "payloadImage.jpg", mimeType: "image/jpeg")
                         }
                         
                     }, to:"http://3.36.233.180:8080/board-posts",
@@ -117,9 +130,9 @@ class WritingViewModel : ObservableObject {
             }.store(in: &subscription)
     }
     
-    func getWantPostDetail() {
+    func getSecretPostDetail() {
         
-        let url = "http://3.36.233.180:8080/want-posts/\(postId)"
+        let url = "http://3.36.233.180:8080/secret-posts/\(postId)"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
         
         AF.request(url,
@@ -127,7 +140,7 @@ class WritingViewModel : ObservableObject {
                    encoding: URLEncoding.default,
                    headers: header
         )
-            .publishDecodable(type : TotalWantPostDetail.self)
+            .publishDecodable(type : TotalSecretPostDetail.self)
             .compactMap { $0.value }
             .sink { completion in
                 switch completion {
@@ -138,7 +151,7 @@ class WritingViewModel : ObservableObject {
                 }
             } receiveValue: { [weak self] recievedValue in
                 print(recievedValue)
-                self?.infoForWantUModifying = recievedValue
+                self?.infoForSecretModifying = recievedValue
 //                print(self?.totalBoardPostDetail as Any)
             }.store(in: &subscription)
     }
@@ -183,7 +196,7 @@ class WritingViewModel : ObservableObject {
         }
     }
     
-    func modifyWantPost(title : String?, description : String?, anonymous : Bool, files : Data?) {
+    func modifySecretPost(title : String?, description : String?, anonymous : Bool, files : Data?) {
         let header: HTTPHeaders = [
             "X-AUTH-TOKEN": token,
             "Accept": "multipart/form-data",
@@ -212,7 +225,7 @@ class WritingViewModel : ObservableObject {
                             multipartFormData.append(files!, withName: "files", fileName: "From_iOS", mimeType: "image/jpg")
                         }
                         
-                    }, to:"http://3.36.233.180:8080/want-posts/\(postId)",
+                    }, to:"http://3.36.233.180:8080/secret-posts/\(postId)",
                     method: .post,
                     headers: header)
             .responseString{ (response) in
@@ -223,7 +236,7 @@ class WritingViewModel : ObservableObject {
         }
     }
     
-    func wantPost(title : String, description : String, anonymous : Bool, files : Data?) {
+    func secretPost(title : String, description : String, anonymous : Bool, files : Data?) {
         let header: HTTPHeaders = [
             "X-AUTH-TOKEN": token,
             "Accept": "multipart/form-data",
@@ -242,7 +255,7 @@ class WritingViewModel : ObservableObject {
                             multipartFormData.append(files!, withName: "files", fileName: "From_iOS", mimeType: "image/jpg")
                         }
                         
-                    }, to:"http://3.36.233.180:8080/want-posts",
+                    }, to:"http://3.36.233.180:8080/secret-posts",
                     method: .post,
                     headers: header)
             .responseString{ (response) in
