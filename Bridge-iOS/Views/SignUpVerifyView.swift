@@ -8,11 +8,12 @@
 import SwiftUI
 
 struct SignUpVerifyView: View {
+//    @Environment(\.presentationMode) var presentationMode
     @State var isLinkActive : Bool = false
     @ObservedObject var viewModel : SignUpViewModel
     
     var titleField : some View {
-        Text("Check your e-mail")
+        Text("Check your mail box")
             .font(.largeTitle)
             .fontWeight(.semibold)
             .padding(.vertical, 60)
@@ -36,34 +37,36 @@ struct SignUpVerifyView: View {
     
     var doneButton : some View {
         Button {
-            isLinkActive = true
-//            print(viewModelData.email)
-//            print(viewModelData.verifyCode)
+            
             viewModel.VerifyEmail(email : viewModel.email, verifyCode : viewModel.verifyCode)
-//
             
-//            print(viewModel.name)
-//            print(viewModel.email)
-//            print(viewModel.password)
-//            print(viewModel.role)
-//            print(viewModel.nickname)
-//            print(viewModel.description)
-//            print(viewModel.verifyCode)
-            
-            viewModel.SignUp(name : viewModel.name, email : viewModel.email, password : viewModel.password, role : viewModel.role, nickname : viewModel.nickname, description : viewModel.description, profileImage : viewModel.profileImage, verifyCode : viewModel.verifyCode)
-        } label : {
-            Text("Done")
-                .modifier(SubmitButtonStyle())
-        }.background(
-            NavigationLink(
-                destination: SignInView()
-                                .environmentObject(viewModel),
-                isActive : $viewModel.signUpDone
-            ) {
-                // label
+            if(viewModel.statusCode3 == 200 || viewModel.statusCode3 == 201){
+                viewModel.showSignUpFailAlert = false
+                isLinkActive = true
+            }else{
+                viewModel.showSignUpFailAlert = true
+                isLinkActive = false
             }
-        )
-
+//            viewModel.SignUp(name : viewModel.name, email : viewModel.email, password : viewModel.password, role : viewModel.role, nickname : viewModel.nickname, description : viewModel.description, profileImage : viewModel.profileImage, verifyCode : viewModel.verifyCode)
+        } label : {
+            if(viewModel.verifyCode.count != 8){
+                Text("Done")
+                    .modifier(DisabledButtonStyle())
+                
+            }else{
+                Text("Done")
+                    .modifier(SubmitButtonStyle())
+                    .background(
+                        NavigationLink(
+                            destination: SignUpCheckUserTypeView(viewModel: viewModel)
+                                            .environmentObject(viewModel),
+                            isActive : $isLinkActive
+                        ) {
+                            // label
+                        }
+                    )
+            }
+        }
     }
     
     var body: some View {
@@ -76,6 +79,14 @@ struct SignUpVerifyView: View {
                 codeField
                 Divider()
                 doneButton
+                HStack(alignment: .lastTextBaseline) {
+                    Button(action: {
+//                            self.presentationMode.wrappedValue.dismiss()
+                            }) {
+                        Text("Did not receive?")
+                            .foregroundColor(.mainTheme)
+                    }
+                }
                 Spacer()
             }
             .frame(width : UIScreen.main.bounds.width, height : UIScreen.main.bounds.height * 0.8)
@@ -88,7 +99,14 @@ struct SignUpVerifyView: View {
         .alert(isPresented: $viewModel.showSignUpFailAlert) {
             Alert(title: Text("Failed to create your account"),
                   message: Text("Please check the verify code"),
-                  dismissButton: .cancel(Text("Retry")))
+                  dismissButton: .cancel(Text("Retry")
+                                         ,
+                                         action: {
+                                            viewModel.showSignUpFailAlert = false
+                                            isLinkActive = false
+                                         }
+                  )
+            )
         }
     }
 }

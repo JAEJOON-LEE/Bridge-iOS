@@ -10,6 +10,9 @@ import SwiftUI
 struct SignUpView: View {
     @State var isLinkActive : Bool = false
     @ObservedObject var viewModel = SignUpViewModel()
+//    init(){
+//        viewModel.isLinkActive = false
+//    }
     
     var titleField : some View {
         Text("Create Account")
@@ -74,8 +77,19 @@ struct SignUpView: View {
     
     var nextButton : some View {
         Button {
-                    isLinkActive = true
                     viewModel.SendEmail(email: viewModel.email)
+                    if(viewModel.statusCode1 == 200 && viewModel.statusCode2 == 200){
+                        viewModel.showSignUpFailAlert = false
+                        isLinkActive = true
+                    }
+//                    else if(viewModel.check == 1){
+//                        isLinkActive = false
+//                        viewModel.showSignUpFailAlert = true
+//                    }
+                    else{
+                        isLinkActive = false
+                        viewModel.showSignUpFailAlert = true
+                    }
                 } label : {
                     Text("Next")
                         .modifier(SubmitButtonStyle())
@@ -83,7 +97,7 @@ struct SignUpView: View {
                     NavigationLink(
                         destination: SignUpAppendixView(viewModel: viewModel)
                                         .environmentObject(viewModel),
-                        isActive : $viewModel.signUpDone
+                        isActive : $isLinkActive
                     ) {
                         // label
                     }
@@ -120,14 +134,15 @@ struct SignUpView: View {
         .edgesIgnoringSafeArea(.all)
         .alert(isPresented: $viewModel.showSignUpFailAlert) {
             Alert(title: Text("Failed to create your account"),
-                  message: Text("Please check your inputs again"),
-                  dismissButton: .cancel(Text("Retry")))
+                  message: Text(viewModel.message),
+                  dismissButton: .cancel(Text("Retry")
+                                         ,
+                                         action: {
+                                            viewModel.showSignUpFailAlert = false
+                                            isLinkActive = false
+                                         }
+                  )
+            )
         }
-    }
-}
-
-struct SignUpView_Previews: PreviewProvider {
-    static var previews: some View {
-        SignUpView()
     }
 }

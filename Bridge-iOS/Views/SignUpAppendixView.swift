@@ -32,10 +32,11 @@ struct SignUpAppendixView: View {
             }
             else{
                 Image(systemName: "camera.fill")
+                    .padding()
             }
         })
         .foregroundColor(.black)
-        .frame(width : UIScreen.main.bounds.width * 0.35, height : UIScreen.main.bounds.width * 0.35, alignment: .center)
+        .frame(width : UIScreen.main.bounds.width * 0.25, height : UIScreen.main.bounds.width * 0.25, alignment: .center)
         .clipShape(Circle())
         .sheet(isPresented: $imagePickerPresented,
                onDismiss: loadImage,
@@ -59,7 +60,7 @@ struct SignUpAppendixView: View {
     var descField : some View {
         HStack {
             Image(systemName: "doc.plaintext")
-            TextEditor(text: $viewModel.description)
+            TextField("About me (Option)", text: $viewModel.description)
                 .autocapitalization(.none)
                 .accentColor(.mainTheme)
         }
@@ -72,13 +73,16 @@ struct SignUpAppendixView: View {
         Button {
             if(viewModel.nickname.count == 0){
                 viewModel.showSignUpFailAlert = true
+                isLinkActive = false
             }else{
                 isLinkActive = true
+                viewModel.showSignUpFailAlert = false
             }
         } label : {
             Text("Done")
                 .modifier(SubmitButtonStyle())
-        }.background(
+        }
+        .background(
             NavigationLink(
                 destination: SignUpVerifyView(viewModel: viewModel)
                                 .environmentObject(viewModel),
@@ -113,13 +117,14 @@ struct SignUpAppendixView: View {
         .alert(isPresented: $viewModel.showSignUpFailAlert) {
             Alert(title: Text("Failed to create your account"),
                   message: Text("Please check your nickname"),
-                  dismissButton: .cancel(Text("Retry")))
+                  dismissButton: .cancel(Text("Retry")
+                                         ,
+                                         action: {
+                                            viewModel.showSignUpFailAlert = false
+                                            isLinkActive = false
+                                         }
+                  )
+            )
         }
-    }
-}
-
-struct SignUpAppendixView_Previews: PreviewProvider {
-    static var previews: some View {
-        SignUpView()
     }
 }
