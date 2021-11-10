@@ -22,10 +22,19 @@ struct FindPasswordView: View {
     var submitButton : some View {
         Button {
             // API Calling and increase buttonAction value
-//            withAnimation { viewModel.apiCalling(viewModel.buttonAction) }
-            withAnimation {viewModel.buttonAction += 1}
+            withAnimation {
+                viewModel.apiCalling(viewModel.buttonAction)
+                //viewModel.buttonAction += 1
+            }
         } label : {
-            Text("Next").modifier(SubmitButtonStyle())
+            Text("Next")
+                //.modifier(SubmitButtonStyle())
+                .frame(width : UIScreen.main.bounds.width * 0.8)
+                .padding()
+                .foregroundColor(.white)
+                .background(viewModel.isPasswordConfirmation ? Color.mainTheme : Color.gray)
+                .cornerRadius(20)
+                .shadow(radius: 3)
         }
     }
     var dissmissButton : some View {
@@ -123,6 +132,7 @@ struct FindPasswordView: View {
                 
                 if (viewModel.buttonAction != 3) {
                     submitButton
+                        .disabled(!viewModel.isPasswordConfirmation)
                 } else {
                     Button {
                         self.presentationMode.wrappedValue.dismiss()
@@ -142,6 +152,11 @@ struct FindPasswordView: View {
             .shadow(radius: 15)
         } // ZStack
         .edgesIgnoringSafeArea(.vertical)
+//        .alert(isPresented: $viewModel.isEmailSended) {
+//            Alert(title: Text("Email is just sended"),
+//                  message: Text(""),
+//                  dismissButton: .default(Text("OK")))
+//        }
     }
 }
 

@@ -69,7 +69,7 @@ final class UsedWritingViewModel : ObservableObject {
                 "price" : price,
                 "description" : description,
                 "category" : selectedCategory,
-                "camps" : selectedCamps
+                "camp" : selectedCamps
             ]
         ]
         

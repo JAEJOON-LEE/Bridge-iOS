@@ -19,6 +19,15 @@ final class FindPasswordViewModel : ObservableObject {
     @Published var showPassword : Bool = false
     @Published var showPasswordConfirmation : Bool = false
     
+    @Published var isEmailSended : Bool = false
+    
+    var isPasswordConfirmation : Bool {
+        password == passwordConfirmation
+    }
+    
+    var receivedToken : String = ""
+    private var subscription = Set<AnyCancellable>()
+
     var titleText : String {
         switch buttonAction {
         case 0:
@@ -63,18 +72,21 @@ final class FindPasswordViewModel : ObservableObject {
     // API #45, params : email
     func findingPassword_sendMail() {
         let url = "http://3.36.233.180:8080/email-auth/password"
+        //print(url + " " + email)
         AF.request(url,
                    method: .post,
-                   parameters: ["email" : email]
+                   parameters: ["email" : email],
+                   encoder: JSONParameterEncoder.prettyPrinted
         ).responseJSON { [weak self] response in
             print(response)
             guard let statusCode = response.response?.statusCode else { return }
             switch statusCode {
-            case 200 :
-                print("SignIn Success : \(statusCode)")
-                self?.buttonAction += 1
-            default :
-                print("SignIn Fail : \(statusCode)")
+                case 200 :
+                    print("Success : \(statusCode)")
+                    self?.buttonAction += 1
+                    self?.isEmailSended = true
+                default :
+                    print("Fail : \(statusCode)")
             }
         }
     }
@@ -85,19 +97,43 @@ final class FindPasswordViewModel : ObservableObject {
         AF.request(url,
                    method: .post,
                    parameters: ["email" : email, "key" : key]
-        ).responseJSON { response in
+        ).responseJSON { [weak self] response in
             print(response)
-        }
+            guard let statusCode = response.response?.statusCode else { return }
+            switch statusCode {
+                case 200 :
+                    print("Success : \(statusCode)")
+                    self?.buttonAction += 1
+                default :
+                    print("Fail : \(statusCode)")
+            }
+        }.publishDecodable(type: FindpasswordResponse.self)
+        .compactMap { $0.value }
+        .sink { _ in }
+         receiveValue: { [weak self] receivedValue in
+            self?.receivedToken = receivedValue.token
+         }.store(in: &subscription)
     }
     
-    // API #42, params : password(new)
+    // API #42, params : password(new) with token
     func findingPassword_chagePassword() {
         let url = "http://3.36.233.180:8080/password"
+        let header: HTTPHeaders = [ "X-AUTH-TOKEN" : receivedToken ]
+
         AF.request(url,
                    method: .patch,
-                   parameters: ["password" : password]
-        ).responseJSON { response in
+                   parameters: [ "password" : password ],
+                   headers: header
+        ).responseJSON { [weak self] response in
             print(response)
+            guard let statusCode = response.response?.statusCode else { return }
+            switch statusCode {
+                case 200 :
+                    print("Success : \(statusCode)")
+                    self?.buttonAction += 1
+                default :
+                    print("Fail : \(statusCode)")
+            }
         }
     }
 }
