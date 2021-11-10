@@ -133,8 +133,8 @@ extension TabContainer {
                     Image(systemName : "note.text")
                         .font(.system(size : 25))
 
-                    Text("Board")
-                        .font(.system(size : 15))
+                    Text("Playground")
+                        .font(.system(size : 12))
 
                 }.foregroundColor(viewModel.selectedTabIndex == 2 ? .mainTheme : .gray)
             }
@@ -160,7 +160,7 @@ extension TabContainer {
                                                 accessToken: signInViewModel.signInResponse?.token.accessToken ?? "",
                                                 postId : -1,
                                                 isForModifying : false,
-                                                isForWantModifying : nil
+                                                isForSecretModifying : nil
                                     )
                                 )
                     ) {

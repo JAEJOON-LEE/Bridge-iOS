@@ -12,6 +12,7 @@ import Alamofire
 final class PostInfoViewModel : ObservableObject {
     @Published var totalBoardPostDetail : TotalBoardPostDetail?
     @Published var isLiked : Bool?
+    
     @Published var likeCount : Int = 0
     @Published var commentCount : Int = 0
     @Published var isMemberInfoClicked : Bool = false
@@ -20,12 +21,14 @@ final class PostInfoViewModel : ObservableObject {
     @Published var showAction : Bool = false
     @Published var showConfirmDeletion : Bool = false
     @Published var showPostModify : Bool = false
+    @Published var showCommentModify : Bool = false
     
-//    @Published var comment : Comments?
     @Published var commentLists : [CommentList] = []
     @Published var commentInput : String = ""
     @Published var isAnonymous : Bool = false
     @Published var commentId : Int?
+    
+    @Published var isCocClicked : Bool = false
     
     private var subscription = Set<AnyCancellable>()
     let token : String
@@ -97,6 +100,7 @@ final class PostInfoViewModel : ObservableObject {
         }
     }
     
+    /////////////////////////////////////////////////// 대댓글 필요
     func sendComment(content : String, anonymous : String) {
         
         let url = "http://3.36.233.180:8080/board-posts/\(postId)/comments"
@@ -111,12 +115,24 @@ final class PostInfoViewModel : ObservableObject {
 
             guard let statusCode = response.response?.statusCode else { return }
 
-//            print("SendComment statuscode = " + String(statusCode))
         }
+    }
+    
+    func sendCommentOfComment(content : String, anonymous : String, cocId : Int) {
         
-        //refresh
-//        getBoardPostDetail()
-//        getComment()
+        let url = "http://3.36.233.180:8080/board-posts/\(postId)/comments"
+        let header: HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
+        
+        AF.request(url,
+                   method: .post,
+                   parameters: ["content" : content, "rootComment" : String(cocId), "anonymous" : anonymous],
+                   encoder: JSONParameterEncoder.prettyPrinted, // 500 error if using URLEncoding.default
+                   headers: header
+        ).responseString{ (response) in
+
+            guard let statusCode = response.response?.statusCode else { return }
+
+        }
     }
 
     func getComment() {
@@ -157,6 +173,23 @@ final class PostInfoViewModel : ObservableObject {
                    headers: header
         ).responseJSON { json in
 //            print(json)
+        }
+    }
+    
+    func patchComment(content : String) {
+        
+        let url = "http://3.36.233.180:8080/board-posts/\(postId)/comments/\(commentId!)"
+        let header: HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
+        
+        AF.request(url,
+                   method: .patch,
+                   parameters: ["content" : content],
+                   encoder: JSONParameterEncoder.prettyPrinted, // 500 error if using URLEncoding.default
+                   headers: header
+        ).responseString{ (response) in
+
+            guard let statusCode = response.response?.statusCode else { return }
+            print("patch + " + String(statusCode))
         }
     }
     
