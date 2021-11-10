@@ -18,9 +18,9 @@ struct CommentList : Codable, Hashable {
     var like : Bool
     var likeCount : Int
     var comments : [Comments]
-    var commentMember : CommentMember?
     var createdAt : String
     var member : CommentMember?
+    var modifiable : Bool
 }
 
 struct Comments : Codable, Hashable {
@@ -29,9 +29,10 @@ struct Comments : Codable, Hashable {
     var anonymous : Bool
     var like : Bool
     var likeCount : Int
-    var comments : [Comments]
+    var comments : [Comments]?
     var createdAt : String
-    var member : CommentMember
+    var member : CommentMember?
+    var modifiable : Bool
 }
 
 struct CommentMember : Codable, Hashable {

@@ -10,16 +10,19 @@ import Combine
 import Alamofire
 
 final class CommentViewModel : ObservableObject {
-    let commentList : CommentList
+    var commentList : CommentList
     let token : String
-    let isMyComment : Bool
-    private let postId : Int
-    private let commentId : Int
+    @Published var  isMyComment : Bool = false
+    let postId : Int
+    let commentId : Int
+    
+    @Published var isLiked : Bool?
+    @Published var likeCount : Int = 0
     
     @Published var isMenuClicked : Bool = false
     @Published var showAction : Bool = false
     @Published var showConfirmDeletion : Bool = false
-    @Published var showPostModify : Bool = false
+    @Published var showCommentModify : Bool = false
     
     init(token : String, commentList : CommentList, postId : Int, commentId : Int, isMyComment : Bool) {
         self.token = token
@@ -27,6 +30,8 @@ final class CommentViewModel : ObservableObject {
         self.postId = postId
         self.commentId = commentId
         self.isMyComment = isMyComment
+        
+//        self.isCocClicked = false
     }
     
     var content : String { commentList.content }
@@ -45,6 +50,34 @@ final class CommentViewModel : ObservableObject {
                    headers: header
         ).responseJSON { json in
 //            print(json)
+        }
+    }
+    
+    func likeComment(isliked : Bool) {
+        let url = "http://3.36.233.180:8080/comments/\(commentId)/likes"
+        let header: HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
+        let method : HTTPMethod = isliked ? .delete : .post
+        
+        AF.request(url,
+                   method: method,
+                   encoding: URLEncoding.default,
+                   headers: header
+        ).response { json in
+            print(json)
+        }
+    }
+    
+    func likeCommentOfComment(isliked : Bool, cocId : Int) {
+        let url = "http://3.36.233.180:8080/comments/\(cocId)/likes"
+        let header: HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
+        let method : HTTPMethod = isliked ? .delete : .post
+        
+        AF.request(url,
+                   method: method,
+                   encoding: URLEncoding.default,
+                   headers: header
+        ).response { json in
+            print(json)
         }
     }
     
