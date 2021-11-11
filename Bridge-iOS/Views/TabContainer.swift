@@ -24,8 +24,10 @@ struct TabContainer: View {
                                 HomeViewModel(
                                     accessToken: signInViewModel.signInResponse?.token.accessToken ?? "",
                                     memberId : signInViewModel.signInResponse?.memberId ?? -1
-                                )
-                    )
+                                ),
+                             isSlideShow : $isSlideShow,
+                             profileImage : signInViewModel.signInResponse?.profileImage ?? ""
+                    ).navigationBarHidden(true)
                 case 2 :
                     BoardView(viewModel:
                                 BoardViewModel(

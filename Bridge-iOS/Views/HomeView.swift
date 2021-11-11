@@ -10,39 +10,83 @@ import URLImage
 
 struct HomeView : View {
     @StateObject private var viewModel : HomeViewModel
+    @Binding var isSlideShow : Bool
+    private let profileImage : String
     
-    init(viewModel : HomeViewModel) {
+    init(viewModel : HomeViewModel, isSlideShow : Binding<Bool>, profileImage : String) {
         self._viewModel = StateObject(wrappedValue: viewModel)
+        self._isSlideShow = Binding(projectedValue: isSlideShow)
+        self.profileImage = profileImage
     }
     
     var LocationPicker : some View {
-        HStack(spacing : 5) {
-            // Location Picker
-            Picker("\(viewModel.selectedCamp )", selection: $viewModel.selectedCamp) {
-                ForEach(viewModel.locations, id: \.self) {
-                    Text($0)
+        VStack {
+            HStack (spacing : 20) {
+                Button {
+                    self.isSlideShow.toggle()
+                } label : {
+                    Image(systemName: "text.justify")
+                        .foregroundColor(.mainTheme)
                 }
-            }.font(.system(size : 15, weight : .bold))
-            .pickerStyle(MenuPickerStyle())
-            Image(systemName: "arrowtriangle.down.circle")
-                .font(.system(size : 12))
-                .foregroundColor(.mainTheme)
-            Spacer()
-            Button{
-                print("search button clicked")
+                
+                URLImage(
+                    URL(string : profileImage) ??
+                    URL(string: "https://static.thenounproject.com/png/741653-200.png")!
+                ) { image in
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                }.clipShape(Circle())
+                .frame(
+                    width : UIScreen.main.bounds.width * 0.04,
+                    height: UIScreen.main.bounds.height * 0.04
+                )
+
+                VStack (alignment : .leading, spacing : 0) {
+                    Text("Bridge in")
+                        .font(.system(size : 10))
+                    Picker("\(viewModel.selectedCamp)       ", selection: $viewModel.selectedCamp) {
+                        ForEach(viewModel.locations, id: \.self) {
+                            Text($0).foregroundColor(.gray)
+                        }
+                    }
+                    .pickerStyle(MenuPickerStyle())
+                    .scaleEffect(1.4)
+                    .padding(.horizontal, 30)
+                }.accentColor(.black.opacity(0.8))
+                Spacer()
+            } // HStack
+            
+            Button {
+                // full cover to Search items
             } label : {
-                Image(systemName: "magnifyingglass")
+                HStack {
+                    Image(systemName: "magnifyingglass")
+                        .padding(.horizontal, 3)
+                    Text("Search")
+                        .font(.system(size : 14))
+                    Spacer()
+                }
+                .foregroundColor(.gray)
+                .frame(
+                    width: UIScreen.main.bounds.width * 0.95,
+                    height : UIScreen.main.bounds.height * 0.035
+                )
+                .background(Color.systemDefaultGray)
+                .cornerRadius(15)
             }
-        }
-        .foregroundColor(.black)
-        .padding()
-        .background(Color.systemDefaultGray)
+            .padding(.vertical, 5)
+        } // VStack
+        .background(
+            Color.white
+                .edgesIgnoringSafeArea(.top)
+                .shadow(color: .systemDefaultGray, radius: 4, x: 0, y: 4)
+        )
     }
     
     var body : some View {
         VStack(spacing: 0) {
             LocationPicker
-            //ListHeader(name: "What's new today?").padding(.vertical, 10)
             HStack{
                 Text("What's new today?")
                     .font(.title2)
@@ -51,12 +95,10 @@ struct HomeView : View {
                 Button {
                     viewModel.getPosts(token: viewModel.token)
                 } label : {
-                    HStack(spacing : 5) {
-                        Text("refresh")
-                        Image(systemName: "arrow.clockwise")
-                    }
+                    Image(systemName: "arrow.clockwise")
                 }
-            }.foregroundColor(.mainTheme)
+            }
+            .foregroundColor(.gray)
             .padding(20)
             .padding(.vertical, 10)
             .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.06)
@@ -114,10 +156,10 @@ struct ItemCard : View {
 
             VStack(alignment : .leading){
                 Text(viewModel.itemTitle)
-                    .fontWeight(.bold)
+                    //.fontWeight(.bold)
                 Spacer()
                 Text("$ " + viewModel.itemPrice)
-                    .font(.system(size: 20, weight : .medium))
+                    .font(.system(size: 20, weight : .bold))
                 Spacer()
                 HStack {
                     Text(viewModel.camp)

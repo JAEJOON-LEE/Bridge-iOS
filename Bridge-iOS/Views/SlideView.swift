@@ -160,7 +160,7 @@ struct SlideView : View {
             .background(
                 Image("myPage_bg")
                     .resizable()
-                    .aspectRatio(contentMode: .fit)
+                    .aspectRatio(contentMode: .fill)
                     .frame(width: UIScreen.main.bounds.width * 0.75)
             )
         }

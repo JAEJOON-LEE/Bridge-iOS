@@ -13,7 +13,7 @@ final class TabContainerViewModel : ObservableObject {
     
     func navigationBarTitleText() -> String {
         switch selectedTabIndex {
-        case 1 : return "Home"
+        case 1 : return ""
         case 2 : return "Playground"
         case 3 : return "Write"
         case 4 : return "Seller"

@@ -263,16 +263,16 @@ struct ItemInfoView: View {
 //            }
 //        })
         .sheet(isPresented: $viewModel.showPostModify, content: {
-//            NavigationView {
-//                ModifyUsedPostView(
-//                    viewModel: ModifyUsedPostViewModel(
-//                        accessToken : viewModel.token,
-//                        postId : viewModel.postId,
-//                        contents: viewModel.itemInfo!.usedPostDetail
-//                    ),
-//                    isModifyDone : self.$isModifyDone
-//                )
-//            }
+            NavigationView {
+                ModifyUsedPostView(
+                    viewModel: ModifyUsedPostViewModel(
+                        accessToken : viewModel.token,
+                        postId : viewModel.postId,
+                        contents: viewModel.itemInfo!.usedPostDetail
+                    ),
+                    isModifyDone : self.$isModifyDone
+                )
+            }
         })
     }
 }

@@ -12,6 +12,7 @@ import Alamofire
 final class HomeViewModel : ObservableObject {
     @Published var Posts : [Post] = []
     @Published var selectedCamp : String = "Camp Casey"
+    //@Published var profileImage : String = ""
     
     private let url = "http://3.36.233.180:8080/used-posts?"
     private var subscription = Set<AnyCancellable>()
