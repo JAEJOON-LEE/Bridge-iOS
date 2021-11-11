@@ -116,15 +116,15 @@ struct TabContainer: View {
 
 extension TabContainer {
     var TabSelector : some View {
-        HStack(spacing : 25) {
+        HStack(spacing : 24) {
             Button {
                 viewModel.selectedTabIndex = 1
             } label : {
                 VStack {
                     Image(systemName : "house.fill")
-                        .font(.system(size : 25))
-                    Text("Market")
-                        .font(.system(size : 15))
+                        .font(.system(size : 23))
+                    Text("Home")
+                        .font(.system(size : 12))
                 }
                 .foregroundColor(viewModel.selectedTabIndex == 1 ? .mainTheme : .gray)
             }
@@ -133,7 +133,7 @@ extension TabContainer {
             } label : {
                 VStack {
                     Image(systemName : "note.text")
-                        .font(.system(size : 25))
+                        .font(.system(size : 23))
 
                     Text("Playground")
                         .font(.system(size : 12))
@@ -181,10 +181,10 @@ extension TabContainer {
             } label : {
                 VStack {
                     Image(systemName : "person.fill")
-                        .font(.system(size : 25))
+                        .font(.system(size : 23))
 
                     Text("Seller")
-                        .font(.system(size : 15))
+                        .font(.system(size : 12))
 
                 }.foregroundColor(viewModel.selectedTabIndex == 4 ? .mainTheme : .gray)
             }
@@ -193,7 +193,7 @@ extension TabContainer {
             } label : {
                 VStack {
                     Image(systemName : "envelope.open.fill")
-                        .font(.system(size : 25))
+                        .font(.system(size : 23))
 
                     Text("Message")
                         .font(.system(size : 15))
@@ -202,9 +202,9 @@ extension TabContainer {
             }
         } // HStack
         .padding(.vertical, 7)
-        .padding(.horizontal, 10)
+        .padding(.horizontal, 15)
         .background(Color.systemDefaultGray)
-        .cornerRadius(20)
+        .cornerRadius(25)
         .shadow(radius: 1)
     }
 }
