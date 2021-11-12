@@ -12,8 +12,8 @@ struct DisabledButtonStyle : ViewModifier {
         return content
             .frame(width : UIScreen.main.bounds.width * 0.8)
             .padding()
-            .foregroundColor(.white)
-            .background(Color.gray)
+            .foregroundColor(.black)
+            .background(Color.systemDefaultGray)
             .cornerRadius(20)
             .shadow(radius: 3)
     }

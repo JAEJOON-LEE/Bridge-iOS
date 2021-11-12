@@ -15,14 +15,16 @@ struct SignUpView: View {
 //    }
     
     var titleField : some View {
-        Text("Create Account")
+        Text("Sign Up")
             .font(.largeTitle)
             .fontWeight(.semibold)
-            .padding(.vertical, 60)
+            .padding(.vertical, 30)
+            .foregroundColor(Color.mainTheme)
     }
     var nameField : some View {
         HStack {
             Image(systemName: "person")
+                .foregroundColor(Color.mainTheme)
             TextField("Full name", text: $viewModel.name)
                 .autocapitalization(.none)
                 .accentColor(.mainTheme)
@@ -31,6 +33,7 @@ struct SignUpView: View {
     var emailField : some View {
         HStack {
             Image(systemName: "envelope")
+                .foregroundColor(Color.mainTheme)
             TextField("Email", text: $viewModel.email)
                 .autocapitalization(.none)
                 .accentColor(.mainTheme)
@@ -39,6 +42,7 @@ struct SignUpView: View {
     var passwordField : some View {
         HStack {
             Image(systemName: "lock")
+                .foregroundColor(Color.mainTheme)
             if viewModel.showPassword {
                 TextField("Password", text: $viewModel.password)
                     .autocapitalization(.none)
@@ -62,7 +66,7 @@ struct SignUpView: View {
     var verifyPasswordField : some View {
             HStack {
                 Image(systemName: "lock")
-                if viewModel.showPassword {
+                if viewModel.showPassword2 {
                     TextField("Verify Password", text: $viewModel.password2)
                         .autocapitalization(.none)
                         .accentColor(.mainTheme)
@@ -70,6 +74,12 @@ struct SignUpView: View {
                     SecureField("Verify Password", text: $viewModel.password2)
                         .autocapitalization(.none)
                         .accentColor(.mainTheme)
+                }
+                Button {
+                    viewModel.showPassword2.toggle()
+                } label : {
+                    Image(systemName: viewModel.showPassword2 ? "eye.slash" : "eye")
+                        .foregroundColor(.black)
                 }
             }
             .modifier(SignViewTextFieldStyle())
@@ -106,14 +116,19 @@ struct SignUpView: View {
     
     var body: some View {
         ZStack(alignment: .bottom) {
-            Color.mainTheme // background
+            Color.systemDefaultGray // background
             
             VStack(spacing : 30) {
+                Spacer()
                 titleField
                 nameField
                 emailField
                 passwordField
                 verifyPasswordField
+                Text("Password should be at least 8 digits")
+                    .foregroundColor(Color.gray)
+                    .font(.system(size: 11))
+                    .padding(-20)
                 nextButton
                 Divider()
                 HStack {
@@ -123,11 +138,10 @@ struct SignUpView: View {
                             .foregroundColor(.mainTheme)
                     }
                 }
-                Spacer()
             }
             .frame(width : UIScreen.main.bounds.width, height : UIScreen.main.bounds.height * 0.8)
             .padding(.bottom)
-            .background(Color.white)
+            .background(Color.white.edgesIgnoringSafeArea(.all))
             .cornerRadius(15)
             .shadow(radius: 15)
         }
@@ -146,3 +160,4 @@ struct SignUpView: View {
         }
     }
 }
+

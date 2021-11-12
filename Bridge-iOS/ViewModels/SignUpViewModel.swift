@@ -23,6 +23,7 @@ final class SignUpViewModel : ObservableObject {
     @Published var profileImage : UIImage? = nil
     @Published var verifyCode = ""
     @Published var showPassword = false
+    @Published var showPassword2 = false
     @Published var signUpInfo : SignUpInfo?
     @Published var showSignUpFailAlert : Bool = false
     @Published var signUpDone : Bool = false
@@ -72,16 +73,16 @@ final class SignUpViewModel : ObservableObject {
 //    func checkDuplicatedUserName() -> Bool {
 //        var check : Int = 0
 //        let url = "http://3.36.233.180:8080/members/usernames/\(name)"
-//        
+//
 //        AF.request(url,
 //                   method: .get,
 //                   encoding: URLEncoding.default)
 //            .responseString{ (response) in
-//                
+//
 //            guard let statusCode = response.response?.statusCode else { return }
-//                
+//
 //            print("email check = " + String(statusCode))
-//                
+//
 //            if(statusCode == 409){
 //                check = 1
 //            }
@@ -229,7 +230,7 @@ final class SignUpViewModel : ObservableObject {
         
 //            print(self.email)
 //            print(self.verifyCode)
-//            
+//
 //            if(self.nickname.count == 0){
 //                self.showSignUpFailAlert = true
 //            }

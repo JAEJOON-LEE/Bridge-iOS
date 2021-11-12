@@ -47,13 +47,13 @@ struct SignUpGreetingView: View {
     
     var body: some View {
         ZStack(alignment: .bottom) {
-            Color.mainTheme // background
+            Color.systemDefaultGray // background
             
             VStack(spacing : 30) {
-                Image("check")
+                Image("Check")
                     .resizable()
-                    .frame(width: 150, height: 150)
-                    .padding(30)
+                    .frame(width: 100, height: 100)
+                    .padding(20)
                 titleField
                 Spacer()
                 doneButton

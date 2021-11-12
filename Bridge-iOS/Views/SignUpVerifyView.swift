@@ -17,6 +17,7 @@ struct SignUpVerifyView: View {
             .font(.largeTitle)
             .fontWeight(.semibold)
             .padding(.vertical, 60)
+            .foregroundColor(Color.mainTheme)
     }
     
     var noticeView : some View {
@@ -29,7 +30,7 @@ struct SignUpVerifyView: View {
     var codeField : some View {
         HStack {
             TextField("Enter your code", text: $viewModel.verifyCode)
-                .autocapitalization(.none)
+                .autocapitalization(.allCharacters)
                 .accentColor(.mainTheme)
         }.modifier(SignViewTextFieldStyle())
     }
@@ -71,7 +72,7 @@ struct SignUpVerifyView: View {
     
     var body: some View {
         ZStack(alignment: .bottom) {
-            Color.mainTheme // background
+            Color.systemDefaultGray // background
             
             VStack(spacing : 30) {
                 titleField
@@ -98,7 +99,7 @@ struct SignUpVerifyView: View {
         .edgesIgnoringSafeArea(.all)
         .alert(isPresented: $viewModel.showSignUpFailAlert) {
             Alert(title: Text("Failed to create your account"),
-                  message: Text("Please check the verify code"),
+                  message: Text("Please input the code sent to your email"),
                   dismissButton: .cancel(Text("Retry")
                                          ,
                                          action: {

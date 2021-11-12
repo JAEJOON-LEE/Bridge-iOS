@@ -17,6 +17,7 @@ struct SignUpSellerInfoView: View {
             .font(.largeTitle)
             .fontWeight(.semibold)
             .padding(.vertical, 60)
+            .foregroundColor(.mainTheme)
     }
     
     var noticeView : some View {
@@ -47,7 +48,7 @@ struct SignUpSellerInfoView: View {
     
     var body: some View {
         ZStack(alignment: .bottom) {
-            Color.mainTheme // background
+            Color.systemDefaultGray // background
             
             VStack(spacing : 30) {
                 titleField

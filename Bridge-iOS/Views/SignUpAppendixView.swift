@@ -19,6 +19,7 @@ struct SignUpAppendixView: View {
             .font(.largeTitle)
             .fontWeight(.semibold)
             .padding(.top, 60)
+            .foregroundColor(Color.mainTheme)
     }
     
     var profileImageField : some View {
@@ -29,13 +30,21 @@ struct SignUpAppendixView: View {
             if(imageSelected){
                 Image(uiImage: viewModel.profileImage!)
                     .resizable()
+                    .shadow(radius: 1, x: 0, y: -1)
             }
             else{
-                Image(systemName: "camera.fill")
-                    .padding()
+                ZStack(alignment: .bottom){
+                    Circle()
+                        .stroke(lineWidth : 3)
+                        .foregroundColor(Color.white)
+                        .shadow(radius: 1, x: 0, y: -1)
+                    
+                    Image(systemName: "camera.fill")
+                        .frame(width : UIScreen.main.bounds.width * 0.25, height : UIScreen.main.bounds.width * 0.25, alignment: .center)
+                }
             }
         })
-        .foregroundColor(.black)
+        .foregroundColor(Color.mainTheme)
         .frame(width : UIScreen.main.bounds.width * 0.25, height : UIScreen.main.bounds.width * 0.25, alignment: .center)
         .clipShape(Circle())
         .sheet(isPresented: $imagePickerPresented,
@@ -50,22 +59,23 @@ struct SignUpAppendixView: View {
     
     var nicknameField : some View {
         HStack {
-            Image(systemName: "person")
             TextField("Nickname", text: $viewModel.nickname)
                 .autocapitalization(.none)
                 .accentColor(.mainTheme)
-        }.modifier(SignViewTextFieldStyle())
+        }
+        .modifier(SignViewTextFieldStyle())
+        .shadow(radius: 1, x: 0, y: 1)
     }
     
     var descField : some View {
         HStack {
-            Image(systemName: "doc.plaintext")
             TextField("About me (Option)", text: $viewModel.description)
                 .autocapitalization(.none)
                 .accentColor(.mainTheme)
         }
         .frame(width: 200, height: 150)
         .modifier(SignViewTextFieldStyle())
+        .shadow(radius: 1, x: 0, y: 1)
     }
     
     var doneButton : some View {
@@ -96,15 +106,17 @@ struct SignUpAppendixView: View {
     
     var body: some View {
         ZStack(alignment: .bottom) {
-            Color.mainTheme // background
+            Color.systemDefaultGray // background
             
             VStack(spacing : 10) {
                 titleField
                 profileImageField
+                    .padding()
                 nicknameField
+                    .padding(.bottom)
                 descField
-                Divider()
                 doneButton
+                    .padding(.top, 40)
                 Spacer()
             }
             .frame(width : UIScreen.main.bounds.width, height : UIScreen.main.bounds.height * 0.8)
