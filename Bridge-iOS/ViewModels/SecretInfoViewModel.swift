@@ -108,10 +108,8 @@ final class SecretInfoViewModel : ObservableObject {
                    encoder: JSONParameterEncoder.prettyPrinted, // 500 error if using URLEncoding.default
                    headers: header
         ).responseString{ (response) in
-
-            guard let statusCode = response.response?.statusCode else { return }
-
-//            print("SendComment statuscode = " + String(statusCode))
+            //guard let statusCode = response.response?.statusCode else { return }
+            //print("SendComment statuscode = " + String(statusCode))
         }
         
         //refresh

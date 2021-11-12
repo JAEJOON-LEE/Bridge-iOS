@@ -321,7 +321,8 @@ struct CommentView : View {
                         Text(viewModel.userName)
                             .font(.system(size: 20, weight : .medium))
                         
-                        Text(viewModel.convertReturnedDateString(viewModel.createdAt ?? "2021-10-01 00:00:00"))
+                        //Text(viewModel.convertReturnedDateString(viewModel.createdAt ?? "2021-10-01 00:00:00"))
+                        Text(viewModel.convertReturnedDateString(viewModel.createdAt))
                             .font(.system(size: 10))
                     }
                     .foregroundColor(.gray)
@@ -340,9 +341,10 @@ struct CommentView : View {
                 Button{
                     //댓글 라이크 버튼 클릭
                     viewModel.isLiked?.toggle()
-                    viewModel.likeComment(isliked: (viewModel.commentList.like ?? true))
+                    //viewModel.likeComment(isliked: (viewModel.commentList.like ?? true))
+                    viewModel.likeComment(isliked: viewModel.commentList.like)
                 } label : {
-                    Image(systemName: (viewModel.commentList.like ?? true) ? "hand.thumbsup.fill" : "hand.thumbsup")
+                    Image(systemName: viewModel.commentList.like ? "hand.thumbsup.fill" : "hand.thumbsup")
                         .foregroundColor(.mainTheme)
                 }
                 Text(String((viewModel.commentList.likeCount)))
@@ -385,10 +387,10 @@ struct CommentView : View {
                                 
                                 VStack(alignment: .leading){
                                     Group{
-                                        Text(CommentofComment.member!.username! ?? "Anonymous")
+                                        Text(CommentofComment.member?.username ?? "Anonymous")
                                             .font(.system(size: 15, weight : .medium))
                                         
-                                        Text(viewModel.convertReturnedDateString(CommentofComment.createdAt ?? "2021-10-01 00:00:00"))
+                                        Text(viewModel.convertReturnedDateString(CommentofComment.createdAt))
                                             .font(.system(size: 11))
                                     }
                                     .foregroundColor(.gray)
@@ -406,9 +408,9 @@ struct CommentView : View {
                                 Button{
                                     //댓글 라이크 버튼 클릭
                                     viewModel.isLiked?.toggle()
-                                    viewModel.likeCommentOfComment(isliked: CommentofComment.like ?? true, cocId : CommentofComment.commentId)
+                                    viewModel.likeCommentOfComment(isliked: CommentofComment.like, cocId : CommentofComment.commentId)
                                 } label : {
-                                    Image(systemName: (CommentofComment.like ?? true) ? "hand.thumbsup.fill" : "hand.thumbsup")
+                                    Image(systemName: CommentofComment.like ? "hand.thumbsup.fill" : "hand.thumbsup")
                                         .foregroundColor(.mainTheme)
                                 }
                                 Text(String((CommentofComment.likeCount)))

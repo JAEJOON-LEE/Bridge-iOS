@@ -37,10 +37,8 @@ final class BoardViewModel : ObservableObject {
                    encoding: URLEncoding.default,
                    headers: header)
             .responseString{ (response) in
-                
-                    guard let statusCode = response.response?.statusCode else { return }
-                    
-//                    print(statusCode)
+                //guard let statusCode = response.response?.statusCode else { return }
+                //print(statusCode)
                 print(response)
             }
             .publishDecodable(type : TotalPostList.self)
@@ -105,11 +103,9 @@ final class BoardViewModel : ObservableObject {
                    encoding: URLEncoding.default,
                    headers: header)
             .responseString{ (response) in
-
-                    guard let statusCode = response.response?.statusCode else { return }
-
-//                    print(statusCode)
-//                print(response)
+                //guard let statusCode = response.response?.statusCode else { return }
+                //print(statusCode)
+                //print(response)
             }
             .publishDecodable(type : SecretTotalPostList.self)
             .compactMap { $0.value }

@@ -134,7 +134,8 @@ struct GeneralPost : View {
                     Text(viewModel.userName)
                         .font(.system(size: 20, weight : .medium))
                     
-                    Text(viewModel.convertReturnedDateString(viewModel.createdAt ?? "2021-10-01 00:00:00"))
+                    //Text(viewModel.convertReturnedDateString(viewModel.createdAt ?? "2021-10-01 00:00:00"))
+                    Text(viewModel.convertReturnedDateString(viewModel.createdAt))
                         .font(.system(size: 10))
                 }
             }

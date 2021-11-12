@@ -23,7 +23,7 @@ struct HomeView : View {
         VStack {
             HStack (spacing : 20) {
                 Button {
-                    self.isSlideShow.toggle()
+                    withAnimation { self.isSlideShow.toggle() }
                 } label : {
                     Image(systemName: "text.justify")
                         .foregroundColor(.mainTheme)

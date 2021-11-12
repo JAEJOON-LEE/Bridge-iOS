@@ -45,7 +45,7 @@ struct SecretInfoView: View { // 게시글 상세 페이지
                         Button{
                             //라이크 버튼 클릭
                             viewModel.isLiked?.toggle()
-                            viewModel.likeSecretPost(isliked: (viewModel.totalSecretPostDetail!.secretPostDetail.like ?? true))
+                            viewModel.likeSecretPost(isliked: (viewModel.totalSecretPostDetail?.secretPostDetail.like ?? true))
                         } label : {
                             Image(systemName: (viewModel.isLiked ?? true) ? "hand.thumbsup.fill" : "hand.thumbsup")
                                 .foregroundColor(.mainTheme)
@@ -237,7 +237,8 @@ struct SecretCommentView : View {
                     Text(viewModel.userName)
                         .font(.system(size: 20, weight : .medium))
                     
-                    Text(viewModel.convertReturnedDateString(viewModel.createdAt ?? "2021-10-01 00:00:00"))
+                    //Text(viewModel.convertReturnedDateString(viewModel.createdAt ?? "2021-10-01 00:00:00"))
+                    Text(viewModel.convertReturnedDateString(viewModel.createdAt))
                         .font(.system(size: 10))
                 }
             }

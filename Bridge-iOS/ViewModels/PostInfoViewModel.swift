@@ -112,9 +112,7 @@ final class PostInfoViewModel : ObservableObject {
                    encoder: JSONParameterEncoder.prettyPrinted, // 500 error if using URLEncoding.default
                    headers: header
         ).responseString{ (response) in
-
-            guard let statusCode = response.response?.statusCode else { return }
-
+            //guard let statusCode = response.response?.statusCode else { return }
         }
     }
     
@@ -129,9 +127,7 @@ final class PostInfoViewModel : ObservableObject {
                    encoder: JSONParameterEncoder.prettyPrinted, // 500 error if using URLEncoding.default
                    headers: header
         ).responseString{ (response) in
-
-            guard let statusCode = response.response?.statusCode else { return }
-
+            //guard let statusCode = response.response?.statusCode else { return }
         }
     }
 
