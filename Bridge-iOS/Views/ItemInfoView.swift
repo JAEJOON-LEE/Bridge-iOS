@@ -21,8 +21,43 @@ struct ItemInfoView: View {
         ZStack {
             // Image Area
             VStack {
-                ScrollView(.horizontal, showsIndicators: true) {
-                    HStack {
+//                ScrollView(.horizontal, showsIndicators: true) {
+//                    HStack {
+//                        ForEach(viewModel.itemInfo?.usedPostDetail.postImages ?? [], id : \.self) { imageInfo in
+//                            URLImage(
+//                                URL(string : imageInfo.image) ??
+//                                URL(string: "https://static.thenounproject.com/png/741653-200.png")!
+//                            ) { image in
+//                                image
+//                                    .resizable()
+//                                    .aspectRatio(contentMode: .fill)
+//                            }
+//                            .frame(width : UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.35)
+//                        }
+//                    }
+//                }
+                TabView {
+                    ForEach(viewModel.itemInfo?.usedPostDetail.postImages ?? [], id : \.self) { imageInfo in
+                        URLImage(
+                            URL(string : imageInfo.image) ??
+                            URL(string: "https://static.thenounproject.com/png/741653-200.png")!
+                        ) { image in
+                            image
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                        }
+                    }
+                }.tabViewStyle(PageTabViewStyle())
+                .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
+                .frame(width : UIScreen.main.bounds.width, height: UIScreen.main.bounds.height / 3)
+                Spacer()
+            }.blur(radius: viewModel.isMemberInfoClicked ? 5 : 0)
+            .onTapGesture {
+                viewModel.isImageTap.toggle() // 이미지 확대 보기 기능
+            }
+            .fullScreenCover(isPresented: $viewModel.isImageTap, content: {
+                ZStack(alignment : .topTrailing) {
+                    TabView {
                         ForEach(viewModel.itemInfo?.usedPostDetail.postImages ?? [], id : \.self) { imageInfo in
                             URLImage(
                                 URL(string : imageInfo.image) ??
@@ -30,17 +65,24 @@ struct ItemInfoView: View {
                             ) { image in
                                 image
                                     .resizable()
-                                    .aspectRatio(contentMode: .fill)
+                                    .aspectRatio(contentMode: .fit)
                             }
-                            .frame(width : UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.35)
                         }
+                    }.tabViewStyle(PageTabViewStyle())
+                    .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
+                    .frame(width : UIScreen.main.bounds.width)
+                    
+                    Button {
+                        viewModel.isImageTap.toggle()
+                    } label : {
+                        Image(systemName : "xmark")
+                            .foregroundColor(.mainTheme)
+                            .font(.system(size : 20))
+                            .padding()
                     }
                 }
-                Spacer()
-            }.blur(radius: viewModel.isMemberInfoClicked ? 5 : 0)
-            .onTapGesture {
-                viewModel.isImageTap.toggle() // 이미지 확대 보기 기능
-            }
+            })
+
             
             // Text Area
             VStack {
@@ -59,7 +101,7 @@ struct ItemInfoView: View {
                                 Text("|").foregroundColor(.mainTheme)
                                 Text("\(viewModel.itemInfo?.usedPostDetail.likeCount ?? 0) Likes")
                             }.font(.system(size : 11, weight : .semibold))
-                        }
+                        }.foregroundColor(.black.opacity(0.8))
                         Spacer()
                         HStack(spacing : 5) {
                             Text("$")
@@ -86,8 +128,10 @@ struct ItemInfoView: View {
                         .cornerRadius(15)
                         
                         VStack(alignment : .leading, spacing: 5) {
-                            Text(viewModel.itemInfo?.member.username ?? "Unknown").fontWeight(.semibold)
+                            Text(viewModel.itemInfo?.member.username ?? "Unknown")
+                                .fontWeight(.semibold)
                             Text(viewModel.itemInfo?.member.description ?? "Error occur")
+                                .font(.subheadline)
                         }
                         Spacer()
                         Button {
@@ -125,14 +169,23 @@ struct ItemInfoView: View {
                     }
 
                     Divider()
+                        .padding(.vertical, 3)
                     
                     // Item Desc.
                     VStack(alignment : .leading, spacing: 10) {
                         HStack {
-                        Text("About Item")
-                            .font(.title2)
-                            .fontWeight(.semibold)
-                            .foregroundColor(.mainTheme)
+                            Text("About Item")
+                                .font(.title2)
+                                .fontWeight(.semibold)
+                                .foregroundColor(.mainTheme)
+                            Text("#\(viewModel.itemInfo?.usedPostDetail.category ?? "etc.")")
+                                .foregroundColor(.mainTheme)
+                                .font(.system(size : 12, weight : .semibold))
+                                .padding(6)
+                                .background(Color.systemDefaultGray)
+                                .cornerRadius(10)
+                                .shadow(radius: 1)
+                                .padding(.leading, 2)
                             Spacer()
                             if viewModel.isMyPost {
                                 Button { viewModel.showAction = true } label : {
@@ -157,17 +210,17 @@ struct ItemInfoView: View {
                                     .font(.system(size : 20, weight : .bold))
                             }
                             .foregroundColor(.white)
-                            .frame(width: UIScreen.main.bounds.width * 0.8, height: UIScreen.main.bounds.height * 0.07)
+                            .frame(width: UIScreen.main.bounds.width * 0.8, height: UIScreen.main.bounds.height * 0.08)
                             .background(Color.mainTheme)
-                            .cornerRadius(25)
+                            .cornerRadius(30)
                         }
                         Spacer()
                     }
-                    Spacer()
+                    Spacer().frame(height: UIScreen.main.bounds.height * 0.04)
                 }
                 .padding(.horizontal, 20)
                 .padding(.top, 20)
-                .frame(width : UIScreen.main.bounds.width, height : UIScreen.main.bounds.height * 0.58)
+                .frame(width : UIScreen.main.bounds.width, height : UIScreen.main.bounds.height * 0.57)
                 .background(Color.systemDefaultGray)
                 .cornerRadius(25)
             }

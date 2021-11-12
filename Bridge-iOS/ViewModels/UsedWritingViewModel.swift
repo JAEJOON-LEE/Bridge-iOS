@@ -46,7 +46,7 @@ final class UsedWritingViewModel : ObservableObject {
         "Gunsan A/B" : 11
     ]
     
-    let camps = ["Camp Casey", "Camp Hovey", "USAG Yongsan", "K-16", "Suwon A/B", "Osan A/B", "Camp Humpreys", "Camp Carroll", "Camp Henry", "Camp Worker", "Gunsan A/B"]
+    let camps = ["Camp Casey", "Camp Hovey", "USAG Yongsan", "K-16", "Suwon A/B", "Osan A/B", "Camp Humperys", "Camp Carroll", "Camp Henry", "Camp Worker", "Gunsan A/B"]
     let categories = ["digital", "furniture", "food", "clothes", "beauty", "etc."]
     
     var configuration : PHPickerConfiguration {
