@@ -13,7 +13,7 @@ final class UsedWritingViewModel : ObservableObject {
     @Published var selectedImages : [UIImage] = []
     @Published var title : String = ""
     @Published var price : String = ""
-    @Published var description : String = ""
+    @Published var description : String = "Please write the content of your Post"
     
     @Published var showImagePicker : Bool = false
     @Published var showCampPicker : Bool = false
@@ -24,6 +24,8 @@ final class UsedWritingViewModel : ObservableObject {
     
     @Published var isUploadDone : Bool = false
     @Published var isProgressShow : Bool = false
+    
+    @Published var isImageTap : Bool = false
     
     private let token : String
     init(accessToken : String) {
@@ -39,7 +41,7 @@ final class UsedWritingViewModel : ObservableObject {
         "K-16" : 4,
         "Suwon A/B" : 5,
         "Osan A/B" : 6,
-        "Camp Humpreys" : 7,
+        "Camp Humperys" : 7,
         "Camp Carroll" : 8,
         "Camp Henry" : 9,
         "Camp Worker" : 10,
@@ -52,7 +54,7 @@ final class UsedWritingViewModel : ObservableObject {
     var configuration : PHPickerConfiguration {
         var configuration = PHPickerConfiguration(photoLibrary: .shared())
         configuration.filter = .images
-        configuration.selectionLimit = 3
+        configuration.selectionLimit = 7
         
         return configuration
     }
@@ -69,7 +71,7 @@ final class UsedWritingViewModel : ObservableObject {
                 "price" : price,
                 "description" : description,
                 "category" : selectedCategory,
-                "camp" : selectedCamps
+                "camps" : selectedCamps
             ]
         ]
         

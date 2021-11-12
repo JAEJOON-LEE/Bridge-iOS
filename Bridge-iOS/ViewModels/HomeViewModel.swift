@@ -33,7 +33,6 @@ final class HomeViewModel : ObservableObject {
                    method: .get,
                    parameters: ["lastCamp" : 0,
                                 "lastArea" : 0,
-//                                "camp":"Camp Casey"],
                                 "camp" : selectedCamp],
                    encoding: URLEncoding.default,
                    headers: header)

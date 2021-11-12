@@ -14,6 +14,7 @@ struct SignInView: View {
         Text("Log In")
             .font(.largeTitle)
             .fontWeight(.semibold)
+            .foregroundColor(.mainTheme)
             .padding(.vertical, 60)
     }
     var emailField : some View {
@@ -47,17 +48,21 @@ struct SignInView: View {
     var remeberButton : some View {
         HStack {
             Spacer()
-            Toggle(isOn: $viewModel.checked) {
-                Text("Remember Me")
-            }.frame(width : UIScreen.main.bounds.width * 0.45)
-        }.padding(.horizontal, 25)
+            Button {
+                viewModel.checked.toggle()
+            } label : {
+                Image(systemName: !viewModel.checked ? "square" : "checkmark.square.fill")
+                    .foregroundColor(!viewModel.checked ? .gray : .mainTheme)
+            }
+            Text("Remember Me").foregroundColor(.gray)
+        }.padding(.horizontal, 30)
     }
     var nextButton : some View {
         Button {
             viewModel.showPrgoressView = true
             viewModel.SignIn(email: viewModel.email, password: viewModel.password)
         } label : {
-            Text("Next")
+            Text("Login")
                 .modifier(SubmitButtonStyle())
         }.background(
             NavigationLink(
@@ -74,10 +79,11 @@ struct SignInView: View {
         }
     }
     var otherSignInMethod : some View {
-        HStack(spacing : 50) {
+        HStack(spacing : 20) {
             Image("facebook")
                 .resizable()
                 .frame(width: 50, height: 50)
+            Text("or").foregroundColor(.gray)
             Image("google")
                 .resizable()
                 .frame(width: 50, height: 50)
@@ -86,16 +92,16 @@ struct SignInView: View {
     
     var body: some View {
         ZStack(alignment: .bottom) {
-            Color.mainTheme
+            Color.systemDefaultGray
             VStack(spacing : 30) {
                 titleField
                 emailField
                 passwordField
                 remeberButton
                 nextButton
-                findPassword
-                Divider()
+                Spacer()
                 otherSignInMethod
+                findPassword
                 Spacer()
             }
             .frame(width : UIScreen.main.bounds.width, height : UIScreen.main.bounds.height * 0.8)

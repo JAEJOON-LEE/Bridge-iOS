@@ -32,6 +32,7 @@
 		1AA8B43726F370CF00C28E02 /* NotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA8B43626F370CF00C28E02 /* NotificationView.swift */; };
 		1ABDEA5326F3B9310031DF0B /* SubmitButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ABDEA5226F3B9310031DF0B /* SubmitButtonStyle.swift */; };
 		1AD008652711F50B00CAAE5B /* UsedWritingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD008642711F50B00CAAE5B /* UsedWritingView.swift */; };
+		1AD9CC4D273EFD9B006C2FB7 /* View+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD9CC4C273EFD9B006C2FB7 /* View+Extension.swift */; };
 		1ADD9DDC2703220F008342A7 /* SignInViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADD9DDB2703220F008342A7 /* SignInViewModel.swift */; };
 		1ADD9DDF27032237008342A7 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 1ADD9DDE27032237008342A7 /* Alamofire */; };
 		1ADD9DE4270325CC008342A7 /* SignIn+ResponseData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADD9DE3270325CC008342A7 /* SignIn+ResponseData.swift */; };
@@ -103,6 +104,7 @@
 		1AA8B43626F370CF00C28E02 /* NotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
 		1ABDEA5226F3B9310031DF0B /* SubmitButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmitButtonStyle.swift; sourceTree = "<group>"; };
 		1AD008642711F50B00CAAE5B /* UsedWritingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsedWritingView.swift; sourceTree = "<group>"; };
+		1AD9CC4C273EFD9B006C2FB7 /* View+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extension.swift"; sourceTree = "<group>"; };
 		1ADD9DDB2703220F008342A7 /* SignInViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewModel.swift; sourceTree = "<group>"; };
 		1ADD9DE3270325CC008342A7 /* SignIn+ResponseData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SignIn+ResponseData.swift"; sourceTree = "<group>"; };
 		1ADD9DE527034B8A008342A7 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
@@ -230,6 +232,7 @@
 			children = (
 				1AA8B42726F3485900C28E02 /* Color+Extension.swift */,
 				6D8D23AA271728160020B5B0 /* String+Extension.swift */,
+				1AD9CC4C273EFD9B006C2FB7 /* View+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -406,6 +409,7 @@
 				6D2B89EC271349B200319907 /* BoardViewModel.swift in Sources */,
 				6D7D94CC273C184700A104FD /* FindPasswordViewModel.swift in Sources */,
 				6DAD1F5A27102985006B01FC /* SignUpVerifyView.swift in Sources */,
+				1AD9CC4D273EFD9B006C2FB7 /* View+Extension.swift in Sources */,
 				6DAD1F5427102873006B01FC /* SignUpViewModel.swift in Sources */,
 				6D2B89D62713477700319907 /* Comment+ResponseData.swift in Sources */,
 				1ABDEA5326F3B9310031DF0B /* SubmitButtonStyle.swift in Sources */,

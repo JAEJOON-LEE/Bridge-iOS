@@ -139,9 +139,9 @@ struct SignUpView: View {
                     }
                 }
             }
-            .frame(width : UIScreen.main.bounds.width, height : UIScreen.main.bounds.height * 0.8)
             .padding(.bottom)
-            .background(Color.white.edgesIgnoringSafeArea(.all))
+            .background(Color.white)
+            .frame(width : UIScreen.main.bounds.width, height : UIScreen.main.bounds.height * 0.8)
             .cornerRadius(15)
             .shadow(radius: 15)
         }
