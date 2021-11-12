@@ -144,7 +144,7 @@ extension TabContainer {
                 Button {
                     viewModel.showUsedPostWriting = true
                 } label : {
-                    Image(systemName : "plus")
+                    Image(systemName : "pencil")
                         .font(.system(size : 35))
                         .padding(10)
                         .background(Color.white)
@@ -196,7 +196,7 @@ extension TabContainer {
                         .font(.system(size : 23))
 
                     Text("Message")
-                        .font(.system(size : 15))
+                        .font(.system(size : 12))
 
                 }.foregroundColor(viewModel.selectedTabIndex == 5 ? .mainTheme : .gray)
             }

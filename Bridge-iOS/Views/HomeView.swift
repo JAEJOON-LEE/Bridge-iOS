@@ -141,7 +141,7 @@ struct ItemCard : View {
     }
     
     var body : some View {
-        HStack(spacing : 15) {
+        HStack(spacing : 13) {
             URLImage(
                 URL(string : viewModel.imageUrl) ??
                 URL(string: "https://static.thenounproject.com/png/741653-200.png")!
@@ -150,25 +150,26 @@ struct ItemCard : View {
                     .resizable()
                     .aspectRatio(contentMode: .fill)
             }
-            .frame(width : UIScreen.main.bounds.width * 0.25,
-                   height: UIScreen.main.bounds.height * 0.1)
+            .frame(width : UIScreen.main.bounds.width * 0.33,
+                   height: UIScreen.main.bounds.height * 0.12)
             .cornerRadius(10)
 
             VStack(alignment : .leading){
                 Text(viewModel.itemTitle)
-                    //.fontWeight(.bold)
+                    .font(.title2)
                 Spacer()
                 Text("$ " + viewModel.itemPrice)
                     .font(.system(size: 20, weight : .bold))
                 Spacer()
-                HStack {
+                HStack(spacing : 5) {
                     Text(viewModel.camp)
+                    Text(viewModel.convertReturnedDateString(viewModel.post.createdAt)).fontWeight(.semibold)
                     Image(systemName : "eye")
                     Text("\(viewModel.viewCount)")
                     Spacer()
                     Image(systemName : viewModel.isLiked ? "heart.fill" : "heart")
                         .font(.system(size : 20))
-                }.font(.system(size : 12))
+                }.font(.system(size : 9))
             }.foregroundColor(.secondary)
         }
         .modifier(ItemCardStyle())

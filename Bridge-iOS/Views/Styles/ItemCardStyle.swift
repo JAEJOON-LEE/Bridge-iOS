@@ -10,13 +10,11 @@ import SwiftUI
 struct ItemCardStyle : ViewModifier {
     func body(content : Content) -> some View {
         return content
-            .frame(width : UIScreen.main.bounds.width * 0.86,
-                   height: UIScreen.main.bounds.height * 0.1)
-            .padding()
-            .foregroundColor(Color.white)
+            .padding(10)
             .background(Color.systemDefaultGray)
-            .cornerRadius(20)
+            .cornerRadius(10)
             .shadow(radius: 2)
+            .padding(.horizontal, 10)
             .padding(.vertical, 3)
     }
 }
