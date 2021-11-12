@@ -39,7 +39,7 @@ struct PostInfoView: View { // 게시글 상세 페이지
                 //Profile
                 HStack{
                     URLImage( //프로필 이미지
-                        URL(string : viewModel.totalBoardPostDetail!.member?.profileImage ?? "https://static.thenounproject.com/png/741653-200.png")!
+                        URL(string : viewModel.totalBoardPostDetail?.member?.profileImage! ?? "https://static.thenounproject.com/png/741653-200.png" ) ?? URL(string: "https://static.thenounproject.com/png/741653-200.png")!
                     ) { image in
                         image
                             .resizable()
@@ -51,7 +51,7 @@ struct PostInfoView: View { // 게시글 상세 페이지
                     
                     HStack{
                         VStack(alignment: .leading){
-                            Text(viewModel.totalBoardPostDetail!.member?.username ?? "Anonymous")
+                            Text(viewModel.totalBoardPostDetail?.member?.username! ?? "Anonymous")
                                 .fontWeight(.bold)
                             
                             Text(viewModel.convertReturnedDateString(viewModel.totalBoardPostDetail?.boardPostDetail.createdAt ?? "2021-10-01 00:00:00"))
@@ -66,7 +66,7 @@ struct PostInfoView: View { // 게시글 상세 페이지
                     //Images
                     ScrollView(.horizontal, showsIndicators: true) {
                         HStack {
-                            ForEach(viewModel.totalBoardPostDetail!.boardPostDetail.postImages ?? [], id : \.self) { imageInfo in
+                            ForEach(viewModel.totalBoardPostDetail?.boardPostDetail.postImages! ?? [], id : \.self) { imageInfo in
                                 URLImage(
                                     URL(string : imageInfo.image) ??
                                         URL(string: "https://static.thenounproject.com/png/741653-200.png")!
@@ -82,13 +82,13 @@ struct PostInfoView: View { // 게시글 상세 페이지
                     
                     //Contents
                     VStack(alignment: .leading){
-                        Text(viewModel.totalBoardPostDetail!.boardPostDetail.title ?? "Title not found")
+                        Text(viewModel.totalBoardPostDetail?.boardPostDetail.title ?? "Title not found")
                             .font(.title2)
                             .fontWeight(.bold)
                         
                         
                         HStack{
-                            Text(viewModel.totalBoardPostDetail!.boardPostDetail.description ?? "No description")
+                            Text(viewModel.totalBoardPostDetail?.boardPostDetail.description ?? "No description")
                         }
                     }
                     .padding(.leading)
@@ -102,12 +102,12 @@ struct PostInfoView: View { // 게시글 상세 페이지
                             Button{
                                 //라이크 버튼 클릭
                                 viewModel.isLiked?.toggle()
-                                viewModel.likePost(isliked: (viewModel.totalBoardPostDetail!.boardPostDetail.like ?? true))
+                                viewModel.likePost(isliked: (viewModel.totalBoardPostDetail?.boardPostDetail.like ?? true))
                             } label : {
                                 Image(systemName: (viewModel.isLiked ?? true) ? "hand.thumbsup.fill" : "hand.thumbsup")
                                     .foregroundColor(.mainTheme)
                             }
-                            Text(String((viewModel.totalBoardPostDetail!.boardPostDetail.likeCount)) )
+                            Text(String((viewModel.totalBoardPostDetail?.boardPostDetail.likeCount ?? 0)) )
                         }
                         .padding()
                     }
