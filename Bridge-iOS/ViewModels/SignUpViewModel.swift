@@ -123,14 +123,14 @@ final class SignUpViewModel : ObservableObject {
 //        }
         
         
-        if(self.name.count == 0 || self.email.count == 0 || !self.email.contains("@")){
+        if(self.name.count == 0 || self.email.count == 0 || !self.email.contains("@") || !self.email.contains(".")){
 //            self.check = 1
             self.showSignUpFailAlert = true
             message = "please check your inputs"
             print("please check your inputs")
             return
             
-        }else if(self.password != self.password2 || self.password.count == 0 || self.password2.count == 0){
+        }else if(self.password != self.password2 || self.password.count < 8 || self.password.count > 15 || self.password.isLowercased ){
 //            self.check = 1
             self.showSignUpFailAlert = true
             message = "please check the passwords"
@@ -295,4 +295,15 @@ final class SignUpViewModel : ObservableObject {
     /* ------------------------------------------------------------------------------------------------*/
     
     /* ------------------------------------------------------------------------------------------------*/
+}
+
+extension String {
+    var isLowercased: Bool {
+        for c in utf8 where (65...90) ~= c { return false }
+        return true
+    }
+    var isUppercased: Bool {
+        for c in utf8 where (97...122) ~= c { return false }
+        return true
+    }
 }
