@@ -53,9 +53,9 @@ struct SignUpAppendixView: View {
     }
     
     func loadImage() {
-        //guard let profileImage = viewModel.profileImage else { return }
-        imageSelected = true
-    }
+        guard let profileImage = viewModel.profileImage else { return }
+            imageSelected = true
+        }
     
     var nicknameField : some View {
         HStack {
@@ -94,8 +94,8 @@ struct SignUpAppendixView: View {
         }
         .background(
             NavigationLink(
-                destination: SignUpVerifyView(viewModel: viewModel)
-                                .environmentObject(viewModel),
+                destination: SignUpCheckUserTypeView(viewModel: viewModel)
+                    .environmentObject(viewModel),
                 isActive : $isLinkActive
             ) {
                 // label

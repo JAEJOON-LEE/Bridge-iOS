@@ -105,7 +105,7 @@ struct SignUpView: View {
                         .modifier(SubmitButtonStyle())
                 }.background(
                     NavigationLink(
-                        destination: SignUpAppendixView(viewModel: viewModel)
+                        destination: SignUpVerifyView(viewModel: viewModel)
                                         .environmentObject(viewModel),
                         isActive : $isLinkActive
                     ) {
@@ -125,9 +125,9 @@ struct SignUpView: View {
                 emailField
                 passwordField
                 verifyPasswordField
-                Text("Password should be at least 8 digits")
+                Text("Password should be 8~15 digits and contain at least one uppercase.")
                     .foregroundColor(Color.gray)
-                    .font(.system(size: 11))
+                    .font(.system(size: 9))
                     .padding(-20)
                 nextButton
                 Divider()
@@ -139,9 +139,9 @@ struct SignUpView: View {
                     }
                 }
             }
-            .padding(.bottom)
-            .background(Color.white)
             .frame(width : UIScreen.main.bounds.width, height : UIScreen.main.bounds.height * 0.8)
+            .padding(.bottom)
+            .background(Color.white.edgesIgnoringSafeArea(.all))
             .cornerRadius(15)
             .shadow(radius: 15)
         }

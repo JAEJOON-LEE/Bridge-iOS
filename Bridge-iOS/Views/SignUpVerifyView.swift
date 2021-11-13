@@ -59,8 +59,8 @@ struct SignUpVerifyView: View {
                     .modifier(SubmitButtonStyle())
                     .background(
                         NavigationLink(
-                            destination: SignUpCheckUserTypeView(viewModel: viewModel)
-                                            .environmentObject(viewModel),
+                            destination: SignUpAppendixView(viewModel: viewModel)
+                                .environmentObject(viewModel),
                             isActive : $isLinkActive
                         ) {
                             // label

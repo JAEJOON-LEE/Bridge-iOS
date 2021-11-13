@@ -50,10 +50,11 @@ struct SignUpGreetingView: View {
             Color.systemDefaultGray // background
             
             VStack(spacing : 30) {
+                Spacer()
                 Image("Check")
                     .resizable()
                     .frame(width: 100, height: 100)
-                    .padding(20)
+                    .padding(10)
                 titleField
                 Spacer()
                 doneButton
