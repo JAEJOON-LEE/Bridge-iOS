@@ -7,9 +7,13 @@
 
 import SwiftUI
 
-struct UsedSearchView: View {
+struct UsedSearchView : View {
     @Environment(\.presentationMode) var presentationMode
-    @State private var searchString : String = ""
+    @StateObject private var viewModel : UsedSearchViewModel
+    
+    init(viewModel : UsedSearchViewModel) {
+        self._viewModel = StateObject(wrappedValue: viewModel)
+    }
     
     var body: some View {
         VStack(spacing : 20) {
@@ -17,7 +21,7 @@ struct UsedSearchView: View {
                 HStack {
                     Image(systemName: "magnifyingglass")
                         .padding(.leading, 5)
-                    TextField("", text: $searchString)
+                    TextField("", text: $viewModel.searchString)
                 }
                 .foregroundColor(.gray)
                 .frame(
@@ -33,9 +37,11 @@ struct UsedSearchView: View {
                 label : {
                     Text("Back")
                         .foregroundColor(.darkGray)
+                        .fontWeight(.semibold)
                 }
             }
-            
+                        
+            // Category
             HStack {
                 Text("Categories")
                     .foregroundColor(.mainTheme)
@@ -44,133 +50,38 @@ struct UsedSearchView: View {
                 Spacer()
             }
             
-            //["digital", "furniture", "food", "clothes", "beauty", "etc."]
-            HStack {
-                NavigationLink {
-                    
-                } label: {
-                    VStack(spacing : 5) {
-                        Image("digital")
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .padding(25)
-                            .frame(
-                                width: UIScreen.main.bounds.width * 0.2,
-                                height: UIScreen.main.bounds.width * 0.2)
-                            .background(Color.systemDefaultGray)
-                            .cornerRadius(20)
-                        
-                        Text("Digital")
-                            .foregroundColor(.darkGray)
-                            .fontWeight(.semibold)
-                    }
-                }
-                Spacer()
-                NavigationLink {
-                    
-                } label: {
-                    VStack(spacing : 5) {
-                        Image("interior")
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .padding(25)
-                            .frame(
-                                width: UIScreen.main.bounds.width * 0.2,
-                                height: UIScreen.main.bounds.width * 0.2)
-                            .background(Color.systemDefaultGray)
-                            .cornerRadius(20)
-                        
-                        Text("Interior")
-                            .foregroundColor(.darkGray)
-                            .fontWeight(.semibold)
-                    }
-                }
-                Spacer()
-                NavigationLink {
-                    
-                } label: {
-                    VStack(spacing : 5) {
-                        Image("life")
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .padding(25)
-                            .frame(
-                                width: UIScreen.main.bounds.width * 0.2,
-                                height: UIScreen.main.bounds.width * 0.2)
-                            .background(Color.systemDefaultGray)
-                            .cornerRadius(20)
-                        
-                        Text("Life")
-                            .foregroundColor(.darkGray)
-                            .fontWeight(.semibold)
-                    }
+            LazyVGrid(columns: [GridItem(.flexible()),
+                                GridItem(.flexible()),
+                                GridItem(.flexible())]
+            ) {
+                ForEach(viewModel.categories, id : \.self) { category in
+                    Button {
+                        viewModel.selectedCategory = category
+                        viewModel.getPostsByCategory(category: category.lowercased())
+                        viewModel.categoryViewShow = true
+                    } label : {
+                        VStack(spacing : 5) {
+                            Image(category)
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .padding(25)
+                                .frame(
+                                    width: UIScreen.main.bounds.width * 0.2,
+                                    height: UIScreen.main.bounds.width * 0.2)
+                                .background(Color.systemDefaultGray)
+                                .cornerRadius(20)
+                            
+                            Text(category)
+                                .foregroundColor(.darkGray)
+                                .fontWeight(.semibold)
+                                .font(.caption)
+                        }
+                    }.padding(.bottom, 10)
                 }
             }
             
             HStack {
-                NavigationLink {
-                    
-                } label: {
-                    VStack(spacing : 5) {
-                        Image("fashion")
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .padding(25)
-                            .frame(
-                                width: UIScreen.main.bounds.width * 0.2,
-                                height: UIScreen.main.bounds.width * 0.2)
-                            .background(Color.systemDefaultGray)
-                            .cornerRadius(20)
-                        
-                        Text("Fashion")
-                            .foregroundColor(.darkGray)
-                            .fontWeight(.semibold)
-                    }
-                }
-                Spacer()
-                NavigationLink {
-                    
-                } label: {
-                    VStack(spacing : 5) {
-                        Image("beauty")
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .padding(25)
-                            .frame(
-                                width: UIScreen.main.bounds.width * 0.2,
-                                height: UIScreen.main.bounds.width * 0.2)
-                            .background(Color.systemDefaultGray)
-                            .cornerRadius(20)
-                        
-                        Text("Beauty")
-                            .foregroundColor(.darkGray)
-                            .fontWeight(.semibold)
-                    }
-                }
-                Spacer()
-                NavigationLink {
-                    
-                } label: {
-                    VStack(spacing : 5) {
-                        Image("other_items")
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .padding(25)
-                            .frame(
-                                width: UIScreen.main.bounds.width * 0.2,
-                                height: UIScreen.main.bounds.width * 0.2)
-                            .background(Color.systemDefaultGray)
-                            .cornerRadius(20)
-                        
-                        Text("other Items")
-                            .foregroundColor(.darkGray)
-                            .fontWeight(.semibold)
-                    }
-                }
-            }
-            
-            HStack {
-                Text("[Camp name] Hot Deal")
+                Text("\(viewModel.currentCamp) Hot Deal")
                     .foregroundColor(.mainTheme)
                     .font(.title2)
                     .fontWeight(.bold)
@@ -181,11 +92,45 @@ struct UsedSearchView: View {
         }.padding(20)
         .navigationBarHidden(true)
         .navigationBarTitle(Text(""))
-    }
-}
-
-struct UsedSearchView_Previews: PreviewProvider {
-    static var previews: some View {
-        UsedSearchView()
+        .background(
+            NavigationLink(
+                destination :
+                    ScrollView {
+                        LazyVStack {
+                            if (viewModel.Posts.isEmpty) {
+                                    HStack {
+                                        Text("No post in")
+                                            .foregroundColor(.darkGray)
+                                            .fontWeight(.semibold)
+                                        Text(viewModel.selectedCategory)
+                                            .foregroundColor(.mainTheme)
+                                            .fontWeight(.semibold)
+                                    }.font(.title)
+                                    .padding(.top, UIScreen.main.bounds.height * 0.3)
+                            }
+                            else {
+                            ForEach(viewModel.Posts, id : \.self) { Post in
+                                NavigationLink(
+                                    destination:
+                                        ItemInfoView(viewModel:
+                                                        ItemInfoViewModel(
+                                                            token: viewModel.token,
+                                                            postId : Post.postId,
+                                                            isMyPost : (viewModel.memberId == Post.memberId)
+                                                        )
+                                        )
+                                        .onDisappear(perform: {
+                                            // 일반 작업시에는 필요없는데, 삭제 작업 즉시 반영을 위해서 필요함
+                                            viewModel.getPostsByCategory(category: viewModel.selectedCategory.lowercased())
+                                        })
+                                ) {
+                                    ItemCard(viewModel : ItemCardViewModel(post: Post))
+                                }
+                            }
+                            }
+                        }
+                    }.navigationTitle(Text(viewModel.selectedCategory)),
+                isActive : $viewModel.categoryViewShow) { }
+        )
     }
 }

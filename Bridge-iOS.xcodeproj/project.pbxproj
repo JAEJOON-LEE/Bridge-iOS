@@ -16,6 +16,7 @@
 		1A936DC5271877C300750DE6 /* ModifyUsedPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A936DC4271877C300750DE6 /* ModifyUsedPostView.swift */; };
 		1A936DC7271878A600750DE6 /* ModifyUsedPostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A936DC6271878A500750DE6 /* ModifyUsedPostViewModel.swift */; };
 		1A976EA827412EF600B743CE /* UsedSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A976EA727412EF600B743CE /* UsedSearchView.swift */; };
+		1A976EAA274186E200B743CE /* UsedSearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A976EA9274186E200B743CE /* UsedSearchViewModel.swift */; };
 		1AA8B40D26F32AF500C28E02 /* Bridge_iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA8B40C26F32AF500C28E02 /* Bridge_iOSApp.swift */; };
 		1AA8B40F26F32AF500C28E02 /* TabContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA8B40E26F32AF500C28E02 /* TabContainer.swift */; };
 		1AA8B41126F32AF800C28E02 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1AA8B41026F32AF800C28E02 /* Assets.xcassets */; };
@@ -87,6 +88,7 @@
 		1A936DC4271877C300750DE6 /* ModifyUsedPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifyUsedPostView.swift; sourceTree = "<group>"; };
 		1A936DC6271878A500750DE6 /* ModifyUsedPostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifyUsedPostViewModel.swift; sourceTree = "<group>"; };
 		1A976EA727412EF600B743CE /* UsedSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsedSearchView.swift; sourceTree = "<group>"; };
+		1A976EA9274186E200B743CE /* UsedSearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsedSearchViewModel.swift; sourceTree = "<group>"; };
 		1AA8B40926F32AF500C28E02 /* Bridge-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Bridge-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1AA8B40C26F32AF500C28E02 /* Bridge_iOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bridge_iOSApp.swift; sourceTree = "<group>"; };
 		1AA8B40E26F32AF500C28E02 /* TabContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabContainer.swift; sourceTree = "<group>"; };
@@ -271,6 +273,7 @@
 				1ADD9DDB2703220F008342A7 /* SignInViewModel.swift */,
 				6D7D94CB273C184700A104FD /* FindPasswordViewModel.swift */,
 				1ADD9DE527034B8A008342A7 /* HomeViewModel.swift */,
+				1A976EA9274186E200B743CE /* UsedSearchViewModel.swift */,
 				6DAD1F3A27041289006B01FC /* WritingViewModel.swift */,
 				1A318F9027131A4C00ADF60E /* UsedWritingViewModel.swift */,
 				1A936DC6271878A500750DE6 /* ModifyUsedPostViewModel.swift */,
@@ -431,6 +434,7 @@
 				1AA8B43726F370CF00C28E02 /* NotificationView.swift in Sources */,
 				1ADD9DE4270325CC008342A7 /* SignIn+ResponseData.swift in Sources */,
 				1AA8B42826F3485900C28E02 /* Color+Extension.swift in Sources */,
+				1A976EAA274186E200B743CE /* UsedSearchViewModel.swift in Sources */,
 				1AA8B41D26F32E7E00C28E02 /* HomeView.swift in Sources */,
 				1AA8B43226F35EF800C28E02 /* LocationPicker.swift in Sources */,
 				1AA8B40F26F32AF500C28E02 /* TabContainer.swift in Sources */,

@@ -53,9 +53,9 @@ struct SignUpAppendixView: View {
     }
     
     func loadImage() {
-        guard let profileImage = viewModel.profileImage else { return }
-            imageSelected = true
-        }
+        //guard let profileImage = viewModel.profileImage else { return }
+        imageSelected = true
+    }
     
     var nicknameField : some View {
         HStack {

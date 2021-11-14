@@ -21,7 +21,7 @@ struct HomeView : View {
     
     var LocationPicker : some View {
         VStack {
-            HStack (spacing : 20) {
+            HStack (spacing : 30) {
                 Button {
                     withAnimation { self.isSlideShow.toggle() }
                 } label : {
@@ -45,20 +45,21 @@ struct HomeView : View {
                 VStack (alignment : .leading, spacing : 0) {
                     Text("Bridge in")
                         .font(.system(size : 10))
-                    Picker("\(viewModel.selectedCamp)       ", selection: $viewModel.selectedCamp) {
+                    Picker("\(viewModel.selectedCamp)", selection: $viewModel.selectedCamp) {
                         ForEach(viewModel.locations, id: \.self) {
                             Text($0).foregroundColor(.gray)
                         }
                     }
                     .pickerStyle(MenuPickerStyle())
                     .scaleEffect(1.4)
-                    .padding(.horizontal, 30)
+                    .padding(.horizontal, 15)
                 }.accentColor(.black.opacity(0.8))
                 Spacer()
             } // HStack
 
+            // Search
             NavigationLink {
-                UsedSearchView()
+                UsedSearchView(viewModel: UsedSearchViewModel(accessToken: viewModel.token, memberId: viewModel.memberId, currentCamp : viewModel.selectedCamp))
             } label: {
                 HStack {
                     Image(systemName: "magnifyingglass")

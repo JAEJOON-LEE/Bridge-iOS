@@ -179,7 +179,7 @@ struct ItemInfoView: View {
                                 .fontWeight(.semibold)
                                 .foregroundColor(.mainTheme)
                             Text("#\(viewModel.itemInfo?.usedPostDetail.category ?? "etc.")")
-                                .foregroundColor(.mainTheme)
+                                .foregroundColor(.darkGray)
                                 .font(.system(size : 12, weight : .semibold))
                                 .padding(6)
                                 .background(Color.systemDefaultGray)
