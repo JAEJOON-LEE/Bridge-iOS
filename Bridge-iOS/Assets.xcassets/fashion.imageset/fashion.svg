@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="40.247" height="29.56" viewBox="0 0 40.247 29.56">
+  <defs>
+    <linearGradient id="linear-gradient" x2="1" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#e86b31"/>
+      <stop offset="1" stop-color="#fff"/>
+    </linearGradient>
+  </defs>
+  <g id="组_397" data-name="组 397" transform="translate(-40.876 -254.097)">
+    <g id="VネックTシャツの無料アイコン1" transform="translate(43 186.004)">
+      <path id="路径_212" data-name="路径 212" d="M24.6,70,18,75.2,11.4,70,0,78.82l5.333,6.667L8.667,83V96.153H27.333V83l3.333,2.489L36,78.82Z" fill="none" stroke="#e86b31" stroke-width="3"/>
+    </g>
+    <rect id="矩形_258" data-name="矩形 258" width="14" height="5" transform="translate(54 275)" fill="url(#linear-gradient)"/>
+  </g>
+</svg>

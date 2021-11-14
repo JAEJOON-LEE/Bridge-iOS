@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="42.808" height="38.072" viewBox="0 0 42.808 38.072">
+  <defs>
+    <linearGradient id="linear-gradient" x1="0.5" y1="1.676" x2="-0.928" y2="0.78" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#e86b31"/>
+      <stop offset="1" stop-color="#fff"/>
+    </linearGradient>
+  </defs>
+  <g id="组_396" data-name="组 396" transform="translate(-271.934 -136.724)">
+    <g id="普通の家のアイコン" transform="translate(271.934 108.4)">
+      <path id="路径_206" data-name="路径 206" d="M36.22,43.138l-5.793-5.789-4.6-4.592-4.417-4.433L0,49.719l3.171,3.169,18.24-18.225L39.637,52.888l3.171-3.169Z" fill="#e86b31"/>
+      <path id="路径_207" data-name="路径 207" d="M78.8,149.77v14.346H90.1v-9.652h7.024v9.652h11.3V149.768L93.624,134.959Z" transform="translate(-72.212 -97.719)" fill="url(#linear-gradient)"/>
+    </g>
+  </g>
+</svg>

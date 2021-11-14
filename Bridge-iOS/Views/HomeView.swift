@@ -56,10 +56,10 @@ struct HomeView : View {
                 }.accentColor(.black.opacity(0.8))
                 Spacer()
             } // HStack
-            
-            Button {
-                // full cover to Search items
-            } label : {
+
+            NavigationLink {
+                UsedSearchView()
+            } label: {
                 HStack {
                     Image(systemName: "magnifyingglass")
                         .padding(.horizontal, 3)
@@ -114,7 +114,8 @@ struct HomeView : View {
                                                     postId : Post.postId,
                                                     isMyPost : (viewModel.memberId == Post.memberId)
                                                 )
-                                ).onDisappear(perform: { // 일반 작업시에는 필요없는데, 삭제 작업 즉시 반영을 위해서 필요함
+                                ).onDisappear(perform: {
+                                    // 일반 작업시에는 필요없는데, 삭제 작업 즉시 반영을 위해서 필요함
                                     viewModel.getPosts(token: viewModel.token)
                                 })
                         ) {

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="39.17" height="40.312" viewBox="0 0 39.17 40.312">
+  <defs>
+    <linearGradient id="linear-gradient" x1="0.47" y1="0.134" x2="0.425" y2="1.29" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#e86b31"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <g id="组_398" data-name="组 398" transform="translate(-274.5 -250.188)">
+    <path id="路径_188" data-name="路径 188" d="M8.522,0A8.522,8.522,0,1,1,0,8.522,8.522,8.522,0,0,1,8.522,0Z" transform="matrix(-0.342, 0.94, -0.94, -0.342, 313.67, 256.017)" fill="url(#linear-gradient)"/>
+    <g id="矩形_219" data-name="矩形 219" transform="translate(276 276)" fill="none" stroke="#e86b31" stroke-linecap="round" stroke-width="1.5">
+      <rect width="12" height="13" rx="1" stroke="none"/>
+      <rect x="-0.75" y="-0.75" width="13.5" height="14.5" rx="1.75" fill="none"/>
+    </g>
+    <g id="矩形_220" data-name="矩形 220" transform="translate(297 276)" fill="none" stroke="#e86b31" stroke-linecap="round" stroke-width="1.5">
+      <rect width="12" height="13" rx="1" stroke="none"/>
+      <rect x="-0.75" y="-0.75" width="13.5" height="14.5" rx="1.75" fill="none"/>
+    </g>
+    <g id="矩形_246" data-name="矩形 246" transform="translate(276 255)" fill="none" stroke="#e86b31" stroke-linecap="round" stroke-width="1.5">
+      <rect width="12" height="13" rx="1" stroke="none"/>
+      <rect x="-0.75" y="-0.75" width="13.5" height="14.5" rx="1.75" fill="none"/>
+    </g>
+  </g>
+</svg>
