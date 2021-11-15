@@ -116,13 +116,13 @@ struct TabContainer: View {
 
 extension TabContainer {
     var TabSelector : some View {
-        HStack(spacing : 24) {
+        HStack(spacing : 20) {
             Button {
                 viewModel.selectedTabIndex = 1
             } label : {
-                VStack {
-                    Image(systemName : "house.fill")
-                        .font(.system(size : 23))
+                VStack(spacing : 0) {
+                    //Image(systemName : "house.fill")
+                    Image(viewModel.selectedTabIndex == 1 ? "tab1_0" : "tab1")
                     Text("Home")
                         .font(.system(size : 12))
                 }
@@ -131,10 +131,9 @@ extension TabContainer {
             Button {
                 viewModel.selectedTabIndex = 2
             } label : {
-                VStack {
-                    Image(systemName : "note.text")
-                        .font(.system(size : 23))
-
+                VStack(spacing : 0) {
+                    //Image(systemName : "note.text")
+                    Image(viewModel.selectedTabIndex == 2 ? "tab2_0" : "tab2")
                     Text("Playground")
                         .font(.system(size : 12))
 
@@ -144,7 +143,8 @@ extension TabContainer {
                 Button {
                     viewModel.showUsedPostWriting = true
                 } label : {
-                    Image(systemName : "pencil")
+                    //Image(systemName : "pencil")
+                    Image("tab3")
                         .font(.system(size : 35))
                         .padding(10)
                         .background(Color.white)
@@ -166,7 +166,8 @@ extension TabContainer {
                                     )
                                 )
                     ) {
-                        Image(systemName : "pencil")
+                        //Image(systemName : "pencil")
+                        Image("tab3")
                             .font(.system(size : 35))
                             .padding(10)
                             .background(Color.white)
@@ -179,8 +180,9 @@ extension TabContainer {
             Button {
                 viewModel.selectedTabIndex = 4
             } label : {
-                VStack {
-                    Image(systemName : "person.fill")
+                VStack(spacing : 0) {
+                    //Image(systemName : "person.fill")
+                    Image(viewModel.selectedTabIndex == 4 ? "tab4_0" : "tab4")
                         .font(.system(size : 23))
 
                     Text("Seller")
@@ -191,8 +193,9 @@ extension TabContainer {
             Button {
                 viewModel.selectedTabIndex = 5
             } label : {
-                VStack {
-                    Image(systemName : "envelope.open.fill")
+                VStack(spacing : 0) {
+                    //Image(systemName : "envelope.open.fill")
+                    Image("tab5")
                         .font(.system(size : 23))
 
                     Text("Message")
@@ -201,7 +204,7 @@ extension TabContainer {
                 }.foregroundColor(viewModel.selectedTabIndex == 5 ? .mainTheme : .gray)
             }
         } // HStack
-        .padding(.vertical, 7)
+        .padding(.vertical, 5)
         .padding(.horizontal, 15)
         .background(Color.systemDefaultGray)
         .cornerRadius(25)

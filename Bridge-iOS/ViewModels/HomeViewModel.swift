@@ -18,7 +18,7 @@ final class HomeViewModel : ObservableObject {
     private var subscription = Set<AnyCancellable>()
     let token : String
     let memberId : Int
-    let locations = ["Camp Casey", "Camp Hovey", "USAG Yongsan", "K-16", "Suwon A/B", "Osan A/B", "Camp Humperys", "Camp Carroll", "Camp Henry", "Camp Worker", "Gunsan A/B"]
+    let locations = ["Camp Casey", "Camp Hovey", "USAG Yongsan", "K-16", "Suwon A/B", "Osan A/B", "Camp Humperys", "Camp Carroll", "Camp Henry", "Camp Walker", "Gunsan A/B"]
 
     init(accessToken : String, memberId : Int) {
         self.token = accessToken
