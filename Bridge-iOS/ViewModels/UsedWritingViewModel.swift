@@ -49,7 +49,8 @@ final class UsedWritingViewModel : ObservableObject {
     ]
     
     let camps = ["Camp Casey", "Camp Hovey", "USAG Yongsan", "K-16", "Suwon A/B", "Osan A/B", "Camp Humperys", "Camp Carroll", "Camp Henry", "Camp Worker", "Gunsan A/B"]
-    let categories = ["digital", "furniture", "food", "clothes", "beauty", "etc."]
+    let categories = ["Digital", "Interior", "Fashion", "Life", "Beauty", "Etc"]
+    //["digital", "furniture", "food", "clothes", "beauty", "etc."]
     
     var configuration : PHPickerConfiguration {
         var configuration = PHPickerConfiguration(photoLibrary: .shared())

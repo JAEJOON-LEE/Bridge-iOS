@@ -24,7 +24,9 @@ final class ModifyUsedPostViewModel : ObservableObject {
     @Published var isUploadDone : Bool = false
 
     let camps = ["Camp Casey", "Camp Hovey", "USAG Yongsan", "K-16", "Suwon A/B", "Osan A/B", "Camp Humperys", "Camp Carroll", "Camp Henry", "Camp Worker", "Gunsan A/B"]
-    let categories = ["digital", "furniture", "food", "clothes", "beauty", "etc."]
+    let categories = ["Digital", "Interior", "Fashion", "Life", "Beauty", "Etc"]
+    //["digital", "furniture", "food", "clothes", "beauty", "etc."]
+    
     let campToNum : [String : Int] = [
         "Camp Casey" : 1,
         "Camp Hovey" : 2,
