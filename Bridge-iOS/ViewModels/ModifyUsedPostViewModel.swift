@@ -23,7 +23,7 @@ final class ModifyUsedPostViewModel : ObservableObject {
     
     @Published var isUploadDone : Bool = false
 
-    let camps = ["Camp Casey", "Camp Hovey", "USAG Yongsan", "K-16", "Suwon A/B", "Osan A/B", "Camp Humperys", "Camp Carroll", "Camp Henry", "Camp Worker", "Gunsan A/B"]
+    let camps = ["Camp Casey", "Camp Hovey", "USAG Yongsan", "K-16", "Suwon A/B", "Osan A/B", "Camp Humperys", "Camp Carroll", "Camp Henry", "Camp Walker", "Gunsan A/B"]
     let categories = ["Digital", "Interior", "Fashion", "Life", "Beauty", "Etc"]
     //["digital", "furniture", "food", "clothes", "beauty", "etc."]
     
@@ -37,7 +37,7 @@ final class ModifyUsedPostViewModel : ObservableObject {
         "Camp Humperys" : 7,
         "Camp Carroll" : 8,
         "Camp Henry" : 9,
-        "Camp Worker" : 10,
+        "Camp Walker" : 10,
         "Gunsan A/B" : 11
     ]
     let campToInt : [Int : String] = [
@@ -50,7 +50,7 @@ final class ModifyUsedPostViewModel : ObservableObject {
         7 : "Camp Humperys",
         8 : "Camp Carroll",
         9 : "Camp Henry",
-        10 : "Camp Worker",
+        10 : "Camp Walker",
         11 : "Gunsan A/B"
     ]
     

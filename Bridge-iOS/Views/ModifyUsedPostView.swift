@@ -21,65 +21,47 @@ struct ModifyUsedPostView: View {
     var body: some View {
         VStack {
             Spacer().frame(height: UIScreen.main.bounds.height * 0.02)
-            Button {
-
-            } label : {
-                LazyVGrid(columns: [
-                    GridItem(.flexible()),
-                    GridItem(.flexible()),
-                    GridItem(.flexible())
-                ]) {
-                    ForEach(viewModel.postImages, id : \.self) { postImage in
-                        URLImage(URL(string : postImage.image) ??
-                                 URL(string: "https://static.thenounproject.com/png/741653-200.png")!
-                             ) { image in
-                                 image
-                                     .resizable()
-                                     .aspectRatio(contentMode: .fill)
-                             }
-                            .frame(width : UIScreen.main.bounds.width * 0.3, height : UIScreen.main.bounds.width * 0.3)
-                            .clipped()
-                    }
-                }.padding(10)
-            }
-            .frame(width : UIScreen.main.bounds.width * 0.95, height : UIScreen.main.bounds.width * 0.35)
-            .background(
-                ZStack {
-                    Color.mainTheme.opacity(0.05)
-                        .cornerRadius(15)
-                    RoundedRectangle(cornerRadius: 15)
-                        .stroke(style: StrokeStyle(lineWidth: 1, dash: [8]))
+            TabView {
+                ForEach(viewModel.postImages, id : \.self) {
+                    URLImage(URL(string : $0.image) ??
+                             URL(string: "https://static.thenounproject.com/png/741653-200.png")!
+                         ) { image in
+                             image
+                                 .resizable()
+                                 .aspectRatio(contentMode: .fill)
+                         }
                 }
-            )
+            }.tabViewStyle(PageTabViewStyle())
+            .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
+            .frame(width : UIScreen.main.bounds.width, height: UIScreen.main.bounds.height / 3)
+
             HStack {
                 Spacer()
-                Text("\(viewModel.postImages.count) / 3").foregroundColor(.gray)
-                Image(systemName: "camera").foregroundColor(.mainTheme)
-            }.padding(.horizontal, 5)
+                Text("\(viewModel.postImages.count) / 7")
+                    .foregroundColor(.gray)
+                Image(systemName: "camera")
+                    .foregroundColor(.mainTheme)
+            }.padding(.horizontal, 20)
+            
             VStack {
                 VStack(spacing : 0) {
-                    HStack {
-                        Text("    Title      ")
-                            .foregroundColor(.gray)
-                        TextField("Title", text: $viewModel.title)
-                            .autocapitalization(.none)
-                            .frame(height : UIScreen.main.bounds.height * 0.05)
-                    }
-                    Divider()
-                     .frame(height: 1)
-                     .background(Color.systemDefaultGray)
+                    TextField(" Title", text: $viewModel.title)
+                        .font(.system(size : 18, weight : .semibold))
+                        .autocapitalization(.none)
+                        .frame(height : UIScreen.main.bounds.height * 0.05)
+                    RoundedRectangle(cornerRadius: 10)
+                        .foregroundColor(.systemDefaultGray)
+                        .frame(width : UIScreen.main.bounds.width * 0.95, height: 7)
                     
-                    HStack {
-                        Text(" Price ($) ")
-                            .foregroundColor(.gray)
-                        TextField("Price ($)", text: $viewModel.price)
-                            .autocapitalization(.none)
-                            .frame(height : UIScreen.main.bounds.height * 0.05)
-                    }
-                    Divider()
-                     .frame(height: 1)
-                     .background(Color.systemDefaultGray)
-                }.padding(.horizontal, 10)
+                    TextField(" Price ($)", text: $viewModel.price)
+                        .keyboardType(.decimalPad)
+                        .font(.system(size : 18, weight : .semibold))
+                        .autocapitalization(.none)
+                        .frame(height : UIScreen.main.bounds.height * 0.05)
+                    RoundedRectangle(cornerRadius: 10)
+                        .foregroundColor(.systemDefaultGray)
+                        .frame(width : UIScreen.main.bounds.width * 0.95, height: 7)
+                }.padding(.horizontal, 20)
                 HStack {
                     Button {
                         viewModel.showCampPicker = true
