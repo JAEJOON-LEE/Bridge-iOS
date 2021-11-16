@@ -11,14 +11,15 @@ import Alamofire
 
 final class HomeViewModel : ObservableObject {
     @Published var Posts : [Post] = []
-    @Published var selectedCamp : String = "Camp Casey"
+    @Published var selectedCamp : String = "Casey/Hovey" //"Camp Casey"
     //@Published var profileImage : String = ""
     
     private let url = "http://3.36.233.180:8080/used-posts?"
     private var subscription = Set<AnyCancellable>()
     let token : String
     let memberId : Int
-    let locations = ["Camp Casey", "Camp Hovey", "USAG Yongsan", "K-16", "Suwon A/B", "Osan A/B", "Camp Humperys", "Camp Carroll", "Camp Henry", "Camp Walker", "Gunsan A/B"]
+    //let locations = ["Camp Casey", "Camp Hovey", "USAG Yongsan", "K-16", "Suwon A/B", "Osan A/B", "Camp Humperys", "Camp Carroll", "Camp Henry", "Camp Walker", "Gunsan A/B"]
+    let locations = ["Casey/Hovey", "USAG Yongsan", "K-16", "Suwon A/B", "Osan A/B", "Camp Humperys", "Camp Carroll", "Henry/Walker", "Gunsan A/B"]
 
     init(accessToken : String, memberId : Int) {
         self.token = accessToken

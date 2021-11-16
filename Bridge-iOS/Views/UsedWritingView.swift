@@ -258,12 +258,15 @@ struct UsedWritingView: View {
             }
             
             if viewModel.isProgressShow {
-                ProgressView()
-                    .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                    .frame(width : UIScreen.main.bounds.width * 0.7,
-                           height : UIScreen.main.bounds.height * 0.35)
-                    .background(Color.black.opacity(0.6))
-                    .cornerRadius(20)
+                HStack (spacing : 20) {
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle(tint: Color.mainTheme))
+                    Text("Loading...")
+                        .foregroundColor(.darkGray)
+                }
+                .frame(width : UIScreen.main.bounds.width * 0.6, height : UIScreen.main.bounds.height * 0.15)
+                .cornerRadius(30)
+                .background(Color.white.shadow(radius: 3))
             }
         }
     }

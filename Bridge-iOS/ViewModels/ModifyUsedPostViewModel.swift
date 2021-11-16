@@ -23,34 +23,39 @@ final class ModifyUsedPostViewModel : ObservableObject {
     
     @Published var isUploadDone : Bool = false
 
-    let camps = ["Camp Casey", "Camp Hovey", "USAG Yongsan", "K-16", "Suwon A/B", "Osan A/B", "Camp Humperys", "Camp Carroll", "Camp Henry", "Camp Walker", "Gunsan A/B"]
+    let camps = ["Casey/Hovey", "USAG Yongsan", "K-16", "Suwon A/B", "Osan A/B", "Camp Humperys", "Camp Carroll", "Henry/Walker", "Gunsan A/B"]
+    //["Camp Casey", "Camp Hovey", "USAG Yongsan", "K-16", "Suwon A/B", "Osan A/B", "Camp Humperys", "Camp Carroll", "Camp Henry", "Camp Walker", "Gunsan A/B"]
     let categories = ["Digital", "Interior", "Fashion", "Life", "Beauty", "Etc"]
     //["digital", "furniture", "food", "clothes", "beauty", "etc."]
     
     let campToNum : [String : Int] = [
-        "Camp Casey" : 1,
-        "Camp Hovey" : 2,
+        //"Camp Casey" : 1,
+        //"Camp Hovey" : 2,
+        "Casey/Hovey" : 1,
         "USAG Yongsan" : 3,
         "K-16" : 4,
         "Suwon A/B" : 5,
         "Osan A/B" : 6,
         "Camp Humperys" : 7,
         "Camp Carroll" : 8,
-        "Camp Henry" : 9,
-        "Camp Walker" : 10,
+        //"Camp Henry" : 9,
+        //"Camp Walker" : 10,
+        "Henry/Walker" : 9,
         "Gunsan A/B" : 11
     ]
     let campToInt : [Int : String] = [
-        1 : "Camp Casey",
-        2 : "Camp Hovey",
+        //1 : "Camp Casey",
+        //2 : "Camp Hovey",
+        1 : "Casey/Hovey",
         3 : "USAG Yongsan",
         4 : "K-16",
         5 : "Suwon A/B",
         6 : "Osan A/B",
         7 : "Camp Humperys",
         8 : "Camp Carroll",
-        9 : "Camp Henry",
-        10 : "Camp Walker",
+        9 : "Henry/Walker",
+        //9 : "Camp Henry",
+        //10 : "Camp Walker",
         11 : "Gunsan A/B"
     ]
     

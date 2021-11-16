@@ -45,14 +45,20 @@ struct HomeView : View {
                 VStack (alignment : .leading, spacing : 0) {
                     Text("Bridge in")
                         .font(.system(size : 10))
-                    Picker("\(viewModel.selectedCamp)", selection: $viewModel.selectedCamp) {
-                        ForEach(viewModel.locations, id: \.self) {
-                            Text($0).foregroundColor(.gray)
+                    HStack {
+                        Picker("\(viewModel.selectedCamp)", selection: $viewModel.selectedCamp) {
+                            ForEach(viewModel.locations, id: \.self) {
+                                Text($0).foregroundColor(.gray)
+                            }
                         }
+                        .pickerStyle(MenuPickerStyle())
+                        .scaleEffect(1.4)
+                        .padding(.leading, 15)
+                        Image(systemName : "arrowtriangle.down.fill")
+                                .padding(.leading, 15)
+                                .font(.system(size : 15))
+                                .foregroundColor(.darkGray)
                     }
-                    .pickerStyle(MenuPickerStyle())
-                    .scaleEffect(1.4)
-                    .padding(.horizontal, 15)
                 }.accentColor(.black.opacity(0.8))
                 Spacer()
             } // HStack
@@ -124,8 +130,17 @@ struct HomeView : View {
                         }//.buttonStyle(.plain)
                     }
                 }
-                Spacer().frame(height : UIScreen.main.bounds.height * 0.1)
-            }
+                //Spacer().frame(height : UIScreen.main.bounds.height * 0.1)
+                
+            }.overlay(
+                VStack(spacing : 0) {
+                    Spacer()
+                    LinearGradient(colors: [.white.opacity(0), .white], startPoint: .top, endPoint: .bottom)
+                        .frame(height : UIScreen.main.bounds.height * 0.1)
+                    Color.white
+                        .frame(height : UIScreen.main.bounds.height * 0.05)
+                }.edgesIgnoringSafeArea(.bottom)
+            )
         }.onAppear {
             viewModel.getPosts(token: viewModel.token)
         }.onChange(of: viewModel.selectedCamp) { newValue in
@@ -170,7 +185,7 @@ struct ItemCard : View {
                     Text("\(viewModel.viewCount)")
                     Spacer()
                     Image(systemName : viewModel.isLiked ? "heart.fill" : "heart")
-                        .font(.system(size : 20))
+                        .font(.system(size : 18))
                 }.font(.system(size : 9))
             }.foregroundColor(.secondary)
         }

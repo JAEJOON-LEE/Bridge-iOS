@@ -120,32 +120,39 @@ extension TabContainer {
             Button {
                 viewModel.selectedTabIndex = 1
             } label : {
-                VStack(spacing : 0) {
+                VStack(spacing : 3) {
                     //Image(systemName : "house.fill")
-                    Image(viewModel.selectedTabIndex == 1 ? "tab1_0" : "tab1")
+                    Image(viewModel.selectedTabIndex == 1 ? "tab1_1" : "tab1_0")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width : UIScreen.main.bounds.width * 0.08)
                     Text("Home")
                         .font(.system(size : 12))
+                        .foregroundColor(viewModel.selectedTabIndex == 1 ? .mainTheme : .gray)
                 }
-                .foregroundColor(viewModel.selectedTabIndex == 1 ? .mainTheme : .gray)
             }
             Button {
                 viewModel.selectedTabIndex = 2
             } label : {
-                VStack(spacing : 0) {
+                VStack(spacing : -5) {
                     //Image(systemName : "note.text")
-                    Image(viewModel.selectedTabIndex == 2 ? "tab2_0" : "tab2")
+                    Image(viewModel.selectedTabIndex == 2 ? "tab2_1" : "tab2_0")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width : UIScreen.main.bounds.width * 0.1)
                     Text("Playground")
                         .font(.system(size : 12))
-
-                }.foregroundColor(viewModel.selectedTabIndex == 2 ? .mainTheme : .gray)
+                        .foregroundColor(viewModel.selectedTabIndex == 2 ? .mainTheme : .gray)
+                }
             }
             if viewModel.selectedTabIndex == 1 {
                 Button {
                     viewModel.showUsedPostWriting = true
                 } label : {
                     //Image(systemName : "pencil")
-                    Image("tab3")
-                        .font(.system(size : 35))
+                    Image("tab3").resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width : UIScreen.main.bounds.width * 0.12)
                         .padding(10)
                         .background(Color.white)
                         .clipShape(Circle())
@@ -168,7 +175,9 @@ extension TabContainer {
                     ) {
                         //Image(systemName : "pencil")
                         Image("tab3")
-                            .font(.system(size : 35))
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width : UIScreen.main.bounds.width * 0.12)
                             .padding(10)
                             .background(Color.white)
                             .clipShape(Circle())
@@ -182,26 +191,28 @@ extension TabContainer {
             } label : {
                 VStack(spacing : 0) {
                     //Image(systemName : "person.fill")
-                    Image(viewModel.selectedTabIndex == 4 ? "tab4_0" : "tab4")
-                        .font(.system(size : 23))
-
+                    Image(viewModel.selectedTabIndex == 4 ? "tab4_1" : "tab4_0")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width : UIScreen.main.bounds.width * 0.1)
                     Text("Seller")
                         .font(.system(size : 12))
-
-                }.foregroundColor(viewModel.selectedTabIndex == 4 ? .mainTheme : .gray)
+                        .foregroundColor(viewModel.selectedTabIndex == 4 ? .mainTheme : .gray)
+                }
             }
             Button {
                 viewModel.selectedTabIndex = 5
             } label : {
                 VStack(spacing : 0) {
                     //Image(systemName : "envelope.open.fill")
-                    Image("tab5")
-                        .font(.system(size : 23))
-
+                    Image(viewModel.selectedTabIndex == 5 ? "tab5_1" : "tab5_0")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width : UIScreen.main.bounds.width * 0.1)
                     Text("Message")
                         .font(.system(size : 12))
-
-                }.foregroundColor(viewModel.selectedTabIndex == 5 ? .mainTheme : .gray)
+                        .foregroundColor(viewModel.selectedTabIndex == 5 ? .mainTheme : .gray)
+                }
             }
         } // HStack
         .padding(.vertical, 5)

@@ -14,7 +14,7 @@ final class UsedSearchViewModel : ObservableObject {
     @Published var hotDealPosts : [Post] = []
     @Published var searchedPosts : [Post] = []
     
-    @Published var selectedCamp : String = "Camp Casey"
+    @Published var selectedCamp : String = "Casey/Hovey" //"Camp Casey"
     @Published var searchString : String = ""
     @Published var selectedCategory : String = "Etc"
     @Published var categoryViewShow = false

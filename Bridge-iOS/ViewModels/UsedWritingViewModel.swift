@@ -35,20 +35,24 @@ final class UsedWritingViewModel : ObservableObject {
     private let url = "http://3.36.233.180:8080/used-posts"
 
     let campToNum : [String : Int] = [
-        "Camp Casey" : 1,
-        "Camp Hovey" : 2,
+        //"Camp Casey" : 1,
+        //"Camp Hovey" : 2,
+        "Casey/Hovey" : 1,
         "USAG Yongsan" : 3,
         "K-16" : 4,
         "Suwon A/B" : 5,
         "Osan A/B" : 6,
         "Camp Humperys" : 7,
         "Camp Carroll" : 8,
-        "Camp Henry" : 9,
-        "Camp Walker" : 10,
+        //"Camp Henry" : 9,
+        //"Camp Walker" : 10,
+        "Henry/Walker" : 9,
         "Gunsan A/B" : 11
     ]
     
-    let camps = ["Camp Casey", "Camp Hovey", "USAG Yongsan", "K-16", "Suwon A/B", "Osan A/B", "Camp Humperys", "Camp Carroll", "Camp Henry", "Camp Walker", "Gunsan A/B"]
+    let camps = ["Casey/Hovey", "USAG Yongsan", "K-16", "Suwon A/B", "Osan A/B", "Camp Humperys", "Camp Carroll", "Henry/Walker", "Gunsan A/B"]
+    //["Camp Casey", "Camp Hovey", "USAG Yongsan", "K-16", "Suwon A/B", "Osan A/B", "Camp Humperys", "Camp Carroll", "Camp Henry", "Camp Walker", "Gunsan A/B"]
+    
     let categories = ["Digital", "Interior", "Fashion", "Life", "Beauty", "Etc"]
     //["digital", "furniture", "food", "clothes", "beauty", "etc."]
     
