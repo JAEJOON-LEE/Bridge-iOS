@@ -8,6 +8,10 @@
 import SwiftUI
 
 struct SignInView: View {
+    @AppStorage("userEmail") var userEmail : String = ""
+    @AppStorage("userPW") var userPW : String = ""
+    @AppStorage("remeberUser") var remeberUser : Bool = false
+    
     @StateObject private var viewModel = SignInViewModel()
     
     var titleField : some View {
@@ -115,6 +119,25 @@ struct SignInView: View {
                     ProgressView()
                     Spacer()
                 }
+            }
+        }
+        .onAppear {
+            viewModel.checked = remeberUser
+            viewModel.email = userEmail
+            viewModel.password = userPW
+//            if viewModel.checked {
+//                viewModel.showPrgoressView = true
+//                viewModel.SignIn(email: viewModel.email, password: viewModel.password)
+//            }
+        }
+        .onDisappear{
+            remeberUser = viewModel.checked
+            if viewModel.checked {
+                userEmail = viewModel.email
+                userPW = viewModel.password
+            } else {
+                userEmail = ""
+                userPW = ""
             }
         }
         .edgesIgnoringSafeArea(.all)
