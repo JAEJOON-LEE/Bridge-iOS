@@ -17,6 +17,7 @@ final class ItemInfoViewModel : ObservableObject {
     @Published var showAction : Bool = false
     @Published var showConfirmDeletion : Bool = false
     @Published var showPostModify : Bool = false
+    @Published var currentImageIndex : Int = 0
     
     private var subscription = Set<AnyCancellable>()
     

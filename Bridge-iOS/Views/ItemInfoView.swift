@@ -21,22 +21,7 @@ struct ItemInfoView: View {
         ZStack {
             // Image Area
             VStack {
-//                ScrollView(.horizontal, showsIndicators: true) {
-//                    HStack {
-//                        ForEach(viewModel.itemInfo?.usedPostDetail.postImages ?? [], id : \.self) { imageInfo in
-//                            URLImage(
-//                                URL(string : imageInfo.image) ??
-//                                URL(string: "https://static.thenounproject.com/png/741653-200.png")!
-//                            ) { image in
-//                                image
-//                                    .resizable()
-//                                    .aspectRatio(contentMode: .fill)
-//                            }
-//                            .frame(width : UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.35)
-//                        }
-//                    }
-//                }
-                TabView {
+                TabView(selection : $viewModel.currentImageIndex) {
                     ForEach(viewModel.itemInfo?.usedPostDetail.postImages ?? [], id : \.self) { imageInfo in
                         URLImage(
                             URL(string : imageInfo.image) ??
@@ -45,6 +30,10 @@ struct ItemInfoView: View {
                             image
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
+                        }
+                        .tag(imageInfo.imageId)
+                        .onTapGesture {
+                            viewModel.currentImageIndex = imageInfo.imageId
                         }
                     }
                 }.tabViewStyle(PageTabViewStyle())
@@ -57,7 +46,7 @@ struct ItemInfoView: View {
             }
             .fullScreenCover(isPresented: $viewModel.isImageTap, content: {
                 ZStack(alignment : .topTrailing) {
-                    TabView {
+                    TabView(selection : $viewModel.currentImageIndex) {
                         ForEach(viewModel.itemInfo?.usedPostDetail.postImages ?? [], id : \.self) { imageInfo in
                             URLImage(
                                 URL(string : imageInfo.image) ??
@@ -66,7 +55,7 @@ struct ItemInfoView: View {
                                 image
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
-                            }
+                            }.tag(imageInfo.imageId)
                         }
                     }.tabViewStyle(PageTabViewStyle())
                     .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))

@@ -5,7 +5,8 @@
 //  Created by Park Gyurim on 2021/10/14.
 //
 
-import Foundation
+import SwiftUI
+import PhotosUI
 import Alamofire
 
 final class ModifyUsedPostViewModel : ObservableObject {
@@ -16,11 +17,13 @@ final class ModifyUsedPostViewModel : ObservableObject {
     @Published var previousSelectedCamps : [Int] = []
     @Published var selectedCamps : [Int] = []
     @Published var selectedCategory = ""
-    
+    @Published var ImagesToAdd : [UIImage] = []
+
     @Published var showImagePicker : Bool = false
     @Published var showCampPicker : Bool = false
     @Published var showCategoryPicker : Bool = false
-    
+    @Published var showImageToAddPicker : Bool = false
+
     @Published var isUploadDone : Bool = false
 
     let camps = ["Casey/Hovey", "USAG Yongsan", "K-16", "Suwon A/B", "Osan A/B", "Camp Humperys", "Camp Carroll", "Henry/Walker", "Gunsan A/B"]
@@ -62,6 +65,14 @@ final class ModifyUsedPostViewModel : ObservableObject {
     private let token : String
     private let postId : Int
 
+    var configuration : PHPickerConfiguration {
+        var configuration = PHPickerConfiguration(photoLibrary: .shared())
+        configuration.filter = .images
+        configuration.selectionLimit = 7 - (postImages.count + ImagesToAdd.count) // max count of photo : 7
+        
+        return configuration
+    }
+    
     var addList : [Int] = []
     var removeList : [Int] = []
     var removeImage : [Int] = []
@@ -113,11 +124,11 @@ final class ModifyUsedPostViewModel : ObservableObject {
         AF.upload(multipartFormData: { (multipartFormData) in
             //guard let self = self else { return }
             
-            // images
-//            for image in self.selectedImages {
-//                multipartFormData.append(image.jpegData(compressionQuality: 1.0)!,
-//                            withName : "files", fileName: "payloadImage.jpg", mimeType: "image/jpeg")
-//            }
+            // images to Add
+            for image in self.ImagesToAdd {
+                multipartFormData.append(image.jpegData(compressionQuality: 1.0)!,
+                            withName : "files", fileName: "payloadImage.jpg", mimeType: "image/jpeg")
+            }
             
             // postInfo
             multipartFormData.append(try! JSONSerialization.data(withJSONObject: payload["postInfo"]!), withName: "postInfo", mimeType: "application/json")

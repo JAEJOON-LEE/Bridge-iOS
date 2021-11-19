@@ -54,7 +54,7 @@ struct TabContainer: View {
                     // temp
                     VStack {
                         Spacer()
-                        Text("Message View").font(.largeTitle)
+                        Text("My Page View").font(.largeTitle)
                         Spacer()
                     }.frame(width : UIScreen.main.bounds.width)
                 default:
@@ -209,7 +209,7 @@ extension TabContainer {
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(width : UIScreen.main.bounds.width * 0.1)
-                    Text("Message")
+                    Text("My Page")
                         .font(.system(size : 12))
                         .foregroundColor(viewModel.selectedTabIndex == 5 ? .mainTheme : .gray)
                 }

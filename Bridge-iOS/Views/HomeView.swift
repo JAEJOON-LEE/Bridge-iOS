@@ -130,8 +130,7 @@ struct HomeView : View {
                         }//.buttonStyle(.plain)
                     }
                 }
-                //Spacer().frame(height : UIScreen.main.bounds.height * 0.1)
-                
+                Spacer().frame(height : UIScreen.main.bounds.height * 0.1)
             }.overlay(
                 VStack(spacing : 0) {
                     Spacer()

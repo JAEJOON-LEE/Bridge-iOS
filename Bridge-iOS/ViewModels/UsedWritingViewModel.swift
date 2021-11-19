@@ -79,22 +79,32 @@ final class UsedWritingViewModel : ObservableObject {
                 "camps" : selectedCamps
             ]
         ]
+//        let payload2 = """
+//            {
+//                "title" : \"\(title)\",
+//                "price" : \"\(price)\",
+//                "description" : \"\(description)\",
+//                "category" : \"\(selectedCategory)\",
+//                "camps" : \(selectedCamps)
+//            }
+//        """.data(using: .utf8)!
         
         AF.upload(multipartFormData: { [weak self] (multipartFormData) in
             guard let self = self else { return }
-            
+
             // images
             for image in self.selectedImages {
                 multipartFormData.append(image.jpegData(compressionQuality: 1.0)!,
                             withName : "files", fileName: "payloadImage.jpg", mimeType: "image/jpeg")
             }
-            //multipartFormData.append(self.file2, withName: "files", fileName : "testImg.png", mimeType: "image/jpeg")
-            
+
             // postInfo
             multipartFormData.append(
-                try! JSONSerialization
-                    .data(withJSONObject: payload["postInfo"]!), withName: "postInfo", mimeType: "application/json"
+                try! JSONSerialization.data(withJSONObject: payload["postInfo"]!),
+                withName: "postInfo",
+                mimeType: "application/json"
             )
+            //multipartFormData.append(payload2, withName: "postInfo", mimeType: "application/json")
         }, to: URL(string : url)!, usingThreshold: UInt64.init(), method : .post, headers: header)
             .responseJSON { [weak self] (response) in
                 guard let statusCode = response.response?.statusCode else { return }

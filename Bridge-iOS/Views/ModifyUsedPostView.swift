@@ -20,28 +20,93 @@ struct ModifyUsedPostView: View {
 
     var body: some View {
         VStack {
-            Spacer().frame(height: UIScreen.main.bounds.height * 0.02)
+            //ZStack (alignment : .topTrailing) {
             TabView {
-                ForEach(viewModel.postImages, id : \.self) {
-                    URLImage(URL(string : $0.image) ??
+                if (viewModel.postImages.count == 0 && viewModel.ImagesToAdd.count == 0) {
+                    Text("No Images, Please add photo")
+                }
+                ForEach(viewModel.postImages, id : \.self) { postImage in
+                    URLImage(URL(string : postImage.image) ??
                              URL(string: "https://static.thenounproject.com/png/741653-200.png")!
                          ) { image in
-                             image
-                                 .resizable()
-                                 .aspectRatio(contentMode: .fill)
+                            ZStack(alignment : .topTrailing) {
+                                 image
+                                     .resizable()
+                                     .aspectRatio(contentMode: .fill)
+                                     .frame(width : UIScreen.main.bounds.width, height: UIScreen.main.bounds.height / 3)
+                                     .clipped()
+                                
+                                    Button {
+                                        if let index = viewModel.postImages.firstIndex(of: postImage) {
+                                            viewModel.postImages.remove(at: index)
+                                        }
+                                        viewModel.removeImage.append(postImage.imageId)
+                                    } label : {
+                                        HStack {
+                                            Image(systemName : "x.circle")
+                                            Text("Delete")
+                                        }
+                                        .foregroundColor(.white)
+                                        .font(.system(size: 13, weight : .semibold))
+                                        .padding(5)
+                                        .background(Color.red.opacity(0.5))
+                                        .cornerRadius(5)
+                                        .padding()
+                                    }
+                            }
                          }
+                }
+                ForEach(viewModel.ImagesToAdd, id : \.self) { image in
+                    ZStack(alignment : .topTrailing) {
+                        Image(uiImage: image)
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width : UIScreen.main.bounds.width, height: UIScreen.main.bounds.height / 3)
+                                .clipped()
+                        
+                        Button {
+                            if let index = viewModel.ImagesToAdd.firstIndex(of: image) {
+                                viewModel.ImagesToAdd.remove(at: index)
+                            }
+                        } label : {
+                            HStack {
+                                Image(systemName : "x.circle")
+                                Text("Delete")
+                            }
+                            .foregroundColor(.white)
+                            .font(.system(size: 13, weight : .semibold))
+                            .padding(5)
+                            .background(Color.red.opacity(0.5))
+                            .cornerRadius(5)
+                            .padding()
+                        }
+                    }
                 }
             }.tabViewStyle(PageTabViewStyle())
             .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
             .frame(width : UIScreen.main.bounds.width, height: UIScreen.main.bounds.height / 3)
 
             HStack {
+                Button {
+                    viewModel.showImageToAddPicker.toggle()
+                } label : {
+                    HStack {
+                        Image(systemName : "plus.circle")
+                        Text("Add Photo").foregroundColor(.darkGray)
+                    }
+                    .font(.system(size: 13, weight : .semibold))
+                    .padding(5)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 5)
+                            .strokeBorder(Color.blue, lineWidth: 1)
+                    )
+                }
                 Spacer()
-                Text("\(viewModel.postImages.count) / 7")
+                Text("\(viewModel.postImages.count + viewModel.ImagesToAdd.count) / 7")
                     .foregroundColor(.gray)
                 Image(systemName: "camera")
                     .foregroundColor(.mainTheme)
-            }.padding(.horizontal, 20)
+            }.padding(.horizontal, 10)
             
             VStack {
                 VStack(spacing : 0) {
@@ -101,7 +166,7 @@ struct ModifyUsedPostView: View {
             
             TextField("Please write the content of your Post", text: $viewModel.description)
                 .autocapitalization(.none)
-                .frame(maxWidth : .infinity, minHeight : UIScreen.main.bounds.height * 0.2, maxHeight : .infinity)
+                .frame(maxWidth : .infinity, minHeight : UIScreen.main.bounds.height * 0.1, maxHeight : .infinity)
                 .background(Color.systemDefaultGray)
                 .cornerRadius(10)
                 .shadow(radius: 1)
@@ -180,6 +245,9 @@ struct ModifyUsedPostView: View {
                 .navigationBarTitle(Text("Select Category"), displayMode: .inline)
                 .navigationBarItems(trailing: Button { viewModel.showCategoryPicker = false } label : { Text("Done").foregroundColor(.mainTheme) } )
             }
+        }
+        .sheet(isPresented: $viewModel.showImageToAddPicker) {
+            PhotoPicker(configuration: viewModel.configuration, isPresented: $viewModel.showImageToAddPicker, pickerResult: $viewModel.ImagesToAdd)
         }
     }
 }
