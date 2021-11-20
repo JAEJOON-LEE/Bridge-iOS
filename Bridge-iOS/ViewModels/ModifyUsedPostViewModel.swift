@@ -104,34 +104,49 @@ final class ModifyUsedPostViewModel : ObservableObject {
             if !selectedCamps.contains(c) { removeList.append(c) }
         }
         
-        let editedCamps : [String : [Int]] = [
-            "addList" : addList,
-            "removeList" : removeList
-        ]
+//        let editedCamps : [String : [Int]] = [
+//            "addList" : addList,
+//            "removeList" : removeList
+//        ]
         
-        let payload : [String : [String : Any]] = [
-            "postInfo" : [
-                "title" : title,
-                "price" : price,
-                "description" : description,
-                "category" : selectedCategory,
-                "camps" : editedCamps,
-                "removeImage" : removeImage
-            ]
-        ]
+//        let payload : [String : [String : Any]] = [
+//            "postInfo" : [
+//                "title" : title,
+//                "price" : price,
+//                "description" : description,
+//                "category" : selectedCategory,
+//                "camps" : editedCamps,
+//                "removeImage" : removeImage
+//            ]
+//        ]
+        let payload = """
+            {
+                "title" : \"\(title)\",
+                "price" : \"\(price)\",
+                "description" : \"\(description)\",
+                "category" : \"\(selectedCategory)\",
+                "camps" : {
+                    "addList" : \(addList),
+                    "removeList" : \(removeList)
+                },
+                "removeImage" : \(removeImage)
+            }
+        """.data(using: .nonLossyASCII)!
+        let payloadEncoded = String(data : payload, encoding : .utf8) ?? ""
         print(payload)
         
         AF.upload(multipartFormData: { (multipartFormData) in
             //guard let self = self else { return }
-            
+
             // images to Add
             for image in self.ImagesToAdd {
                 multipartFormData.append(image.jpegData(compressionQuality: 1.0)!,
                             withName : "files", fileName: "payloadImage.jpg", mimeType: "image/jpeg")
             }
-            
-            // postInfo
-            multipartFormData.append(try! JSONSerialization.data(withJSONObject: payload["postInfo"]!), withName: "postInfo", mimeType: "application/json")
+
+//            postInfo
+//            multipartFormData.append(try! JSONSerialization.data(withJSONObject: payload["postInfo"]!), withName: "postInfo", mimeType: "application/json")
+            multipartFormData.append(payloadEncoded.data(using: .utf8)!, withName: "postInfo", mimeType: "application/json")
         }, to: URL(string : url)!, usingThreshold: UInt64.init(), method : .post, headers: header)
             .responseJSON { [weak self] (response) in
                 guard let statusCode = response.response?.statusCode else { return }

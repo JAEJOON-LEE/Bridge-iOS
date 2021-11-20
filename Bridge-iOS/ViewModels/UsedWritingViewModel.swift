@@ -64,30 +64,45 @@ final class UsedWritingViewModel : ObservableObject {
         return configuration
     }
     
+    func incodingHTML(_ data: Data) -> String? {
+        var html = String(data: data, encoding: .utf8)
+        guard html == nil else { return html }
+        
+        let encoding = String.Encoding(rawValue: CFStringConvertEncodingToNSStringEncoding(0x0422))
+        html = String(data: data, encoding: encoding)
+        
+        guard html == nil else { return html }
+        html = String(decoding: data, as: UTF8.self)
+        
+        return html
+    }
+
     func upload() { //(with payload : PostPayload)
         let header : HTTPHeaders = [
             "Content-Type": "multipart/form-data",
             "X-AUTH-TOKEN": token
         ]
         
-        let payload : [String : [String : Any]] = [
-            "postInfo" : [
-                "title" : title,
-                "price" : price,
-                "description" : description,
-                "category" : selectedCategory,
-                "camps" : selectedCamps
-            ]
-        ]
-//        let payload2 = """
-//            {
-//                "title" : \"\(title)\",
-//                "price" : \"\(price)\",
-//                "description" : \"\(description)\",
-//                "category" : \"\(selectedCategory)\",
-//                "camps" : \(selectedCamps)
-//            }
-//        """.data(using: .utf8)!
+//        let payload : [String : [String : Any]] = [
+//            "postInfo" : [
+//                "title" : title,
+//                "price" : price,
+//                "description" : description,
+//                "category" : selectedCategory,
+//                "camps" : selectedCamps
+//            ]
+//        ]
+        
+        let payload = """
+            {
+                "title" : \"\(title)\",
+                "price" : \"\(price)\",
+                "description" : \"\(description)\",
+                "category" : \"\(selectedCategory)\",
+                "camps" : \(selectedCamps)
+            }
+        """.data(using: .nonLossyASCII)!
+        let payloadEncoded = String(data : payload, encoding : .utf8) ?? ""
         
         AF.upload(multipartFormData: { [weak self] (multipartFormData) in
             guard let self = self else { return }
@@ -97,14 +112,14 @@ final class UsedWritingViewModel : ObservableObject {
                 multipartFormData.append(image.jpegData(compressionQuality: 1.0)!,
                             withName : "files", fileName: "payloadImage.jpg", mimeType: "image/jpeg")
             }
-
-            // postInfo
-            multipartFormData.append(
-                try! JSONSerialization.data(withJSONObject: payload["postInfo"]!),
-                withName: "postInfo",
-                mimeType: "application/json"
-            )
-            //multipartFormData.append(payload2, withName: "postInfo", mimeType: "application/json")
+            
+//            postInfo
+//            multipartFormData.append(
+//                try! JSONSerialization.data(withJSONObject: payload["postInfo"]!),
+//                withName: "postInfo",
+//                mimeType: "application/json"
+//            )
+            multipartFormData.append(payloadEncoded.data(using: .utf8)!, withName: "postInfo", mimeType: "application/json")
         }, to: URL(string : url)!, usingThreshold: UInt64.init(), method : .post, headers: header)
             .responseJSON { [weak self] (response) in
                 guard let statusCode = response.response?.statusCode else { return }
