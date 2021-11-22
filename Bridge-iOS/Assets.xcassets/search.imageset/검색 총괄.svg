@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="245.041" height="185.49" viewBox="0 0 245.041 185.49">
+  <defs>
+    <linearGradient id="linear-gradient" x1="0.85" y1="0.725" x2="0.191" y2="0.102" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#ffdba2"/>
+      <stop offset="1" stop-color="#f3af90"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-2" x1="0.202" y1="0.155" x2="0.791" y2="0.769" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#ffbc50"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-3" x1="0.202" y1="0.155" x2="0.791" y2="0.769" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#e86b31"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <g id="组_408" data-name="组 408" transform="translate(-78.012 -186.639)">
+    <g id="Search_Icon" data-name="Search Icon" transform="translate(101.135 186.639)">
+      <path id="Bounds" d="M185.49,185.49H0V0H185.49Z" transform="translate(36.428)" fill="none"/>
+      <path id="Icon" d="M99.609,88.016H93.426L91.108,85.7c7.729-8.5-13.912,13.139-5.41,5.41l2.319,2.319v6.183l38.644,38.644,11.593-11.593L99.609,88.016Z" transform="matrix(1, -0.017, 0.017, 1, -5.055, 24.14)" opacity="0.54" fill="url(#linear-gradient)"/>
+      <path id="Icon-2" data-name="Icon" d="M91.108,85.7a48.375,48.375,0,0,0,12.366-32.461,50.237,50.237,0,1,0-50.237,50.237C65.6,103.474,77.2,98.836,91.108,85.7ZM53.237,88.016A34.779,34.779,0,1,1,88.016,53.237,34.635,34.635,0,0,1,53.237,88.016Z" transform="translate(-8.135 20.186)" opacity="0.54" fill="url(#linear-gradient-2)"/>
+      <path id="Icon-3" data-name="Icon" d="M91.108,85.7a48.375,48.375,0,0,0,12.366-32.461,50.237,50.237,0,1,0-50.237,50.237C65.6,103.474,77.2,98.836,91.108,85.7ZM53.237,88.016A34.779,34.779,0,1,1,88.016,53.237,34.635,34.635,0,0,1,53.237,88.016Z" transform="matrix(-0.848, 0.53, -0.53, -0.848, 119.46, 90.359)" opacity="0.54" fill="url(#linear-gradient-3)"/>
+    </g>
+  </g>
+</svg>
