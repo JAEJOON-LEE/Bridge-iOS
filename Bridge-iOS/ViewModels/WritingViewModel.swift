@@ -33,6 +33,12 @@ class WritingViewModel : ObservableObject {
     @Published var showImagePicker : Bool = false
     @Published var isSecret = false
     @Published var writing : WritingInfo?
+    @Published var isImageTap : Bool = false
+    @Published var anonymousChecked : Bool = false
+    @Published var secretChecked : Bool = false
+    @Published var isUploadDone : Bool = false
+    @Published var isProgressShow : Bool = false
+    
     
     let postId : Int
     let isForModifying : Bool
@@ -98,9 +104,14 @@ class WritingViewModel : ObservableObject {
                     headers: header)
             .responseString{ (response) in
             
-            guard let statusCode = response.response?.statusCode else { return }
-            
-            print(statusCode)
+                guard let statusCode = response.response?.statusCode else { return }
+                switch statusCode {
+                case 200 :
+                    print("Post Upload Success : \(statusCode)")
+                    self.isUploadDone = true
+                default :
+                    print("Post Upload Fail : \(statusCode)")
+                }
         }
     }
     
@@ -167,32 +178,78 @@ class WritingViewModel : ObservableObject {
 //                 "description" : description,
 //                 "anonymous" : String(anonymous)]
         
+        var removeImage : [Int] = []
         var query : String = "{ "
         if(title != nil && title != ""){
-            query.append("\"title\" : \"\(title!)\", ")
+            query.append("\"title\" : \"\(title!)\" ")
+            
+            if(description != nil && description != ""){
+                query.append(", \"description\" : \"\(description!)\"")
+            }
         }
-        if(description != nil && description != ""){
-            query.append("\"description\" : \"\(description!)\", ")
+        else if (description != nil && description != ""){
+            query.append("\"description\" : \"\(description!)\"")
         }
-        query.append(" \"anonymous\" : \"\(anonymous)\" }");
         
-        print(query)
+        if(selectedImages.count != 0){
+            
+            var cnt = 0
+            
+            infoForModifying?.boardPostDetail.postImages!.forEach{ image in
+                removeImage.append(image.imageId)
+            }
+            if(query.count > 3){
+                query.append(", ")
+            }
+            query.append("\"removeImage\" : [ ")
+            for imageId in removeImage {
+                if(cnt == removeImage.count - 1){
+                    query.append(String(imageId))
+                }else{
+                    query.append(String(imageId) + ", ")
+                }
+                
+                cnt += 1
+            }
+            
+            query.append("] }")
+        }
+        else{
+            query.append("}")
+        }
+        
         AF.upload(multipartFormData: { multipartFormData in
             
                         multipartFormData.append(query.data(using: .utf8)!, withName: "postInfo", mimeType: "application/json")
-                        
-                        if(files != nil){
-                            multipartFormData.append(files!, withName: "files", fileName: "From_iOS", mimeType: "image/jpg")
-                        }
+//
+//                        if(files != nil){
+//                            multipartFormData.append(files!, withName: "files", fileName: "From_iOS", mimeType: "image/jpg")
+//                        }
+            
+            if(query.count > 3){
+                query.append(", ")
+            }
+            for image in self.selectedImages {
+                multipartFormData.append(image.jpegData(compressionQuality: 1.0)!,
+                            withName : "files", fileName: "payloadImage.jpg", mimeType: "image/jpeg")
+            }
+            
                         
                     }, to:"http://3.36.233.180:8080/board-posts/\(postId)",
                     method: .post,
                     headers: header)
             .responseString{ (response) in
-            
-            guard let statusCode = response.response?.statusCode else { return }
-            
+                
+                    guard let statusCode = response.response?.statusCode else { return }
+                    switch statusCode {
+                    case 200 :
+                        print("Post Modify Success : \(statusCode)")
+                        self.isUploadDone = true
+                    default :
+                        print("Post Upload Fail : \(statusCode)")
+                    }
             print(statusCode)
+                print(query)
         }
     }
     
@@ -229,9 +286,15 @@ class WritingViewModel : ObservableObject {
                     method: .post,
                     headers: header)
             .responseString{ (response) in
-            
-            guard let statusCode = response.response?.statusCode else { return }
-            
+                
+                    guard let statusCode = response.response?.statusCode else { return }
+                    switch statusCode {
+                    case 200 :
+                        print("Post Upload Success : \(statusCode)")
+                        self.isUploadDone = true
+                    default :
+                        print("Post Upload Fail : \(statusCode)")
+                    }
             print(statusCode)
         }
     }
@@ -259,9 +322,15 @@ class WritingViewModel : ObservableObject {
                     method: .post,
                     headers: header)
             .responseString{ (response) in
-            
-            guard let statusCode = response.response?.statusCode else { return }
-            
+                
+                    guard let statusCode = response.response?.statusCode else { return }
+                    switch statusCode {
+                    case 200 :
+                        print("Post Upload Success : \(statusCode)")
+                        self.isUploadDone = true
+                    default :
+                        print("Post Upload Fail : \(statusCode)")
+                    }
             print(statusCode)
         }
     }

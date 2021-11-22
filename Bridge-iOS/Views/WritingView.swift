@@ -30,19 +30,24 @@ struct WritingView : View {
             if(viewModel.isForModifying){
                 if(viewModel.isForSecretModifying!){
                     viewModel.modifySecretPost(title: viewModel.title, description: viewModel.description, anonymous: viewModel.anonymous, files: viewModel.files)
+//                    withAnimation { viewModel.isProgressShow = true }
                 }
                 else {
                     viewModel.modifyPost(title: viewModel.title, description: viewModel.description, anonymous: viewModel.anonymous, files: viewModel.files)
+//                    withAnimation { viewModel.isProgressShow = true }
                 }
             }
             else{
                 if(viewModel.isSecret){
                     viewModel.secretPost(title: viewModel.title, description: viewModel.description, anonymous: viewModel.anonymous, files: viewModel.files)
+//                    withAnimation { viewModel.isProgressShow = true }
                 }
                 else {
                     viewModel.post(title: viewModel.title, description: viewModel.description, anonymous: viewModel.anonymous, files: viewModel.files)
+//                    withAnimation { viewModel.isProgressShow = true }
                 }
             }
+            withAnimation { viewModel.isProgressShow = true }
         } label : {
             Text("Upload")
                 .modifier(SubmitButtonStyle())
@@ -62,76 +67,168 @@ struct WritingView : View {
     
     var imageButton : some View {
         Button(action: {
-            if(viewModel.selectedImages.count != 3){
-                viewModel.showImagePicker.toggle()
-            }
+            viewModel.selectedImages.removeAll()
+            viewModel.showImagePicker.toggle()
         }, label: {
             HStack {
                 Spacer()
-                Text("\(viewModel.selectedImages.count) / 3").foregroundColor(.gray)
-                Image(systemName: "camera").padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 0))
+//                Text("\(viewModel.selectedImages.count) / 3").foregroundColor(.gray)
+                Image("cam").padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 0))
+                    .foregroundColor(Color.mainTheme)
+                    .font(.system(size : 20))
             }.padding(.horizontal, 5)
         })
         .sheet(isPresented: $viewModel.showImagePicker) {
                         WritingPhotoPicker(configuration: viewModel.configuration, isPresented: $viewModel.showImagePicker, pickerResult: $viewModel.selectedImages)
                     }
-//        .sheet(isPresented: $imagePickerPresented,
-//               onDismiss: loadImage,
-//               content: { ImagePicker(image: $viewModel.selectedImage) })
     }
     
-//    func loadImage() {
-//        guard let selectedImage = viewModel.selectedImage else { return }
-//            viewModel.files = selectedImage.jpegData(compressionQuality: 1)
-//        }
-    
     var body: some View {
+        ZStack{
         VStack(spacing : 20) {
-            if(!viewModel.isForModifying){
-                HStack{
-                    Text("Writing Post")
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-                    Spacer()
-                }.padding(20)
-            }else{
-                HStack {
-                    Text("Modify Post")
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-                    Spacer()
-                }.padding(20)
-            }
+//            if(!viewModel.isForModifying){
+//                HStack{
+//                    Text("Board Writing")
+//                        .font(.largeTitle)
+//                        .fontWeight(.bold)
+//                    Spacer()
+//                }.padding(20)
+//            }else{
+//                HStack {
+//                    Text("Board Modifying")
+//                        .font(.largeTitle)
+//                        .fontWeight(.bold)
+//                    Spacer()
+//                }.padding(20)
+//            }
             
             if(viewModel.isForModifying){
                 if(viewModel.isForSecretModifying!){
                     TextField(viewModel.infoForSecretModifying?.secretPostDetail.title ?? "Title not found",
                               text:  $viewModel.title)
-                        .modifier(SignViewTextFieldStyle())
+//                        .modifier(SignViewTextFieldStyle())
+                        .font(.system(size : 25))
+                        .border(Color.white)
+                        .padding()
                     TextField(viewModel.infoForSecretModifying?.secretPostDetail.description ?? "Contents not found",
                               text: $viewModel.description)
-                        .frame(height : UIScreen.main.bounds.height * 0.18 )
-                        .modifier(SignViewTextFieldStyle())
+                        .frame(width :UIScreen.main.bounds.width * 0.85,height : UIScreen.main.bounds.height * 0.3 )
+                        .padding()
+//                        .modifier(SignViewTextFieldStyle())
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 15)
+                                .stroke(Color.gray, style: StrokeStyle(lineWidth: 1, dash: [8]))
+                        )
                 }
                 else {
                     TextField(viewModel.isForModifying ? (viewModel.infoForModifying?.boardPostDetail.title ?? "Title not found") : "title",
                               text:  $viewModel.title)
-                        .modifier(SignViewTextFieldStyle())
+//                        .modifier(SignViewTextFieldStyle())
+                        .font(.system(size : 25))
+                        .border(Color.white)
+                        .padding()
                     TextField(viewModel.isForModifying ? (viewModel.infoForModifying?.boardPostDetail.description ?? "Contents not found") : "content", text: $viewModel.description)
-                        .frame(height : UIScreen.main.bounds.height * 0.18 )
-                        .modifier(SignViewTextFieldStyle())
+                        .frame(width :UIScreen.main.bounds.width * 0.85, height : UIScreen.main.bounds.height * 0.3 )
+//                        .modifier(SignViewTextFieldStyle())
+                        .padding()
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 15)
+                                .stroke(Color.gray, style: StrokeStyle(lineWidth: 1, dash: [8]))
+                        )
                 }
             }
             else {
-                TextField("title", text:  $viewModel.title)
-                    .modifier(SignViewTextFieldStyle())
-                TextField("content", text: $viewModel.description)
-                    .frame(height : UIScreen.main.bounds.height * 0.18 )
-                    .modifier(SignViewTextFieldStyle())
+                TextField("Title", text:  $viewModel.title)
+//                    .modifier(SignViewTextFieldStyle())
+                    .font(.system(size : 25))
+                    .border(Color.white)
+                    .padding()
+                TextField("Please write the content of your post.", text: $viewModel.description)
+                    .frame(width :UIScreen.main.bounds.width * 0.85, height : UIScreen.main.bounds.height * 0.3 )
+                    .padding()
+//                    .modifier(SignViewTextFieldStyle())
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 15)
+                            .stroke(Color.gray, style: StrokeStyle(lineWidth: 1, dash: [8]))
+                    )
             }
             
+            HStack{
+//                Toggle("Anonymous", isOn: $viewModel.anonymous)
+                Spacer()
+                
+                Text("Anonumous").foregroundColor(.gray)
+                Button {
+                    viewModel.anonymous.toggle()
+                } label : {
+                    Image(systemName: !viewModel.anonymous ? "square" : "checkmark.square.fill")
+                        .foregroundColor(!viewModel.anonymous ? .gray : .mainTheme)
+                }
+                
+                if(!viewModel.isForModifying){
+                    Spacer()
+                    
+                    Text("S-SPACE").foregroundColor(.gray)
+                    Button {
+                        viewModel.isSecret.toggle()
+                    } label : {
+                        Image(systemName: !viewModel.isSecret ? "square" : "checkmark.square.fill")
+                            .foregroundColor(!viewModel.isSecret ? .gray : .mainTheme)
+                    }
+                }
+                
+                Spacer()
+                
+                imageButton
+            }
+            .padding(.horizontal, 30)
+            .font(.caption)
+            .font(.system(size : 20))
+            
+            
             if(viewModel.isForModifying){
-                if(viewModel.infoForModifying?.boardPostDetail.postImages != nil){
+                if !viewModel.selectedImages.isEmpty {
+                    HStack {
+                        ForEach(viewModel.selectedImages, id : \.self) {
+                            Image(uiImage: $0)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width : UIScreen.main.bounds.width * 0.2, height: UIScreen.main.bounds.width * 0.2)
+                                    .cornerRadius(10)
+                                    .padding()
+                        }
+                    }
+                    .tabViewStyle(PageTabViewStyle())
+                    .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
+                    .frame(width : UIScreen.main.bounds.width * 0.95)
+                    .cornerRadius(10)
+                    .onTapGesture {
+                        viewModel.isImageTap.toggle() // 이미지 확대 보기 기능
+                    }
+                    .fullScreenCover(isPresented: $viewModel.isImageTap, content: {
+                        ZStack(alignment : .topTrailing) {
+                            TabView {
+                                ForEach(viewModel.selectedImages, id : \.self) {
+                                    Image(uiImage: $0)
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fit)
+                                }
+                            }.tabViewStyle(PageTabViewStyle())
+                            .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
+                            .frame(width : UIScreen.main.bounds.width)
+                            
+                            Button {
+                                viewModel.isImageTap.toggle()
+                            } label : {
+                                Image(systemName : "xmark")
+                                    .foregroundColor(.mainTheme)
+                                    .font(.system(size : 20))
+                                    .padding()
+                            }
+                        }
+                    })
+                }
+                else if(viewModel.infoForModifying?.boardPostDetail.postImages != nil){
                     HStack{
                     ForEach(viewModel.infoForModifying?.boardPostDetail.postImages ?? [], id : \.self) { imageInfo in
                         URLImage(
@@ -143,42 +240,102 @@ struct WritingView : View {
                                 .foregroundColor(.black)
                                 .frame(width : UIScreen.main.bounds.width * 0.2, height : UIScreen.main.bounds.width * 0.2, alignment: .center)
                                 .cornerRadius(10)
+                                .padding()
                             }
                         }
                     }
                 }else{
-                    Image(systemName: "photo")
-                        .foregroundColor(.black)
-                        .frame(width: 40, height: 40, alignment: .center)
+//                    Button {
+//                        viewModel.selectedImages.removeAll()
+//                        viewModel.showImagePicker.toggle()
+//                    } label : {
+//                        VStack {
+//                            Image("uploadImage")
+//                                .resizable()
+//                                .frame(width: UIScreen.main.bounds.width * 0.2, height : UIScreen.main.bounds.height * 0.05)
+//                                .aspectRatio(contentMode: .fill)
+//
+//                            Text("Upload Pictures")
+//                                .font(.title3)
+//                                .fontWeight(.semibold)
+//                                .foregroundColor(.gray)
+//                        }
+//                        .frame(width : UIScreen.main.bounds.width * 0.95, height : UIScreen.main.bounds.width * 0.2)
+//                        .background(Color.mainTheme.opacity(0.04))
+//                        .cornerRadius(15)
+//                        .overlay(
+//                            RoundedRectangle(cornerRadius: 15)
+//                                .stroke(Color.gray, style: StrokeStyle(lineWidth: 1, dash: [8]))
+//                        )
+//                    }
                 }
-
             }else{
                 if viewModel.selectedImages.isEmpty {
-                    VStack {
-                        Image(systemName : "photo.on.rectangle.angled").font(.system(size : 40))
-                        Text("Upload Pictures").font(.title)
-                    }.foregroundColor(.gray)
-                } else {
-                    LazyVGrid(columns: [
-//                                Button(action : {
+//                    Button {
+//                        viewModel.selectedImages.removeAll()
+//                        viewModel.showImagePicker.toggle()
+//                    } label : {
+//                        VStack {
+//                            Image("uploadImage")
+//                                .resizable()
+//                                .frame(width: UIScreen.main.bounds.width * 0.2, height : UIScreen.main.bounds.height * 0.05)
+//                                .aspectRatio(contentMode: .fill)
 //
-//                                }, label : {
-//                                    GridItem(.flexible())
-//                                }),
-                        GridItem(.flexible()),
-                        GridItem(.flexible()),
-                        GridItem(.flexible())
-                    ]) {
+//                            Text("Upload Pictures")
+//                                .font(.title3)
+//                                .fontWeight(.semibold)
+//                                .foregroundColor(.gray)
+//                        }
+//                        .frame(width : UIScreen.main.bounds.width * 0.95, height : UIScreen.main.bounds.width * 0.2)
+//                        .background(Color.mainTheme.opacity(0.04))
+//                        .cornerRadius(15)
+//                        .overlay(
+//                            RoundedRectangle(cornerRadius: 15)
+//                                .stroke(Color.gray, style: StrokeStyle(lineWidth: 1, dash: [8]))
+//                        )
+//                    }
+                } else {
+                    HStack {
                         ForEach(viewModel.selectedImages, id : \.self) {
-                                Image(uiImage: $0)
+                            Image(uiImage: $0)
                                     .resizable()
                                     .aspectRatio(contentMode: .fill)
-                                    .frame(width : UIScreen.main.bounds.width * 0.2, height : UIScreen.main.bounds.width * 0.2, alignment: .center)
-                                    .clipped()
+                                    .frame(width : UIScreen.main.bounds.width * 0.2, height: UIScreen.main.bounds.width * 0.2)
                                     .cornerRadius(10)
+                                    .padding()
                         }
-                    }.padding()
+                    }
+                    .tabViewStyle(PageTabViewStyle())
+                    .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
+                    .frame(width : UIScreen.main.bounds.width * 0.95)
+                    .cornerRadius(10)
+                    .onTapGesture {
+                        viewModel.isImageTap.toggle() // 이미지 확대 보기 기능
+                    }
+                    .fullScreenCover(isPresented: $viewModel.isImageTap, content: {
+                        ZStack(alignment : .topTrailing) {
+                            TabView {
+                                ForEach(viewModel.selectedImages, id : \.self) {
+                                    Image(uiImage: $0)
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fit)
+                                }
+                            }.tabViewStyle(PageTabViewStyle())
+                            .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
+                            .frame(width : UIScreen.main.bounds.width)
+                            
+                            Button {
+                                viewModel.isImageTap.toggle()
+                            } label : {
+                                Image(systemName : "xmark")
+                                    .foregroundColor(.mainTheme)
+                                    .font(.system(size : 20))
+                                    .padding()
+                            }
+                        }
+                    })
                 }
+
             }
 //            {
 //                if(viewModel.selectedImage != nil){
@@ -194,30 +351,54 @@ struct WritingView : View {
 //                }
 //            }
             
-            HStack{
-                Toggle("Anonymous", isOn: $viewModel.anonymous)
-                    .font(.system(size : 8))
-                
-                if(!viewModel.isForModifying){
-//                    Spacer()
-                    Toggle("Secret", isOn: $viewModel.isSecret)
-                }
-                
-                imageButton
-            }
-            .padding(.horizontal, 30)
-            .font(.caption)
             
 //            if(!viewModel.isForModifying){
-                Text("Policy Text Area : asdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddasdsbgaddas")
-                    .font(.caption2)
-                    .padding(.horizontal, 30)
+            VStack(alignment: .leading){
+                Text("Terms of Use")
+                .font(.caption2)
+                .fontWeight(.bold)
+                .foregroundColor(Color.gray)
+                
+                Text("For the better community and communication, we are establishing some rules for the playground. Violation of the rules below may result in the deletion of posts and restriction of service use by the monitoring team.  1. We are forbidding acts for criminal purposes or infringing on the rights of others. Examples: - Acts that can cause or aid any possible crimes - Acts that cause discomfort or displeasure to other users. - Acts that insult another person or spread lies 1. We are forbidding discrimination based on gender, religion, sexual orienation,  disability, age, and social status. Examples:  - Acts that insult specific gender or sexual orientation - Acts that contains hate speach for specific group 1. We are forbidding acts that violate the constitution or threaten national security. Examples: - Acts that may significantly harm international peace and international order, such as terrorism. - Acts that leaking secrets which is prescribed by law. 1. We are forbidding uploading content with serious violence, cruelty and disgust. Examples: - Acts that belittle life or describing serious damage to the body. - Acts that describe murder, assault, intimidation and abuse against a specific person. 1. We are forbidding any abnormal use or abuse of Playground Examples: - Acts that manipulate public opinion using anonymity - Acts that cause traffic or make error intentionally")
+                    .foregroundColor(Color.systemDefaultGray)
+                    .font(.system(size : 11))
+            }
+            .padding()
+            
+                    
 //            }
             
+            if(viewModel.selectedImages.isEmpty){
+                Spacer()
+                    .frame(height: UIScreen.main.bounds.width * 0.2)
+            }
             uploadButton
 //                .modifier(SubmitButtonStyle())
             Spacer()
         }
+        .onAppear{
+            viewModel.selectedImages.removeAll()
+            viewModel.title = ""
+            viewModel.description = ""
+        }
+        .onChange(of: viewModel.isUploadDone, perform: { _ in
+            self.presentationMode.wrappedValue.dismiss()
+        })
+        .navigationBarTitle(viewModel.isForModifying ? Text("Board Modifying") : Text("Board Writing"), displayMode: .inline)
+            
+            
+//            if viewModel.isProgressShow {
+//                HStack (spacing : 20) {
+//                    ProgressView()
+//                        .progressViewStyle(CircularProgressViewStyle(tint: Color.mainTheme))
+//                    Text("Loading...")
+//                        .foregroundColor(.darkGray)
+//                }
+//                .frame(width : UIScreen.main.bounds.width * 0.6, height : UIScreen.main.bounds.height * 0.15)
+//                .cornerRadius(30)
+//                .background(Color.white.shadow(radius: 3))
+//            }
+    }
     }
 //    .sheet(isPresented: $viewModel.showImagePicker) {
 //        WritingPhotoPicker(configuration: viewModel.configuration, isPresented: $viewModel.showImagePicker, pickerResult: $viewModel.selectedImages)
@@ -267,4 +448,3 @@ struct WritingPhotoPicker: UIViewControllerRepresentable {
         }
     }
 }
-
