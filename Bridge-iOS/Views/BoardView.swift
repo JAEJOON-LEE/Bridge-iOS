@@ -20,19 +20,29 @@ struct BoardView : View {
             List {
             
             //Hot Posts
-            HStack{
-                Text("Hot")
-                    .font(.title2)
-                    .fontWeight(.semibold)
-                Spacer()
-                Button {
-//                    viewModel.getPosts(token: viewModel.token)
-                } label : {
-                    Text("MORE")
+                
+                NavigationLink(
+                    destination:
+                        HotBoardView(viewModel: BoardViewModel(
+                            accessToken: viewModel.token,
+                                        memberId : viewModel.memberId))
+                ) {
+                    HStack{
+                        Text("Hot board 😎")
+                            .fontWeight(.semibold)
+                            .foregroundColor(.mainTheme)
+                        Spacer()
+                        Button {
+                            //                    viewModel.getPosts(token: viewModel.token)
+                        } label : {
+                            Text("MORE")
+                                .foregroundColor(.gray)
+                                .fontWeight(.light)
+                        }
+                    }
+                    .padding(.vertical, 10)
+                    .frame(height: UIScreen.main.bounds.height * 0.06)
                 }
-            }.foregroundColor(.mainTheme)
-            .padding(.vertical, 10)
-            .frame(height: UIScreen.main.bounds.height * 0.06)
             
 //            List {
                     ForEach(viewModel.hotLists, id : \.self) { HotList in
@@ -53,37 +63,49 @@ struct BoardView : View {
             .frame(height:UIScreen.main.bounds.height * 1/7 )
             
             //Secret Posts
-            HStack{
-                Text("Secret")
-                    .font(.title2)
-                    .fontWeight(.semibold)
-                Spacer()
-                Button {
-//                    viewModel.getPosts(token: viewModel.token)
-                } label : {
-                    Text("MORE")
-                }
-            }.foregroundColor(.mainTheme)
-            .padding(.vertical, 10)
-            .frame(height: UIScreen.main.bounds.height * 0.06)
-            
-//            List {
-                ForEach(viewModel.secretLists, id : \.self) { SecretList in
-                    NavigationLink(
-                        destination:
-                            SecretInfoView(viewModel: SecretInfoViewModel(
-                                            token: viewModel.token,
-                                            postId : SecretList.postInfo.postId,
-                                            memberId : viewModel.memberId,
-                                            isMyPost : (viewModel.memberId == SecretList.member?.memberId)))
-                    ) {
-                        SecretPost(viewModel : SecretViewModel(postList: SecretList))
+                NavigationLink(
+                    destination:
+                        SecretBoardView(viewModel:
+                                    BoardViewModel(
+                                        accessToken: viewModel.token,
+                                        memberId : viewModel.memberId
+                                    )
+                        )
+                ) {
+                    HStack{
+                        Text("S-SPACE")
+                            .padding()
+                        Spacer()
+                        Text("ALL ANONYMOUS!")
+                            .padding()
                     }
+                    .font(.system(size: 12, weight : .bold))
+                    .frame(width : UIScreen.main.bounds.width * 0.83, height : UIScreen.main.bounds.height * 0.02)
+                    .padding()
+                    .foregroundColor(.white)
+                    .background(Color.black)
+                    .cornerRadius(20)
+                    .shadow(radius: 3)
                 }
-//            }
-            .foregroundColor(Color.mainTheme)
-            .listStyle(PlainListStyle()) // iOS 15 대응
-            .frame(height:UIScreen.main.bounds.height * 1/7 )
+                
+            
+////            List {
+//                ForEach(viewModel.secretLists, id : \.self) { SecretList in
+//                    NavigationLink(
+//                        destination:
+//                            SecretInfoView(viewModel: SecretInfoViewModel(
+//                                            token: viewModel.token,
+//                                            postId : SecretList.postInfo.postId,
+//                                            memberId : viewModel.memberId,
+//                                            isMyPost : (viewModel.memberId == SecretList.member?.memberId)))
+//                    ) {
+//                        SecretPost(viewModel : SecretViewModel(postList: SecretList))
+//                    }
+//                }
+////            }
+//            .foregroundColor(Color.mainTheme)
+//            .listStyle(PlainListStyle()) // iOS 15 대응
+//            .frame(height:UIScreen.main.bounds.height * 1/7 )
             
             //General Posts
 //            List {
@@ -104,6 +126,9 @@ struct BoardView : View {
         }.onAppear {
             viewModel.getBoardPosts(token: viewModel.token)
         }
+//        .refreshable{ // only for ios15
+//            viewModel.getBoardPosts(token: viewModel.token)
+//        }
     }
 }
 
@@ -116,7 +141,7 @@ struct GeneralPost : View {
     }
     
     var body : some View {
-        VStack{
+        VStack(alignment : .leading){
             HStack{
                 URLImage( //프로필 이미지
                     URL(string : viewModel.profileImage) ??
@@ -130,7 +155,7 @@ struct GeneralPost : View {
                        height: 40)
                 .cornerRadius(20)
                 
-                VStack{
+                VStack(alignment : .leading){
                     Text(viewModel.userName)
                         .font(.system(size: 20, weight : .medium))
                     
@@ -140,7 +165,7 @@ struct GeneralPost : View {
                 }
             }
             .foregroundColor(.black)
-            .padding(.bottom)
+            .padding(.bottom, 2)
             
             if(viewModel.imageUrl != "null"){
                 URLImage(
@@ -156,7 +181,7 @@ struct GeneralPost : View {
                 .cornerRadius(10)
             }
             
-            HStack(alignment: .top){
+            HStack(alignment: .bottom){
                 VStack(alignment: .leading){
                     Text(viewModel.postTitle)
                         .font(.system(size: 17, weight : .medium))
@@ -169,15 +194,16 @@ struct GeneralPost : View {
                 
                 Spacer()
                 
-                Image(systemName: "hand.thumbsup.fill")
-                    .font(.system(size: 10, weight : .medium))
-                    .foregroundColor(.mainTheme)
-                Text(String(viewModel.likeCount))
-                    .font(.system(size: 10, weight : .medium))
                 
                 Image(systemName: "message.fill")
                     .font(.system(size: 10, weight : .medium))
                 Text(String(viewModel.commentCount))
+                    .font(.system(size: 10, weight : .medium))
+                
+                Image("like")
+                    .font(.system(size: 10, weight : .medium))
+                    .foregroundColor(.mainTheme)
+                Text(String(viewModel.likeCount))
                     .font(.system(size: 10, weight : .medium))
             }.foregroundColor(.black)
         }
@@ -186,39 +212,39 @@ struct GeneralPost : View {
     }
 }
 
-struct SecretPost : View {
-    private let viewModel : SecretViewModel
-    
-    init(viewModel : SecretViewModel) {
-        self.viewModel = viewModel
-    }
-    
-    var body : some View {
-        VStack{
-                Text(viewModel.postTitle)
-                    .font(.system(size: 15, weight : .medium))
-            
-                HStack{
-                    Group{
-                        Image(systemName: "hand.thumbsup.fill")
-                            .font(.system(size: 10))
-                            .foregroundColor(.mainTheme)
-                        Text(String(viewModel.likeCount))
-                            .font(.system(size: 10, weight : .medium))
-                            .foregroundColor(.black)
-                    }
-                    
-                    Group{
-                        Image(systemName: "message.fill")
-                            .font(.system(size: 10))
-                        Text(String(viewModel.commentCount))
-                            .font(.system(size: 10, weight : .medium))
-                    }.foregroundColor(.black)
-                }
-            }
-        .modifier(SpecialPostStyle())
-    }
-}
+//struct SecretPost : View {
+//    private let viewModel : SecretViewModel
+//
+//    init(viewModel : SecretViewModel) {
+//        self.viewModel = viewModel
+//    }
+//
+//    var body : some View {
+//        VStack{
+//                Text(viewModel.postTitle)
+//                    .font(.system(size: 15, weight : .medium))
+//
+//                HStack{
+//                    Group{
+//                        Image(systemName: "hand.thumbsup.fill")
+//                            .font(.system(size: 10))
+//                            .foregroundColor(.mainTheme)
+//                        Text(String(viewModel.likeCount))
+//                            .font(.system(size: 10, weight : .medium))
+//                            .foregroundColor(.black)
+//                    }
+//
+//                    Group{
+//                        Image(systemName: "message.fill")
+//                            .font(.system(size: 10))
+//                        Text(String(viewModel.commentCount))
+//                            .font(.system(size: 10, weight : .medium))
+//                    }.foregroundColor(.black)
+//                }
+//            }
+//        .modifier(SpecialPostStyle())
+//    }
+//}
 
 struct HotPost : View {
     private let viewModel : GeneralPostViewModel
@@ -234,7 +260,7 @@ struct HotPost : View {
             
                 HStack{
                     Group{
-                        Image(systemName: "hand.thumbsup.fill")
+                        Image("like")
                             .font(.system(size: 10))
                             .foregroundColor(.mainTheme)
                         Text(String(viewModel.likeCount))

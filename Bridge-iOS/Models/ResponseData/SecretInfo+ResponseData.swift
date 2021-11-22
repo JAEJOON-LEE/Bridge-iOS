@@ -9,7 +9,7 @@ import Foundation
 
 struct TotalSecretPostDetail : Codable {
     var secretPostDetail : SecretPostDetail
-    var member : SecretPostMember?
+//    var member : SecretPostMember?
 }
 
 struct SecretPostDetail : Codable {
@@ -19,15 +19,16 @@ struct SecretPostDetail : Codable {
     var createdAt : String
     var like : Bool
     var likeCount : Int
-    var postImages : [SecretPostImages]
+    var postImages : [SecretPostImages]?
+    var modifiable : Bool
 }
 
-struct SecretPostMember : Codable, Hashable {
-    var memberId : Int?
-    var username : String?
-    var description : String?
-    var profileImage : String?
-}
+//struct SecretPostMember : Codable, Hashable {
+//    var memberId : Int?
+//    var username : String?
+//    var description : String?
+//    var profileImage : String?
+//}
 
 struct SecretPostImages : Codable, Hashable {
     var imageId : Int

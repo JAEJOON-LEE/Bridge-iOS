@@ -69,15 +69,37 @@ struct TabContainer: View {
                 TabSelector
             }.accentColor(.mainTheme)
             .navigationBarItems(
+                
                 leading: Button {
                     print("leading button clicked")
                     withAnimation {
-                        isSlideShow.toggle()
+                        if(viewModel.selectedTabIndex == 2){
+                            //
+                        }
+                        else{
+                            isSlideShow.toggle()
+                        }
                     }
+                    
                 } label : {
-                    Image(systemName: "text.justify")
-                        .foregroundColor(.black)
-                },
+                    if(viewModel.selectedTabIndex == 2){
+                            NavigationLink(
+                                destination:
+                                        PostSearchView(viewModel:
+                                                       BoardViewModel(
+                                                           accessToken: signInViewModel.signInResponse?.token.accessToken ?? "",
+                                                           memberId : signInViewModel.signInResponse?.memberId ?? -1)
+                                                       )
+                            ) {
+                                Image(systemName: "magnifyingglass")
+                                    .foregroundColor(.black)
+                            }
+                    }else{
+                        Image(systemName: "text.justify")
+                            .foregroundColor(.black)
+                    }
+                }
+                ,
                 trailing: Button {
                     print("trailing button clicked")
                     isNotificationShow.toggle()

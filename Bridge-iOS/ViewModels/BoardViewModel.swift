@@ -12,8 +12,13 @@ import Alamofire
 final class BoardViewModel : ObservableObject {
     @Published var postLists : [PostList] = []
     @Published var hotLists : [PostList] = []
-    @Published var secretLists : [SecretPostList] = []
+    @Published var searchLists : [PostList] = []
+    @Published var secretLists : [SecretBoardPostInfo] = []
 //    @Published var postMembers : [PostMember] = []
+    
+    //for search
+    @Published var searchString : String = ""
+    @Published var searchResultViewShow = false
     
     private var subscription = Set<AnyCancellable>()
     let token : String
@@ -58,6 +63,37 @@ final class BoardViewModel : ObservableObject {
             }.store(in: &subscription)
     }
     
+    func searchPosts(token : String, query : String) {
+        let url = "http://3.36.233.180:8080/board-posts?"
+        let header: HTTPHeaders = [ "X-AUTH-TOKEN": token ]
+        
+        AF.request(url,
+                   method: .get,
+                   parameters: ["query": query],
+                   encoding: URLEncoding.default,
+                   headers: header)
+            .responseString{ (response) in
+                //guard let statusCode = response.response?.statusCode else { return }
+                //print(statusCode)
+                print(response)
+            }
+            .publishDecodable(type : TotalPostList.self)
+            .compactMap { $0.value }
+            .map { $0.postList }
+            .sink { completion in
+                switch completion {
+                case let .failure(error) :
+                    print(error.localizedDescription)
+                case .finished :
+                    print("finished boardView")
+                }
+            } receiveValue: { [weak self] (recievedValue : [PostList]) in
+                self?.searchLists = recievedValue
+                print(recievedValue)
+                
+            }.store(in: &subscription)
+    }
+    
     func getHotPosts(token : String) {
         let url = "http://3.36.233.180:8080/board-posts?"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN": token ]
@@ -94,7 +130,7 @@ final class BoardViewModel : ObservableObject {
     }
     
     func getSecretPosts(token : String) {
-        let url = "http://3.36.233.180:8080/secret-posts?lastPost=1"
+        let url = "http://3.36.233.180:8080/secret-posts?"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN": token ]
 
         AF.request(url,
@@ -107,7 +143,7 @@ final class BoardViewModel : ObservableObject {
                 //print(statusCode)
                 //print(response)
             }
-            .publishDecodable(type : SecretTotalPostList.self)
+            .publishDecodable(type : SecretPostList.self)
             .compactMap { $0.value }
             .map { $0.postList }
             .sink { completion in
@@ -117,9 +153,10 @@ final class BoardViewModel : ObservableObject {
                 case .finished :
                     print("finished secretPost")
                 }
-            } receiveValue: { [weak self] (recievedValue : [SecretPostList]) in
+            } receiveValue: { [weak self] (recievedValue : [SecretBoardPostInfo]) in
                 self?.secretLists = recievedValue
-//                print(recievedValue)
+                print("secret ========> ")
+                print(recievedValue)
 
             }.store(in: &subscription)
     }

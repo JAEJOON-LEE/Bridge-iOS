@@ -7,29 +7,30 @@
 
 import Foundation
 
-struct SecretTotalPostList : Codable, Hashable {
-    var postList : [SecretPostList]
-}
+//struct SecretTotalPostList : Codable, Hashable {
+//    var postD : SecretBoardPostInfo
+//}
 
 struct SecretPostList : Codable, Hashable {
-    var postInfo : SecretBoardPostInfo
-    var member : SecretBoardMember?
+    var postList : [SecretBoardPostInfo]
+//    var member : SecretBoardMember?
 }
 
 struct SecretBoardPostInfo : Codable, Hashable{
     var postId : Int
+    var postType : String 
     var title : String
-    var likeCount : Int
     var image : String
-    var commentCount : Int
     var description : String
+    var likeCount : Int
+    var commentCount : Int
     var createdAt : String
 }
 
-struct SecretBoardMember : Codable, Hashable {
-    var memberId : Int?
-    var username : String?
-    var description : String?
-    var profileImage : String?
-}
+//struct SecretBoardMember : Codable, Hashable {
+//    var memberId : Int?
+//    var username : String?
+//    var description : String?
+//    var profileImage : String?
+//}
 
