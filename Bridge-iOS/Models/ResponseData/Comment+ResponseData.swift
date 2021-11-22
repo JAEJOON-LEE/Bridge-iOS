@@ -17,23 +17,23 @@ struct CommentList : Codable, Hashable {
     var anonymous : Bool
     var like : Bool
     var likeCount : Int
-    var comments : [Comments]
+    var comments : [CommentList]?
     var createdAt : String
     var member : CommentMember?
     var modifiable : Bool
 }
-
-struct Comments : Codable, Hashable {
-    var commentId : Int
-    var content : String
-    var anonymous : Bool
-    var like : Bool
-    var likeCount : Int
-    var comments : [Comments]?
-    var createdAt : String
-    var member : CommentMember?
-    var modifiable : Bool
-}
+//
+//struct Comments : Codable, Hashable {
+//    var commentId : Int
+//    var content : String
+//    var anonymous : Bool
+//    var like : Bool
+//    var likeCount : Int
+//    var comments : [Comments]?
+//    var createdAt : String
+//    var member : CommentMember?
+//    var modifiable : Bool
+//}
 
 struct CommentMember : Codable, Hashable {
     var memberId : Int?

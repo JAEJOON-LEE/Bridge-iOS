@@ -15,5 +15,6 @@ struct GeneralPostStyle : ViewModifier {
             .foregroundColor(Color.black)
             .background(Color.white)
             .cornerRadius(20)
+            .shadow(radius : 5)
     }
 }

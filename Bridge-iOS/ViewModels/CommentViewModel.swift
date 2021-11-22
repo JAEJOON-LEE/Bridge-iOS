@@ -15,6 +15,7 @@ final class CommentViewModel : ObservableObject {
     @Published var  isMyComment : Bool = false
     let postId : Int
     let commentId : Int
+    let memberId : Int
     
     @Published var isLiked : Bool?
     @Published var likeCount : Int = 0
@@ -24,11 +25,12 @@ final class CommentViewModel : ObservableObject {
     @Published var showConfirmDeletion : Bool = false
     @Published var showCommentModify : Bool = false
     
-    init(token : String, commentList : CommentList, postId : Int, commentId : Int, isMyComment : Bool) {
+    init(token : String, commentList : CommentList, postId : Int, commentId : Int, memberId : Int, isMyComment : Bool) {
         self.token = token
         self.commentList = commentList
         self.postId = postId
         self.commentId = commentId
+        self.memberId = memberId
         self.isMyComment = isMyComment
         
 //        self.isCocClicked = false
@@ -36,8 +38,9 @@ final class CommentViewModel : ObservableObject {
     
     var content : String { commentList.content }
     var createdAt : String { commentList.createdAt }
-    var profileImage : String { commentList.member?.profileImage! ?? "https://static.thenounproject.com/png/741653-200.png"}
-    var userName : String { commentList.member?.username! ?? "Anonymous" }
+    var profileImage : String { commentList.member?.profileImage ?? "https://static.thenounproject.com/png/741653-200.png"}
+    var userName : String { commentList.member?.username ?? "Anonymous" }
+    var commetMemberId : Int { commentList.member?.memberId ?? -1}
     
     
     func deleteComment() {

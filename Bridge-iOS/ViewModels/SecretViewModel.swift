@@ -8,23 +8,23 @@
 import Foundation
 
 final class SecretViewModel : ObservableObject {
-    let postList : SecretPostList
+    let postList : SecretBoardPostInfo
 //    let member : PostMember
     
-    init(postList : SecretPostList) {
+    init(postList : SecretBoardPostInfo) {
         self.postList = postList
 //        self.member = member
     }
     
-    var imageUrl : String { postList.postInfo.image }
-    var postTitle : String { postList.postInfo.title }
-    var likeCount : Int { postList.postInfo.likeCount }
-    var commentCount : Int { postList.postInfo.commentCount }
-    var postId : Int { postList.postInfo.postId }
-    var description : String { postList.postInfo.description }
-    var createdAt : String { postList.postInfo.createdAt }
-    var profileImage : String { postList.member?.profileImage ?? "nil"}
-    var userName : String { postList.member?.username ?? "nil" }
+    var imageUrl : String { postList.image }
+    var postTitle : String { postList.title }
+    var likeCount : Int { postList.likeCount }
+    var commentCount : Int { postList.commentCount }
+    var postId : Int { postList.postId }
+    var description : String { postList.description }
+    var createdAt : String { postList.createdAt }
+    var profileImage : String { "https://static.thenounproject.com/png/741653-200.png"}
+    var userName : String { "Anonymous" }
     
     
 //    func stringToDate(createdAt : String) -> Date{

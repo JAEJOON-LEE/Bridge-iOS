@@ -11,7 +11,10 @@ import Alamofire
 
 final class SecretInfoViewModel : ObservableObject {
     @Published var totalSecretPostDetail : TotalSecretPostDetail?
+    @Published var commentLists : [CommentList] = []
+    
     @Published var isLiked : Bool?
+    
     @Published var likeCount : Int = 0
     @Published var commentCount : Int = 0
     @Published var isMemberInfoClicked : Bool = false
@@ -20,28 +23,56 @@ final class SecretInfoViewModel : ObservableObject {
     @Published var showAction : Bool = false
     @Published var showConfirmDeletion : Bool = false
     @Published var showPostModify : Bool = false
+    @Published var showCommentModify : Bool = false
+    @Published var commentSended : Bool = false
+    @Published var isProgressShow : Bool = false
     
-//    @Published var comment : Comments?
-    @Published var commentLists : [CommentList] = []
     @Published var commentInput : String = ""
     @Published var isAnonymous : Bool = false
     @Published var commentId : Int?
     
     private var subscription = Set<AnyCancellable>()
     let token : String
-    private let postId : Int
-    let isMyPost : Bool
+    let postId : Int
+    let isMyPost : Bool?
     @Published var isMyComment : Bool = false
     let memberId : Int
+    var isSecret : Bool = false
     
-    init(token : String, postId : Int, memberId:Int, isMyPost : Bool) {
+    var isCocCliked : Bool = false
+    var cocMenuClicked = false
+    var cocShowAction = false
+    var contentForViewing : String = "Say something..."
+    var contentForPatch : String = ""
+    
+    init(token : String, postId : Int, memberId : Int) {
+        self.contentForViewing = "Say something..."
         self.token = token
         self.postId = postId
         self.memberId = memberId
-        self.isMyPost = isMyPost
+//        self.memberId = memberId
+//        self.isMyPost = isMyPost
+        self.isMyPost = nil
+        self.isSecret = true
         getSecretPostDetail()
         getSecretComment()
     }
+    
+    func likeComment(isliked : Bool) {
+        let url = "http://3.36.233.180:8080/comments/\(commentId)/likes"
+        let header: HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
+        let method : HTTPMethod = isliked ? .delete : .post
+        
+        AF.request(url,
+                   method: method,
+                   encoding: URLEncoding.default,
+                   headers: header
+        ).response { json in
+            print(json)
+        }
+    }
+    
+    //Secret Post
     
     func getSecretPostDetail() {
         
@@ -93,7 +124,7 @@ final class SecretInfoViewModel : ObservableObject {
                    encoding: URLEncoding.default,
                    headers: header
         ).responseJSON { json in
-//            print(json)
+            print(json)
         }
     }
     
@@ -109,12 +140,40 @@ final class SecretInfoViewModel : ObservableObject {
                    headers: header
         ).responseString{ (response) in
             //guard let statusCode = response.response?.statusCode else { return }
-            //print("SendComment statuscode = " + String(statusCode))
+            
+                guard let statusCode = response.response?.statusCode else { return }
+                switch statusCode {
+                case 200 :
+                    print("Post Upload Success : \(statusCode)")
+                    self.commentSended = true
+                default :
+                    print("Post Upload Fail : \(statusCode)")
+                }
         }
+    }
+    
+    func sendSecretCommentOfComment(content : String, anonymous : String, cocId : Int) {
         
-        //refresh
-//        getBoardPostDetail()
-//        getComment()
+        let url = "http://3.36.233.180:8080/secret-posts/\(postId)/comments"
+        let header: HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
+        
+        AF.request(url,
+                   method: .post,
+                   parameters: ["content" : content, "rootComment" : String(cocId), "anonymous" : anonymous],
+                   encoder: JSONParameterEncoder.prettyPrinted, // 500 error if using URLEncoding.default
+                   headers: header
+        ).responseString{ (response) in
+            //guard let statusCode = response.response?.statusCode else { return }
+            
+                guard let statusCode = response.response?.statusCode else { return }
+                switch statusCode {
+                case 200 :
+                    print("Post Upload Success : \(statusCode)")
+                    self.commentSended = true
+                default :
+                    print("Post Upload Fail : \(statusCode)")
+                }
+        }
     }
 
     func getSecretComment() {
@@ -155,6 +214,39 @@ final class SecretInfoViewModel : ObservableObject {
                    headers: header
         ).responseJSON { json in
 //            print(json)
+            
+//                guard let statusCode = response.response?.statusCode else { return }
+//                switch statusCode {
+//                case 200 :
+//                    print("Post Upload Success : \(statusCode)")
+//                    self.commentSended = true
+//                default :
+//                    print("Post Upload Fail : \(statusCode)")
+//                }
+        }
+    }
+    
+    func patchSecretComment(content : String) {
+        
+        let url = "http://3.36.233.180:8080/secret-posts/\(postId)/comments/\(commentId!)"
+        let header: HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
+        
+        AF.request(url,
+                   method: .patch,
+                   parameters: ["content" : content],
+                   encoder: JSONParameterEncoder.prettyPrinted, // 500 error if using URLEncoding.default
+                   headers: header
+        ).responseString{ (response) in
+            
+                guard let statusCode = response.response?.statusCode else { return }
+                switch statusCode {
+                case 200 :
+                    print("Post Upload Success : \(statusCode)")
+                    self.commentSended = true
+                default :
+                    print("Post Upload Fail : \(statusCode)")
+                }
+            print("patch + " + String(statusCode))
         }
     }
 
@@ -181,5 +273,3 @@ final class SecretInfoViewModel : ObservableObject {
         }
     }
 }
-
-
