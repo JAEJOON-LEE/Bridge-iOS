@@ -600,7 +600,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Bridge-iOS/Preview Content\"";
-				DEVELOPMENT_TEAM = CUHQA67FQU;
+				DEVELOPMENT_TEAM = ZKRH5N6RGG;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "Bridge-iOS/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -608,7 +608,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.bridge.2021.Bridge-test";
+				PRODUCT_BUNDLE_IDENTIFIER = com.bridge.2021.Bridge;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -630,7 +630,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.bridge.2021.Bridge-test";
+				PRODUCT_BUNDLE_IDENTIFIER = com.bridge.2021.Bridge;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

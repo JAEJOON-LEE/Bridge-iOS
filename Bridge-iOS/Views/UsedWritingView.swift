@@ -199,9 +199,9 @@ struct UsedWritingView: View {
                     }
                 }
             } // VStack
-//            .onTapGesture {
-//                    hideKeyboard()
-//            }
+            .onTapGesture {
+                    hideKeyboard()
+            }
             .onChange(of: viewModel.isUploadDone, perform: { _ in
                 self.presentationMode.wrappedValue.dismiss()
             })
