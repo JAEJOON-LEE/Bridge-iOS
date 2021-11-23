@@ -89,10 +89,11 @@ class WritingViewModel : ObservableObject {
                  "description" : description,
                  "anonymous" : String(anonymous)]
         
+        let payloadEncoded = String(data : "{ \"title\" : \"\(title)\", \"description\" : \"\(description)\", \"anonymous\" : \"\(anonymous)\" }".data(using: .nonLossyASCII)!, encoding : .utf8) ?? ""
         //anonymous이면 나중에 수정할 때 참조 못하는 에러 생김 ==> anonymous일때 프로필사진 nil, 이름 anonymous로 강제로 보낼까..?
         AF.upload(multipartFormData: { multipartFormData in
             
-                        multipartFormData.append("{ \"title\" : \"\(title)\", \"description\" : \"\(description)\", \"anonymous\" : \"\(anonymous)\" }".data(using: .utf8)!, withName: "postInfo", mimeType: "application/json")
+                        multipartFormData.append(payloadEncoded.data(using: .utf8)!, withName: "postInfo", mimeType: "application/json")
                         
                         for image in self.selectedImages {
                             multipartFormData.append(image.jpegData(compressionQuality: 1.0)!,
@@ -218,9 +219,10 @@ class WritingViewModel : ObservableObject {
             query.append("}")
         }
         
+        let payloadEncoded = String(data : query.data(using: .nonLossyASCII)!, encoding : .utf8) ?? ""
         AF.upload(multipartFormData: { multipartFormData in
             
-                        multipartFormData.append(query.data(using: .utf8)!, withName: "postInfo", mimeType: "application/json")
+                        multipartFormData.append(payloadEncoded.data(using: .utf8)!, withName: "postInfo", mimeType: "application/json")
 //
 //                        if(files != nil){
 //                            multipartFormData.append(files!, withName: "files", fileName: "From_iOS", mimeType: "image/jpg")
@@ -273,10 +275,12 @@ class WritingViewModel : ObservableObject {
         }
         query.append(" \"anonymous\" : \"\(anonymous)\" }");
         
-        print(query)
+//        print(query)
+        
+        let payloadEncoded = String(data : query.data(using: .nonLossyASCII)!, encoding : .utf8) ?? ""
         AF.upload(multipartFormData: { multipartFormData in
             
-                        multipartFormData.append(query.data(using: .utf8)!, withName: "postInfo", mimeType: "application/json")
+                        multipartFormData.append(payloadEncoded.data(using: .utf8)!, withName: "postInfo", mimeType: "application/json")
                         
                         if(files != nil){
                             multipartFormData.append(files!, withName: "files", fileName: "From_iOS", mimeType: "image/jpg")
@@ -310,9 +314,10 @@ class WritingViewModel : ObservableObject {
                  "description" : description,
                  "anonymous" : String(anonymous)]
         
+        let payloadEncoded = String(data : "{ \"title\" : \"\(title)\", \"description\" : \"\(description)\", \"anonymous\" : \"\(anonymous)\" }".data(using: .nonLossyASCII)!, encoding : .utf8) ?? ""
         AF.upload(multipartFormData: { multipartFormData in
             
-                        multipartFormData.append("{ \"title\" : \"\(title)\", \"description\" : \"\(description)\", \"anonymous\" : \"\(anonymous)\" }".data(using: .utf8)!, withName: "postInfo", mimeType: "application/json")
+                        multipartFormData.append(payloadEncoded.data(using: .utf8)!, withName: "postInfo", mimeType: "application/json")
                         
                         if(files != nil){
                             multipartFormData.append(files!, withName: "files", fileName: "From_iOS", mimeType: "image/jpg")
