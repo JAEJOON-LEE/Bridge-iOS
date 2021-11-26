@@ -25,7 +25,9 @@ struct UsedSearchView : View {
                         //print("return press and content is \(viewModel.searchString)")
                         viewModel.getPostsByQuery(query: viewModel.searchString)
                         viewModel.searchResultViewShow = true
-                    }).autocapitalization(.none)
+                    })
+                    .autocapitalization(.none)
+                    .keyboardType(.webSearch)
                 }
                 .foregroundColor(.gray)
                 .frame(
@@ -44,7 +46,6 @@ struct UsedSearchView : View {
                         .fontWeight(.semibold)
                 }
             }
-                        
             // Category
             HStack {
                 Text("Categories")
@@ -93,29 +94,30 @@ struct UsedSearchView : View {
                 Spacer()
             }.padding(.horizontal, 20)
             
-            //ScrollView { hot deal 개수가 3개 이상이면 필요
-            LazyVStack {
-                ForEach(viewModel.hotDealPosts, id : \.self) { Post in
-                    NavigationLink(
-                        destination:
-                            ItemInfoView(viewModel:
-                                            ItemInfoViewModel(
-                                                token: viewModel.token,
-                                                postId : Post.postId,
-                                                isMyPost : (viewModel.memberId == Post.memberId)
-                                            )
-                            )
-                            .onDisappear(perform: {
-                                // 일반 작업시에는 필요없는데, 삭제 작업 즉시 반영을 위해서 필요함
-                                viewModel.getHotDealPosts()
-                            })
-                    ) {
-                        ItemCard(viewModel : ItemCardViewModel(post: Post))
+            ScrollView { //hot deal 개수가 3개 이상이면 필요
+                LazyVStack {
+                    ForEach(viewModel.hotDealPosts, id : \.self) { Post in
+                        NavigationLink(
+                            destination:
+                                ItemInfoView(viewModel:
+                                                ItemInfoViewModel(
+                                                    token: viewModel.token,
+                                                    postId : Post.postId,
+                                                    isMyPost : (viewModel.memberId == Post.memberId)
+                                                )
+                                )
+                                .onDisappear(perform: {
+                                    // 일반 작업시에는 필요없는데, 삭제 작업 즉시 반영을 위해서 필요함
+                                    viewModel.getHotDealPosts()
+                                })
+                        ) {
+                            ItemCard(viewModel : ItemCardViewModel(post: Post))
+                        }
                     }
                 }
-            }
-            //}
-            if (viewModel.hotDealPosts.isEmpty) { Spacer() }
+                //}
+                if (viewModel.hotDealPosts.isEmpty) { Spacer() }
+            } // ScrollView
         }
         .edgesIgnoringSafeArea(.bottom)
         .navigationBarHidden(true)
