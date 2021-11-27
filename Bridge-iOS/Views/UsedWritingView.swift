@@ -270,7 +270,8 @@ struct UsedWritingView: View {
             
             if viewModel.keyboardHideButtonShow {
                 VStack {
-                    Spacer().frame(height : UIScreen.main.bounds.height * 0.5)
+                    Spacer()
+                        .frame(height : UIScreen.main.bounds.height * 0.5)
                     HStack {
                         Spacer()
                         Button {
@@ -278,14 +279,13 @@ struct UsedWritingView: View {
                             viewModel.keyboardHideButtonShow.toggle()
                         } label : {
                             Text("Hide keyboard")
-                                .fontWeight(.semibold)
+                                .font(.system(size : 16, weight : .semibold))
                                 .foregroundColor(.mainTheme)
-                                .padding(7)
-                                .background(Color.white)
-                                .cornerRadius(10)
                                 .padding()
-                        }.shadow(radius : 2)
+                        }
                     }
+                    .frame(width : UIScreen.main.bounds.width)
+                    .background(Color.white.shadow(radius: 2))
                 }
             }
             
