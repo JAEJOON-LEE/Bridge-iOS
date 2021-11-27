@@ -14,6 +14,7 @@ final class UsedWritingViewModel : ObservableObject {
     @Published var title : String = ""
     @Published var price : String = ""
     @Published var description : String = "Please write the content of your Post"
+    @Published var keyboardHideButtonShow : Bool = false
     
     @Published var showImagePicker : Bool = false
     @Published var showCampPicker : Bool = false

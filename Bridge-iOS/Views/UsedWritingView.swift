@@ -22,6 +22,7 @@ struct UsedWritingView: View {
                 Spacer().frame(height: UIScreen.main.bounds.height * 0.02)
                 if viewModel.selectedImages.isEmpty {
                     Button {
+                        viewModel.keyboardHideButtonShow = false
                         viewModel.selectedImages.removeAll()
                         viewModel.showImagePicker.toggle()
                     } label : {
@@ -55,6 +56,7 @@ struct UsedWritingView: View {
                     .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
                     .frame(width : UIScreen.main.bounds.width, height: UIScreen.main.bounds.height / 3)
                     .onTapGesture {
+                        viewModel.keyboardHideButtonShow = false
                         viewModel.isImageTap.toggle() // 이미지 확대 보기 기능
                     }
                     .fullScreenCover(isPresented: $viewModel.isImageTap, content: {
@@ -84,6 +86,7 @@ struct UsedWritingView: View {
                 HStack {
                     Spacer()
                     Button {
+                        viewModel.keyboardHideButtonShow = false
                         viewModel.selectedImages.removeAll()
                         viewModel.showImagePicker.toggle()
                     } label : {
@@ -97,14 +100,17 @@ struct UsedWritingView: View {
                 VStack {
                     VStack(spacing : 0) {
                         TextField(" Title", text: $viewModel.title)
+                            .onTapGesture { viewModel.keyboardHideButtonShow = false }
                             .font(.system(size : 18, weight : .semibold))
                             .autocapitalization(.none)
                             .frame(height : UIScreen.main.bounds.height * 0.05)
+                            
                         RoundedRectangle(cornerRadius: 10)
                             .foregroundColor(.systemDefaultGray)
                             .frame(width : UIScreen.main.bounds.width * 0.95, height: 7)
                         
                         TextField(" Price ($)", text: $viewModel.price)
+                            .onTapGesture { viewModel.keyboardHideButtonShow = false }
                             .keyboardType(.decimalPad)
                             .font(.system(size : 18, weight : .semibold))
                             .autocapitalization(.none)
@@ -115,6 +121,7 @@ struct UsedWritingView: View {
                     }.padding(.horizontal, 20)
                     HStack {
                         Button {
+                            viewModel.keyboardHideButtonShow = false
                             viewModel.showCampPicker = true
                         } label : {
                             VStack {
@@ -139,6 +146,7 @@ struct UsedWritingView: View {
                         .shadow(radius: 1)
                         Spacer()
                         Button {
+                            viewModel.keyboardHideButtonShow = false
                             viewModel.showCategoryPicker = true
                         } label : {
                             VStack {
@@ -184,7 +192,10 @@ struct UsedWritingView: View {
                             }
                         }
                         .foregroundColor(.darkGray)
-                    
+                        .onChange(of: viewModel.description) { _ in
+                            withAnimation { viewModel.keyboardHideButtonShow = true }
+                        }
+                        
                     Button {
                         // API Call
                         viewModel.upload()
@@ -254,6 +265,27 @@ struct UsedWritingView: View {
                     }.listStyle(GroupedListStyle())
                     .navigationBarTitle(Text("Select Category"), displayMode: .inline)
                     .navigationBarItems(trailing: Button { viewModel.showCategoryPicker = false } label : { Text("Done").foregroundColor(.mainTheme) } )
+                }
+            }
+            
+            if viewModel.keyboardHideButtonShow {
+                VStack {
+                    Spacer().frame(height : UIScreen.main.bounds.height * 0.5)
+                    HStack {
+                        Spacer()
+                        Button {
+                            hideKeyboard()
+                            viewModel.keyboardHideButtonShow.toggle()
+                        } label : {
+                            Text("Hide keyboard")
+                                .fontWeight(.semibold)
+                                .foregroundColor(.mainTheme)
+                                .padding(7)
+                                .background(Color.white)
+                                .cornerRadius(10)
+                                .padding()
+                        }.shadow(radius : 2)
+                    }
                 }
             }
             
