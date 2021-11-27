@@ -19,6 +19,7 @@ final class UsedWritingViewModel : ObservableObject {
     @Published var showImagePicker : Bool = false
     @Published var showCampPicker : Bool = false
     @Published var showCategoryPicker : Bool = false
+    @Published var showMessage : Bool = false
     
     @Published var selectedCamps : [Int] = []
     @Published var selectedCategory = ""
@@ -35,6 +36,8 @@ final class UsedWritingViewModel : ObservableObject {
     
     private let url = "http://3.36.233.180:8080/used-posts"
 
+    let message = "Please fill all field!"
+    
     let campToNum : [String : Int] = [
         //"Camp Casey" : 1,
         //"Camp Hovey" : 2,
@@ -63,6 +66,13 @@ final class UsedWritingViewModel : ObservableObject {
         configuration.selectionLimit = 7
         
         return configuration
+    }
+    
+    func isFilledPost() -> Bool {
+        if selectedImages.count == 0 || title == "" || description == "" || price == "" || selectedCamps.isEmpty || selectedCategory == "" {
+            return false
+        }
+        return true
     }
     
     func incodingHTML(_ data: Data) -> String? {

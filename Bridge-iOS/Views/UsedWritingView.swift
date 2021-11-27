@@ -18,198 +18,208 @@ struct UsedWritingView: View {
     
     var body: some View {
         ZStack {
-            VStack {
-                Spacer().frame(height: UIScreen.main.bounds.height * 0.02)
-                if viewModel.selectedImages.isEmpty {
-                    Button {
-                        viewModel.keyboardHideButtonShow = false
-                        viewModel.selectedImages.removeAll()
-                        viewModel.showImagePicker.toggle()
-                    } label : {
-                        VStack {
-                            Image("uploadImage")
-                                .resizable()
-                                .frame(width: UIScreen.main.bounds.width * 0.25, height : UIScreen.main.bounds.height * 0.1)
-                                .aspectRatio(contentMode: .fill)
-                                
-                            Text("Upload Pictures")
-                                .font(.title3)
-                                .fontWeight(.semibold)
-                                .foregroundColor(.gray)
-                        }
-                        .frame(width : UIScreen.main.bounds.width * 0.95, height : UIScreen.main.bounds.height * 0.3)
-                        .background(Color.mainTheme.opacity(0.04))
-                        .cornerRadius(15)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 15)
-                                .stroke(Color.gray, style: StrokeStyle(lineWidth: 1, dash: [8]))
-                        )
-                    }
-                } else {
-                    TabView {
-                        ForEach(viewModel.selectedImages, id : \.self) {
-                            Image(uiImage: $0)
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                        }
-                    }.tabViewStyle(PageTabViewStyle())
-                    .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
-                    .frame(width : UIScreen.main.bounds.width, height: UIScreen.main.bounds.height / 3)
-                    .onTapGesture {
-                        viewModel.keyboardHideButtonShow = false
-                        viewModel.isImageTap.toggle() // 이미지 확대 보기 기능
-                    }
-                    .fullScreenCover(isPresented: $viewModel.isImageTap, content: {
-                        ZStack(alignment : .topTrailing) {
-                            TabView {
-                                ForEach(viewModel.selectedImages, id : \.self) {
-                                    Image(uiImage: $0)
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fit)
-                                }
-                            }.tabViewStyle(PageTabViewStyle())
-                            .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
-                            .frame(width : UIScreen.main.bounds.width)
-                            
-                            Button {
-                                viewModel.isImageTap.toggle()
-                            } label : {
-                                Image(systemName : "xmark")
-                                    .foregroundColor(.mainTheme)
-                                    .font(.system(size : 20))
-                                    .padding()
-                            }
-                        }
-                    })
-                }
-                
-                HStack {
-                    Spacer()
-                    Button {
-                        viewModel.keyboardHideButtonShow = false
-                        viewModel.selectedImages.removeAll()
-                        viewModel.showImagePicker.toggle()
-                    } label : {
-                        HStack {
-                            Text("\(viewModel.selectedImages.count) / 7").foregroundColor(.gray)
-                            Image(systemName: "camera").foregroundColor(.mainTheme)
-                        }
-                    }
-                }.padding(.horizontal, 20)
-                
-                VStack {
-                    VStack(spacing : 0) {
-                        TextField(" Title", text: $viewModel.title)
-                            .onTapGesture { viewModel.keyboardHideButtonShow = false }
-                            .font(.system(size : 18, weight : .semibold))
-                            .autocapitalization(.none)
-                            .frame(height : UIScreen.main.bounds.height * 0.05)
-                            
-                        RoundedRectangle(cornerRadius: 10)
-                            .foregroundColor(.systemDefaultGray)
-                            .frame(width : UIScreen.main.bounds.width * 0.95, height: 7)
-                        
-                        TextField(" Price ($)", text: $viewModel.price)
-                            .onTapGesture { viewModel.keyboardHideButtonShow = false }
-                            .keyboardType(.decimalPad)
-                            .font(.system(size : 18, weight : .semibold))
-                            .autocapitalization(.none)
-                            .frame(height : UIScreen.main.bounds.height * 0.05)
-                        RoundedRectangle(cornerRadius: 10)
-                            .foregroundColor(.systemDefaultGray)
-                            .frame(width : UIScreen.main.bounds.width * 0.95, height: 7)
-                    }.padding(.horizontal, 20)
-                    HStack {
+            ScrollView {
+                ScrollViewReader { value in
+                    if viewModel.selectedImages.isEmpty {
                         Button {
                             viewModel.keyboardHideButtonShow = false
-                            viewModel.showCampPicker = true
+                            viewModel.selectedImages.removeAll()
+                            viewModel.showImagePicker.toggle()
                         } label : {
                             VStack {
-                                HStack {
-                                    Text("Camp").fontWeight(.semibold)
-                                    if !viewModel.selectedCamps.isEmpty {
-                                        Image(systemName : "checkmark.circle.fill")
-                                            .foregroundColor(.mainTheme)
-                                    }
-                                }
-                                if viewModel.selectedCamps.isEmpty {
-                                    Image(systemName: "arrowtriangle.down.fill")
-                                        .font(.system(size : 12))
-                                }
-                                
+                                Image("uploadImage")
+                                    .resizable()
+                                    .frame(width: UIScreen.main.bounds.width * 0.25, height : UIScreen.main.bounds.height * 0.1)
+                                    .aspectRatio(contentMode: .fill)
+                                    
+                                Text("Upload Pictures")
+                                    .font(.title3)
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(.gray)
                             }
+                            .frame(width : UIScreen.main.bounds.width * 0.95, height : UIScreen.main.bounds.height * 0.3)
+                            .background(Color.mainTheme.opacity(0.04))
+                            .cornerRadius(15)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 15)
+                                    .stroke(Color.gray, style: StrokeStyle(lineWidth: 1, dash: [8]))
+                            )
                         }
-                        .foregroundColor(.darkGray)
-                        .frame(width: UIScreen.main.bounds.width * 0.45, height: UIScreen.main.bounds.height * 0.06)
-                        .background(Color.systemDefaultGray)
-                        .cornerRadius(10)
-                        .shadow(radius: 1)
+                    } else {
+                        TabView {
+                            ForEach(viewModel.selectedImages, id : \.self) {
+                                Image(uiImage: $0)
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fill)
+                            }
+                        }.tabViewStyle(PageTabViewStyle())
+                        .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
+                        .frame(width : UIScreen.main.bounds.width, height: UIScreen.main.bounds.height / 3)
+                        .onTapGesture {
+                            viewModel.keyboardHideButtonShow = false
+                            viewModel.isImageTap.toggle() // 이미지 확대 보기 기능
+                        }
+                        .fullScreenCover(isPresented: $viewModel.isImageTap, content: {
+                            ZStack(alignment : .topTrailing) {
+                                TabView {
+                                    ForEach(viewModel.selectedImages, id : \.self) {
+                                        Image(uiImage: $0)
+                                                .resizable()
+                                                .aspectRatio(contentMode: .fit)
+                                    }
+                                }.tabViewStyle(PageTabViewStyle())
+                                .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
+                                .frame(width : UIScreen.main.bounds.width)
+                                
+                                Button {
+                                    viewModel.isImageTap.toggle()
+                                } label : {
+                                    Image(systemName : "xmark")
+                                        .foregroundColor(.mainTheme)
+                                        .font(.system(size : 20))
+                                        .padding()
+                                }
+                            }
+                        })
+                    }
+                    
+                    HStack {
                         Spacer()
                         Button {
                             viewModel.keyboardHideButtonShow = false
-                            viewModel.showCategoryPicker = true
+                            viewModel.selectedImages.removeAll()
+                            viewModel.showImagePicker.toggle()
                         } label : {
-                            VStack {
-                                HStack {
-                                    Text("Category").fontWeight(.semibold)
-                                    if viewModel.selectedCategory != "" {
-                                        Image(systemName : "checkmark.circle.fill")
-                                            .foregroundColor(.mainTheme)
+                            HStack {
+                                Text("\(viewModel.selectedImages.count) / 7").foregroundColor(.gray)
+                                Image(systemName: "camera").foregroundColor(.mainTheme)
+                            }
+                        }
+                    }.padding(.horizontal, 20)
+                    
+                    VStack {
+                        VStack(spacing : 0) {
+                            TextField(" Title", text: $viewModel.title)
+                                .onTapGesture { viewModel.keyboardHideButtonShow = false }
+                                .font(.system(size : 18, weight : .semibold))
+                                .autocapitalization(.none)
+                                .frame(height : UIScreen.main.bounds.height * 0.05)
+                                
+                            RoundedRectangle(cornerRadius: 10)
+                                .foregroundColor(.systemDefaultGray)
+                                .frame(width : UIScreen.main.bounds.width * 0.95, height: 7)
+                            
+                            TextField(" Price ($)", text: $viewModel.price)
+                                .onTapGesture { viewModel.keyboardHideButtonShow = false }
+                                .keyboardType(.decimalPad)
+                                .font(.system(size : 18, weight : .semibold))
+                                .autocapitalization(.none)
+                                .frame(height : UIScreen.main.bounds.height * 0.05)
+                            RoundedRectangle(cornerRadius: 10)
+                                .foregroundColor(.systemDefaultGray)
+                                .frame(width : UIScreen.main.bounds.width * 0.95, height: 7)
+                        }.padding(.horizontal, 20)
+                        HStack {
+                            Button {
+                                viewModel.keyboardHideButtonShow = false
+                                viewModel.showCampPicker = true
+                            } label : {
+                                VStack {
+                                    HStack {
+                                        Text("Camp").fontWeight(.semibold)
+                                        if !viewModel.selectedCamps.isEmpty {
+                                            Image(systemName : "checkmark.circle.fill")
+                                                .foregroundColor(.mainTheme)
+                                        }
+                                    }
+                                    if viewModel.selectedCamps.isEmpty {
+                                        Image(systemName: "arrowtriangle.down.fill")
+                                            .font(.system(size : 12))
+                                    }
+                                    
+                                }
+                            }
+                            .foregroundColor(.darkGray)
+                            .frame(width: UIScreen.main.bounds.width * 0.45, height: UIScreen.main.bounds.height * 0.06)
+                            .background(Color.systemDefaultGray)
+                            .cornerRadius(10)
+                            .shadow(radius: 1)
+                            Spacer()
+                            Button {
+                                viewModel.keyboardHideButtonShow = false
+                                viewModel.showCategoryPicker = true
+                            } label : {
+                                VStack {
+                                    HStack {
+                                        Text("Category").fontWeight(.semibold)
+                                        if viewModel.selectedCategory != "" {
+                                            Image(systemName : "checkmark.circle.fill")
+                                                .foregroundColor(.mainTheme)
+                                        }
+                                    }
+                                    if viewModel.selectedCategory == "" {
+                                        Image(systemName: "arrowtriangle.down.fill")
+                                            .font(.system(size : 12))
                                     }
                                 }
-                                if viewModel.selectedCategory == "" {
-                                    Image(systemName: "arrowtriangle.down.fill")
-                                        .font(.system(size : 12))
+                            }
+                            .foregroundColor(.darkGray)
+                            .frame(width: UIScreen.main.bounds.width * 0.45, height: UIScreen.main.bounds.height * 0.06)
+                            .background(Color.systemDefaultGray)
+                            .cornerRadius(10)
+                            .shadow(radius: 1)
+                        }
+                        .padding(10)
+                        .padding(.horizontal, 10)
+                        
+                        TextEditor(text: $viewModel.description)
+                            .id(1)
+                            .onAppear() {
+                                UITextView.appearance().backgroundColor = UIColor(.systemDefaultGray)
+                            }.onDisappear() {
+                                UITextView.appearance().backgroundColor = nil
+                            }
+                            .disableAutocorrection(true)
+                            .autocapitalization(.none)
+                            .frame(maxWidth : .infinity, minHeight : UIScreen.main.bounds.height * 0.2, maxHeight : .infinity)
+                            .background(Color.systemDefaultGray)
+                            .cornerRadius(10)
+                            .shadow(radius: 1)
+                            .padding(.horizontal, 20)
+                            .padding(.bottom, 5)
+                            .onTapGesture {
+                                if viewModel.description == "Please write the content of your Post" {
+                                    viewModel.description = ""
                                 }
                             }
-                        }
-                        .foregroundColor(.darkGray)
-                        .frame(width: UIScreen.main.bounds.width * 0.45, height: UIScreen.main.bounds.height * 0.06)
-                        .background(Color.systemDefaultGray)
-                        .cornerRadius(10)
-                        .shadow(radius: 1)
-                    }
-                    .padding(10)
-                    .padding(.horizontal, 10)
-                    
-                    TextEditor(text: $viewModel.description)
-                        .onAppear() {
-                            UITextView.appearance().backgroundColor = UIColor(.systemDefaultGray)
-                        }.onDisappear() {
-                            UITextView.appearance().backgroundColor = nil
-                        }
-                        .disableAutocorrection(true)
-                        .autocapitalization(.none)
-                        .frame(maxWidth : .infinity, minHeight : UIScreen.main.bounds.height * 0.2, maxHeight : .infinity)
-                        .background(Color.systemDefaultGray)
-                        .cornerRadius(10)
-                        .shadow(radius: 1)
-                        .padding(.horizontal, 20)
-                        .padding(.bottom, 5)
-                        .onTapGesture {
-                            if viewModel.description == "Please write the content of your Post" {
-                                viewModel.description = ""
+                            .foregroundColor(.darkGray)
+                            .onChange(of: viewModel.description) { _ in
+                                withAnimation {
+                                    viewModel.keyboardHideButtonShow = true
+                                    value.scrollTo(1, anchor: .bottom)
+                                }
                             }
+                            
+                            
+                        Button {
+                            if viewModel.isFilledPost() {
+                                // API Call
+                                viewModel.upload()
+                                withAnimation { viewModel.isProgressShow = true }
+                            } else {
+                                viewModel.showMessage = true
+                            }
+                        } label : {
+                            Text("DONE")
+                                .font(.system(size: 20, weight: .semibold))
+                                .foregroundColor(.white)
+                                .frame(width: UIScreen.main.bounds.width * 0.8, height: UIScreen.main.bounds.height * 0.06)
+                                .background(Color.mainTheme)
+                                .cornerRadius(30)
                         }
-                        .foregroundColor(.darkGray)
-                        .onChange(of: viewModel.description) { _ in
-                            withAnimation { viewModel.keyboardHideButtonShow = true }
-                        }
-                        
-                    Button {
-                        // API Call
-                        viewModel.upload()
-                        withAnimation { viewModel.isProgressShow = true }
-                    } label : {
-                        Text("DONE")
-                            .font(.system(size: 20, weight: .semibold))
-                            .foregroundColor(.white)
-                            .frame(width: UIScreen.main.bounds.width * 0.8, height: UIScreen.main.bounds.height * 0.06)
-                            .background(Color.mainTheme)
-                            .cornerRadius(30)
                     }
-                }
-            } // VStack
+                } // ScrollViewReader
+            } // ScrollView
             .onTapGesture {
                     hideKeyboard()
             }
@@ -300,6 +310,10 @@ struct UsedWritingView: View {
                 .cornerRadius(30)
                 .background(Color.white.shadow(radius: 3))
             }
+        }.alert(isPresented: $viewModel.showMessage) {
+            Alert(title: Text(viewModel.message),
+                  //message: Text("Incorrect Email or Password"),
+                  dismissButton: .cancel(Text("OK")))
         }
     }
 }
