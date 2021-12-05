@@ -17,6 +17,9 @@ struct PostSearchView : View {
     }
     
     var body: some View {
+        ZStack{
+            ScrollView {
+                ScrollViewReader { value in
         VStack(spacing : 15) {
             HStack {
                 HStack {
@@ -26,11 +29,18 @@ struct PostSearchView : View {
                         //print("return press and content is \(viewModel.searchString)")
                         viewModel.searchPosts(token: viewModel.token, query: viewModel.searchString)
                         viewModel.searchResultViewShow = true
-                    }).autocapitalization(.none)
+                    })
+                    .autocapitalization(.none)
+                    .keyboardType(.webSearch)
+                    .onChange(of: viewModel.searchString) { _ in
+                        withAnimation {
+                            value.scrollTo(1, anchor: .bottom)
+                        }
+                    }
                 }
                 .foregroundColor(.gray)
                 .frame(
-                    width: UIScreen.main.bounds.width * 0.77,
+                    width: UIScreen.main.bounds.width * 0.75,
                     height : UIScreen.main.bounds.height * 0.035
                 )
                 .background(Color.systemDefaultGray)
@@ -108,5 +118,8 @@ struct PostSearchView : View {
                     }.navigationTitle(Text("Search results of \"\(viewModel.searchString)\"")),
                 isActive : $viewModel.searchResultViewShow) { }
         )
+    }
+}
+        }
     }
 }
