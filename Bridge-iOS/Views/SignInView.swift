@@ -27,6 +27,7 @@ struct SignInView: View {
             TextField("Email", text: $viewModel.email)
                 .autocapitalization(.none)
                 .accentColor(.mainTheme)
+                .keyboardType(.emailAddress)
         }.modifier(SignViewTextFieldStyle())
     }
     var passwordField : some View {
