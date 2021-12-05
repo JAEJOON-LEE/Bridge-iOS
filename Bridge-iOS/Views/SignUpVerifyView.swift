@@ -72,44 +72,53 @@ struct SignUpVerifyView: View {
     
     var body: some View {
         ZStack(alignment: .bottom) {
-            Color.systemDefaultGray // background
-            
-            VStack(spacing : 30) {
-                titleField
-                noticeView
-                codeField
-                Divider()
-                doneButton
-                HStack(alignment: .lastTextBaseline) {
-                    Button(action: {
-                        
-                            viewModel.SendEmail(email: viewModel.email)
-//                            self.presentationMode.wrappedValue.dismiss()
+            ScrollView {
+                ScrollViewReader { value in
+                    Color.systemDefaultGray // background
+                    
+                    VStack(spacing : 30) {
+                        titleField
+                        noticeView
+                        codeField
+                            .onChange(of: viewModel.verifyCode) { _ in
+                                withAnimation {
+                                    value.scrollTo(1, anchor: .bottom)
+                                }
+                            }
+                        Divider()
+                        doneButton
+                        HStack(alignment: .lastTextBaseline) {
+                            Button(action: {
+                                
+                                viewModel.SendEmail(email: viewModel.email)
+                                //                            self.presentationMode.wrappedValue.dismiss()
                             }) {
-                        Text("send again")
-                            .foregroundColor(.mainTheme)
+                                Text("send again")
+                                    .foregroundColor(.mainTheme)
+                            }
+                        }
+                        Spacer()
                     }
+                    .frame(width : UIScreen.main.bounds.width, height : UIScreen.main.bounds.height * 0.8)
+                    .padding(.bottom)
+                    .background(Color.white)
+                    .cornerRadius(15)
+                    .shadow(radius: 15)
                 }
-                Spacer()
+                .edgesIgnoringSafeArea(.bottom)
+                .alert(isPresented: $viewModel.showSignUpFailAlert) {
+                    Alert(title: Text("Failed to create your account"),
+                          message: Text("Please input the code sent to your email"),
+                          dismissButton: .cancel(Text("Retry")
+                                                 ,
+                                                 action: {
+                        viewModel.showSignUpFailAlert = false
+                        isLinkActive = false
+                    }
+                                                )
+                    )
+                }
             }
-            .frame(width : UIScreen.main.bounds.width, height : UIScreen.main.bounds.height * 0.8)
-            .padding(.bottom)
-            .background(Color.white)
-            .cornerRadius(15)
-            .shadow(radius: 15)
-        }
-        .edgesIgnoringSafeArea(.all)
-        .alert(isPresented: $viewModel.showSignUpFailAlert) {
-            Alert(title: Text("Failed to create your account"),
-                  message: Text("Please input the code sent to your email"),
-                  dismissButton: .cancel(Text("Retry")
-                                         ,
-                                         action: {
-                                            viewModel.showSignUpFailAlert = false
-                                            isLinkActive = false
-                                         }
-                  )
-            )
         }
     }
 }

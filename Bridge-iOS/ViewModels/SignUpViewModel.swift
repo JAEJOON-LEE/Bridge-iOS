@@ -149,7 +149,7 @@ final class SignUpViewModel : ObservableObject {
                    encoding: URLEncoding.default)
             .responseString{ (response) in
                 
-                self.statusCode1 = response.response?.statusCode ?? 409
+                self.statusCode1 = response.response?.statusCode ?? 200
                 
                 print("username check = " + String(self.statusCode1))
                 
@@ -176,7 +176,7 @@ final class SignUpViewModel : ObservableObject {
                    encoding: URLEncoding.default)
             .responseString{ (response) in
                 
-            self.statusCode2 = response.response?.statusCode ?? 409
+            self.statusCode2 = response.response?.statusCode ?? 200
         
             print("email check = " + String(self.statusCode2))
             
@@ -226,7 +226,7 @@ final class SignUpViewModel : ObservableObject {
         )
         .responseString{ (response) in
         
-            self.statusCode3 = response.response?.statusCode ?? 409
+            self.statusCode3 = response.response?.statusCode ?? 200
         
 //            print(self.email)
 //            print(self.verifyCode)
