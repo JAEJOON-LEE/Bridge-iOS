@@ -20,16 +20,19 @@ struct SecretBoardView : View {
         VStack {
             List {
                 ForEach(viewModel.secretLists, id : \.self) { SecretList in
-                    NavigationLink(
-                        destination:
-                            PostInfoView(viewModel: PostInfoViewModel(
-                                            token: viewModel.token,
-                                            postId : SecretList.postId,
-                                            memberId : viewModel.memberId,
-                                            isMyPost : nil))
-                    ) {
+                    Button {
+                    } label : {
                         SecretPost(viewModel : SecretViewModel(postList: SecretList))
-                    }
+                    }.background(
+                        NavigationLink(
+                            destination:
+                                PostInfoView(viewModel: PostInfoViewModel(
+                                                token: viewModel.token,
+                                                postId : SecretList.postId,
+                                                memberId : viewModel.memberId,
+                                                isMyPost : nil))
+                        ){ }
+                    )
                 }
             .foregroundColor(Color.mainTheme)
             .listStyle(PlainListStyle()) // iOS 15 대응

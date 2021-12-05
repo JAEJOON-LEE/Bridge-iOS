@@ -318,6 +318,9 @@ struct PostInfoView: View { // 게시글 상세 페이지
                 viewModel.commentInput = ""
                 viewModel.getBoardPostDetail()
                 viewModel.getComment()
+                viewModel.showAction = false
+                viewModel.showAction2 = false
+                viewModel.isMenuClicked = false
             }else{
 //                viewModel.sendSecretComment(content: viewModel.commentInput, anonymous: String(viewModel.isAnonymous))
                 viewModel.contentForViewing = "Say something..."
@@ -325,6 +328,9 @@ struct PostInfoView: View { // 게시글 상세 페이지
                 viewModel.commentInput = ""
                 viewModel.getSecretPostDetail()
                 viewModel.getSecretComment()
+                viewModel.showAction = false
+                viewModel.showAction2 = false
+                viewModel.isMenuClicked = false
             }
         }
         .onDisappear {
@@ -421,37 +427,60 @@ struct PostInfoView: View { // 게시글 상세 페이지
                     withAnimation {
                         viewModel.isMenuClicked = true
                         viewModel.showAction = true
+                        
+                        if((viewModel.isSecret == false && viewModel.isMyPost! == true) || (viewModel.totalSecretPostDetail?.secretPostDetail.modifiable == true)){
+                        }
+                        else{
+                        
+                        }
                     }
                     //menu toggle
                 } label: {
-                    if((viewModel.isSecret == false && viewModel.isMyPost! == true) || (viewModel.totalSecretPostDetail?.secretPostDetail.modifiable == true)){
+//                    if((viewModel.isSecret == false && viewModel.isMyPost! == true) || (viewModel.totalSecretPostDetail?.secretPostDetail.modifiable == true)){
                         Image(systemName : "ellipsis")
                             .foregroundColor(.black)
                             .font(.system(size : 15, weight : .bold))
-                    }
+//                    }
                 }
         )
         .actionSheet(isPresented: $viewModel.showAction) {
-            ActionSheet(
-                title: (viewModel.isMyComment) ? Text("Comment Options") : Text("Post Options"),
-                buttons: [
-                    .default((viewModel.isMyComment) ? Text("Modify Comment") : Text("Modify Post")){
-                        if(viewModel.isMyComment){
-                            viewModel.showCommentModify = true
-                            viewModel.contentForViewing = viewModel.contentForPatch
-                        }
-                        else{
-                            viewModel.showPostModify = true
-                        }
-                    },
-                    .destructive((viewModel.isMyComment) ? Text("Delete Comment") : Text("Delete Post")) {
-                        viewModel.showConfirmDeletion = true
-                        
-                    },
-                    .cancel()
-                ]
-            )
+                ActionSheet(
+                    title: (viewModel.isMyComment) ? Text("Comment Options") : Text("Post Options"),
+                    buttons:
+                        [
+                            
+                            .default((viewModel.isMyComment) ? Text("Modify Comment") : ((viewModel.isMyPost!) ? Text("Post Options") : Text("Report"))){
+                                if(viewModel.isMyComment){
+                                    viewModel.showCommentModify = true
+                                    viewModel.contentForViewing = viewModel.contentForPatch
+                                }
+                                else{
+                                    viewModel.showPostModify = true
+                                }
+                            },
+                            
+                            .destructive((viewModel.isMyComment) ? Text("Delete Comment") : Text("Delete Post")) {
+                                viewModel.showConfirmDeletion = true
+                            },
+                            .cancel()
+                            
+                        ]
+                    
+                )
         }
+//        .actionSheet(isPresented: $viewModel.showAction2) {
+//            ActionSheet(
+//                title: Text("Post Options"),
+//                buttons: [
+//
+//                        .default(Text("Report")){
+//                            // 신고 기능 추가
+//                            viewModel.isMenuClicked = false
+//                        },
+//                        .cancel()
+//                ]
+//            )
+//        }
 //        .actionSheet(isPresented: $viewModel.showAction) {
 //            ActionSheet(
 //                title: Text("options"),

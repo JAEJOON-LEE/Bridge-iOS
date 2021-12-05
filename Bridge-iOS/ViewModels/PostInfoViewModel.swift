@@ -22,6 +22,7 @@ final class PostInfoViewModel : ObservableObject {
     @Published var isMenuClicked : Bool = false
     @Published var isImageTap : Bool = false
     @Published var showAction : Bool = false
+    @Published var showAction2 : Bool = false
     @Published var showConfirmDeletion : Bool = false
     @Published var showPostModify : Bool = false
     @Published var showCommentModify : Bool = false

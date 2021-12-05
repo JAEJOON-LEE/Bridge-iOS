@@ -63,15 +63,9 @@ struct BoardView : View {
             .frame(height:UIScreen.main.bounds.height * 1/7 )
             
             //Secret Posts
-                NavigationLink(
-                    destination:
-                        SecretBoardView(viewModel:
-                                    BoardViewModel(
-                                        accessToken: viewModel.token,
-                                        memberId : viewModel.memberId
-                                    )
-                        )
-                ) {
+                
+                Button {
+                } label : {
                     HStack{
                         Text("S-SPACE")
                             .padding()
@@ -86,9 +80,19 @@ struct BoardView : View {
                     .background(Color.black)
                     .cornerRadius(20)
                     .shadow(radius: 3)
-                }
+                    
+                }.background(
+                    NavigationLink(
+                        destination:
+                            SecretBoardView(viewModel:
+                                        BoardViewModel(
+                                            accessToken: viewModel.token,
+                                            memberId : viewModel.memberId
+                                        )
+                            )
+                    ){ }
+                )
                 
-            
 ////            List {
 //                ForEach(viewModel.secretLists, id : \.self) { SecretList in
 //                    NavigationLink(
@@ -110,17 +114,20 @@ struct BoardView : View {
             //General Posts
 //            List {
                 ForEach(viewModel.postLists, id : \.self) { PostList in
-                    NavigationLink(
-                        destination:
-                            PostInfoView(viewModel: PostInfoViewModel(
-                                            token: viewModel.token,
-                                            postId : PostList.postInfo.postId,
-                                            memberId : viewModel.memberId,
-                                            isMyPost : (viewModel.memberId == PostList.member?.memberId)))
-                    ) {
+                    
+                    Button {
+                    } label : {
                         GeneralPost(viewModel : GeneralPostViewModel(postList: PostList))
-                    }
-//                    .buttonStyle(PlainButtonStyle())
+                    }.background(
+                        NavigationLink(
+                            destination:
+                                PostInfoView(viewModel: PostInfoViewModel(
+                                                token: viewModel.token,
+                                                postId : PostList.postInfo.postId,
+                                                memberId : viewModel.memberId,
+                                                isMyPost : (viewModel.memberId == PostList.member?.memberId)))
+                        ){ }
+                    )
                 }
             }.listStyle(PlainListStyle()) // iOS 15 대응
         }.onAppear {

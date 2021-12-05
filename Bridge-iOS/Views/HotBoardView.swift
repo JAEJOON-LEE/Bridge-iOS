@@ -10,6 +10,7 @@ import URLImage
 
 struct HotBoardView : View {
     @StateObject private var viewModel : BoardViewModel
+    @Environment(\.presentationMode) var presentationMode
     
     init(viewModel : BoardViewModel) {
         self._viewModel = StateObject(wrappedValue: viewModel)
@@ -19,17 +20,19 @@ struct HotBoardView : View {
         VStack {
             List {
                 ForEach(viewModel.hotLists, id : \.self) { HotList in
-                    NavigationLink(
-                        destination:
-                            PostInfoView(viewModel: PostInfoViewModel(
-                                            token: viewModel.token,
-                                            postId : HotList.postInfo.postId,
-                                            memberId : viewModel.memberId,
-                                            isMyPost : (viewModel.memberId == HotList.member?.memberId)))
-                    ) {
+                    Button {
+                    } label : {
                         GeneralPost(viewModel : GeneralPostViewModel(postList: HotList))
-                    }
-//                    .buttonStyle(PlainButtonStyle())
+                    }.background(
+                        NavigationLink(
+                            destination:
+                                PostInfoView(viewModel: PostInfoViewModel(
+                                                token: viewModel.token,
+                                                postId : HotList.postInfo.postId,
+                                                memberId : viewModel.memberId,
+                                                isMyPost : (viewModel.memberId == HotList.member?.memberId)))
+                        ){ }
+                    )
                 }
             .foregroundColor(Color.mainTheme)
             .listStyle(PlainListStyle()) // iOS 15 대응
@@ -39,6 +42,17 @@ struct HotBoardView : View {
         }.onAppear {
             viewModel.getSecretPosts(token: viewModel.token)
         }
+        .navigationBarTitle("Hot board", displayMode: .inline)
+        .navigationBarBackButtonHidden(true)
+        .navigationBarItems(
+            leading : Button {
+                self.presentationMode.wrappedValue.dismiss()
+            } label : {
+                Image(systemName : "chevron.backward")
+                    .foregroundColor(.black)
+                    .font(.system(size : 15, weight : .bold))
+            }
+        )
 //        .refreshable{ // only for ios15
 //            viewModel.getBoardPosts(token: viewModel.token)
 //        }
