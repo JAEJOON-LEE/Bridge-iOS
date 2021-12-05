@@ -96,11 +96,11 @@ struct PostInfoView: View { // 게시글 상세 페이지
                                         image
                                             .resizable()
                                             .aspectRatio(contentMode: .fill)
-                                            .frame(width : viewModel.totalSecretPostDetail?.secretPostDetail.postImages! .count == 1 ? UIScreen.main.bounds.width * 0.93 : UIScreen.main.bounds.width * 0.58, height: viewModel.totalBoardPostDetail?.boardPostDetail.postImages!.count == 1 ? UIScreen.main.bounds.height * 0.3 : UIScreen.main.bounds.height * 0.23)
+                                            .frame(width : viewModel.totalSecretPostDetail?.secretPostDetail.postImages! .count == 1 ? UIScreen.main.bounds.width * 0.93 : UIScreen.main.bounds.width * 0.58, height: viewModel.totalSecretPostDetail?.secretPostDetail.postImages!.count == 1 ? UIScreen.main.bounds.height * 0.3 : UIScreen.main.bounds.height * 0.23)
                                             .cornerRadius(10)
                                             .padding(.horizontal)
                                     }
-                                    .frame(width : viewModel.totalSecretPostDetail?.secretPostDetail.postImages! .count == 1 ? UIScreen.main.bounds.width * 0.93 : UIScreen.main.bounds.width * 0.58, height: viewModel.totalBoardPostDetail?.boardPostDetail.postImages!.count == 1 ? UIScreen.main.bounds.height * 0.3 : UIScreen.main.bounds.height * 0.23)
+                                    .frame(width : viewModel.totalSecretPostDetail?.secretPostDetail.postImages! .count == 1 ? UIScreen.main.bounds.width * 0.93 : UIScreen.main.bounds.width * 0.58, height: viewModel.totalSecretPostDetail?.secretPostDetail.postImages!.count == 1 ? UIScreen.main.bounds.height * 0.3 : UIScreen.main.bounds.height * 0.23)
                                 }
                             }
                         }

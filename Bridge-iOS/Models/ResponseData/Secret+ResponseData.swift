@@ -18,11 +18,12 @@ struct SecretPostList : Codable, Hashable {
 
 struct SecretBoardPostInfo : Codable, Hashable{
     var postId : Int
-    var postType : String 
+    var postType : String
     var title : String
     var image : String
     var description : String
     var likeCount : Int
+    var like : Bool
     var commentCount : Int
     var createdAt : String
 }
