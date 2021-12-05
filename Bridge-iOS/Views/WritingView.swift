@@ -157,7 +157,7 @@ struct WritingView : View {
 //                Toggle("Anonymous", isOn: $viewModel.anonymous)
                 Spacer()
                 
-                Text("Anonumous").foregroundColor(.gray)
+                Text("Anonymous").foregroundColor(.gray)
                 Button {
                     viewModel.anonymous.toggle()
                 } label : {
