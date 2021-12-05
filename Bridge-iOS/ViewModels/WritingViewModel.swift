@@ -26,7 +26,7 @@ class WritingViewModel : ObservableObject {
     @Published var infoForModifying : TotalBoardPostDetail?
     @Published var infoForSecretModifying : TotalSecretPostDetail?
     @Published var title = ""
-    @Published var description : String = "Please write the content of your post."
+    @Published var description : String = ""
     @Published var anonymous = false
     @Published var files : Data? = nil
     @Published var selectedImages : [UIImage] = []
