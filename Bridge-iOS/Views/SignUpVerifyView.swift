@@ -82,9 +82,11 @@ struct SignUpVerifyView: View {
                 doneButton
                 HStack(alignment: .lastTextBaseline) {
                     Button(action: {
+                        
+                            viewModel.SendEmail(email: viewModel.email)
 //                            self.presentationMode.wrappedValue.dismiss()
                             }) {
-                        Text("Did not receive?")
+                        Text("send again")
                             .foregroundColor(.mainTheme)
                     }
                 }
