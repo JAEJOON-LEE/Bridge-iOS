@@ -26,7 +26,7 @@ class WritingViewModel : ObservableObject {
     @Published var infoForModifying : TotalBoardPostDetail?
     @Published var infoForSecretModifying : TotalSecretPostDetail?
     @Published var title = ""
-    @Published var description = ""
+    @Published var description : String = "Please write the content of your post."
     @Published var anonymous = false
     @Published var files : Data? = nil
     @Published var selectedImages : [UIImage] = []
@@ -107,7 +107,7 @@ class WritingViewModel : ObservableObject {
             
                 guard let statusCode = response.response?.statusCode else { return }
                 switch statusCode {
-                case 200 :
+                case 200, 201 :
                     print("Post Upload Success : \(statusCode)")
                     self.isUploadDone = true
                 default :
@@ -244,7 +244,7 @@ class WritingViewModel : ObservableObject {
                 
                     guard let statusCode = response.response?.statusCode else { return }
                     switch statusCode {
-                    case 200 :
+                    case 200, 201 :
                         print("Post Modify Success : \(statusCode)")
                         self.isUploadDone = true
                     default :
@@ -266,25 +266,62 @@ class WritingViewModel : ObservableObject {
 //                 "description" : description,
 //                 "anonymous" : String(anonymous)]
         
+        var removeImage : [Int] = []
         var query : String = "{ "
         if(title != nil && title != ""){
-            query.append("\"title\" : \"\(title!)\", ")
+            query.append("\"title\" : \"\(title!)\" ")
+            
+            if(description != nil && description != ""){
+                query.append(", \"description\" : \"\(description!)\"")
+            }
         }
-        if(description != nil && description != ""){
-            query.append("\"description\" : \"\(description!)\", ")
+        else if (description != nil && description != ""){
+            query.append("\"description\" : \"\(description!)\"")
         }
-        query.append(" \"anonymous\" : \"\(anonymous)\" }");
         
-//        print(query)
+        if(selectedImages.count != 0){
+            
+            var cnt = 0
+            
+            infoForModifying?.boardPostDetail.postImages!.forEach{ image in
+                removeImage.append(image.imageId)
+            }
+            if(query.count > 3){
+                query.append(", ")
+            }
+            query.append("\"removeImage\" : [ ")
+            for imageId in removeImage {
+                if(cnt == removeImage.count - 1){
+                    query.append(String(imageId))
+                }else{
+                    query.append(String(imageId) + ", ")
+                }
+                
+                cnt += 1
+            }
+            
+            query.append("] }")
+        }
+        else{
+            query.append("}")
+        }
         
         let payloadEncoded = String(data : query.data(using: .nonLossyASCII)!, encoding : .utf8) ?? ""
         AF.upload(multipartFormData: { multipartFormData in
             
                         multipartFormData.append(payloadEncoded.data(using: .utf8)!, withName: "postInfo", mimeType: "application/json")
-                        
-                        if(files != nil){
-                            multipartFormData.append(files!, withName: "files", fileName: "From_iOS", mimeType: "image/jpg")
-                        }
+//
+//                        if(files != nil){
+//                            multipartFormData.append(files!, withName: "files", fileName: "From_iOS", mimeType: "image/jpg")
+//                        }
+            
+            if(query.count > 3){
+                query.append(", ")
+            }
+            for image in self.selectedImages {
+                multipartFormData.append(image.jpegData(compressionQuality: 1.0)!,
+                            withName : "files", fileName: "payloadImage.jpg", mimeType: "image/jpeg")
+            }
                         
                     }, to:"http://3.36.233.180:8080/secret-posts/\(postId)",
                     method: .post,
@@ -293,7 +330,7 @@ class WritingViewModel : ObservableObject {
                 
                     guard let statusCode = response.response?.statusCode else { return }
                     switch statusCode {
-                    case 200 :
+                    case 200, 201 :
                         print("Post Upload Success : \(statusCode)")
                         self.isUploadDone = true
                     default :
@@ -311,16 +348,16 @@ class WritingViewModel : ObservableObject {
         ]
         
         param = ["title" : title,
-                 "description" : description,
-                 "anonymous" : String(anonymous)]
+                 "description" : description]
         
-        let payloadEncoded = String(data : "{ \"title\" : \"\(title)\", \"description\" : \"\(description)\", \"anonymous\" : \"\(anonymous)\" }".data(using: .nonLossyASCII)!, encoding : .utf8) ?? ""
+        let payloadEncoded = String(data : "{ \"title\" : \"\(title)\", \"description\" : \"\(description)\"}".data(using: .nonLossyASCII)!, encoding : .utf8) ?? ""
         AF.upload(multipartFormData: { multipartFormData in
             
                         multipartFormData.append(payloadEncoded.data(using: .utf8)!, withName: "postInfo", mimeType: "application/json")
                         
-                        if(files != nil){
-                            multipartFormData.append(files!, withName: "files", fileName: "From_iOS", mimeType: "image/jpg")
+                        for image in self.selectedImages {
+                            multipartFormData.append(image.jpegData(compressionQuality: 1.0)!,
+                                        withName : "files", fileName: "payloadImage.jpg", mimeType: "image/jpeg")
                         }
                         
                     }, to:"http://3.36.233.180:8080/secret-posts",
@@ -330,8 +367,8 @@ class WritingViewModel : ObservableObject {
                 
                     guard let statusCode = response.response?.statusCode else { return }
                     switch statusCode {
-                    case 200 :
-                        print("Post Upload Success : \(statusCode)")
+                    case 200, 201 :
+                        print("Secret Post Upload Success : \(statusCode)")
                         self.isUploadDone = true
                     default :
                         print("Post Upload Fail : \(statusCode)")
