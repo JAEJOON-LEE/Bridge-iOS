@@ -10,6 +10,7 @@ import URLImage
 
 struct SecretBoardView : View {
     @StateObject private var viewModel : BoardViewModel
+    @Environment(\.presentationMode) var presentationMode
     
     init(viewModel : BoardViewModel) {
         self._viewModel = StateObject(wrappedValue: viewModel)
@@ -38,6 +39,17 @@ struct SecretBoardView : View {
         }.onAppear {
             viewModel.getSecretPosts(token: viewModel.token)
         }
+        .navigationBarTitle("S-SPACE", displayMode: .inline)
+        .navigationBarBackButtonHidden(true)
+        .navigationBarItems(
+            leading : Button {
+                self.presentationMode.wrappedValue.dismiss()
+            } label : {
+                Image(systemName : "chevron.backward")
+                    .foregroundColor(.black)
+                    .font(.system(size : 15, weight : .bold))
+            }
+        )
 //        .refreshable{ // only for ios15
 //            viewModel.getBoardPosts(token: viewModel.token)
 //        }
