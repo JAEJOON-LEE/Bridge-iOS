@@ -68,14 +68,12 @@ struct SignUpAppendixView: View {
     }
     
     var descField : some View {
-        HStack {
-            TextField("About me (Option)", text: $viewModel.description)
-                .autocapitalization(.none)
-                .accentColor(.mainTheme)
-        }
-        .frame(width: 200, height: 150)
-        .modifier(SignViewTextFieldStyle())
-        .shadow(radius: 1, x: 0, y: 1)
+        TextField("About me (Option)", text: $viewModel.description)
+            .autocapitalization(.none)
+            .accentColor(.mainTheme)
+            .frame(height: 100)
+            .modifier(SignViewTextFieldStyle())
+            .shadow(radius: 1, x: 0, y: 1)
     }
     
     var doneButton : some View {
@@ -87,6 +85,7 @@ struct SignUpAppendixView: View {
             }else{
                 isLinkActive = true
                 viewModel.showSignUpFailAlert = false
+                viewModel.SignUp(name : viewModel.name, email : viewModel.email, password : viewModel.password, role : "user", nickname : viewModel.nickname, description : viewModel.description, profileImage : viewModel.profileImage, verifyCode : viewModel.verifyCode)
             }
         } label : {
             Text("Done")
@@ -94,7 +93,7 @@ struct SignUpAppendixView: View {
         }
         .background(
             NavigationLink(
-                destination: SignUpCheckUserTypeView(viewModel: viewModel)
+                destination: SignUpGreetingView(viewModel: viewModel)
                     .environmentObject(viewModel),
                 isActive : $isLinkActive
             ) {
