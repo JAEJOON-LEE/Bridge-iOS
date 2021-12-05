@@ -110,6 +110,7 @@ struct WritingView : View {
                         .font(.system(size : 25))
                         .border(Color.white)
                         .padding()
+                    
                     TextField(viewModel.infoForSecretModifying?.secretPostDetail.description ?? "Contents not found",
                               text: $viewModel.description)
                         .frame(width :UIScreen.main.bounds.width * 0.85,height : UIScreen.main.bounds.height * 0.3 )
@@ -127,6 +128,7 @@ struct WritingView : View {
                         .font(.system(size : 25))
                         .border(Color.white)
                         .padding()
+                    
                     TextField(viewModel.isForModifying ? (viewModel.infoForModifying?.boardPostDetail.description ?? "Contents not found") : "content", text: $viewModel.description)
                         .frame(width :UIScreen.main.bounds.width * 0.85, height : UIScreen.main.bounds.height * 0.3 )
 //                        .modifier(SignViewTextFieldStyle())
@@ -143,14 +145,17 @@ struct WritingView : View {
                     .font(.system(size : 25))
                     .border(Color.white)
                     .padding()
-                TextField("Please write the content of your post.", text: $viewModel.description)
+                
+                TextEditor(text: $viewModel.description)
                     .frame(width :UIScreen.main.bounds.width * 0.85, height : UIScreen.main.bounds.height * 0.3 )
                     .padding()
-//                    .modifier(SignViewTextFieldStyle())
                     .overlay(
                         RoundedRectangle(cornerRadius: 15)
                             .stroke(Color.gray, style: StrokeStyle(lineWidth: 1, dash: [8]))
                     )
+                    .onTapGesture{
+                        viewModel.description = ""
+                    }
             }
             
             HStack{
@@ -379,13 +384,22 @@ struct WritingView : View {
         .onAppear{
             viewModel.selectedImages.removeAll()
             viewModel.title = ""
-            viewModel.description = ""
+            viewModel.isSecret = false
         }
         .onChange(of: viewModel.isUploadDone, perform: { _ in
             self.presentationMode.wrappedValue.dismiss()
         })
         .navigationBarTitle(viewModel.isForModifying ? Text("Board Modifying") : Text("Board Writing"), displayMode: .inline)
-            
+        .navigationBarBackButtonHidden(true)
+        .navigationBarItems(
+            leading : Button {
+                self.presentationMode.wrappedValue.dismiss()
+            } label : {
+                Image(systemName : "chevron.backward")
+                    .foregroundColor(.black)
+                    .font(.system(size : 15, weight : .bold))
+            }
+        )
             
 //            if viewModel.isProgressShow {
 //                HStack (spacing : 20) {
