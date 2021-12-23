@@ -20,6 +20,7 @@ final class SignInViewModel : ObservableObject {
     @Published var showPrgoressView : Bool = false
     
     private let signInUrl : String = "http://3.36.233.180:8080/sign-in"
+    private let refreshUrl : String = "http://3.36.233.180:8080/token"
     
     private var subscription = Set<AnyCancellable>()
     
@@ -62,8 +63,56 @@ final class SignInViewModel : ObservableObject {
                     description: receivedValue.description,
                     createdAt: receivedValue.createdAt
                 )
-//                print(self?.signInResponse as Any)
+                //print(self?.signInResponse as Any)
             }
             .store(in: &subscription)
+        
+        
+        DispatchQueue.main.asyncAfter(
+            deadline: .now() + DispatchTimeInterval.seconds(signInResponse?.token.accessTokenExpiresIn ?? 1800)
+        ) {
+            print("Token refreshing request will call after token expired time.")
+            self.refreshToken()
+        }
+    }
+    
+    func refreshToken() {
+        AF.request(refreshUrl,
+                   method: .post,
+                   parameters: ["refreshToken" : signInResponse?.token.refreshToken,
+                                "accessToken" : signInResponse?.token.accessToken],
+                   encoder: JSONParameterEncoder.prettyPrinted
+        )
+            .responseJSON { response in
+                guard let statusCode = response.response?.statusCode else { return }
+                switch statusCode {
+                case 403 :
+                    print("Refresh Fail : \(statusCode)")
+                default :
+                    print("Refresh status : \(statusCode)")
+                }
+            }
+            .publishDecodable(type: Token.self)
+            .compactMap{ $0.value }
+            //.map { $0 }
+            .sink { completion in
+                switch completion {
+                case let .failure(error) :
+                    print(error.localizedDescription)
+                case .finished :
+                    print("Success refeshing token")
+                }
+            } receiveValue: { [weak self] (receivedValue : Token) in
+                print(receivedValue)
+                self?.signInResponse?.token = receivedValue
+            }
+            .store(in: &subscription)
+        
+        DispatchQueue.main.asyncAfter(
+            deadline: .now() + DispatchTimeInterval.seconds(signInResponse?.token.accessTokenExpiresIn ?? 1800)
+        ) {
+            print("Token refreshing request will call after token expired time.")
+            self.refreshToken()
+        }
     }
 }
