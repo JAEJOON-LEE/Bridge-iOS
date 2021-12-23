@@ -277,6 +277,7 @@ struct UsedWritingView: View {
                     .navigationBarItems(trailing: Button { viewModel.showCategoryPicker = false } label : { Text("Done").foregroundColor(.mainTheme) } )
                 }
             }
+            .disabled(viewModel.isProgressShow)
             
             if viewModel.keyboardHideButtonShow {
                 VStack {

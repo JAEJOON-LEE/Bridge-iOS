@@ -21,6 +21,8 @@ final class ItemInfoViewModel : ObservableObject {
     
     private var subscription = Set<AnyCancellable>()
     
+    var previousLikeStatus : Bool = false
+    
     let token : String
     let postId : Int
     let isMyPost : Bool
@@ -91,6 +93,7 @@ final class ItemInfoViewModel : ObservableObject {
                 //print(recievedValue)
                 self?.itemInfo = recievedValue
                 self?.isLiked = recievedValue.usedPostDetail.like
+                self?.previousLikeStatus = recievedValue.usedPostDetail.like
                 //print(self?.itemInfo as Any)
             }.store(in: &subscription)
     }

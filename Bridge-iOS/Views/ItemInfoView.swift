@@ -262,8 +262,13 @@ struct ItemInfoView: View {
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarItems(trailing:
                 Button {
+                    if viewModel.isLiked! {
+                        viewModel.itemInfo?.usedPostDetail.likeCount -= 1
+                    } else {
+                        viewModel.itemInfo?.usedPostDetail.likeCount += 1
+                    }
                     viewModel.isLiked?.toggle()
-                    viewModel.likePost(isliked: (viewModel.itemInfo?.usedPostDetail.like ?? true))
+                    viewModel.likePost(isliked: !(viewModel.isLiked ?? false))
                 } label: {
                     if !viewModel.isMyPost {
                         Image(systemName: (viewModel.isLiked ?? true) ? "heart.fill" : "heart")
