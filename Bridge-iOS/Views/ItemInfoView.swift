@@ -12,6 +12,8 @@ struct ItemInfoView: View {
     @Environment(\.presentationMode) var presentationMode
     @StateObject private var viewModel : ItemInfoViewModel
     @State var isModifyDone : Bool = false
+    @State private var offset = CGSize.zero
+    @State private var ImageViewOffset = CGSize.zero
     
     init(viewModel : ItemInfoViewModel) {
         self._viewModel = StateObject(wrappedValue: viewModel)
@@ -38,7 +40,7 @@ struct ItemInfoView: View {
                     }
                 }.tabViewStyle(PageTabViewStyle())
                 .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
-                .frame(width : UIScreen.main.bounds.width, height: UIScreen.main.bounds.height / 3)
+                .frame(width : UIScreen.main.bounds.width, height: UIScreen.main.bounds.height / 3 + offset.height)
                 Spacer()
             }.blur(radius: viewModel.isMemberInfoClicked ? 5 : 0)
             .onTapGesture {
@@ -60,6 +62,23 @@ struct ItemInfoView: View {
                     }.tabViewStyle(PageTabViewStyle())
                     .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
                     .frame(width : UIScreen.main.bounds.width)
+                    .offset(x : 0, y : ImageViewOffset.height)
+                    .gesture(
+                        DragGesture()
+                            .onChanged { gesture in
+                                if -50 < gesture.translation.height && gesture.translation.height < 100 {
+                                    self.ImageViewOffset = gesture.translation
+                                } else if gesture.translation.height >= 100 {
+                                    viewModel.isImageTap.toggle()
+                                    self.ImageViewOffset = .zero
+                                }
+                            }
+                            .onEnded { _ in
+                                withAnimation {
+                                    self.ImageViewOffset = .zero
+                                }
+                            }
+                    )
                     
                     Button {
                         viewModel.isImageTap.toggle()
@@ -213,10 +232,24 @@ struct ItemInfoView: View {
                 .background(Color.systemDefaultGray)
                 .cornerRadius(25)
             }
+            .offset(x: 0, y: offset.height)
             .edgesIgnoringSafeArea(.bottom)
             .shadow(radius: 5)
             .blur(radius: viewModel.isMemberInfoClicked ? 5 : 0)
-            
+            .gesture(
+                DragGesture()
+                    .onChanged { gesture in
+                        //if -50 < gesture.translation.height && gesture.translation.height < 100 {
+                        if 0 < gesture.translation.height && gesture.translation.height < 100 {
+                            self.offset = gesture.translation
+                        }
+                    }
+                    .onEnded { _ in
+                        withAnimation {
+                            self.offset = .zero
+                        }
+                    }
+            )
             
             // Seller Information
             if viewModel.isMemberInfoClicked {
