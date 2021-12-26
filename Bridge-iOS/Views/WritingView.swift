@@ -23,36 +23,50 @@ struct WritingView : View {
     var uploadButton : some View {
         // temporary linked to TabContainer //
         Button {
-            self.presentationMode.wrappedValue.dismiss()
-            isLinkActive = true
-//            print(viewModel.email)
-//            print(viewModel.password)
+            //            print(viewModel.email)
+            //            print(viewModel.password)
             if(viewModel.isForModifying){
+                self.presentationMode.wrappedValue.dismiss()
+                isLinkActive = true
+                
                 if(viewModel.isForSecretModifying!){
                     viewModel.modifySecretPost(title: viewModel.title, description: viewModel.description, anonymous: viewModel.anonymous, files: viewModel.files)
-//                    withAnimation { viewModel.isProgressShow = true }
+                    //                    withAnimation { viewModel.isProgressShow = true }
                 }
                 else {
                     viewModel.modifyPost(title: viewModel.title, description: viewModel.description, anonymous: viewModel.anonymous, files: viewModel.files)
-//                    withAnimation { viewModel.isProgressShow = true }
+                    //                    withAnimation { viewModel.isProgressShow = true }
                 }
             }
             else{
-                if(viewModel.isSecret){
-                    viewModel.secretPost(title: viewModel.title, description: viewModel.description, anonymous: viewModel.anonymous, files: viewModel.files)
-//                    withAnimation { viewModel.isProgressShow = true }
+                if(viewModel.description != "Please write the content of your post." && viewModel.description.count != 0 && viewModel.title.count != 0){
+                    
+                    self.presentationMode.wrappedValue.dismiss()
+                    isLinkActive = true
+                    
+                    if(viewModel.isSecret){
+                        viewModel.secretPost(title: viewModel.title, description: viewModel.description, anonymous: viewModel.anonymous, files: viewModel.files)
+                        //                    withAnimation { viewModel.isProgressShow = true }
+                    }
+                    else {
+                        viewModel.post(title: viewModel.title, description: viewModel.description, anonymous: viewModel.anonymous, files: viewModel.files)
+                        //                    withAnimation { viewModel.isProgressShow = true }
+                    }
+                    withAnimation { viewModel.isProgressShow = true }
                 }
-                else {
-                    viewModel.post(title: viewModel.title, description: viewModel.description, anonymous: viewModel.anonymous, files: viewModel.files)
-//                    withAnimation { viewModel.isProgressShow = true }
+                else{
+                    viewModel.showAlert = true
                 }
             }
-            withAnimation { viewModel.isProgressShow = true }
         } label : {
             Text("Upload")
                 .modifier(SubmitButtonStyle())
 //                .disabled(!viewModel.isValid())
 //                .opacity(viewModel.isValid() ? 1.0 : 0.4)
+        }.alert(isPresented: $viewModel.showAlert) {
+            Alert(title: Text("Alert"),
+                  message: Text("Please fill the title and contents"),
+                  dismissButton: .default(Text("Close")))
         }
 //        .background(
 //            NavigationLink(

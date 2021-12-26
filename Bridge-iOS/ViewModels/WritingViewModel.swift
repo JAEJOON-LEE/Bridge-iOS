@@ -38,6 +38,7 @@ class WritingViewModel : ObservableObject {
     @Published var secretChecked : Bool = false
     @Published var isUploadDone : Bool = false
     @Published var isProgressShow : Bool = false
+    @Published var showAlert : Bool = false
     
     
     let postId : Int
