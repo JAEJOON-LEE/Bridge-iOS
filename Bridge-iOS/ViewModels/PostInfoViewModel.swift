@@ -26,6 +26,7 @@ final class PostInfoViewModel : ObservableObject {
     @Published var showConfirmDeletion : Bool = false
     @Published var showPostModify : Bool = false
     @Published var showCommentModify : Bool = false
+    @Published var showCommentAlert : Bool = false
     @Published var commentSended : Bool = false
     @Published var isProgressShow : Bool = false
     
@@ -133,7 +134,7 @@ final class PostInfoViewModel : ObservableObject {
             
                 guard let statusCode = response.response?.statusCode else { return }
                 switch statusCode {
-                case 200 :
+                case 200, 201 :
                     print("Post Upload Success : \(statusCode)")
                     self.commentSended = true
 //                    self.isProgressShow = false

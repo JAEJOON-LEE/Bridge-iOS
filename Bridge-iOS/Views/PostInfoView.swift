@@ -196,62 +196,77 @@ struct PostInfoView: View { // 게시글 상세 페이지
                     Spacer()
                     
                     Button{
-                        if(viewModel.isCocCliked){
-                            if(viewModel.isSecret == false){
-                                viewModel.sendCommentOfComment(content: viewModel.commentInput, anonymous: String(viewModel.isAnonymous), cocId: viewModel.commentId!)
-                                viewModel.contentForViewing = "Say something..."
-                                viewModel.contentForPatch = ""
-                                viewModel.commentInput = ""
-                                viewModel.getBoardPostDetail()
-                                viewModel.getComment()
-                                viewModel.isCocCliked = false
+                        viewModel.getComment()
+                        
+                        if(viewModel.commentInput.count != 0){
+                            if(viewModel.isCocCliked){
+                                if(viewModel.isSecret == false){
+                                    viewModel.sendCommentOfComment(content: viewModel.commentInput, anonymous: String(viewModel.isAnonymous), cocId: viewModel.commentId!)
+                                    viewModel.contentForViewing = "Say something..."
+                                    viewModel.contentForPatch = ""
+                                    viewModel.commentInput = ""
+                                    viewModel.getBoardPostDetail()
+                                    viewModel.getComment()
+                                    viewModel.isCocCliked = false
+                                }
+                                else{
+                                    viewModel.sendSecretCommentOfComment(content: viewModel.commentInput, anonymous: String(viewModel.isAnonymous), cocId: viewModel.commentId!)
+                                    viewModel.contentForViewing = "Say something..."
+                                    viewModel.contentForPatch = ""
+                                    viewModel.commentInput = ""
+                                    viewModel.getSecretPostDetail()
+                                    viewModel.getSecretComment()
+                                    viewModel.isCocCliked = false
+                                }
+                            }
+                            else if(viewModel.showCommentModify == true){
+                                if(viewModel.isSecret == false){
+                                    viewModel.patchComment(content: viewModel.commentInput)
+                                    viewModel.contentForViewing = "Say something..."
+                                    viewModel.contentForPatch = ""
+                                    viewModel.commentInput = ""
+                                    viewModel.getBoardPostDetail()
+                                    viewModel.getComment()
+                                    viewModel.isCocCliked = false
+                                }
+                                else{
+                                    viewModel.patchSecretComment(content: viewModel.commentInput)
+                                    viewModel.contentForViewing = "Say something..."
+                                    viewModel.contentForPatch = ""
+                                    viewModel.commentInput = ""
+                                    viewModel.getSecretPostDetail()
+                                    viewModel.getSecretComment()
+                                    viewModel.isCocCliked = false
+                                }
                             }
                             else{
-                                viewModel.sendSecretCommentOfComment(content: viewModel.commentInput, anonymous: String(viewModel.isAnonymous), cocId: viewModel.commentId!)
-                                viewModel.contentForViewing = "Say something..."
-                                viewModel.contentForPatch = ""
-                                viewModel.commentInput = ""
-                                viewModel.getSecretPostDetail()
-                                viewModel.getSecretComment()
-                                viewModel.isCocCliked = false
+                                if(viewModel.isSecret == false){
+                                    viewModel.sendComment(content: viewModel.commentInput, anonymous: String(viewModel.isAnonymous))
+                                    viewModel.contentForViewing = "Say something..."
+                                    viewModel.contentForPatch = ""
+                                    viewModel.commentInput = ""
+                                    viewModel.getBoardPostDetail()
+                                    viewModel.getComment()
+                                    viewModel.isCocCliked = false
+                                }else{
+                                    viewModel.sendSecretComment(content: viewModel.commentInput, anonymous: String(viewModel.isAnonymous))
+                                    viewModel.contentForViewing = "Say something..."
+                                    viewModel.contentForPatch = ""
+                                    viewModel.commentInput = ""
+                                    viewModel.getBoardPostDetail()
+                                    viewModel.getComment()
+                                    viewModel.isCocCliked = false
+                                }
                             }
-                        }
-                        else if(viewModel.showCommentModify == true){
-                            if(viewModel.isSecret == false){
-                                viewModel.patchComment(content: viewModel.commentInput)
-                                viewModel.contentForViewing = "Say something..."
-                                viewModel.contentForPatch = ""
-                                viewModel.commentInput = ""
+                            withAnimation {
+                                viewModel.isProgressShow = true
+                                viewModel.commentSended = true
                                 viewModel.getBoardPostDetail()
-                                viewModel.getComment()
-                            }
-                            else{
-                                viewModel.patchSecretComment(content: viewModel.commentInput)
-                                viewModel.contentForViewing = "Say something..."
-                                viewModel.contentForPatch = ""
-                                viewModel.commentInput = ""
-                                viewModel.getSecretPostDetail()
-                                viewModel.getSecretComment()
-                            }
+                                viewModel.getComment() }
+                        }else{
+                            viewModel.showCommentAlert = true
                         }
-                        else{
-                            if(viewModel.isSecret == false){
-                                viewModel.sendComment(content: viewModel.commentInput, anonymous: String(viewModel.isAnonymous))
-                                viewModel.contentForViewing = "Say something..."
-                                viewModel.contentForPatch = ""
-                                viewModel.commentInput = ""
-                                viewModel.getBoardPostDetail()
-                                viewModel.getComment()
-                            }else{
-                                viewModel.sendSecretComment(content: viewModel.commentInput, anonymous: String(viewModel.isAnonymous))
-                                viewModel.contentForViewing = "Say something..."
-                                viewModel.contentForPatch = ""
-                                viewModel.commentInput = ""
-                                viewModel.getSecretPostDetail()
-                                viewModel.getSecretComment()
-                            }
-                        }
-                        withAnimation { viewModel.isProgressShow = true }
+                        viewModel.getComment()
                     } label : {
                         Image(systemName: "paperplane")
                             .foregroundColor(.black)
@@ -352,6 +367,14 @@ struct PostInfoView: View { // 게시글 상세 페이지
         .onChange(of: viewModel.commentSended, perform: { _ in
             
                 if(viewModel.isMyPost != nil){
+                    viewModel.getComment()
+                }else{
+                    viewModel.getSecretComment()
+                }
+        })
+        .onChange(of: viewModel.isProgressShow, perform: { _ in
+            
+                if(viewModel.isMyPost != nil){
                     viewModel.contentForViewing = "Say something..."
                     viewModel.contentForPatch = ""
                     viewModel.commentInput = ""
@@ -389,12 +412,16 @@ struct PostInfoView: View { // 게시글 상세 페이지
                     viewModel.commentInput = ""
                     viewModel.getBoardPostDetail()
                     viewModel.getComment()
+//                    viewModel.isMenuClicked = false
+//                    viewModel.isMyComment = false
                 }else{
                     viewModel.contentForViewing = "Say something..."
                     viewModel.contentForPatch = ""
                     viewModel.commentInput = ""
                     viewModel.getSecretPostDetail()
                     viewModel.getSecretComment()
+//                    viewModel.isMenuClicked = false
+//                    viewModel.isMyComment = false
                 }
         }).onChange(of: viewModel.isLiked, perform: { _ in
             
@@ -426,13 +453,14 @@ struct PostInfoView: View { // 게시글 상세 페이지
                 Button {
                     withAnimation {
                         viewModel.isMenuClicked = true
-                        viewModel.showAction = true
+//                        if((viewModel.isSecret == false && viewModel.isMyPost! == true) || (viewModel.totalSecretPostDetail?.secretPostDetail.modifiable == true)){
+                            viewModel.showAction = true
                         
-                        if((viewModel.isSecret == false && viewModel.isMyPost! == true) || (viewModel.totalSecretPostDetail?.secretPostDetail.modifiable == true)){
-                        }
-                        else{
+                        viewModel.isMyComment = false
+//                        }else{
+//                            viewModel.showAction2 = true
+//                        }
                         
-                        }
                     }
                     //menu toggle
                 } label: {
@@ -443,34 +471,35 @@ struct PostInfoView: View { // 게시글 상세 페이지
 //                    }
                 }
         )
-        .actionSheet(isPresented: $viewModel.showAction) {
-                ActionSheet(
-                    title: (viewModel.isMyComment) ? Text("Comment Options") : Text("Post Options"),
-                    buttons:
-                        [
-                            
-                            .default((viewModel.isMyComment) ? Text("Modify Comment") : ((viewModel.isMyPost!) ? Text("Post Options") : Text("Report"))){
-                                if(viewModel.isMyComment){
-                                    viewModel.showCommentModify = true
-                                    viewModel.contentForViewing = viewModel.contentForPatch
-                                }
-                                else{
-                                    viewModel.showPostModify = true
-                                }
-                            },
-                            
-                            .destructive((viewModel.isMyComment) ? Text("Delete Comment") : Text("Delete Post")) {
-                                viewModel.showConfirmDeletion = true
-                            },
-                            .cancel()
-                            
-                        ]
-                    
-                )
-        }
+        .actionSheet(isPresented: $viewModel.showAction, content: getActionSheet)
+//        .actionSheet(isPresented: $viewModel.showAction) {
+//                ActionSheet(
+//                    title: (viewModel.isMyComment) ? Text("Comment Options") : Text("Post Options"),
+//                    buttons:
+//                        [
+//
+//                            .default((viewModel.isMyComment) ? Text("Modify Comment") : Text("Modify Post")){
+//                                if(viewModel.isMyComment){
+//                                    viewModel.showCommentModify = true
+//                                    viewModel.contentForViewing = viewModel.contentForPatch
+//                                }
+//                                else{
+//                                    viewModel.showPostModify = true
+//                                }
+//                            },
+//
+//                            .destructive((viewModel.isMyComment) ? Text("Delete Comment") : Text("Delete Post")) {
+//                                viewModel.showConfirmDeletion = true
+//                            },
+//                            .cancel()
+//
+//                        ]
+//
+//                )
+//        }
 //        .actionSheet(isPresented: $viewModel.showAction2) {
 //            ActionSheet(
-//                title: Text("Post Options"),
+//                title: Text("Post Option"),
 //                buttons: [
 //
 //                        .default(Text("Report")){
@@ -495,6 +524,11 @@ struct PostInfoView: View { // 게시글 상세 페이지
 //                ]
 //            )
 //        }
+        .alert(isPresented: $viewModel.showCommentAlert) {
+            Alert(title: Text("Alert"),
+                  message: Text("Please fill the comment"),
+                  dismissButton: .default(Text("Close")))
+        }
         .alert(isPresented: $viewModel.showConfirmDeletion) {
             Alert(
                 title: Text("Confirmation"),
@@ -505,20 +539,24 @@ struct PostInfoView: View { // 게시글 상세 페이지
                             viewModel.deleteComment()
                             viewModel.getBoardPostDetail()
                             viewModel.getComment()
+                            viewModel.showAction = false
                         }
                         else{
                             viewModel.deletePost()
                             self.presentationMode.wrappedValue.dismiss()
+                            viewModel.showAction = false
                         }
                     }else{
                         if(viewModel.isMyComment){
                             viewModel.deleteSecretComment()
                             viewModel.getSecretPostDetail()
                             viewModel.getSecretComment()
+                            viewModel.showAction = false
                         }
                         else{
                             viewModel.deleteSecretPost()
                             self.presentationMode.wrappedValue.dismiss()
+                            viewModel.showAction = false
                         }
                     }
                     
@@ -535,6 +573,72 @@ struct PostInfoView: View { // 게시글 상세 페이지
                     .navigationBarTitle((viewModel.isMyComment) ? Text("Modify Comment") : Text("Modify Post")),
                 isActive : $viewModel.showPostModify) { }
         )
+    }
+    /*
+    .actionSheet(isPresented: $viewModel.showAction) {
+            ActionSheet(
+                title: (viewModel.isMyComment) ? Text("Comment Options") : Text("Post Options"),
+                buttons:
+                    [
+                        
+                        .default((viewModel.isMyComment) ? Text("Modify Comment") : Text("Modify Post")){
+                            if(viewModel.isMyComment){
+                                viewModel.showCommentModify = true
+                                viewModel.contentForViewing = viewModel.contentForPatch
+                            }
+                            else{
+                                viewModel.showPostModify = true
+                            }
+                        },
+                        
+                        .destructive((viewModel.isMyComment) ? Text("Delete Comment") : Text("Delete Post")) {
+                            viewModel.showConfirmDeletion = true
+                        },
+                        .cancel()
+                        
+                    ]
+                
+            )
+    }
+    */
+    func getActionSheet() -> ActionSheet {
+        let btnMC: ActionSheet.Button = (
+            .default(Text("Modify Comment")){
+                viewModel.showCommentModify = true
+                viewModel.contentForViewing = viewModel.contentForPatch
+        })
+        
+        let btnMP: ActionSheet.Button = (
+            .default(Text("Modify Post")){
+                viewModel.showPostModify = true
+        })
+        
+        let btnDC: ActionSheet.Button = (
+            .destructive(Text("Delete Comment")) {
+            viewModel.showConfirmDeletion = true
+        })
+        
+        let btnDP: ActionSheet.Button = (
+            .destructive(Text("Delete Post")) {
+            viewModel.showConfirmDeletion = true
+        })
+        
+        let btnReport: ActionSheet.Button = (
+            .default(Text("Report")){
+                // 신고 기능 추가
+                viewModel.isMenuClicked = false
+            })
+        
+        let btnCancle: ActionSheet.Button = .cancel()
+        
+        if((viewModel.isMyComment == true) || (viewModel.totalSecretPostDetail?.secretPostDetail.modifiable == true)){
+            return ActionSheet(title: Text("Options"), message: nil, buttons: [btnMC, btnDC, btnCancle])
+        }
+        else if((viewModel.isSecret == false && viewModel.isMyPost! == true ) || (viewModel.totalSecretPostDetail?.secretPostDetail.modifiable == true)){
+            return ActionSheet(title: Text("Options"), message: nil, buttons: [btnMP, btnDP, btnCancle])
+        }else{
+            return ActionSheet(title: Text("Option"), message: nil, buttons: [btnReport, btnCancle])
+        }
     }
 }
 
@@ -662,6 +766,35 @@ extension PostInfoView {
                             Text(Coc.content)
                                 .padding(.leading, 40)
                             
+//                            HStack{
+//                                Spacer()
+//
+////                                Button{
+////                                    //댓글 라이크 버튼 클릭
+//////                                    viewModel.isLiked?.toggle()
+//////                                    viewModel.likeCommentOfComment(isliked: Coc.like)
+////                                } label : {
+////                                    Image(systemName: Coc.like ? "hand.thumbsup.fill" : "hand.thumbsup")
+//                                    Image(systemName: "hand.thumbsup.fill")
+//                                        .foregroundColor(.mainTheme)
+////                                }
+//                                Text(String((Coc.likeCount)))
+//                                    .padding(.trailing)
+//
+////                                Button{
+////                                    //대댓글 클릭
+////                                    viewModel.isCocCliked = true
+////                                    viewModel.commentId = Coc.commentId
+////                                    //                        commentId = viewModel.commentId
+////                                    viewModel.contentForViewing = "@" + (Coc.member?.username! ?? "Anonymous")
+////                                    //                            viewModel.likeComment(isliked: (viewModel.commentList.like ?? true))
+////                                } label : {
+////                                    Image(systemName: "message.fill")
+////                                        .foregroundColor(.black)
+////                                }
+//                            }
+//                            .font(.system(size: 11))
+//
 //                            HStack{
 //                                Spacer()
 //                            }
