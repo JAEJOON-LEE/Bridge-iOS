@@ -88,31 +88,32 @@ struct SignUpView: View {
     
     var nextButton : some View {
         Button {
-                    viewModel.SendEmail(email: viewModel.email)
+            if(viewModel.CheckValidation() == 1){
+                viewModel.CheckDuplication(email: viewModel.email)
                     if(viewModel.statusCode1 == 200 && viewModel.statusCode2 == 200){
                         viewModel.showSignUpFailAlert = false
                         isLinkActive = true
                     }
-//                    else if(viewModel.check == 1){
-//                        isLinkActive = false
-//                        viewModel.showSignUpFailAlert = true
-//                    }
-                    else{
-                        isLinkActive = false
-                        viewModel.showSignUpFailAlert = true
-                    }
-                } label : {
-                    Text("Next")
-                        .modifier(SubmitButtonStyle())
-                }.background(
-                    NavigationLink(
-                        destination: SignUpVerifyView(viewModel: viewModel)
-                                        .environmentObject(viewModel),
-                        isActive : $isLinkActive
-                    ) {
-                        // label
-                    }
-                )
+                
+            //                    else if(viewModel.check == 1){
+            //                        isLinkActive = false
+            //                        viewModel.showSignUpFailAlert = true
+            //                    }
+//            else{
+//                //                        viewModel.showSignUpFailAlert = true
+//            }
+            }} label : {
+            Text("Next")
+                .modifier(SubmitButtonStyle())
+        }.background(
+            NavigationLink(
+                destination: SignUpVerifyView(viewModel: viewModel)
+                    .environmentObject(viewModel),
+                isActive : $isLinkActive
+            ) {
+                // label
+            }
+        )
     }
     
     var body: some View {
@@ -154,7 +155,6 @@ struct SignUpView: View {
                                          ,
                                          action: {
                                             viewModel.showSignUpFailAlert = false
-                                            isLinkActive = false
                                          }
                   )
             )

@@ -12,6 +12,7 @@ struct SignUpVerifyView: View {
     @State var isLinkActive : Bool = false
     @ObservedObject var viewModel : SignUpViewModel
     
+    
     var titleField : some View {
         Text("Check your mail box")
             .font(.largeTitle)

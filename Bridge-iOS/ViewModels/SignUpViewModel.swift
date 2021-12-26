@@ -32,6 +32,7 @@ final class SignUpViewModel : ObservableObject {
     @Published var statusCode1 = 0
     @Published var statusCode2 = 0
     @Published var statusCode3 = 0
+    @Published var isLinkActive = false
     
     private var subscription = Set<AnyCancellable>()
     
@@ -101,47 +102,36 @@ final class SignUpViewModel : ObservableObject {
 //    }
     /* ------------------------------------------------------------------------------------------------*/
     
-    /* ------------------------------------------------------------------------------------------------*/
-    func SendEmail(email : String){ //회원가입 이메일 전송 (API number 43)
-        
-//        self.signUpDone = false
-//        self.showSignUpFailAlert = false
-        
-        
-//        if(checkDuplicatedUserName() == true){
-//            self.showSignUpFailAlert = true
-//            message = "the username is already enlisted"
-//            print("duplicated user name")
-//            return
-//        }
-//        else
-//        if(self.checkDuplicatedEmail() == true){
-//            self.showSignUpFailAlert = true
-//            message = "the email is already enlisted"
-//            print("duplicated user name")
-//            return
-//        }
-        
-        
+    func CheckValidation() -> Int {
         if(self.name.count == 0 || self.email.count == 0 || !self.email.contains("@") || !self.email.contains(".")){
 //            self.check = 1
             self.showSignUpFailAlert = true
-            message = "please check your inputs"
-            print("please check your inputs")
-            return
+            message = "please check your name or email"
+            print("please check your name or email")
+            self.signUpDone = false
+            return 0
             
         }else if(self.password != self.password2 || self.password.count < 8 || self.password.count > 15 || self.password.isLowercased ){
 //            self.check = 1
             self.showSignUpFailAlert = true
             message = "please check the passwords"
             print("please check the passwords")
-            return
+            self.signUpDone = false
+            return 0
         }
         else{
-//            self.showSignUpFailAlert = false
+            self.showSignUpFailAlert = false
 //            self.check = 0
             self.signUpDone = true
+            return 1
         }
+    }
+    
+    /* ------------------------------------------------------------------------------------------------*/
+    
+    func CheckDuplication(email : String){
+        
+        var checkDup = 0
         
         //유저네임 중복 확인
         AF.request("http://3.36.233.180:8080/members/usernames/\(name)",
@@ -158,9 +148,10 @@ final class SignUpViewModel : ObservableObject {
                 self.message = "the username is already enlisted"
                 print("duplicated user name")
 //                self.check = 1
-                return
+                checkDup = 0
             }else{
                 self.showSignUpFailAlert = false
+                checkDup = 1
 //                self.check = 0
             }
         }
@@ -185,9 +176,13 @@ final class SignUpViewModel : ObservableObject {
                 self.message = "the email is already enlisted"
                 print("duplicated email")
 //                self.check = 1
-                return
+                
+                checkDup = 0
             }else{
                 self.showSignUpFailAlert = false
+                checkDup = 1
+                
+                self.SendEmail(email: email)
 //                self.check = 0
             }
         }
@@ -196,8 +191,34 @@ final class SignUpViewModel : ObservableObject {
 //            self.check = 0
 //            return
 //        }
+        print(checkDup)
+//        return checkDup
+    }
+    
+    /* ------------------------------------------------------------------------------------------------*/
+    func SendEmail(email : String){ //회원가입 이메일 전송 (API number 43)
+        
+//        self.signUpDone = false
+//        self.showSignUpFailAlert = false
         
         
+//        if(checkDuplicatedUserName() == true){
+//            self.showSignUpFailAlert = true
+//            message = "the username is already enlisted"
+//            print("duplicated user name")
+//            return
+//        }
+//        else
+//        if(self.checkDuplicatedEmail() == true){
+//            self.showSignUpFailAlert = true
+//            message = "the email is already enlisted"
+//            print("duplicated user name")
+//            return
+//        }
+        
+        
+        
+        //인증 메일 전송
         AF.request("http://3.36.233.180:8080/email-auth/sign-up",
                    method: .post,
                    parameters: ["email" : email],
@@ -214,10 +235,12 @@ final class SignUpViewModel : ObservableObject {
     /* ------------------------------------------------------------------------------------------------*/
     
     /* ------------------------------------------------------------------------------------------------*/
-    func VerifyEmail(email : String, verifyCode : String){ //회원가입 이메일 인증 코드 확인 (API number 44)
+    func VerifyEmail(email : String, verifyCode : String) { //회원가입 이메일 인증 코드 확인 (API number 44)
         
+        var checkVery = 0
 //        self.signUpDone = false
-//        self.showSignUpFailAlert = false
+        self.showSignUpFailAlert = false
+        self.isLinkActive = false
         
         AF.request("http://3.36.233.180:8080/email-auth/sign-up/confirm",
                    method: .post,
@@ -239,17 +262,22 @@ final class SignUpViewModel : ObservableObject {
                     print("email verify =  \(self.statusCode3)")
 //                    self.showSignUpFailAlert = false
 //                    self.signUpDone = true
+                    checkVery = 1
                 default :
                     print("email verify =  \(self.statusCode3)")
-                    self.showSignUpFailAlert = true
+//                    self.showSignUpFailAlert = true
+                    checkVery = 0
             }
         }
+        print(checkVery)
+//        return checkVery
     }
     /* ------------------------------------------------------------------------------------------------*/
     
     /* ------------------------------------------------------------------------------------------------*/
     func SignUp(name : String, email : String, password : String, role : String, nickname : String, description : String, profileImage : UIImage?, verifyCode : String) {
         
+        self.isLinkActive = false
 //        self.signUpDone = false
 //        self.showSignUpFailAlert = false
 //
