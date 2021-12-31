@@ -79,6 +79,7 @@
 		6DBAAC9A274AB4F700FCE93A /* PostSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBAAC99274AB4F700FCE93A /* PostSearchView.swift */; };
 		6DBAAC9C274AB63B00FCE93A /* SecretBoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBAAC9B274AB63B00FCE93A /* SecretBoardView.swift */; };
 		6DBAAC9E274AB64500FCE93A /* HotBoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBAAC9D274AB64500FCE93A /* HotBoardView.swift */; };
+		6DC3D16C277ECCC500BE28C0 /* ScrollTest.swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC3D16B277ECCC400BE28C0 /* ScrollTest.swift.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -153,6 +154,7 @@
 		6DBAAC99274AB4F700FCE93A /* PostSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostSearchView.swift; sourceTree = "<group>"; };
 		6DBAAC9B274AB63B00FCE93A /* SecretBoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecretBoardView.swift; sourceTree = "<group>"; };
 		6DBAAC9D274AB64500FCE93A /* HotBoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotBoardView.swift; sourceTree = "<group>"; };
+		6DC3D16B277ECCC400BE28C0 /* ScrollTest.swift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollTest.swift.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -236,6 +238,7 @@
 				6DBAAC99274AB4F700FCE93A /* PostSearchView.swift */,
 				6D2B89EF271405CD00319907 /* SecretInfoView.swift */,
 				6D6BA4F026F5A13A0008B25E /* SlideView.swift */,
+				6DC3D16B277ECCC400BE28C0 /* ScrollTest.swift.swift */,
 				1AA8B43626F370CF00C28E02 /* NotificationView.swift */,
 			);
 			path = Views;
@@ -447,6 +450,7 @@
 				1AA8B42826F3485900C28E02 /* Color+Extension.swift in Sources */,
 				1A976EAA274186E200B743CE /* UsedSearchViewModel.swift in Sources */,
 				1AA8B41D26F32E7E00C28E02 /* HomeView.swift in Sources */,
+				6DC3D16C277ECCC500BE28C0 /* ScrollTest.swift.swift in Sources */,
 				1AA8B43226F35EF800C28E02 /* LocationPicker.swift in Sources */,
 				1AA8B40F26F32AF500C28E02 /* TabContainer.swift in Sources */,
 				6DAD1F5227102843006B01FC /* SignUp+ResponseData.swift in Sources */,
@@ -605,7 +609,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Bridge-iOS/Preview Content\"";
-				DEVELOPMENT_TEAM = ZKRH5N6RGG;
+				DEVELOPMENT_TEAM = CUHQA67FQU;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "Bridge-iOS/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -613,7 +617,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.bridge.2021;
+				PRODUCT_BUNDLE_IDENTIFIER = com.bridge.2021.test;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				SWIFT_WHOLE_MODULE_OPTIMIZATION = YES;

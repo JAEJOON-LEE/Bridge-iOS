@@ -163,6 +163,7 @@ struct WritingView : View {
                                 .padding()
                             
                             TextEditor(text: $viewModel.description)
+                                .foregroundColor(viewModel.description == "Please write the content of your post." ? Color.gray : Color.black)
                                 .frame(width :UIScreen.main.bounds.width * 0.85, height : UIScreen.main.bounds.height * 0.3 )
                                 .padding()
                                 .overlay(
