@@ -26,6 +26,8 @@ struct PostInfoView: View { // 게시글 상세 페이지
     
     
     var body: some View {
+        
+        ScrollViewReader { commentArea in
         ZStack {
             VStack {
                 //Profile
@@ -68,6 +70,10 @@ struct PostInfoView: View { // 게시글 상세 페이지
                 .padding()
                 .frame(width : UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.06)
                 
+                
+                ///
+                ///
+                ///
                 ScrollView(.vertical, showsIndicators: false) {
                     //Images
                     ScrollView(.horizontal, showsIndicators: true) {
@@ -171,7 +177,13 @@ struct PostInfoView: View { // 게시글 상세 페이지
                     VStack(alignment: .leading){
                         commentView
                     }.listStyle(PlainListStyle()) // iOS 15 대응
+                        .id("COMMENT_AREA")
                 }
+                
+                ///
+                ///
+                ///
+                
                 Divider()
                 
                 //Comment Input Area
@@ -196,8 +208,6 @@ struct PostInfoView: View { // 게시글 상세 페이지
                     Spacer()
                     
                     Button{
-                        viewModel.getComment()
-                        
                         if(viewModel.commentInput.count != 0){
                             if(viewModel.isCocCliked){
                                 if(viewModel.isSecret == false){
@@ -238,6 +248,7 @@ struct PostInfoView: View { // 게시글 상세 페이지
                                     viewModel.getSecretComment()
                                     viewModel.isCocCliked = false
                                 }
+                                viewModel.showCommentModify = false
                             }
                             else{
                                 if(viewModel.isSecret == false){
@@ -253,17 +264,21 @@ struct PostInfoView: View { // 게시글 상세 페이지
                                     viewModel.contentForViewing = "Say something..."
                                     viewModel.contentForPatch = ""
                                     viewModel.commentInput = ""
-                                    viewModel.getBoardPostDetail()
-                                    viewModel.getComment()
+                                    viewModel.getSecretPostDetail()
+                                    viewModel.getSecretComment()
                                     viewModel.isCocCliked = false
                                 }
                             }
                             withAnimation {
                                 viewModel.isProgressShow = true
                                 viewModel.commentSended = true
-                                viewModel.getBoardPostDetail()
-                                viewModel.getComment() }
+                                commentArea.scrollTo("COMMENT_AREA", anchor: .bottom)
+//                                viewModel.getBoardPostDetail()
+//                                viewModel.getComment()
+//                                commentArea.scrollTo(viewModel.commentLists.count, anchor: .bottom)
+                            }
                         }else{
+                            viewModel.commentSended = false
                             viewModel.showCommentAlert = true
                         }
                         viewModel.getComment()
@@ -273,6 +288,7 @@ struct PostInfoView: View { // 게시글 상세 페이지
                     }
                 }
                 .padding()
+            
             }.onTapGesture {
                 viewModel.isImageTap.toggle() // 이미지 확대 보기 기능
             }
@@ -366,11 +382,24 @@ struct PostInfoView: View { // 게시글 상세 페이지
         }
         .onChange(of: viewModel.commentSended, perform: { _ in
             
+                viewModel.getComment()
+            
                 if(viewModel.isMyPost != nil){
                     viewModel.getComment()
+                    withAnimation{
+                        commentArea.scrollTo("COMMENT_AREA", anchor: .bottom)
+                    }
                 }else{
                     viewModel.getSecretComment()
+                    withAnimation{
+                        commentArea.scrollTo("COMMENT_AREA", anchor: .bottom)
+                    }
                 }
+            
+            viewModel.commentSended = false
+            withAnimation{
+                commentArea.scrollTo("COMMENT_AREA", anchor: .bottom)
+            }
         })
         .onChange(of: viewModel.isProgressShow, perform: { _ in
             
@@ -387,6 +416,11 @@ struct PostInfoView: View { // 게시글 상세 페이지
                     viewModel.getSecretPostDetail()
                     viewModel.getSecretComment()
                 }
+            
+            viewModel.isProgressShow = false
+            withAnimation{
+                commentArea.scrollTo("COMMENT_AREA", anchor: .bottom)
+            }
         })
         .onChange(of: viewModel.showConfirmDeletion, perform: { _ in
             
@@ -574,6 +608,7 @@ struct PostInfoView: View { // 게시글 상세 페이지
                 isActive : $viewModel.showPostModify) { }
         )
     }
+}
     /*
     .actionSheet(isPresented: $viewModel.showAction) {
             ActionSheet(
@@ -644,6 +679,11 @@ struct PostInfoView: View { // 게시글 상세 페이지
 
 extension PostInfoView {
     var commentView : some View {
+        
+        ///
+        ///
+        ///
+        ScrollViewReader{ proxyReader in
         ForEach(viewModel.commentLists, id : \.self) { Comment in
             
             VStack(alignment: .leading){
@@ -876,6 +916,11 @@ extension PostInfoView {
                     , alignment : .topTrailing
                 )
         }
+        .id("SCROLL_TO_BOTTOM")
+        }
+        ///
+        ///
+        ///
     }
 }
 
