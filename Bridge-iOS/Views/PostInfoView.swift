@@ -666,10 +666,12 @@ struct PostInfoView: View { // 게시글 상세 페이지
         
         let btnCancle: ActionSheet.Button = .cancel()
         
-        if((viewModel.isMyComment == true) || (viewModel.totalSecretPostDetail?.secretPostDetail.modifiable == true)){
+        if((viewModel.isMyComment == true)){
             return ActionSheet(title: Text("Options"), message: nil, buttons: [btnMC, btnDC, btnCancle])
         }
-        else if((viewModel.isSecret == false && viewModel.isMyPost! == true ) || (viewModel.totalSecretPostDetail?.secretPostDetail.modifiable == true)){
+        else if((viewModel.isSecret == false && viewModel.isMyPost! == true )){
+            return ActionSheet(title: Text("Options"), message: nil, buttons: [btnMP, btnDP, btnCancle])
+        }else if((viewModel.isSecret == true) && (viewModel.totalSecretPostDetail?.secretPostDetail.modifiable == true)){
             return ActionSheet(title: Text("Options"), message: nil, buttons: [btnMP, btnDP, btnCancle])
         }else{
             return ActionSheet(title: Text("Option"), message: nil, buttons: [btnReport, btnCancle])
