@@ -144,13 +144,14 @@ struct PostInfoView: View { // 게시글 상세 페이지
                             
                             Button{
                                 //라이크 버튼 클릭
+                                viewModel.isLiked = viewModel.totalBoardPostDetail?.boardPostDetail.like
                                 viewModel.isLiked?.toggle()
                                 if(viewModel.isSecret == false){
                                     viewModel.likePost(isliked: (viewModel.totalBoardPostDetail?.boardPostDetail.like ?? true))
-                                    viewModel.getBoardPostDetail()
+//                                    viewModel.getBoardPostDetail()
                                 }else{
                                     viewModel.likeSecretPost(isliked: (viewModel.totalSecretPostDetail?.secretPostDetail.like ?? true))
-                                    viewModel.getSecretPostDetail()
+//                                    viewModel.getSecretPostDetail()
                                 }
                             } label : {
                                 Image(systemName: (viewModel.isLiked ?? true) ? "hand.thumbsup.fill" : "hand.thumbsup")
@@ -272,6 +273,7 @@ struct PostInfoView: View { // 게시글 상세 페이지
                             withAnimation {
                                 viewModel.isProgressShow = true
                                 viewModel.commentSended = true
+                                viewModel.isAnonymous = false
                                 commentArea.scrollTo("COMMENT_AREA", anchor: .bottom)
 //                                viewModel.getBoardPostDetail()
 //                                viewModel.getComment()
@@ -383,6 +385,7 @@ struct PostInfoView: View { // 게시글 상세 페이지
         .onChange(of: viewModel.commentSended, perform: { _ in
             
                 viewModel.getComment()
+                viewModel.getSecretComment()
             
                 if(viewModel.isMyPost != nil){
                     viewModel.getComment()
@@ -457,7 +460,8 @@ struct PostInfoView: View { // 게시글 상세 페이지
 //                    viewModel.isMenuClicked = false
 //                    viewModel.isMyComment = false
                 }
-        }).onChange(of: viewModel.isLiked, perform: { _ in
+        })
+        .onChange(of: viewModel.isLiked!, perform: { _ in
             
             if(viewModel.isSecret == false){
                 viewModel.getBoardPostDetail()
@@ -724,13 +728,25 @@ extension PostInfoView {
                 HStack{
                     Spacer()
                     
+                    
                     Button{
                         //댓글 라이크 버튼 클릭
-                        viewModel.isLiked?.toggle()
-                        viewModel.likeComment(isliked: Comment.like)
+                        viewModel.isCommentLiked = Comment.like
+                        viewModel.isCommentLiked?.toggle()
+//                        print(viewModel.isCommentLiked ?? true)
+//                        if(viewModel.isCommentLiked! == true){
+//                            Comment.like = true
+//                        }else{
+//                            Comment.like = false
+//                        }
+//                        viewModel.commentId = Comment.commentId
+                        viewModel.commentId = Comment.commentId
+                        viewModel.likeComment(isCommentliked: (viewModel.isCommentLiked ?? true))
                     } label : {
-                        Image(systemName: Comment.like ? "hand.thumbsup.fill" : "hand.thumbsup")
+                        Image(systemName: (viewModel.isCommentLiked ?? true) ? "hand.thumbsup.fill" : "hand.thumbsup")
                             .foregroundColor(.mainTheme)
+//                        Image(systemName: (viewModel.isLiked ?? true) ? "hand.thumbsup.fill" : "hand.thumbsup")
+//                            .foregroundColor(.mainTheme)
                     }
                     Text(String((Comment.likeCount)))
                         .padding(.trailing)
@@ -745,6 +761,7 @@ extension PostInfoView {
                     } label : {
                         Image(systemName: "message.fill")
                             .foregroundColor(.black)
+                            .padding(.bottom, 1)
                     }
                 }
                 .font(.system(size: 13))
@@ -802,14 +819,66 @@ extension PostInfoView {
                                 .foregroundColor(.gray)
                                 
                                 Spacer()
+                                
+                                    Button { // menu button
+                                            viewModel.isMenuClicked = true
+                                            viewModel.showAction = true
+                                            viewModel.isMyComment = true
+                                            viewModel.commentId = Coc.commentId
+                                            viewModel.contentForPatch = Coc.content
+                                        
+                                            //menu toggle
+                                    } label: {
+                                        if (Coc.modifiable) {
+                                            Image(systemName : "ellipsis")
+                                                .foregroundColor(.black)
+                                                .font(.system(size : 15, weight : .bold))
+                                        }
+                                    }
                             }
                             .frame(alignment: .leading)
                             
                             Text(Coc.content)
                                 .padding(.leading, 40)
                             
-//                            HStack{
-//                                Spacer()
+                            HStack{
+                                Spacer()
+                                
+                                Button{
+                                    //댓글 라이크 버튼 클릭
+                                    viewModel.isCocLiked = Coc.like
+                                    viewModel.isCocLiked?.toggle()
+            //                        print(viewModel.isCommentLiked ?? true)
+            //                        if(viewModel.isCommentLiked! == true){
+            //                            Comment.like = true
+            //                        }else{
+            //                            Comment.like = false
+            //                        }
+                                    viewModel.commentId = Coc.commentId
+                                     
+                                    viewModel.likeCommentOfComment(isliked: viewModel.isCocLiked ?? true, cocId: Coc.commentId )
+                                } label : {
+                                    Image(systemName: (viewModel.isCocLiked ?? true) ? "hand.thumbsup.fill" : "hand.thumbsup")
+                                        .foregroundColor(.mainTheme)
+            //                        Image(systemName: (viewModel.isLiked ?? true) ? "hand.thumbsup.fill" : "hand.thumbsup")
+            //                            .foregroundColor(.mainTheme)
+                                }
+                                Text(String((Coc.likeCount)))
+                                    .padding(.trailing)
+                                
+                                Button{
+                                    //대댓글 클릭
+                                    viewModel.isCocCliked = true
+                                    viewModel.commentId = Comment.commentId
+                                    //                        commentId = viewModel.commentId
+                                    viewModel.contentForViewing = "@" + (Comment.member?.username! ?? "Anonymous")
+                                    //                            viewModel.likeComment(isliked: (viewModel.commentList.like ?? true))
+                                } label : {
+                                    Image(systemName: "message.fill")
+                                        .foregroundColor(.black)
+                                        .padding(.bottom, 2)
+                                }
+                            }
 //
 ////                                Button{
 ////                                    //댓글 라이크 버튼 클릭
@@ -855,6 +924,23 @@ extension PostInfoView {
                         
                     }
                     .frame(alignment : .leading)
+//                    .overlay(
+//                        Button { // menu button
+//                                viewModel.isMenuClicked = true
+//                                viewModel.showAction = true
+//                                viewModel.isMyComment = true
+//                                viewModel.commentId = Coc.commentId
+//                                viewModel.contentForPatch = Coc.content
+//
+//                                //menu toggle
+//                        } label: {
+//                            if viewModel.memberId == Coc.member?.memberId {
+//                                Image(systemName : "ellipsis")
+//                                    .foregroundColor(.black)
+//                                    .font(.system(size : 15, weight : .bold))
+//                            }
+//                        }
+//                    )
                 }
 //                }
                     
@@ -909,7 +995,7 @@ extension PostInfoView {
                         }
                             //menu toggle
                     } label: {
-                        if viewModel.memberId == Comment.member?.memberId {
+                        if (Comment.modifiable) {
                             Image(systemName : "ellipsis")
                                 .foregroundColor(.black)
                                 .font(.system(size : 15, weight : .bold))

@@ -15,6 +15,8 @@ final class PostInfoViewModel : ObservableObject {
     @Published var commentLists : [CommentList] = []
     
     @Published var isLiked : Bool?
+    @Published var isCommentLiked : Bool?
+    @Published var isCocLiked : Bool?
     
     @Published var likeCount : Int = 0
     @Published var commentCount : Int = 0
@@ -361,6 +363,7 @@ final class PostInfoViewModel : ObservableObject {
                 }
             } receiveValue: { [weak self] (recievedValue : [CommentList]) in
                 self?.commentLists = recievedValue
+//                self?.isCommentLiked = recievedValue.boardPostDetail.like
 //                print(recievedValue)
             }.store(in: &subscription)
     }
@@ -411,10 +414,10 @@ final class PostInfoViewModel : ObservableObject {
         }
     }
     
-    func likeComment(isliked : Bool) {
-        let url = "http://3.36.233.180:8080/comments/\(commentId)/likes"
+    func likeComment(isCommentliked : Bool) {
+        let url = "http://3.36.233.180:8080/comments/\(commentId!)/likes"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
-        let method : HTTPMethod = isliked ? .delete : .post
+        let method : HTTPMethod = isCommentliked ? .delete : .post
         
         AF.request(url,
                    method: method,
