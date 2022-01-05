@@ -51,12 +51,7 @@ struct TabContainer: View {
                         Spacer()
                     }.frame(width : UIScreen.main.bounds.width)
                 case 5 :
-                    // temp
-                    VStack {
-                        Spacer()
-                        Text("Message").font(.largeTitle)
-                        Spacer()
-                    }.frame(width : UIScreen.main.bounds.width)
+                    ChatView(viewModel: ChatViewModel(accessToken: signInViewModel.signInResponse?.token.accessToken ?? ""))
                 default:
                     BoardView(viewModel:
                                 BoardViewModel(
@@ -69,8 +64,8 @@ struct TabContainer: View {
                 TabSelector
             }.accentColor(.mainTheme)
             .navigationBarItems(
-                
-                leading: Button {
+                leading:
+                Button {
                     print("leading button clicked")
                     withAnimation {
                         if(viewModel.selectedTabIndex == 2){
@@ -80,7 +75,6 @@ struct TabContainer: View {
                             isSlideShow.toggle()
                         }
                     }
-                    
                 } label : {
                     if(viewModel.selectedTabIndex == 2){
                             NavigationLink(
@@ -98,9 +92,9 @@ struct TabContainer: View {
                         Image(systemName: "text.justify")
                             .foregroundColor(.black)
                     }
-                }
-                ,
-                trailing: Button {
+                },
+                trailing:
+                Button {
                     print("trailing button clicked")
                     isNotificationShow.toggle()
                 } label : {
@@ -231,7 +225,7 @@ extension TabContainer {
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(width : UIScreen.main.bounds.width * 0.1)
-                    Text("Message")
+                    Text("Chatting")
                         .font(.system(size : 12))
                         .foregroundColor(viewModel.selectedTabIndex == 5 ? .mainTheme : .gray)
                 }

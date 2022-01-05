@@ -179,7 +179,7 @@ struct ItemCard : View {
                 Spacer()
                 HStack(spacing : 5) {
                     Text(viewModel.camp)
-                    Text(viewModel.convertReturnedDateString(viewModel.post.createdAt)).fontWeight(.semibold)
+                    Text(convertReturnedDateString(viewModel.post.createdAt)).fontWeight(.semibold)
                     Image(systemName : "eye")
                     Text("\(viewModel.viewCount)")
                     Spacer()

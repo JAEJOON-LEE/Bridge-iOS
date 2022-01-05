@@ -103,7 +103,7 @@ struct ItemInfoView: View {
                                 .font(.largeTitle)
                                 .fontWeight(.bold)
                             HStack(spacing : 5) {
-                                Text(viewModel.convertReturnedDateString(viewModel.itemInfo?.usedPostDetail.createdAt ?? "2021-10-01 00:00:00"))
+                                Text(convertReturnedDateString(viewModel.itemInfo?.usedPostDetail.createdAt ?? "2021-10-01 00:00:00"))
                                 Text("|").foregroundColor(.mainTheme)
                                 Text("\(viewModel.itemInfo?.usedPostDetail.viewCount ?? 0) View")
                                 Text("|").foregroundColor(.mainTheme)
