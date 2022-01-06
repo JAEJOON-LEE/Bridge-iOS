@@ -24,6 +24,8 @@ struct SlideItem : View {
 }
 
 struct SlideView : View {
+    @AppStorage("remeberUser") var remeberUser : Bool = false
+
     @StateObject private var viewModel : SlideViewModel
     
     init(viewModel : SlideViewModel) {
@@ -145,6 +147,12 @@ struct SlideView : View {
                         SlideItem(ImageName: "info.circle", text: "Customer Service")
                     }
                     
+                    Spacer()
+                    if remeberUser {
+                        Button("Disable Auto SignIn") {
+                            remeberUser = false
+                        }
+                    }
                     Spacer()
                     
                     Button{

@@ -126,10 +126,6 @@ struct SignInView: View {
             viewModel.checked = remeberUser
             viewModel.email = userEmail
             viewModel.password = userPW
-//            if viewModel.checked {
-//                viewModel.showPrgoressView = true
-//                viewModel.SignIn(email: viewModel.email, password: viewModel.password)
-//            }
         }
         .onDisappear{
             remeberUser = viewModel.checked

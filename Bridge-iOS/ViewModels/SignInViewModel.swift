@@ -67,9 +67,8 @@ final class SignInViewModel : ObservableObject {
             }
             .store(in: &subscription)
         
-        
         DispatchQueue.main.asyncAfter(
-            deadline: .now() + DispatchTimeInterval.seconds(signInResponse?.token.accessTokenExpiresIn ?? 1800)
+            deadline: .now() + DispatchTimeInterval.seconds((self.signInResponse?.token.accessTokenExpiresIn ?? 1800) - 10)
         ) {
             print("Token refreshing request will call after token expired time.")
             self.refreshToken()
@@ -109,7 +108,7 @@ final class SignInViewModel : ObservableObject {
             .store(in: &subscription)
         
         DispatchQueue.main.asyncAfter(
-            deadline: .now() + DispatchTimeInterval.seconds(signInResponse?.token.accessTokenExpiresIn ?? 1800)
+            deadline: .now() + DispatchTimeInterval.seconds((self.signInResponse?.token.accessTokenExpiresIn ?? 1800) - 10  )
         ) {
             print("Token refreshing request will call after token expired time.")
             self.refreshToken()

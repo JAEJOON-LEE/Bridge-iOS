@@ -15,8 +15,7 @@ struct Bridge_iOSApp: App {
 
     var body: some Scene {
         WindowGroup {
-            //MainView()
-            LandingView()
+            BaseView()
                 .environment(\.urlImageService, urlImageService)
                 .preferredColorScheme(.light)
         }
