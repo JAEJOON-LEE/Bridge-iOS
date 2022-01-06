@@ -113,21 +113,26 @@ struct HomeView : View {
             ScrollView {
                 LazyVStack {
                     ForEach(viewModel.Posts, id : \.self) { Post in
-                        NavigationLink(
-                            destination:
-                                ItemInfoView(viewModel:
-                                                ItemInfoViewModel(
-                                                    token: viewModel.token,
-                                                    postId : Post.postId,
-                                                    isMyPost : (viewModel.memberId == Post.memberId)
-                                                )
-                                ).onDisappear(perform: {
-                                    // 일반 작업시에는 필요없는데, 삭제 작업 즉시 반영을 위해서 필요함
-                                    viewModel.getPosts(token: viewModel.token)
-                                })
-                        ) {
-                            ItemCard(viewModel : ItemCardViewModel(post: Post))
-                        }//.buttonStyle(.plain)
+                        VStack {
+                            NavigationLink(
+                                destination:
+                                    ItemInfoView(viewModel:
+                                                    ItemInfoViewModel(
+                                                        token: viewModel.token,
+                                                        postId : Post.postId,
+                                                        isMyPost : (viewModel.memberId == Post.memberId)
+                                                    )
+                                    ).onDisappear(perform: {
+                                        // 일반 작업시에는 필요없는데, 삭제 작업 즉시 반영을 위해서 필요함
+                                        viewModel.getPosts(token: viewModel.token)
+                                    })
+                            ) {
+                                ItemCard(viewModel : ItemCardViewModel(post: Post))
+                            }
+                            
+                            Color.systemDefaultGray
+                                .frame(width : UIScreen.main.bounds.width * 0.9, height : 5)
+                        }
                     }
                 }
                 Spacer().frame(height : UIScreen.main.bounds.height * 0.1)
@@ -166,28 +171,38 @@ struct ItemCard : View {
                     .resizable()
                     .aspectRatio(contentMode: .fill)
             }
-            .frame(width : UIScreen.main.bounds.width * 0.33,
-                   height: UIScreen.main.bounds.height * 0.12)
+            .frame(width : UIScreen.main.bounds.width * 0.33, height: UIScreen.main.bounds.height * 0.12)
             .cornerRadius(10)
 
-            VStack(alignment : .leading){
+            VStack(alignment : .leading, spacing: 5) {
                 Text(viewModel.itemTitle)
                     .font(.title2)
-                Spacer()
-                Text("$ " + viewModel.itemPrice)
-                    .font(.system(size: 20, weight : .bold))
-                Spacer()
+                    .fontWeight(.light)
+                    .foregroundColor(.black)
                 HStack(spacing : 5) {
                     Text(viewModel.camp)
-                    Text(convertReturnedDateString(viewModel.post.createdAt)).fontWeight(.semibold)
+                        .fontWeight(.light)
+                    Text(convertReturnedDateString(viewModel.post.createdAt))
+                        .fontWeight(.light)
                     Image(systemName : "eye")
                     Text("\(viewModel.viewCount)")
+                        .fontWeight(.light)
+                }.font(.system(size : 9))
+                Spacer()
+                HStack {
+                    Text("$ " + viewModel.itemPrice)
+                        .font(.system(size: 20, weight : .bold))
+                        .foregroundColor(.black)
+                        .fontWeight(.light)
                     Spacer()
                     Image(systemName : viewModel.isLiked ? "heart.fill" : "heart")
-                        .font(.system(size : 18))
-                }.font(.system(size : 9))
+                        .font(.system(size : 20))
+                }
             }.foregroundColor(.secondary)
+            .padding(.vertical, 5)
         }
-        .modifier(ItemCardStyle())
+        .padding(5)
+        .padding(.horizontal, 10)
+        //.modifier(ItemCardStyle())
     }
 }

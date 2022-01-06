@@ -21,38 +21,6 @@ struct SettingsView: View {
         self._viewModel = StateObject(wrappedValue: viewModel)
     }
     
-    // selling item
-    // liked item
-    var UserInfoView : some View {
-        VStack {
-            HStack {
-                Text("My Account")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                Spacer()
-            }
-            Spacer()
-            URLImage(URL(string: viewModel.userInfo.profileImage)!) { image in
-                image
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-            }
-            .frame(
-                width : UIScreen.main.bounds.width * 0.4,
-                height : UIScreen.main.bounds.width * 0.4
-            )
-            .clipShape(Circle())
-            .shadow(radius: 5)
-            
-            Text(viewModel.userInfo.username)
-                .font(.title)
-                .fontWeight(.bold)
-            Text(viewModel.userInfo.description)
-                .font(.title)
-            Spacer()
-        }.padding()
-    }
-    
     var BlockedUsersView : some View {
         VStack {
             List {
@@ -134,7 +102,7 @@ struct SettingsView: View {
                     .fontWeight(.bold)
                     .padding(.vertical, 5)
                 Divider()
-                NavigationLink(destination: UserInfoView) {
+                NavigationLink(destination: MyPageView(viewModel: MyPageViewModel(signInResponse: viewModel.userInfo))) {
                     HStack {
                         Image(systemName: "person.circle")
                         Text("Account Info")
@@ -169,10 +137,16 @@ struct SettingsView: View {
                 Divider()
             }
             Spacer()
-            HStack {
-                Image(systemName: "arrow.right.square")
-                Text("Log Out")
-            }
+            Divider()
+            Button {
+                
+            } label : {
+                HStack {
+                    Image(systemName: "arrow.right.square")
+                    Text("Log Out")
+                        .fontWeight(.bold)
+                }
+            }.padding()
         } //VStack
         .navigationBarTitle(Text("Settings"))
         .navigationBarTitleDisplayMode(.inline)

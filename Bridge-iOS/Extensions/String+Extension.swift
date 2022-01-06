@@ -19,7 +19,7 @@ extension String {
 
 func convertReturnedDateString(_ timeString : String) -> String {
     var str = timeString
-    str.removeSubrange(str.index(str.endIndex, offsetBy: -7)..<str.endIndex)
+    str.removeSubrange(str.index(str.startIndex, offsetBy: 19)..<str.endIndex)
     str.remove(at: str.index(str.startIndex, offsetBy: 10))
     str.insert(" ", at: str.index(str.startIndex, offsetBy: 10))
     

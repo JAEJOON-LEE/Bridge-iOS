@@ -12,6 +12,11 @@ struct Element : Codable {
 //    var areaLast : Int
     var postList : [Post]
 }
+struct Element_Selling : Codable {
+//    var campLast : Int
+//    var areaLast : Int
+    var usedPostList : [Post]
+}
 
 struct Post : Codable, Hashable {
     let postId : Int
