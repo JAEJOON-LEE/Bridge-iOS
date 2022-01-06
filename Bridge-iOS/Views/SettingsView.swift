@@ -6,13 +6,87 @@
 //
 
 import SwiftUI
+import URLImage
 
 struct SettingsView: View {
+    @StateObject private var viewModel : SettingsViewModel
+    
     // Temporal Var.
     @State private var testToggleVar1 : Bool = false
     @State private var testToggleVar2 : Bool = false
     @State private var testToggleVar3 : Bool = false
     @State private var testToggleVar4 : Bool = false
+    
+    init(viewModel : SettingsViewModel) {
+        self._viewModel = StateObject(wrappedValue: viewModel)
+    }
+    
+    // selling item
+    // liked item
+    var UserInfoView : some View {
+        VStack {
+            HStack {
+                Text("My Account")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                Spacer()
+            }
+            Spacer()
+            URLImage(URL(string: viewModel.userInfo.profileImage)!) { image in
+                image
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+            }
+            .frame(
+                width : UIScreen.main.bounds.width * 0.4,
+                height : UIScreen.main.bounds.width * 0.4
+            )
+            .clipShape(Circle())
+            .shadow(radius: 5)
+            
+            Text(viewModel.userInfo.username)
+                .font(.title)
+                .fontWeight(.bold)
+            Text(viewModel.userInfo.description)
+                .font(.title)
+            Spacer()
+        }.padding()
+    }
+    
+    var BlockedUsersView : some View {
+        VStack {
+            List {
+                ForEach(viewModel.blockList, id : \.self) { blockInfo in
+                    HStack(spacing : 15) {
+                        URLImage(URL(string: blockInfo.blockedMember.profileImage)!) { image in
+                            image
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                        }
+                        .frame(
+                            width : UIScreen.main.bounds.width * 0.15,
+                            height : UIScreen.main.bounds.width * 0.15
+                        )
+                        .clipShape(Circle())
+                        Text(blockInfo.blockedMember.username)
+                            .fontWeight(.semibold)
+                        Spacer()
+                    }
+                }.onDelete { indexOffset in
+                    let index = indexOffset[indexOffset.startIndex]
+                    let blockId = viewModel.blockList[index].blockId
+                    viewModel.UnblockUser(blockId: blockId)
+                    viewModel.blockList.remove(atOffsets: indexOffset)
+                }
+            }.toolbar { EditButton() }
+        }.navigationTitle(Text("Blocked Users"))
+    }
+    
+    var OpenSoureUsage : some View {
+        VStack {
+            Text("Open")
+        }.navigationTitle(Text("Open Source"))
+    }
     
     var body: some View {
         VStack {
@@ -60,7 +134,7 @@ struct SettingsView: View {
                     .fontWeight(.bold)
                     .padding(.vertical, 5)
                 Divider()
-                NavigationLink(destination: Text("1")) {
+                NavigationLink(destination: UserInfoView) {
                     HStack {
                         Image(systemName: "person.circle")
                         Text("Account Info")
@@ -71,7 +145,7 @@ struct SettingsView: View {
                     .foregroundColor(.black)
                 }
                 Divider()
-                NavigationLink(destination: Text("2")) {
+                NavigationLink(destination: BlockedUsersView) {
                     HStack {
                         Image(systemName: "person.fill.xmark")
                         Text("Blocked Users")
@@ -82,7 +156,7 @@ struct SettingsView: View {
                     .foregroundColor(.black)
                 }
                 Divider()
-                NavigationLink(destination: Text("3")) {
+                NavigationLink(destination: OpenSoureUsage) {
                     HStack {
                         Image(systemName: "chevron.left.forwardslash.chevron.right")
                         Text("Opensource code")

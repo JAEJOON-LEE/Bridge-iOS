@@ -156,7 +156,7 @@ struct SlideView : View {
                     }
                     Spacer()
                     
-                    NavigationLink(destination: SettingsView()) {
+                    NavigationLink(destination: SettingsView(viewModel: SettingsViewModel(signInResponse: viewModel.userInfo))) {
                         SlideItem(ImageName: "gearshape", text: "Setting")
                     }.padding(.bottom, 20)
                 }

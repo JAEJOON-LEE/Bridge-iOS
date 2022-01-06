@@ -12,11 +12,7 @@ struct AutoSignInView: View {
     @AppStorage("userPW") var userPW : String = ""
     
     @StateObject private var viewModel = SignInViewModel()
-    
-//    init() {
-//        viewModel.SignIn(email: userEmail, password: userPW)
-//    }
-//
+
     var body: some View {
         if !viewModel.signInDone {
             VStack {

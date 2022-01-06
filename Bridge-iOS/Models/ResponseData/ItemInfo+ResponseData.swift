@@ -26,7 +26,7 @@ struct UsedPostDetail : Codable {
     var viewCount : Int
 }
 
-struct Member : Codable {
+struct Member : Codable, Hashable {
     var description : String
     var memberId : Int
     var profileImage : String
