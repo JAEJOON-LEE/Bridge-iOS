@@ -148,6 +148,7 @@ struct SlideView : View {
                     }
                     
                     Spacer()
+                    //MARK: - TEMP
                     if remeberUser {
                         Button("Disable Auto SignIn") {
                             remeberUser = false
@@ -155,9 +156,7 @@ struct SlideView : View {
                     }
                     Spacer()
                     
-                    Button{
-                        print("setting is clicked")
-                    } label : {
+                    NavigationLink(destination: SettingsView()) {
                         SlideItem(ImageName: "gearshape", text: "Setting")
                     }.padding(.bottom, 20)
                 }
