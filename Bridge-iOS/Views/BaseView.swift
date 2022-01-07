@@ -8,12 +8,12 @@
 import SwiftUI
 
 struct BaseView: View {
-    @AppStorage("remeberUser") var remeberUser : Bool = false
+    @AppStorage("rememberUser") var rememberUser : Bool = false
     
     var body: some View {
-        if remeberUser {
+        if rememberUser {
             AutoSignInView()
-        } else {
+        } else { // rememberUser == false
             LandingView()
         }
     }

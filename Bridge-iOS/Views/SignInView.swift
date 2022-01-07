@@ -10,7 +10,7 @@ import SwiftUI
 struct SignInView: View {
     @AppStorage("userEmail") var userEmail : String = ""
     @AppStorage("userPW") var userPW : String = ""
-    @AppStorage("remeberUser") var remeberUser : Bool = false
+    @AppStorage("rememberUser") var rememberUser : Bool = false
     
     @StateObject private var viewModel = SignInViewModel()
     
@@ -123,12 +123,12 @@ struct SignInView: View {
             }
         }
         .onAppear {
-            viewModel.checked = remeberUser
+            viewModel.checked = rememberUser
             viewModel.email = userEmail
             viewModel.password = userPW
         }
         .onDisappear{
-            remeberUser = viewModel.checked
+            rememberUser = viewModel.checked
             if viewModel.checked {
                 userEmail = viewModel.email
                 userPW = viewModel.password

@@ -16,8 +16,10 @@ final class SettingsViewModel : ObservableObject {
     @Published var boardAlarm : Bool = false
     @Published var sellingAlarm : Bool = false
     //
-    
     @Published var blockList : [BlockInfo] = []
+    @Published var showActionSheet : Bool = false
+    @Published var actionSheetType : Int = 0
+    @Published var signOutConfirm : Bool = false
     
     private var subscription = Set<AnyCancellable>()
 
@@ -47,7 +49,7 @@ final class SettingsViewModel : ObservableObject {
                     print("Get Blocked User Finished")
                 }
             } receiveValue: { [weak self] (recievedValue : [BlockInfo]) in
-                print(recievedValue)
+                //print(recievedValue)
                 self?.blockList = recievedValue
             }.store(in: &subscription)
     }
@@ -58,6 +60,17 @@ final class SettingsViewModel : ObservableObject {
         
         AF.request(requestURL,
                    method: .delete,
+                   encoding: URLEncoding.default,
+                   headers: header)
+            .responseJSON { json in print(json)}
+    }
+    
+    func signOut() {
+        let header: HTTPHeaders = [ "X-AUTH-TOKEN": userInfo.token.accessToken ]
+        let requestURL : String = "http://3.36.233.180:8080/sign-out"
+        
+        AF.request(requestURL,
+                   method: .post,
                    encoding: URLEncoding.default,
                    headers: header)
             .responseJSON { json in print(json)}

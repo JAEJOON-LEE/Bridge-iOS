@@ -67,6 +67,7 @@ final class UsedSearchViewModel : ObservableObject {
     
     func getHotDealPosts() {
         let header: HTTPHeaders = [ "X-AUTH-TOKEN": token ]
+        Posts.removeAll()
         
         AF.request(url,
                    method: .get,

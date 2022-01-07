@@ -9,6 +9,10 @@ import SwiftUI
 import URLImage
 
 struct SettingsView: View {
+    @AppStorage("rememberUser") var rememberUser : Bool = false
+    @AppStorage("userEmail") var userEmail : String = ""
+    @AppStorage("userPW") var userPW : String = ""
+    
     @StateObject private var viewModel : SettingsViewModel
     
     // Temporal Var.
@@ -138,18 +142,70 @@ struct SettingsView: View {
             }
             Spacer()
             Divider()
+            if rememberUser {
+                Button {
+                    print("Disable remember me")
+                    viewModel.actionSheetType = 1
+                    viewModel.showActionSheet = true
+                } label : {
+                    HStack {
+                        Image(systemName: "switch.2")
+                        Text("Disable Remeber Me")
+                            .fontWeight(.semibold)
+                    }
+                }
+                .foregroundColor(.mainTheme)
+                .padding(7)
+            }
             Button {
-                
+                viewModel.actionSheetType = 2
+                viewModel.showActionSheet = true
             } label : {
                 HStack {
                     Image(systemName: "arrow.right.square")
                     Text("Log Out")
-                        .fontWeight(.bold)
+                        .fontWeight(.semibold)
                 }
-            }.padding()
+                .foregroundColor(.mainTheme)
+                .padding(7)
+            }
         } //VStack
         .navigationBarTitle(Text("Settings"))
         .navigationBarTitleDisplayMode(.inline)
         .padding()
+        .actionSheet(isPresented: $viewModel.showActionSheet) {
+            if viewModel.actionSheetType == 1 {
+                return ActionSheet(
+                    title: Text("Do you want to disable Remeber Me?\nYour account will be logged out."),
+                    buttons: [
+                        .destructive(Text("Disable")) {
+                            userEmail = ""
+                            userPW = ""
+                            rememberUser = false
+                        },
+                        .cancel()
+                    ]
+                )
+            } else {
+                return ActionSheet(
+                    title: Text("Do you really want to logout?"),
+                    buttons: [
+                        .destructive(Text("Log Out")) {
+                            userEmail = ""
+                            userPW = ""
+                            rememberUser = false
+                            viewModel.signOut()
+                            viewModel.signOutConfirm = true
+                        },
+                        .cancel()
+                    ]
+                )
+            }
+        } // actionSheet
+        .background(
+            NavigationLink(
+                destination : LandingView().navigationBarHidden(true),
+                isActive : $viewModel.signOutConfirm) { }
+        )
     }
 }

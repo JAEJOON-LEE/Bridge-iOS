@@ -24,7 +24,7 @@ struct SlideItem : View {
 }
 
 struct SlideView : View {
-    @AppStorage("remeberUser") var remeberUser : Bool = false
+    @AppStorage("rememberUser") var rememberUser : Bool = false
 
     @StateObject private var viewModel : SlideViewModel
     
@@ -32,6 +32,72 @@ struct SlideView : View {
         self._viewModel = StateObject(wrappedValue: viewModel)
     }
     
+    var sellingItems : some View {
+        ScrollView {
+            LazyVStack {
+                ForEach(viewModel.usedPostList, id : \.self) { Post in
+                    VStack {
+                        NavigationLink(
+                            destination:
+                                ItemInfoView(viewModel:
+                                                ItemInfoViewModel(
+                                                    token: viewModel.userInfo.token.accessToken,
+                                                    postId : Post.postId,
+                                                    isMyPost : (viewModel.userInfo.memberId == Post.postId)
+                                                )
+                                )
+                        ) {
+                            ItemCard(viewModel : ItemCardViewModel(post: Post))
+                        }
+                        
+                        Color.systemDefaultGray
+                            .frame(width : UIScreen.main.bounds.width * 0.9, height : 5)
+                    }
+                }
+            }.onAppear {
+                viewModel.getSellingList()
+            }
+        }.navigationTitle(Text("Selling Items"))
+    }
+    
+    var likedItems : some View {
+        ScrollView {
+            LazyVStack {
+                ForEach(viewModel.likedPostList, id : \.self) { Post in
+                    VStack {
+                        NavigationLink(
+                            destination:
+                                ItemInfoView(viewModel:
+                                                ItemInfoViewModel(
+                                                    token: viewModel.userInfo.token.accessToken,
+                                                    postId : Post.postId,
+                                                    isMyPost : (viewModel.userInfo.memberId == Post.postId)
+                                                )
+                                )
+                        ) {
+                            ItemCard(viewModel : ItemCardViewModel(post: Post))
+                        }
+                        
+                        Color.systemDefaultGray
+                            .frame(width : UIScreen.main.bounds.width * 0.9, height : 5)
+                    }
+                }
+            }.onAppear {
+                viewModel.getLikedList()
+            }
+        }.navigationTitle(Text("Liked Items"))
+    }
+    
+    var postsIWrote : some View {
+        ScrollView {
+            LazyVStack {
+                Text("Element 1")
+                Text("Element 2")
+                Text("Element 3")
+            }
+        }.navigationTitle(Text("Posts I Wrote"))
+    }
+
     var body : some View {
         HStack {
             Spacer()
@@ -70,8 +136,8 @@ struct SlideView : View {
                 .padding(.leading, 10)
                 
                 HStack {
-                    Button {
-                        print("first button is clicked")
+                    NavigationLink {
+                        sellingItems
                     } label : {
                         VStack {
                             Image(systemName : "cart")
@@ -83,8 +149,8 @@ struct SlideView : View {
                         .foregroundColor(.gray)
                     }
                     
-                    Button {
-                        print("second button is clicked")
+                    NavigationLink {
+                        postsIWrote
                     } label : {
                         VStack {
                             Image(systemName : "list.bullet.rectangle")
@@ -96,8 +162,8 @@ struct SlideView : View {
                         .foregroundColor(.gray)
                     }
                     
-                    Button {
-                        print("third button is clicked")
+                    NavigationLink {
+                        likedItems
                     } label : {
                         VStack {
                             Image(systemName : "heart")
@@ -147,13 +213,6 @@ struct SlideView : View {
                         SlideItem(ImageName: "info.circle", text: "Customer Service")
                     }
                     
-                    Spacer()
-                    //MARK: - TEMP
-                    if remeberUser {
-                        Button("Disable Auto SignIn") {
-                            remeberUser = false
-                        }
-                    }
                     Spacer()
                     
                     NavigationLink(destination: SettingsView(viewModel: SettingsViewModel(signInResponse: viewModel.userInfo))) {

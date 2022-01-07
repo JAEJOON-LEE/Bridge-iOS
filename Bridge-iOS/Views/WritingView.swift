@@ -28,7 +28,7 @@ struct WritingView : View {
             //            print(viewModel.password)
             //            if(viewModel.isForModifying){
             
-            if(viewModel.isForSecretModifying){
+            if(viewModel.isForSecretModifying ?? false){
                 viewModel.modifySecretPost(title: viewModel.title, description: viewModel.description, anonymous: viewModel.anonymous, files: viewModel.files)
                 //                    withAnimation { viewModel.isProgressShow = true }
             }
@@ -114,7 +114,7 @@ struct WritingView : View {
                         //                }.padding(20)
                         //            }
                         
-                        if(viewModel.isForSecretModifying){
+                        if(viewModel.isForSecretModifying ?? false){
                             TextField(viewModel.infoForSecretModifying?.secretPostDetail.title ?? "Title not found",
                                       text:  $viewModel.title)
                             //                        .modifier(SignViewTextFieldStyle())

@@ -84,7 +84,6 @@ struct UsedSearchView : View {
                     }.padding(.bottom, 10)
                 }
             }
-            
             // Hot Deal
             HStack {
                 Text("\(viewModel.currentCamp) Hot Deal")
@@ -97,25 +96,28 @@ struct UsedSearchView : View {
             ScrollView { //hot deal 개수가 3개 이상이면 필요
                 LazyVStack {
                     ForEach(viewModel.hotDealPosts, id : \.self) { Post in
-                        NavigationLink(
-                            destination:
-                                ItemInfoView(viewModel:
-                                                ItemInfoViewModel(
-                                                    token: viewModel.token,
-                                                    postId : Post.postId,
-                                                    isMyPost : (viewModel.memberId == Post.memberId)
-                                                )
-                                )
-                                .onDisappear(perform: {
-                                    // 일반 작업시에는 필요없는데, 삭제 작업 즉시 반영을 위해서 필요함
-                                    viewModel.getHotDealPosts()
-                                })
-                        ) {
-                            ItemCard(viewModel : ItemCardViewModel(post: Post))
+                        VStack {
+                            NavigationLink(
+                                destination:
+                                    ItemInfoView(viewModel:
+                                                    ItemInfoViewModel(
+                                                        token: viewModel.token,
+                                                        postId : Post.postId,
+                                                        isMyPost : (viewModel.memberId == Post.memberId)
+                                                    )
+                                    )
+                                    .onDisappear(perform: {
+                                        // 일반 작업시에는 필요없는데, 삭제 작업 즉시 반영을 위해서 필요함
+                                        viewModel.getHotDealPosts()
+                                    })
+                            ) {
+                                ItemCard(viewModel : ItemCardViewModel(post: Post))
+                            }
+                            Color.systemDefaultGray
+                                .frame(width : UIScreen.main.bounds.width * 0.9, height : 5)
                         }
                     }
                 }
-                //}
                 if (viewModel.hotDealPosts.isEmpty) { Spacer() }
             } // ScrollView
         }

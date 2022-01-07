@@ -112,6 +112,7 @@
 		1AA6D2EF278713C5008357BE /* BlockUser+ResponseData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BlockUser+ResponseData.swift"; sourceTree = "<group>"; };
 		1AA6D2F12787241B008357BE /* MyPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageView.swift; sourceTree = "<group>"; };
 		1AA6D2F327872490008357BE /* MyPageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageViewModel.swift; sourceTree = "<group>"; };
+		1AA6D2F527881303008357BE /* Bridge-iOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Bridge-iOS.entitlements"; sourceTree = "<group>"; };
 		1AA8B40926F32AF500C28E02 /* Bridge-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Bridge-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1AA8B40C26F32AF500C28E02 /* Bridge_iOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bridge_iOSApp.swift; sourceTree = "<group>"; };
 		1AA8B40E26F32AF500C28E02 /* TabContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabContainer.swift; sourceTree = "<group>"; };
@@ -208,6 +209,7 @@
 		1AA8B40B26F32AF500C28E02 /* Bridge-iOS */ = {
 			isa = PBXGroup;
 			children = (
+				1AA6D2F527881303008357BE /* Bridge-iOS.entitlements */,
 				1AA8B40C26F32AF500C28E02 /* Bridge_iOSApp.swift */,
 				1ADD9DE027032597008342A7 /* Models */,
 				1AA8B42626F3484C00C28E02 /* Extensions */,
@@ -643,6 +645,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Bridge-iOS/Bridge-iOS.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Bridge-iOS/Preview Content\"";
 				DEVELOPMENT_TEAM = ZKRH5N6RGG;
@@ -666,6 +669,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Bridge-iOS/Bridge-iOS.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Bridge-iOS/Preview Content\"";
 				DEVELOPMENT_TEAM = ZKRH5N6RGG;
