@@ -21,6 +21,7 @@ struct BoardPostDetail : Codable {
     var like : Bool
     var likeCount : Int
     var postImages : [PostImages]?
+    var modifiable : Bool
 }
 
 struct PostMember : Codable, Hashable {

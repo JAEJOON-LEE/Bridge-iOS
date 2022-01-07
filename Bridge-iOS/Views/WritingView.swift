@@ -15,6 +15,7 @@ struct WritingView : View {
         
     init(viewModel : WritingViewModel) {
         self._viewModel = StateObject(wrappedValue: viewModel)
+        
     }
     
     @State var isLinkActive : Bool = false
@@ -25,24 +26,19 @@ struct WritingView : View {
         Button {
             //            print(viewModel.email)
             //            print(viewModel.password)
-            if(viewModel.isForModifying){
-                self.presentationMode.wrappedValue.dismiss()
-                isLinkActive = true
-                
-                if(viewModel.isForSecretModifying!){
-                    viewModel.modifySecretPost(title: viewModel.title, description: viewModel.description, anonymous: viewModel.anonymous, files: viewModel.files)
-                    //                    withAnimation { viewModel.isProgressShow = true }
-                }
-                else {
-                    viewModel.modifyPost(title: viewModel.title, description: viewModel.description, anonymous: viewModel.anonymous, files: viewModel.files)
-                    //                    withAnimation { viewModel.isProgressShow = true }
-                }
+            //            if(viewModel.isForModifying){
+            
+            if(viewModel.isForSecretModifying){
+                viewModel.modifySecretPost(title: viewModel.title, description: viewModel.description, anonymous: viewModel.anonymous, files: viewModel.files)
+                //                    withAnimation { viewModel.isProgressShow = true }
+            }
+            else if(viewModel.isForModifying){
+                viewModel.modifyPost(title: viewModel.title, description: viewModel.description, anonymous: viewModel.anonymous, files: viewModel.files)
+                //                    withAnimation { viewModel.isProgressShow = true }
             }
             else{
                 if(viewModel.description != "Please write the content of your post." && viewModel.description.count != 0 && viewModel.title.count != 0){
                     
-                    self.presentationMode.wrappedValue.dismiss()
-                    isLinkActive = true
                     
                     if(viewModel.isSecret){
                         viewModel.secretPost(title: viewModel.title, description: viewModel.description, anonymous: viewModel.anonymous, files: viewModel.files)
@@ -118,42 +114,40 @@ struct WritingView : View {
                         //                }.padding(20)
                         //            }
                         
-                        if(viewModel.isForModifying){
-                            if(viewModel.isForSecretModifying!){
-                                TextField(viewModel.infoForSecretModifying?.secretPostDetail.title ?? "Title not found",
-                                          text:  $viewModel.title)
-                                //                        .modifier(SignViewTextFieldStyle())
-                                    .font(.system(size : 25))
-                                    .border(Color.white)
-                                    .padding()
-                                
-                                TextField(viewModel.infoForSecretModifying?.secretPostDetail.description ?? "Contents not found",
-                                          text: $viewModel.description)
-                                    .frame(width :UIScreen.main.bounds.width * 0.85,height : UIScreen.main.bounds.height * 0.3 )
-                                    .padding()
-                                //                        .modifier(SignViewTextFieldStyle())
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 15)
-                                            .stroke(Color.gray, style: StrokeStyle(lineWidth: 1, dash: [8]))
-                                    )
-                            }
-                            else {
-                                TextField(viewModel.isForModifying ? (viewModel.infoForModifying?.boardPostDetail.title ?? "Title not found") : "title",
-                                          text:  $viewModel.title)
-                                //                        .modifier(SignViewTextFieldStyle())
-                                    .font(.system(size : 25))
-                                    .border(Color.white)
-                                    .padding()
-                                
-                                TextField(viewModel.isForModifying ? (viewModel.infoForModifying?.boardPostDetail.description ?? "Contents not found") : "content", text: $viewModel.description)
-                                    .frame(width :UIScreen.main.bounds.width * 0.85, height : UIScreen.main.bounds.height * 0.3 )
-                                //                        .modifier(SignViewTextFieldStyle())
-                                    .padding()
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 15)
-                                            .stroke(Color.gray, style: StrokeStyle(lineWidth: 1, dash: [8]))
-                                    )
-                            }
+                        if(viewModel.isForSecretModifying){
+                            TextField(viewModel.infoForSecretModifying?.secretPostDetail.title ?? "Title not found",
+                                      text:  $viewModel.title)
+                            //                        .modifier(SignViewTextFieldStyle())
+                                .font(.system(size : 25))
+                                .border(Color.white)
+                                .padding()
+                            
+                            TextField(viewModel.infoForSecretModifying?.secretPostDetail.description ?? "Contents not found",
+                                      text: $viewModel.description)
+                                .frame(width :UIScreen.main.bounds.width * 0.85,height : UIScreen.main.bounds.height * 0.3 )
+                                .padding()
+                            //                        .modifier(SignViewTextFieldStyle())
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 15)
+                                        .stroke(Color.gray, style: StrokeStyle(lineWidth: 1, dash: [8]))
+                                )
+                        }
+                        else if(viewModel.isForModifying){
+                            TextField(viewModel.isForModifying ? (viewModel.infoForModifying?.boardPostDetail.title ?? "Title not found") : "title",
+                                      text:  $viewModel.title)
+                            //                        .modifier(SignViewTextFieldStyle())
+                                .font(.system(size : 25))
+                                .border(Color.white)
+                                .padding()
+                            
+                            TextField(viewModel.isForModifying ? (viewModel.infoForModifying?.boardPostDetail.description ?? "Contents not found") : "content", text: $viewModel.description)
+                                .frame(width :UIScreen.main.bounds.width * 0.85, height : UIScreen.main.bounds.height * 0.3 )
+                            //                        .modifier(SignViewTextFieldStyle())
+                                .padding()
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 15)
+                                        .stroke(Color.gray, style: StrokeStyle(lineWidth: 1, dash: [8]))
+                                )
                         }
                         else {
                             TextField("Title", text:  $viewModel.title)
@@ -382,6 +376,11 @@ struct WritingView : View {
                         
                         
                         //            if(!viewModel.isForModifying){
+                        
+                        if(viewModel.selectedImages.isEmpty){
+                            Spacer()
+                                .frame(height: UIScreen.main.bounds.width * 0.2)
+                        }
                         VStack(alignment: .leading){
                             Text("Terms of Use")
                                 .font(.caption2)
@@ -397,10 +396,6 @@ struct WritingView : View {
                         
                         //            }
                         
-                        if(viewModel.selectedImages.isEmpty){
-                            Spacer()
-                                .frame(height: UIScreen.main.bounds.width * 0.2)
-                        }
                         uploadButton
                         //                .modifier(SubmitButtonStyle())
                         Spacer()
@@ -449,6 +444,9 @@ struct WritingView : View {
             //    .sheet(isPresented: $viewModel.showImagePicker) {
             //        WritingPhotoPicker(configuration: viewModel.configuration, isPresented: $viewModel.showImagePicker, pickerResult: $viewModel.selectedImages)
             //    }
+        }
+        .onAppear {
+            viewModel.anonymous = false
         }
     }
 }

@@ -13,10 +13,11 @@ final class PostInfoViewModel : ObservableObject {
     @Published var totalBoardPostDetail : TotalBoardPostDetail?
     @Published var totalSecretPostDetail : TotalSecretPostDetail?
     @Published var commentLists : [CommentList] = []
+    @Published var commentItem : CommentList?
     
-    @Published var isLiked : Bool?
-    @Published var isCommentLiked : Bool?
-    @Published var isCocLiked : Bool?
+    @Published var isLiked : Bool = false
+    @Published var isCommentLiked : Bool = false
+    @Published var isCocLiked : Bool = false
     
     @Published var likeCount : Int = 0
     @Published var commentCount : Int = 0
@@ -25,6 +26,7 @@ final class PostInfoViewModel : ObservableObject {
     @Published var isImageTap : Bool = false
     @Published var showAction : Bool = false
     @Published var showAction2 : Bool = false
+    @Published var showAction3 : Bool = false
     @Published var showConfirmDeletion : Bool = false
     @Published var showPostModify : Bool = false
     @Published var showCommentModify : Bool = false
@@ -104,7 +106,7 @@ final class PostInfoViewModel : ObservableObject {
                    encoding: URLEncoding.default,
                    headers: header
         ).response { json in
-//            print(json)
+            print(json)
         }
     }
     
@@ -424,6 +426,7 @@ final class PostInfoViewModel : ObservableObject {
                    encoding: URLEncoding.default,
                    headers: header
         ).response { json in
+            print(self.commentId!)
             print(json)
         }
     }

@@ -30,10 +30,15 @@ struct PostInfoView: View { // 게시글 상세 페이지
         ScrollViewReader { commentArea in
         ZStack {
             VStack {
+                
+                ///
+                ////
+                ///
+                ///
                 //Profile
                 HStack{
                     //                    if(viewModel.isSecret == false){
-                    
+
                     Button{
                         viewModel.isMemberInfoClicked.toggle()
                     } label : {
@@ -49,18 +54,18 @@ struct PostInfoView: View { // 게시글 상세 페이지
                         .cornerRadius(13)
                     }
                     //                    }
-                    
+
                     HStack{
                         VStack(alignment: .leading){
                             if(viewModel.isSecret == false){
                                 Text(viewModel.totalBoardPostDetail?.member?.username! ?? "Anonymous")
                                     .fontWeight(.bold)
-                                
+
                                 Text(viewModel.convertReturnedDateString(viewModel.totalBoardPostDetail?.boardPostDetail.createdAt ?? "2021-10-01 00:00:00"))
                             }else{
                                 Text("Anonymous")
                                     .fontWeight(.bold)
-                                
+
                                 Text(viewModel.convertReturnedDateString(viewModel.totalSecretPostDetail?.secretPostDetail.createdAt ?? "2021-10-01 00:00:00"))
                             }
                         }
@@ -69,7 +74,9 @@ struct PostInfoView: View { // 게시글 상세 페이지
                 }
                 .padding()
                 .frame(width : UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.06)
-                
+                ///
+                ///
+                ///
                 
                 ///
                 ///
@@ -111,6 +118,7 @@ struct PostInfoView: View { // 게시글 상세 페이지
                             }
                         }
                         .padding()
+                        /// 살려
                     }
                     
                     //Contents
@@ -144,18 +152,28 @@ struct PostInfoView: View { // 게시글 상세 페이지
                             
                             Button{
                                 //라이크 버튼 클릭
-                                viewModel.isLiked = viewModel.totalBoardPostDetail?.boardPostDetail.like
-                                viewModel.isLiked?.toggle()
                                 if(viewModel.isSecret == false){
-                                    viewModel.likePost(isliked: (viewModel.totalBoardPostDetail?.boardPostDetail.like ?? true))
-//                                    viewModel.getBoardPostDetail()
+                                    viewModel.isLiked = viewModel.totalBoardPostDetail!.boardPostDetail.like
+                                    viewModel.likePost(isliked: (viewModel.totalBoardPostDetail!.boardPostDetail.like))
                                 }else{
-                                    viewModel.likeSecretPost(isliked: (viewModel.totalSecretPostDetail?.secretPostDetail.like ?? true))
-//                                    viewModel.getSecretPostDetail()
+                                    viewModel.isLiked = viewModel.totalSecretPostDetail!.secretPostDetail.like
+                                    viewModel.likeSecretPost(isliked: (viewModel.totalSecretPostDetail!.secretPostDetail.like))
+                                }
+                                usleep(500000) // server is fuckin slow
+                                if(viewModel.isSecret == false){
+                                    viewModel.getBoardPostDetail()
+                                }else{
+                                    viewModel.getSecretPostDetail()
                                 }
                             } label : {
-                                Image(systemName: (viewModel.isLiked ?? true) ? "hand.thumbsup.fill" : "hand.thumbsup")
-                                    .foregroundColor(.mainTheme)
+                                
+                                if(viewModel.isSecret == false){
+                                    Image(systemName: (viewModel.totalBoardPostDetail?.boardPostDetail.like ?? true) ? "hand.thumbsup.fill" : "hand.thumbsup")
+                                        .foregroundColor(.mainTheme)
+                                }else{
+                                    Image(systemName: (viewModel.totalSecretPostDetail?.secretPostDetail.like ?? true) ? "hand.thumbsup.fill" : "hand.thumbsup")
+                                        .foregroundColor(.mainTheme)
+                                }
                             }
                             if(viewModel.isSecret == false){
                                 Text(String((viewModel.totalBoardPostDetail?.boardPostDetail.likeCount ?? 0)) )
@@ -175,9 +193,9 @@ struct PostInfoView: View { // 게시글 상세 페이지
                     .padding()
                     .frame(width : UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.03, alignment : .leading)
                     
-                    VStack(alignment: .leading){
-                        commentView
-                    }.listStyle(PlainListStyle()) // iOS 15 대응
+//                    VStack(alignment: .leading){
+//                        commentView
+//                    }.listStyle(PlainListStyle()) // iOS 15 대응
                         .id("COMMENT_AREA")
                 }
                 
@@ -461,14 +479,24 @@ struct PostInfoView: View { // 게시글 상세 페이지
 //                    viewModel.isMyComment = false
                 }
         })
-        .onChange(of: viewModel.isLiked!, perform: { _ in
-            
-            if(viewModel.isSecret == false){
-                viewModel.getBoardPostDetail()
-            }else{
-                viewModel.getSecretPostDetail()
-            }
-    })
+//        .onChange(of: viewModel.isLiked, perform: { _ in
+//            viewModel.showAction3 = false
+//            viewModel.getBoardPostDetail()
+//        })
+//        .onChange(of: viewModel.isLiked, perform: { _ in
+//
+//            if(viewModel.isSecret == false){
+//                viewModel.likePost(isliked: (viewModel.isLiked))
+//                viewModel.getBoardPostDetail()
+//
+////                viewModel.isLiked = viewModel.totalBoardPostDetail!.boardPostDetail.like
+//            }else{
+//                viewModel.getSecretPostDetail()
+//                viewModel.likeSecretPost(isliked: (viewModel.isLiked))
+//
+////                viewModel.isLiked = viewModel.totalBoardPostDetail!.boardPostDetail.like
+//            }
+//        })
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .principal) {
@@ -491,77 +519,18 @@ struct PostInfoView: View { // 게시글 상세 페이지
                 Button {
                     withAnimation {
                         viewModel.isMenuClicked = true
-//                        if((viewModel.isSecret == false && viewModel.isMyPost! == true) || (viewModel.totalSecretPostDetail?.secretPostDetail.modifiable == true)){
                             viewModel.showAction = true
                         
                         viewModel.isMyComment = false
-//                        }else{
-//                            viewModel.showAction2 = true
-//                        }
-                        
                     }
                     //menu toggle
                 } label: {
-//                    if((viewModel.isSecret == false && viewModel.isMyPost! == true) || (viewModel.totalSecretPostDetail?.secretPostDetail.modifiable == true)){
                         Image(systemName : "ellipsis")
                             .foregroundColor(.black)
                             .font(.system(size : 15, weight : .bold))
-//                    }
                 }
         )
         .actionSheet(isPresented: $viewModel.showAction, content: getActionSheet)
-//        .actionSheet(isPresented: $viewModel.showAction) {
-//                ActionSheet(
-//                    title: (viewModel.isMyComment) ? Text("Comment Options") : Text("Post Options"),
-//                    buttons:
-//                        [
-//
-//                            .default((viewModel.isMyComment) ? Text("Modify Comment") : Text("Modify Post")){
-//                                if(viewModel.isMyComment){
-//                                    viewModel.showCommentModify = true
-//                                    viewModel.contentForViewing = viewModel.contentForPatch
-//                                }
-//                                else{
-//                                    viewModel.showPostModify = true
-//                                }
-//                            },
-//
-//                            .destructive((viewModel.isMyComment) ? Text("Delete Comment") : Text("Delete Post")) {
-//                                viewModel.showConfirmDeletion = true
-//                            },
-//                            .cancel()
-//
-//                        ]
-//
-//                )
-//        }
-//        .actionSheet(isPresented: $viewModel.showAction2) {
-//            ActionSheet(
-//                title: Text("Post Option"),
-//                buttons: [
-//
-//                        .default(Text("Report")){
-//                            // 신고 기능 추가
-//                            viewModel.isMenuClicked = false
-//                        },
-//                        .cancel()
-//                ]
-//            )
-//        }
-//        .actionSheet(isPresented: $viewModel.showAction) {
-//            ActionSheet(
-//                title: Text("options"),
-//                buttons: [
-//                    .default( Text("modify comment") ){
-//                        //                        viewModel.showPostModify = true
-//                    },
-//                    .destructive( Text("Delete Comment") ) {
-//                        //                        viewModel.showConfirmDeletion = true
-//                    },
-//                    .cancel()
-//                ]
-//            )
-//        }
         .alert(isPresented: $viewModel.showCommentAlert) {
             Alert(title: Text("Alert"),
                   message: Text("Please fill the comment"),
@@ -613,33 +582,7 @@ struct PostInfoView: View { // 게시글 상세 페이지
         )
     }
 }
-    /*
-    .actionSheet(isPresented: $viewModel.showAction) {
-            ActionSheet(
-                title: (viewModel.isMyComment) ? Text("Comment Options") : Text("Post Options"),
-                buttons:
-                    [
-                        
-                        .default((viewModel.isMyComment) ? Text("Modify Comment") : Text("Modify Post")){
-                            if(viewModel.isMyComment){
-                                viewModel.showCommentModify = true
-                                viewModel.contentForViewing = viewModel.contentForPatch
-                            }
-                            else{
-                                viewModel.showPostModify = true
-                            }
-                        },
-                        
-                        .destructive((viewModel.isMyComment) ? Text("Delete Comment") : Text("Delete Post")) {
-                            viewModel.showConfirmDeletion = true
-                        },
-                        .cancel()
-                        
-                    ]
-                
-            )
-    }
-    */
+    
     func getActionSheet() -> ActionSheet {
         let btnMC: ActionSheet.Button = (
             .default(Text("Modify Comment")){
@@ -673,9 +616,11 @@ struct PostInfoView: View { // 게시글 상세 페이지
         if((viewModel.isMyComment == true)){
             return ActionSheet(title: Text("Options"), message: nil, buttons: [btnMC, btnDC, btnCancle])
         }
-        else if((viewModel.isSecret == false && viewModel.isMyPost! == true )){
+        else if((viewModel.isMyPost! == true )){
             return ActionSheet(title: Text("Options"), message: nil, buttons: [btnMP, btnDP, btnCancle])
-        }else if((viewModel.isSecret == true) && (viewModel.totalSecretPostDetail?.secretPostDetail.modifiable == true)){
+        }else if((viewModel.totalSecretPostDetail?.secretPostDetail.modifiable == true)){
+            return ActionSheet(title: Text("Options"), message: nil, buttons: [btnMP, btnDP, btnCancle])
+        }else if((viewModel.totalBoardPostDetail?.boardPostDetail.modifiable == true)){
             return ActionSheet(title: Text("Options"), message: nil, buttons: [btnMP, btnDP, btnCancle])
         }else{
             return ActionSheet(title: Text("Option"), message: nil, buttons: [btnReport, btnCancle])
@@ -683,438 +628,100 @@ struct PostInfoView: View { // 게시글 상세 페이지
     }
 }
 
-extension PostInfoView {
-    var commentView : some View {
-        
-        ///
-        ///
-        ///
-        ScrollViewReader{ proxyReader in
-        ForEach(viewModel.commentLists, id : \.self) { Comment in
-            
-            VStack(alignment: .leading){
-                HStack{
-                    URLImage( //프로필 이미지
-                        URL(string : (Comment.member?.profileImage) ?? "https://static.thenounproject.com/png/741653-200.png") ??
-                        URL(string: "https://static.thenounproject.com/png/741653-200.png")!
-                    ) { image in
-                        image
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                    }
-                    .frame(width : 40,
-                           height: 40)
-                    .cornerRadius(13)
-                    
-                    
-                    VStack(alignment: .leading){
-                        Group{
-                            Text(Comment.member?.username! ?? "Anonymous" )
-                                .font(.system(size: 20, weight : .medium))
-                            
-                            Text(viewModel.convertReturnedDateString(Comment.createdAt ?? "2021-10-01 00:00:00"))
-                                .font(.system(size: 10))
-                        }
-                        .foregroundColor(.gray)
-                    }
-                    
-                    Spacer()
-                }
-                .padding(.top, -20)
-                
-                Text(Comment.content)
-                    .padding(.leading, 50)
-                
-                HStack{
-                    Spacer()
-                    
-                    
-                    Button{
-                        //댓글 라이크 버튼 클릭
-                        viewModel.isCommentLiked = Comment.like
-                        viewModel.isCommentLiked?.toggle()
-//                        print(viewModel.isCommentLiked ?? true)
-//                        if(viewModel.isCommentLiked! == true){
-//                            Comment.like = true
-//                        }else{
-//                            Comment.like = false
+//extension PostInfoView {
+//    var commentView : some View {
+//
+//        ///
+//        ///
+//        ///
+//        ScrollViewReader{ proxyReader in
+//        ForEach(viewModel.commentLists, id : \.self) { Comment in
+//
+//            VStack(alignment: .leading){
+//                HStack{
+//                    URLImage( //프로필 이미지
+//                        URL(string : (Comment.member?.profileImage) ?? "https://static.thenounproject.com/png/741653-200.png") ??
+//                        URL(string: "https://static.thenounproject.com/png/741653-200.png")!
+//                    ) { image in
+//                        image
+//                            .resizable()
+//                            .aspectRatio(contentMode: .fill)
+//                    }
+//                    .frame(width : 40,
+//                           height: 40)
+//                    .cornerRadius(13)
+//
+//
+//                    VStack(alignment: .leading){
+//                        Group{
+//                            Text(Comment.member?.username! ?? "Anonymous" )
+//                                .font(.system(size: 20, weight : .medium))
+//
+//                            Text(viewModel.convertReturnedDateString(Comment.createdAt ?? "2021-10-01 00:00:00"))
+//                                .font(.system(size: 10))
 //                        }
-//                        viewModel.commentId = Comment.commentId
-                        viewModel.commentId = Comment.commentId
-                        viewModel.likeComment(isCommentliked: (viewModel.isCommentLiked ?? true))
-                    } label : {
-                        Image(systemName: (viewModel.isCommentLiked ?? true) ? "hand.thumbsup.fill" : "hand.thumbsup")
-                            .foregroundColor(.mainTheme)
-//                        Image(systemName: (viewModel.isLiked ?? true) ? "hand.thumbsup.fill" : "hand.thumbsup")
-//                            .foregroundColor(.mainTheme)
-                    }
-                    Text(String((Comment.likeCount)))
-                        .padding(.trailing)
-                    
-                    Button{
-                        //대댓글 클릭
-                        viewModel.isCocCliked = true
-                        viewModel.commentId = Comment.commentId
-                        //                        commentId = viewModel.commentId
-                        viewModel.contentForViewing = "@" + (Comment.member?.username! ?? "Anonymous")
-                        //                            viewModel.likeComment(isliked: (viewModel.commentList.like ?? true))
-                    } label : {
-                        Image(systemName: "message.fill")
-                            .foregroundColor(.black)
-                            .padding(.bottom, 1)
-                    }
-                }
-                .font(.system(size: 13))
-                
-                // 대댓글
-                // 내용들 묶어서 리팩토링 필요
-//                if(Comment.comments != nil){
-//                    CocView(viewModel : CommentViewModel(token: viewModel.token,
-//                                                         commentList: Comment.comments!,
-//                                                             postId : (viewModel.totalBoardPostDetail?.boardPostDetail.postId)!,
-//                                                             commentId : Comment.commentId,
-//                                                             memberId : Comment.member?.memberId ?? -1,
-//                                                             isMyComment: viewModel.memberId == Comment.member?.memberId)
-//                            )
-//                }else{
+//                        .foregroundColor(.gray)
+//                    }
+//
 //                    Spacer()
 //                }
-                
-//                if(Comment.comments != nil){
-                ForEach(Comment.comments!, id : \.self) { Coc in
-                        
-//                        CocView(viewModel : CommentViewModel(token: viewModel.token,
-//                                                             commentList: Comment.comments!,
-//                                                                 postId : (viewModel.totalBoardPostDetail?.boardPostDetail.postId)!,
-//                                                                 commentId : Coc.commentId,
-//                                                                 memberId : Coc.member?.memberId ?? -1,
-//                                                                 isMyComment: viewModel.memberId == Coc.member?.memberId)
-//                                )
-                    HStack{
-                        Spacer()
-                        
-                        VStack(alignment: .leading){
-                            HStack{
-                                URLImage( //프로필 이미지
-                                    URL(string : (Coc.member?.profileImage) ?? "https://static.thenounproject.com/png/741653-200.png") ??
-                                    URL(string: "https://static.thenounproject.com/png/741653-200.png")!
-                                ) { image in
-                                    image
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fill)
-                                }
-                                .frame(width : 30,
-                                       height: 30)
-                                .cornerRadius(9)
-                                
-                                VStack(alignment: .leading){
-                                    
-                                    Text(Coc.member?.username! ?? "Anonymous" )
-                                        .font(.system(size: 15, weight : .medium))
-                                    
-                                    Text(viewModel.convertReturnedDateString(Coc.createdAt ?? "2021-10-01 00:00:00"))
-                                        .font(.system(size: 11))
-                                    
-                                }
-                                .foregroundColor(.gray)
-                                
-                                Spacer()
-                                
-                                    Button { // menu button
-                                            viewModel.isMenuClicked = true
-                                            viewModel.showAction = true
-                                            viewModel.isMyComment = true
-                                            viewModel.commentId = Coc.commentId
-                                            viewModel.contentForPatch = Coc.content
-                                        
-                                            //menu toggle
-                                    } label: {
-                                        if (Coc.modifiable) {
-                                            Image(systemName : "ellipsis")
-                                                .foregroundColor(.black)
-                                                .font(.system(size : 15, weight : .bold))
-                                        }
-                                    }
-                            }
-                            .frame(alignment: .leading)
-                            
-                            Text(Coc.content)
-                                .padding(.leading, 40)
-                            
-                            HStack{
-                                Spacer()
-                                
-                                Button{
-                                    //댓글 라이크 버튼 클릭
-                                    viewModel.isCocLiked = Coc.like
-                                    viewModel.isCocLiked?.toggle()
-            //                        print(viewModel.isCommentLiked ?? true)
-            //                        if(viewModel.isCommentLiked! == true){
-            //                            Comment.like = true
-            //                        }else{
-            //                            Comment.like = false
-            //                        }
-                                    viewModel.commentId = Coc.commentId
-                                     
-                                    viewModel.likeCommentOfComment(isliked: viewModel.isCocLiked ?? true, cocId: Coc.commentId )
-                                } label : {
-                                    Image(systemName: (viewModel.isCocLiked ?? true) ? "hand.thumbsup.fill" : "hand.thumbsup")
-                                        .foregroundColor(.mainTheme)
-            //                        Image(systemName: (viewModel.isLiked ?? true) ? "hand.thumbsup.fill" : "hand.thumbsup")
-            //                            .foregroundColor(.mainTheme)
-                                }
-                                Text(String((Coc.likeCount)))
-                                    .padding(.trailing)
-                                
-                                Button{
-                                    //대댓글 클릭
-                                    viewModel.isCocCliked = true
-                                    viewModel.commentId = Comment.commentId
-                                    //                        commentId = viewModel.commentId
-                                    viewModel.contentForViewing = "@" + (Comment.member?.username! ?? "Anonymous")
-                                    //                            viewModel.likeComment(isliked: (viewModel.commentList.like ?? true))
-                                } label : {
-                                    Image(systemName: "message.fill")
-                                        .foregroundColor(.black)
-                                        .padding(.bottom, 2)
-                                }
-                            }
+//                .padding(.top, -20)
 //
-////                                Button{
-////                                    //댓글 라이크 버튼 클릭
-//////                                    viewModel.isLiked?.toggle()
-//////                                    viewModel.likeCommentOfComment(isliked: Coc.like)
-////                                } label : {
-////                                    Image(systemName: Coc.like ? "hand.thumbsup.fill" : "hand.thumbsup")
-//                                    Image(systemName: "hand.thumbsup.fill")
-//                                        .foregroundColor(.mainTheme)
-////                                }
-//                                Text(String((Coc.likeCount)))
-//                                    .padding(.trailing)
+//                Text(Comment.content)
+//                    .padding(.leading, 50)
 //
-////                                Button{
-////                                    //대댓글 클릭
-////                                    viewModel.isCocCliked = true
-////                                    viewModel.commentId = Coc.commentId
-////                                    //                        commentId = viewModel.commentId
-////                                    viewModel.contentForViewing = "@" + (Coc.member?.username! ?? "Anonymous")
-////                                    //                            viewModel.likeComment(isliked: (viewModel.commentList.like ?? true))
-////                                } label : {
-////                                    Image(systemName: "message.fill")
-////                                        .foregroundColor(.black)
-////                                }
-//                            }
-//                            .font(.system(size: 11))
+//                HStack{
+//                    Spacer()
 //
-//                            HStack{
-//                                Spacer()
-//                            }
-                        }
-                        .font(.system(size: 11))
-                        .padding()
-                        .frame(width : 250, alignment: .trailing)
-                        .background(Color.systemDefaultGray)
-                        .cornerRadius(20)
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                    }
-                    .frame(alignment : .leading)
-//                    .overlay(
-//                        Button { // menu button
-//                                viewModel.isMenuClicked = true
-//                                viewModel.showAction = true
-//                                viewModel.isMyComment = true
-//                                viewModel.commentId = Coc.commentId
-//                                viewModel.contentForPatch = Coc.content
 //
-//                                //menu toggle
-//                        } label: {
-//                            if viewModel.memberId == Coc.member?.memberId {
-//                                Image(systemName : "ellipsis")
-//                                    .foregroundColor(.black)
-//                                    .font(.system(size : 15, weight : .bold))
-//                            }
+//                    Button{
+//                        //댓글 라이크 버튼 클릭
+//                        viewModel.isCommentLiked = Comment.like
+//                        viewModel.commentItem = Comment
+//                        viewModel.commentId = Comment.commentId
+//                        viewModel.likeComment(isCommentliked: viewModel.isCommentLiked)
+//
+//
+//                        if(viewModel.isSecret == false){
+//                            viewModel.getComment()
+//                        }else{
+//                            viewModel.getSecretComment()
 //                        }
-//                    )
-                }
-//                }
-                    
-//                        HStack{
-//                            Spacer()
-//
-//                            VStack(alignment: .leading){
-//                                HStack{
-//                                    URLImage( //프로필 이미지
-//                                        URL(string : (Coc.member?.profileImage) ?? "https://static.thenounproject.com/png/741653-200.png") ??
-//                                        URL(string: "https://static.thenounproject.com/png/741653-200.png")!
-//                                    ) { image in
-//                                        image
-//                                            .resizable()
-//                                            .aspectRatio(contentMode: .fill)
-//                                    }
-//                                    .frame(width : 30,
-//                                           height: 30)
-//                                    .cornerRadius(9)
-//
-//                                    VStack(alignment: .leading){
-//                                        Group{
-//                                            Text(Coc.member?.username ?? "Anonymous")
-//                                                .font(.system(size: 15, weight : .medium))
-//
-////                                            Text(viewModel.convertReturnedDateString(Coc.createdAt ?? "2021-10-01 00:00:00"))
-////                                                .font(.system(size: 11))
-//                                        }
-//                                        .foregroundColor(.gray)
-//                                    }
-//                                    Spacer()
-//                                }
-//                            }
-//                            .frame(alignment : .leading)
-//
-//
-//                        }
+//                    } label : {
+//                        Image(systemName: (Comment.like) ? "hand.thumbsup.fill" : "hand.thumbsup")
+//                            .foregroundColor(.mainTheme)
+////                        Image(systemName: (viewModel.isLiked ?? true) ? "hand.thumbsup.fill" : "hand.thumbsup")
+////                            .foregroundColor(.mainTheme)
 //                    }
-//            }
-//                if(Comment.comments.count != 0){
-                    Divider()
-                }
-                .modifier(CommentStyle())
-                .overlay(
-                    Button { // menu button
-                        withAnimation {
-                            viewModel.isMenuClicked = true
-                            viewModel.showAction = true
-                            viewModel.isMyComment = true
-                            viewModel.commentId = Comment.commentId
-                            viewModel.contentForPatch = Comment.content
-                        }
-                            //menu toggle
-                    } label: {
-                        if (Comment.modifiable) {
-                            Image(systemName : "ellipsis")
-                                .foregroundColor(.black)
-                                .font(.system(size : 15, weight : .bold))
-                        }
-                    }
-                    , alignment : .topTrailing
-                )
-        }
-        .id("SCROLL_TO_BOTTOM")
-        }
-        ///
-        ///
-        ///
-    }
-}
-
-//struct CocView : View {
-//    @StateObject private var viewModel : CommentViewModel
-//    @EnvironmentObject var postInfoViewModel : PostInfoViewModel
+//                    Text(String((Comment.likeCount)))
+//                        .padding(.trailing)
 //
-//    init(viewModel : CommentViewModel) {
-//        self._viewModel = StateObject(wrappedValue: viewModel)
-//    }
-//
-//    var body : some View {
-//        Spacer()
-//    }
-//}
-
-//struct CommentView : View {
-//    @Environment(\.presentationMode) var presentationMode
-////    @EnvironmentObject var signInViewModel : SignInViewModel
-//    @StateObject private var viewModel : CommentViewModel
-//    @EnvironmentObject var postInfoViewModel : PostInfoViewModel
-//
-//    //    init(viewModel : CommentViewModel) {
-//    //        self.viewModel = viewModel
-//    //    }
-//
-//    init(viewModel : CommentViewModel) {
-//        self._viewModel = StateObject(wrappedValue: viewModel)
-//    }
-//
-//    var body : some View {
-//        VStack(alignment: .leading){
-//
-//            HStack{
-//                URLImage( //프로필 이미지
-//                    URL(string : viewModel.profileImage)!
-////                    URL(string : viewModel.commentList.member!.profileImage!)!
-//                ) { image in
-//                    image
-//                        .resizable()
-//                        .aspectRatio(contentMode: .fill)
-//                }
-//                .frame(width : 40,
-//                       height: 40)
-//                .cornerRadius(13)
-//
-//                VStack(alignment: .leading){
-//                    Group{
-//                        Text(viewModel.userName)
-//                            .font(.system(size: 20, weight : .medium))
-//
-//                        //Text(viewModel.convertReturnedDateString(viewModel.createdAt ?? "2021-10-01 00:00:00"))
-//                        Text(viewModel.convertReturnedDateString(viewModel.createdAt))
-//                            .font(.system(size: 10))
+//                    Button{
+//                        //대댓글 클릭
+//                        viewModel.isCocCliked = true
+//                        viewModel.commentId = Comment.commentId
+//                        //                        commentId = viewModel.commentId
+//                        viewModel.contentForViewing = "@" + (Comment.member?.username! ?? "Anonymous")
+//                        //                            viewModel.likeComment(isliked: (viewModel.commentList.like ?? true))
+//                    } label : {
+//                        Image(systemName: "message.fill")
+//                            .foregroundColor(.black)
+//                            .padding(.bottom, 1)
 //                    }
-//                    .foregroundColor(.gray)
 //                }
+//                .font(.system(size: 13))
 //
-//                Spacer()
-//            }
-//            .padding(.top, -20)
+//                // 대댓글
+//                ForEach(Comment.comments!, id : \.self) { Coc in
 //
-//            Text(viewModel.content)
-//                .padding(.leading, 50)
+//                    HStack{
+//                        Spacer()
 //
-//            HStack{
-//                Spacer()
-//
-//                Button{
-//                    //댓글 라이크 버튼 클릭
-//                    viewModel.isLiked?.toggle()
-//                    //viewModel.likeComment(isliked: (viewModel.commentList.like ?? true))
-//                    viewModel.likeComment(isliked: viewModel.commentList.like)
-//                } label : {
-//                    Image(systemName: viewModel.commentList.like ? "hand.thumbsup.fill" : "hand.thumbsup")
-//                        .foregroundColor(.mainTheme)
-//                }
-//                Text(String((viewModel.commentList.likeCount)))
-//                    .padding(.trailing)
-//
-//                Button{
-//                    //대댓글 클릭
-////                    isCocCliked = true
-////                    commentId = viewModel.commentId
-////                    contentForViewing = "@" + viewModel.userName
-//                    //                            viewModel.likeComment(isliked: (viewModel.commentList.like ?? true))
-//                } label : {
-//                    Image(systemName: "message.fill")
-//                        .foregroundColor(.black)
-//                }
-//            }
-//            .font(.system(size: 13))
-//
-//            // 내용들 묶어서 리팩토링 필요
-//            if(viewModel.commentList.comments != nil){
-//                          //     여기 대댓글
-//                    ForEach(viewModel.commentList.comments!, id : \.self) { CommentofComment in
-//                        HStack{
-//                            Spacer()
 //                        VStack(alignment: .leading){
-//
 //                            HStack{
-//
-//
 //                                URLImage( //프로필 이미지
-//                                    URL(string : CommentofComment.member?.profileImage ?? "https://static.thenounproject.com/png/741653-200.png")!
+//                                    URL(string : (Coc.member?.profileImage) ?? "https://static.thenounproject.com/png/741653-200.png") ??
+//                                    URL(string: "https://static.thenounproject.com/png/741653-200.png")!
 //                                ) { image in
 //                                    image
 //                                        .resizable()
@@ -1125,20 +732,37 @@ extension PostInfoView {
 //                                .cornerRadius(9)
 //
 //                                VStack(alignment: .leading){
-//                                    Group{
-//                                        Text(CommentofComment.member?.username ?? "Anonymous")
-//                                            .font(.system(size: 15, weight : .medium))
 //
-//                                        Text(viewModel.convertReturnedDateString(CommentofComment.createdAt))
-//                                            .font(.system(size: 11))
-//                                    }
-//                                    .foregroundColor(.gray)
+//                                    Text(Coc.member?.username! ?? "Anonymous" )
+//                                        .font(.system(size: 15, weight : .medium))
+//
+//                                    Text(viewModel.convertReturnedDateString(Coc.createdAt ?? "2021-10-01 00:00:00"))
+//                                        .font(.system(size: 11))
+//
 //                                }
+//                                .foregroundColor(.gray)
+//
 //                                Spacer()
+//
+//                                    Button { // menu button
+//                                            viewModel.isMenuClicked = true
+//                                            viewModel.showAction = true
+//                                            viewModel.isMyComment = true
+//                                            viewModel.commentId = Coc.commentId
+//                                            viewModel.contentForPatch = Coc.content
+//
+//                                            //menu toggle
+//                                    } label: {
+//                                        if (Coc.modifiable) {
+//                                            Image(systemName : "ellipsis")
+//                                                .foregroundColor(.black)
+//                                                .font(.system(size : 15, weight : .bold))
+//                                        }
+//                                    }
 //                            }
 //                            .frame(alignment: .leading)
 //
-//                            Text(CommentofComment.content)
+//                            Text(Coc.content)
 //                                .padding(.leading, 40)
 //
 //                            HStack{
@@ -1146,82 +770,72 @@ extension PostInfoView {
 //
 //                                Button{
 //                                    //댓글 라이크 버튼 클릭
-//                                    viewModel.isLiked?.toggle()
-//                                    viewModel.likeCommentOfComment(isliked: CommentofComment.like, cocId : CommentofComment.commentId)
+//
+//                                    viewModel.isCocLiked = Coc.like
+//                                    viewModel.commentItem = Coc
+//                                    viewModel.commentId = Coc.commentId
+//                                    viewModel.likeCommentOfComment(isliked: viewModel.isCocLiked, cocId: Coc.commentId )
+//
+//
+//                                    if(viewModel.isSecret == false){
+//                                        viewModel.getComment()
+//                                    }else{
+//                                        viewModel.getSecretComment()
+//                                    }
 //                                } label : {
-//                                    Image(systemName: CommentofComment.like ? "hand.thumbsup.fill" : "hand.thumbsup")
+//                                    Image(systemName: (Coc.like) ? "hand.thumbsup.fill" : "hand.thumbsup")
 //                                        .foregroundColor(.mainTheme)
 //                                }
-//                                Text(String((CommentofComment.likeCount)))
+//                                Text(String((Coc.likeCount)))
 //                                    .padding(.trailing)
 //
 //                                Button{
-//                                    //대댓글의 대댓글 없다고 했지..?
-//                                    //                            viewModel.isLiked?.toggle()
-//                                    //                            viewModel.likeComment(isliked: (viewModel.commentList.like ?? true))
+//                                    //대댓글 클릭
+//                                    viewModel.isCocCliked = true
+//                                    viewModel.commentId = Comment.commentId
+//                                    viewModel.contentForViewing = "@" + (Comment.member?.username! ?? "Anonymous")
 //                                } label : {
 //                                    Image(systemName: "message.fill")
 //                                        .foregroundColor(.black)
+//                                        .padding(.bottom, 2)
 //                                }
 //                            }
-//                            .frame(alignment: .trailing)
 //                        }
 //                        .font(.system(size: 11))
 //                        .padding()
 //                        .frame(width : 250, alignment: .trailing)
 //                        .background(Color.systemDefaultGray)
 //                        .cornerRadius(20)
-//                        .overlay(
-//
-//                            Button { // menu button
-//                                withAnimation {
-//
-//                                    postInfoViewModel.isMenuClicked = true
-//                                    postInfoViewModel.showAction = true
-//                                    postInfoViewModel.isMyComment = true
-//                                    postInfoViewModel.commentId = CommentofComment.commentId
-//                                    postInfoViewModel.contentForPatch = CommentofComment.content
-//                                }
-//                                //menu toggle
-//                            } label: { //signInViewModel.signInResponse!.memberId == CommentOfComment.member!.memberId!
-//                                //                                if ((CommentofComment.member?.memberId!)! == viewModel.memberId) {
-////                                if (signInViewModel.signInResponse?.memberId == CommentofComment.member!.memberId!) {
-//                                //
-//                                if viewModel.memberId == postInfoViewModel.totalBoardPostDetail?.member?.memberId! {
-//                                    Image(systemName : "ellipsis")
-//                                        .foregroundColor(.black)
-//                                        .font(.system(size : 15, weight : .bold))
-//                                }
-//                            }
-//    //                        }
-//                            , alignment : .topTrailing
-//                        )
-//
-//                        }
-////                        Divider()
-////                            .frame(width : 200, alignment: .trailing)
 //                    }
-//                    .frame(alignment: .trailing)
-//            }
-//
-//            Divider()
-//
+//                    .frame(alignment : .leading)
+//                }
+//                    Divider()
+//                }
+//                .modifier(CommentStyle())
+//                .overlay(
+//                    Button { // menu button
+//                        withAnimation {
+//                            viewModel.isMenuClicked = true
+//                            viewModel.showAction = true
+//                            viewModel.isMyComment = true
+//                            viewModel.commentId = Comment.commentId
+//                            viewModel.contentForPatch = Comment.cctent
+//                        }
+//                            //menu toggle
+//                    } label: {
+//                        if (Comment.modifiable) {
+//                            Image(systemName : "ellipsis")
+//                                .foregroundColor(.black)
+//                                .font(.system(size : 15, weight : .bold))
+//                        }
+//                    }
+//                    , alignment : .topTrailing
+//                )
 //        }
-//        .modifier(CommentStyle())
-//
-////        .actionSheet(isPresented: $viewModel.showAction) {
-////            ActionSheet(
-////                title: Text("options"),
-////                buttons: [
-////                    .default( Text("modify comment") ){
-//////                        viewModel.showPostModify = true
-////                    },
-////                    .destructive( Text("Delete Comment") ) {
-//////                        viewModel.showConfirmDeletion = true
-////                    },
-////                    .cancel()
-////                ]
-////            )
-////        }
+//        .id("SCROLL_TO_BOTTOM")
+//        }
+//        ///
+//        ///
+//        ///
 //    }
 //}
