@@ -575,8 +575,8 @@ struct PostInfoView: View { // 게시글 상세 페이지
                 destination :
                     WritingView(viewModel: WritingViewModel(accessToken: viewModel.token,
                                                             postId : viewModel.postId,
-                                                            isForModifying: true,
-                                                            isForSecretModifying : false))
+                                                            isForModifying: (viewModel.isSecret) ? false : true,
+                                                            isForSecretModifying : (viewModel.isSecret) ? true : false))
                     .navigationBarTitle((viewModel.isMyComment) ? Text("Modify Comment") : Text("Modify Post")),
                 isActive : $viewModel.showPostModify) { }
         )
@@ -616,7 +616,7 @@ struct PostInfoView: View { // 게시글 상세 페이지
         if((viewModel.isMyComment == true)){
             return ActionSheet(title: Text("Options"), message: nil, buttons: [btnMC, btnDC, btnCancle])
         }
-        else if((viewModel.isMyPost ?? true )){
+        else if((viewModel.isMyPost == true )){
             return ActionSheet(title: Text("Options"), message: nil, buttons: [btnMP, btnDP, btnCancle])
         }else if((viewModel.totalSecretPostDetail?.secretPostDetail.modifiable == true)){
             return ActionSheet(title: Text("Options"), message: nil, buttons: [btnMP, btnDP, btnCancle])
@@ -819,7 +819,7 @@ struct PostInfoView: View { // 게시글 상세 페이지
 //                            viewModel.showAction = true
 //                            viewModel.isMyComment = true
 //                            viewModel.commentId = Comment.commentId
-//                            viewModel.contentForPatch = Comment.cctent
+//                            viewModel.contentForPatch = Comment.content
 //                        }
 //                            //menu toggle
 //                    } label: {
