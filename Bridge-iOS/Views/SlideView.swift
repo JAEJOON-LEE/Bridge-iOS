@@ -99,7 +99,7 @@ struct SlideView : View {
                                     token: viewModel.userInfo.token.accessToken,
                                     postId : PostList.postId,
                                     memberId : viewModel.userInfo.memberId,
-                                    isMyPost : true))
+                                    isMyPost : (PostList.postType == "board" ? true : nil)))
                         ) {
                             HStack(spacing : 13) {
                                 URLImage(
@@ -112,17 +112,6 @@ struct SlideView : View {
                                 }
                                 .frame(width : UIScreen.main.bounds.width * 0.33, height: UIScreen.main.bounds.height * 0.12)
                                 .cornerRadius(10)
-
-//                                struct PlayPostList : Codable, Hashable {
-//                                    var postId : Int
-//                                    var postType : String
-//                                    var title : String
-//                                    var image : String?
-//                                    var description : String
-//                                    var likeCount : Int
-//                                    var commentCount : Int
-//                                    var createdAt : String
-//                                }
 
                                 VStack(alignment : .leading, spacing: 5) {
                                     Text(PostList.title)
