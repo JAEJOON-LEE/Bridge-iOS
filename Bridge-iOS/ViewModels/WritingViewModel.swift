@@ -44,7 +44,7 @@ class WritingViewModel : ObservableObject {
     let postId : Int
     let isForModifying : Bool
     let token : String
-    let isForSecretModifying : Bool?
+    let isForSecretModifying : Bool
     
     var configuration : PHPickerConfiguration {
         var configuration = PHPickerConfiguration(photoLibrary: .shared())
@@ -54,19 +54,19 @@ class WritingViewModel : ObservableObject {
         return configuration
     }
         
-    init(accessToken : String, postId : Int, isForModifying : Bool, isForSecretModifying : Bool?) {
+    init(accessToken : String, postId : Int, isForModifying : Bool, isForSecretModifying : Bool) {
         self.token = accessToken
         self.postId = postId
         self.isForModifying = isForModifying
         self.isForSecretModifying = isForSecretModifying
         
-        if(self.isForSecretModifying != nil){
-            if(self.isForSecretModifying!){
+//        if(self.isForSecretModifying != nil){
+            if(isForSecretModifying == true){
                 getSecretPostDetail()
-            }else{
+            }else if(isForModifying == true){
                 getBoardPostDetail()
             }
-        }
+//        }
     }
 //    let url : String = "http://3.36.233.180:8080/board-posts"
     
@@ -91,7 +91,6 @@ class WritingViewModel : ObservableObject {
                  "anonymous" : String(anonymous)]
         
         let payloadEncoded = String(data : "{ \"title\" : \"\(title)\", \"description\" : \"\(description)\", \"anonymous\" : \"\(anonymous)\" }".data(using: .nonLossyASCII)!, encoding : .utf8) ?? ""
-        //anonymous이면 나중에 수정할 때 참조 못하는 에러 생김 ==> anonymous일때 프로필사진 nil, 이름 anonymous로 강제로 보낼까..?
         AF.upload(multipartFormData: { multipartFormData in
             
                         multipartFormData.append(payloadEncoded.data(using: .utf8)!, withName: "postInfo", mimeType: "application/json")
@@ -116,6 +115,44 @@ class WritingViewModel : ObservableObject {
                 }
         }
     }
+    
+    func secretPost(title : String, description : String, anonymous : Bool, files : Data?) {
+        let header: HTTPHeaders = [
+            "X-AUTH-TOKEN": token,
+            "Accept": "multipart/form-data",
+            "Content-Type": "multipart/form-data"
+        ]
+        
+        param = ["title" : title,
+                 "description" : description]
+        
+        let payloadEncoded = String(data : "{ \"title\" : \"\(title)\", \"description\" : \"\(description)\"}".data(using: .nonLossyASCII)!, encoding : .utf8) ?? ""
+        AF.upload(multipartFormData: { multipartFormData in
+            
+                        multipartFormData.append(payloadEncoded.data(using: .utf8)!, withName: "postInfo", mimeType: "application/json")
+                        
+                        for image in self.selectedImages {
+                            multipartFormData.append(image.jpegData(compressionQuality: 1.0)!,
+                                        withName : "files", fileName: "payloadImage.jpg", mimeType: "image/jpeg")
+                        }
+                        
+                    }, to:"http://3.36.233.180:8080/secret-posts",
+                    method: .post,
+                    headers: header)
+            .responseString{ (response) in
+                
+                    guard let statusCode = response.response?.statusCode else { return }
+                    switch statusCode {
+                    case 200, 201 :
+                        print("Secret Post Upload Success : \(statusCode)")
+                        self.isUploadDone = true
+                    default :
+                        print("Post Upload Fail : \(statusCode)")
+                    }
+            print(statusCode)
+        }
+    }
+    
     
     func getBoardPostDetail() {
         
@@ -284,7 +321,7 @@ class WritingViewModel : ObservableObject {
             
             var cnt = 0
             
-            infoForModifying?.boardPostDetail.postImages!.forEach{ image in
+            infoForSecretModifying?.secretPostDetail.postImages!.forEach{ image in
                 removeImage.append(image.imageId)
             }
             if(query.count > 3){
@@ -340,44 +377,4 @@ class WritingViewModel : ObservableObject {
             print(statusCode)
         }
     }
-    
-    func secretPost(title : String, description : String, anonymous : Bool, files : Data?) {
-        let header: HTTPHeaders = [
-            "X-AUTH-TOKEN": token,
-            "Accept": "multipart/form-data",
-            "Content-Type": "multipart/form-data"
-        ]
-        
-        param = ["title" : title,
-                 "description" : description]
-        
-        let payloadEncoded = String(data : "{ \"title\" : \"\(title)\", \"description\" : \"\(description)\"}".data(using: .nonLossyASCII)!, encoding : .utf8) ?? ""
-        AF.upload(multipartFormData: { multipartFormData in
-            
-                        multipartFormData.append(payloadEncoded.data(using: .utf8)!, withName: "postInfo", mimeType: "application/json")
-                        
-                        for image in self.selectedImages {
-                            multipartFormData.append(image.jpegData(compressionQuality: 1.0)!,
-                                        withName : "files", fileName: "payloadImage.jpg", mimeType: "image/jpeg")
-                        }
-                        
-                    }, to:"http://3.36.233.180:8080/secret-posts",
-                    method: .post,
-                    headers: header)
-            .responseString{ (response) in
-                
-                    guard let statusCode = response.response?.statusCode else { return }
-                    switch statusCode {
-                    case 200, 201 :
-                        print("Secret Post Upload Success : \(statusCode)")
-                        self.isUploadDone = true
-                    default :
-                        print("Post Upload Fail : \(statusCode)")
-                    }
-            print(statusCode)
-        }
-    }
-    
-    
-
 }

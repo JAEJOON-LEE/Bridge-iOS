@@ -185,7 +185,7 @@ extension TabContainer {
                                                 accessToken: signInViewModel.signInResponse?.token.accessToken ?? "",
                                                 postId : -1,
                                                 isForModifying : false,
-                                                isForSecretModifying : nil
+                                                isForSecretModifying : false
                                     )
                                 )
                     ) {

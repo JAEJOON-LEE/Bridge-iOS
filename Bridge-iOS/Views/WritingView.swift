@@ -28,12 +28,14 @@ struct WritingView : View {
             //            print(viewModel.password)
             //            if(viewModel.isForModifying){
             
-            if(viewModel.isForSecretModifying ?? false){
+            if(viewModel.isForSecretModifying){
                 viewModel.modifySecretPost(title: viewModel.title, description: viewModel.description, anonymous: viewModel.anonymous, files: viewModel.files)
+                viewModel.isUploadDone = true
                 //                    withAnimation { viewModel.isProgressShow = true }
             }
             else if(viewModel.isForModifying){
                 viewModel.modifyPost(title: viewModel.title, description: viewModel.description, anonymous: viewModel.anonymous, files: viewModel.files)
+                viewModel.isUploadDone = true
                 //                    withAnimation { viewModel.isProgressShow = true }
             }
             else{
@@ -48,7 +50,7 @@ struct WritingView : View {
                         viewModel.post(title: viewModel.title, description: viewModel.description, anonymous: viewModel.anonymous, files: viewModel.files)
                         //                    withAnimation { viewModel.isProgressShow = true }
                     }
-                    withAnimation { viewModel.isProgressShow = true }
+                    viewModel.isUploadDone = true
                 }
                 else{
                     viewModel.showAlert = true
@@ -114,7 +116,7 @@ struct WritingView : View {
                         //                }.padding(20)
                         //            }
                         
-                        if(viewModel.isForSecretModifying ?? false){
+                        if(viewModel.isForSecretModifying){
                             TextField(viewModel.infoForSecretModifying?.secretPostDetail.title ?? "Title not found",
                                       text:  $viewModel.title)
                             //                        .modifier(SignViewTextFieldStyle())
@@ -209,7 +211,7 @@ struct WritingView : View {
                         .font(.system(size : 20))
                         
                         
-                        if(viewModel.isForModifying){
+                        if(viewModel.isForModifying || viewModel.isForSecretModifying){
                             if !viewModel.selectedImages.isEmpty {
                                 HStack {
                                     ForEach(viewModel.selectedImages, id : \.self) {
@@ -254,6 +256,22 @@ struct WritingView : View {
                             else if(viewModel.infoForModifying?.boardPostDetail.postImages != nil){
                                 HStack{
                                     ForEach(viewModel.infoForModifying?.boardPostDetail.postImages ?? [], id : \.self) { imageInfo in
+                                        URLImage(
+                                            URL(string : imageInfo.image) ??
+                                            URL(string: "https://static.thenounproject.com/png/741653-200.png")!
+                                        ) { image in
+                                            image
+                                                .resizable()
+                                                .foregroundColor(.black)
+                                                .frame(width : UIScreen.main.bounds.width * 0.2, height : UIScreen.main.bounds.width * 0.2, alignment: .center)
+                                                .cornerRadius(10)
+                                                .padding()
+                                        }
+                                    }
+                                }
+                            } else if(viewModel.infoForSecretModifying?.secretPostDetail.postImages != nil){
+                                HStack{
+                                    ForEach(viewModel.infoForSecretModifying?.secretPostDetail.postImages ?? [], id : \.self) { imageInfo in
                                         URLImage(
                                             URL(string : imageInfo.image) ??
                                             URL(string: "https://static.thenounproject.com/png/741653-200.png")!
@@ -377,10 +395,11 @@ struct WritingView : View {
                         
                         //            if(!viewModel.isForModifying){
                         
-                        if(viewModel.selectedImages.isEmpty){
-                            Spacer()
-                                .frame(height: UIScreen.main.bounds.width * 0.2)
-                        }
+//                        if(viewModel.selectedImages.isEmpty || viewModel.infoForSecretModifying?.secretPostDetail.postImages == nil ||
+//                           viewModel.infoForModifying?.boardPostDetail.postImages == nil){
+//                            Spacer()
+//                                .frame(height: UIScreen.main.bounds.width * 0.2)
+//                        }
                         VStack(alignment: .leading){
                             Text("Terms of Use")
                                 .font(.caption2)
@@ -402,9 +421,10 @@ struct WritingView : View {
                     }
                     .onAppear{
                         viewModel.description = ""
-                        if(!viewModel.isForModifying){
+                        if(!((viewModel.isForModifying == true && viewModel.isForSecretModifying == false) || (viewModel.isForModifying == false && viewModel.isForSecretModifying == true))){
                             viewModel.description = "Please write the content of your post."
                         }
+                        
                         viewModel.selectedImages.removeAll()
                         viewModel.title = ""
                         viewModel.isSecret = false
@@ -413,9 +433,11 @@ struct WritingView : View {
                         hideKeyboard()
                     }
                     .onChange(of: viewModel.isUploadDone, perform: { _ in
+                        viewModel.isUploadDone = false
+//                        usleep(300000)
                         self.presentationMode.wrappedValue.dismiss()
                     })
-                    .navigationBarTitle(viewModel.isForModifying ? Text("Board Modifying") : Text("Board Writing"), displayMode: .inline)
+                    .navigationBarTitle(viewModel.isForModifying ? Text("Board Modifying") :( viewModel.isForSecretModifying ? Text("Board Modifying")  : Text("Board Writing")), displayMode: .inline)
                     .navigationBarBackButtonHidden(true)
                     .navigationBarItems(
                         leading : Button {
