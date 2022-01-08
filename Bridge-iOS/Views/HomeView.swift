@@ -12,6 +12,7 @@ struct HomeView : View {
     @StateObject private var viewModel : HomeViewModel
     @Binding var isSlideShow : Bool
     private let profileImage : String
+    @State var tempBool : Bool = false
     
     init(viewModel : HomeViewModel, isSlideShow : Binding<Bool>, profileImage : String) {
         self._viewModel = StateObject(wrappedValue: viewModel)
@@ -64,8 +65,10 @@ struct HomeView : View {
             } // HStack
 
             // Search
-            NavigationLink {
-                UsedSearchView(viewModel: UsedSearchViewModel(accessToken: viewModel.token, memberId: viewModel.memberId, currentCamp : viewModel.selectedCamp))
+//            NavigationLink {
+//                UsedSearchView(viewModel: UsedSearchViewModel(accessToken: viewModel.token, memberId: viewModel.memberId, currentCamp : viewModel.selectedCamp))
+            Button {
+                tempBool = true
             } label: {
                 HStack {
                     Image(systemName: "magnifyingglass")
@@ -122,10 +125,11 @@ struct HomeView : View {
                                                         postId : Post.postId,
                                                         isMyPost : (viewModel.memberId == Post.memberId)
                                                     )
-                                    ).onDisappear(perform: {
+                                    )/*.onDisappear(perform: {
                                         // 일반 작업시에는 필요없는데, 삭제 작업 즉시 반영을 위해서 필요함
+                                        // 조회수 2 증가 원인
                                         viewModel.getPosts(token: viewModel.token)
-                                    })
+                                    })*/
                             ) {
                                 ItemCard(viewModel : ItemCardViewModel(post: Post))
                             }
@@ -151,6 +155,14 @@ struct HomeView : View {
             print(newValue)
             viewModel.getPosts(token: viewModel.token)
         }
+        .fullScreenCover(isPresented: $tempBool) {
+            print("full screen cover dissmiss action")
+        } content: {
+            NavigationView {
+                UsedSearchView(viewModel: UsedSearchViewModel(accessToken: viewModel.token, memberId: viewModel.memberId, currentCamp : viewModel.selectedCamp))
+            }.accentColor(.mainTheme)
+        }
+
     }
 }
 

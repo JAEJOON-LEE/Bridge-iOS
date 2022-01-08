@@ -123,7 +123,7 @@ struct UsedSearchView : View {
         }
         .edgesIgnoringSafeArea(.bottom)
         .navigationBarHidden(true)
-        .navigationBarTitle(Text(""))
+        .navigationBarTitle(Text("Search"))
         .background(
             NavigationLink(
                 destination :
@@ -152,24 +152,29 @@ struct UsedSearchView : View {
                                 }.padding(.top, UIScreen.main.bounds.height * 0.2)
                             }
                             else {
-                            ForEach(viewModel.Posts, id : \.self) { Post in
-                                NavigationLink(
-                                    destination:
-                                        ItemInfoView(viewModel:
-                                                        ItemInfoViewModel(
-                                                            token: viewModel.token,
-                                                            postId : Post.postId,
-                                                            isMyPost : (viewModel.memberId == Post.memberId)
-                                                        )
-                                        )
-                                        .onDisappear(perform: {
-                                            // 일반 작업시에는 필요없는데, 삭제 작업 즉시 반영을 위해서 필요함
-                                            viewModel.getPostsByCategory(category: viewModel.selectedCategory)
-                                        })
-                                ) {
-                                    ItemCard(viewModel : ItemCardViewModel(post: Post))
+                                ForEach(viewModel.Posts, id : \.self) { Post in
+                                    VStack {
+                                        NavigationLink(
+                                            destination:
+                                                ItemInfoView(viewModel:
+                                                                ItemInfoViewModel(
+                                                                    token: viewModel.token,
+                                                                    postId : Post.postId,
+                                                                    isMyPost : (viewModel.memberId == Post.memberId)
+                                                                )
+                                                )
+                                                .onDisappear(perform: {
+                                                    // 일반 작업시에는 필요없는데, 삭제 작업 즉시 반영을 위해서 필요함
+                                                    viewModel.getPostsByCategory(category: viewModel.selectedCategory)
+                                                })
+                                        ) {
+                                            ItemCard(viewModel : ItemCardViewModel(post: Post))
+                                        }
+                                        
+                                        Color.systemDefaultGray
+                                            .frame(width : UIScreen.main.bounds.width * 0.9, height : 5)
+                                    }
                                 }
-                            }
                             }
                         }
                     }.navigationTitle(Text(viewModel.selectedCategory)),
@@ -204,21 +209,25 @@ struct UsedSearchView : View {
                             }
                             else {
                                 ForEach(viewModel.searchedPosts, id : \.self) { Post in
-                                    NavigationLink(
-                                        destination:
-                                            ItemInfoView(viewModel:
-                                                            ItemInfoViewModel(
-                                                                token: viewModel.token,
-                                                                postId : Post.postId,
-                                                                isMyPost : (viewModel.memberId == Post.memberId)
-                                                            )
-                                            )
-                                            .onDisappear(perform: {
-                                                // 일반 작업시에는 필요없는데, 삭제 작업 즉시 반영을 위해서 필요함
-                                                viewModel.getPostsByQuery(query: viewModel.searchString)
-                                            })
-                                    ) {
-                                        ItemCard(viewModel : ItemCardViewModel(post: Post))
+                                    VStack {
+                                        NavigationLink(
+                                            destination:
+                                                ItemInfoView(viewModel:
+                                                                ItemInfoViewModel(
+                                                                    token: viewModel.token,
+                                                                    postId : Post.postId,
+                                                                    isMyPost : (viewModel.memberId == Post.memberId)
+                                                                )
+                                                )
+                                                .onDisappear(perform: {
+                                                    // 일반 작업시에는 필요없는데, 삭제 작업 즉시 반영을 위해서 필요함
+                                                    viewModel.getPostsByQuery(query: viewModel.searchString)
+                                                })
+                                        ) {
+                                            ItemCard(viewModel : ItemCardViewModel(post: Post))
+                                        }
+                                        Color.systemDefaultGray
+                                            .frame(width : UIScreen.main.bounds.width * 0.9, height : 5)
                                     }
                                 }
                             }
