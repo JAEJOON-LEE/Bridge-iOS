@@ -91,11 +91,78 @@ struct SlideView : View {
     var postsIWrote : some View {
         ScrollView {
             LazyVStack {
-                Text("Element 1")
-                Text("Element 2")
-                Text("Element 3")
+                ForEach(viewModel.playPostLists, id : \.self) { PostList in
+                    VStack {
+                        NavigationLink(
+                            destination:
+                                PostInfoView(viewModel: PostInfoViewModel(
+                                    token: viewModel.userInfo.token.accessToken,
+                                    postId : PostList.postId,
+                                    memberId : viewModel.userInfo.memberId,
+                                    isMyPost : true))
+                        ) {
+                            HStack(spacing : 13) {
+                                URLImage(
+                                    URL(string : PostList.image!) ??
+                                    URL(string: "https://static.thenounproject.com/png/741653-200.png")!
+                                ) { image in
+                                    image
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fill)
+                                }
+                                .frame(width : UIScreen.main.bounds.width * 0.33, height: UIScreen.main.bounds.height * 0.12)
+                                .cornerRadius(10)
+
+//                                struct PlayPostList : Codable, Hashable {
+//                                    var postId : Int
+//                                    var postType : String
+//                                    var title : String
+//                                    var image : String?
+//                                    var description : String
+//                                    var likeCount : Int
+//                                    var commentCount : Int
+//                                    var createdAt : String
+//                                }
+
+                                VStack(alignment : .leading, spacing: 5) {
+                                    Text(PostList.title)
+                                        .font(.title2)
+//                                        .fontWeight(.bold)
+                                        .foregroundColor(.black)
+                                    HStack {
+                                        Text(PostList.description)
+                                            .font(.system(size: 20, weight : .bold))
+                                            .foregroundColor(.black)
+                                            .fontWeight(.light)
+//                                        Spacer()
+//                                        Image(systemName : "hand.thumbsup.fill")
+//                                            .font(.system(size : 15))
+                                    }
+                                    Spacer()
+                                    HStack(spacing : 5) {
+                                        Spacer()
+                                        Text(convertReturnedDateString(PostList.createdAt))
+                                            .fontWeight(.light)
+                                        Image(systemName : "hand.thumbsup.fill")
+                                        Text("\(PostList.likeCount)")
+                                            .fontWeight(.light)
+                                    }.font(.system(size : 9))
+                                }.foregroundColor(.secondary)
+                                .padding(.vertical, 5)
+                            }
+                            .padding(5)
+                            .padding(.horizontal, 10)
+                            //.modifier(ItemCardStyle())
+                        }
+                        
+                        Color.systemDefaultGray
+                            .frame(width : UIScreen.main.bounds.width * 0.9, height : 5)
+                    }
+                }
+            }.onAppear {
+                viewModel.getBoardPosts(token: viewModel.userInfo.token.accessToken)
             }
-        }.navigationTitle(Text("Posts I Wrote"))
+        }.navigationTitle(Text("My Posts"))
     }
 
     var body : some View {

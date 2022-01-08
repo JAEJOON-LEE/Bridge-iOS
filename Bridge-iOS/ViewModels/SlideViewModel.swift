@@ -13,6 +13,7 @@ final class SlideViewModel : ObservableObject {
     @Published var usedPostList : [Post] = []
     //@Published var playPostList
     @Published var likedPostList : [Post] = []
+    @Published var playPostLists : [PlayPostList] = []
     
     private var subscription = Set<AnyCancellable>()
     var userInfo : SignInResponse
@@ -67,6 +68,36 @@ final class SlideViewModel : ObservableObject {
             } receiveValue: { [weak self] (recievedValue : [Post]) in
                 print(recievedValue)
                 self?.likedPostList = recievedValue
+            }.store(in: &subscription)
+    }
+    
+    func getBoardPosts(token : String) {
+        let url = "http://3.36.233.180:8080/members/\(userInfo.memberId)/playground?lastPostId=0"
+        let header: HTTPHeaders = [ "X-AUTH-TOKEN": token ]
+        
+        AF.request(url,
+                   method: .get,
+//                   parameters: ["lastPost": 1000],
+                   encoding: URLEncoding.default,
+                   headers: header)
+            .responseString{ (response) in
+                //guard let statusCode = response.response?.statusCode else { return }
+                //print(statusCode)
+                print(response)
+            }
+            .publishDecodable(type : TotalPlayPostList.self)
+            .compactMap { $0.value }
+            .map { $0.playPostList }
+            .sink { completion in
+                switch completion {
+                case let .failure(error) :
+                    print(error.localizedDescription)
+                case .finished :
+                    print("finished boardView")
+                }
+            } receiveValue: { [weak self] (recievedValue : [PlayPostList]) in
+                self?.playPostLists = recievedValue
+                
             }.store(in: &subscription)
     }
 }

@@ -33,3 +33,18 @@ struct BoardMember : Codable, Hashable {
     var description : String?
     var profileImage : String?
 }
+
+struct TotalPlayPostList : Codable,Hashable {
+    var playPostList : [PlayPostList]
+}
+
+struct PlayPostList : Codable, Hashable {
+    var postId : Int
+    var postType : String
+    var title : String
+    var image : String?
+    var description : String
+    var likeCount : Int
+    var commentCount : Int
+    var createdAt : String
+}
