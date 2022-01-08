@@ -190,7 +190,7 @@ struct WritingView : View {
                                     .foregroundColor(!viewModel.anonymous ? .gray : .mainTheme)
                             }
                             
-                            if(!viewModel.isForModifying){
+                            if(viewModel.isForModifying == false || viewModel.isForSecretModifying == false){
                                 Spacer()
                                 
                                 Text("S-SPACE").foregroundColor(.gray)
@@ -269,7 +269,7 @@ struct WritingView : View {
                                         }
                                     }
                                 }
-                            } else if(viewModel.infoForSecretModifying?.secretPostDetail.postImages != nil){
+                            }else if(viewModel.infoForSecretModifying?.secretPostDetail.postImages != nil){
                                 HStack{
                                     ForEach(viewModel.infoForSecretModifying?.secretPostDetail.postImages ?? [], id : \.self) { imageInfo in
                                         URLImage(
