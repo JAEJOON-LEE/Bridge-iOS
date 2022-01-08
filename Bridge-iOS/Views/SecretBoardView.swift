@@ -40,6 +40,7 @@ struct SecretBoardView : View {
             
             }.listStyle(PlainListStyle()) // iOS 15 대응
         }.onAppear {
+            usleep(200000)
             viewModel.getSecretPosts(token: viewModel.token)
         }
         .navigationBarTitle("S-SPACE", displayMode: .inline)

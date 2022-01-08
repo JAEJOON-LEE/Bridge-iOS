@@ -616,7 +616,7 @@ struct PostInfoView: View { // 게시글 상세 페이지
         if((viewModel.isMyComment == true)){
             return ActionSheet(title: Text("Options"), message: nil, buttons: [btnMC, btnDC, btnCancle])
         }
-        else if((viewModel.isMyPost! == true )){
+        else if((viewModel.isMyPost ?? true )){
             return ActionSheet(title: Text("Options"), message: nil, buttons: [btnMP, btnDP, btnCancle])
         }else if((viewModel.totalSecretPostDetail?.secretPostDetail.modifiable == true)){
             return ActionSheet(title: Text("Options"), message: nil, buttons: [btnMP, btnDP, btnCancle])

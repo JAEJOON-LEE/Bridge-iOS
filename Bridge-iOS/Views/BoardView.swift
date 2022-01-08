@@ -131,6 +131,8 @@ struct BoardView : View {
                 }
             }.listStyle(PlainListStyle()) // iOS 15 대응
         }.onAppear {
+//            sleep(30000)
+            usleep(200000)
             viewModel.getBoardPosts(token: viewModel.token)
         }
 //        .refreshable{ // only for ios15
