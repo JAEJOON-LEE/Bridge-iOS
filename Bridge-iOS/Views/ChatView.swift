@@ -72,17 +72,17 @@ struct ChatView: View {
                                         // 2. Text Area
                                         VStack(alignment : .leading, spacing : 5) {
                                             Text(chatroom.memberTo?.username ?? "Anonymous")
-                                                .font(.system(size: 18, weight : .bold))
+                                                .font(.system(size: 18, weight : .bold, design : .rounded))
                                                 .foregroundColor(.black)
                                             
                                             if let msg = chatroom.message {
                                                 Text(msg.message.isEmpty ? "📷 Image" : msg.message)
-                                                    .font(.system(size: 13, weight : .bold))
+                                                    .font(.system(size: 13, weight : .bold, design : .rounded))
                                                     .foregroundColor(.gray)
                                             }
                                             
                                             Text(convertReturnedDateString(chatroom.message?.createdAt ?? "2021-10-01 00:00:00"))
-                                                .font(.system(size: 12))
+                                                .font(.system(.caption, design : .rounded))
                                                 .foregroundColor(.gray)
                                         }
                                         .padding(5)
@@ -106,6 +106,7 @@ struct ChatView: View {
                                     }
                                     .frame(width : UIScreen.main.bounds.width * 0.95)
                                     .padding(10)
+                                    .padding(.horizontal, 5)
                                 }
 
                                 Color.systemDefaultGray

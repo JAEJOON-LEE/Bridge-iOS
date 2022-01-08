@@ -12,6 +12,8 @@ import Alamofire
 final class HomeViewModel : ObservableObject {
     @Published var Posts : [Post] = []
     @Published var selectedCamp : String = "Casey/Hovey" //"Camp Casey"
+    @Published var isSearchViewShow : Bool = false
+    @Published var postFetchDone : Bool = false
     //@Published var profileImage : String = ""
     
     private let url = "http://3.36.233.180:8080/used-posts?"
@@ -37,7 +39,16 @@ final class HomeViewModel : ObservableObject {
                                 "camp" : selectedCamp],
                    encoding: URLEncoding.default,
                    headers: header)
-            .publishDecodable(type : Element.self)
+            .responseJSON { [weak self] (response) in
+                guard let statusCode = response.response?.statusCode else { return }
+                switch statusCode {
+                    case 200 :
+                        print("Post Fetching Success : \(statusCode)")
+                        self?.postFetchDone = true
+                    default :
+                        print("Post Fetching Fail : \(statusCode)")
+                }
+            }.publishDecodable(type : Element.self)
             .compactMap { $0.value }
             .map { $0.postList }
             .sink { completion in

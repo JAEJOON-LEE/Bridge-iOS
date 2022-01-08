@@ -12,7 +12,6 @@ struct HomeView : View {
     @StateObject private var viewModel : HomeViewModel
     @Binding var isSlideShow : Bool
     private let profileImage : String
-    @State var tempBool : Bool = false
     
     init(viewModel : HomeViewModel, isSlideShow : Binding<Bool>, profileImage : String) {
         self._viewModel = StateObject(wrappedValue: viewModel)
@@ -68,7 +67,7 @@ struct HomeView : View {
 //            NavigationLink {
 //                UsedSearchView(viewModel: UsedSearchViewModel(accessToken: viewModel.token, memberId: viewModel.memberId, currentCamp : viewModel.selectedCamp))
             Button {
-                tempBool = true
+                viewModel.isSearchViewShow = true
             } label: {
                 HStack {
                     Image(systemName: "magnifyingglass")
@@ -99,7 +98,7 @@ struct HomeView : View {
             LocationPicker
             HStack{
                 Text("What's new today?")
-                    .font(.title2)
+                    .font(.system(.title2, design : .rounded))
                     .fontWeight(.semibold)
                 Spacer()
                 Button {
@@ -113,49 +112,59 @@ struct HomeView : View {
             .padding(.vertical, 10)
             .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.06)
             
-            ScrollView {
-                LazyVStack {
-                    ForEach(viewModel.Posts, id : \.self) { Post in
-                        VStack {
-                            NavigationLink(
-                                destination:
-                                    ItemInfoView(viewModel:
-                                                    ItemInfoViewModel(
-                                                        token: viewModel.token,
-                                                        postId : Post.postId,
-                                                        isMyPost : (viewModel.memberId == Post.memberId)
-                                                    )
-                                    )/*.onDisappear(perform: {
-                                        // 일반 작업시에는 필요없는데, 삭제 작업 즉시 반영을 위해서 필요함
-                                        // 조회수 2 증가 원인
-                                        viewModel.getPosts(token: viewModel.token)
-                                    })*/
-                            ) {
-                                ItemCard(viewModel : ItemCardViewModel(post: Post))
+            if !viewModel.postFetchDone {
+                Spacer()
+                ProgressView()
+                    .padding()
+                Text("Loading..")
+                    .foregroundColor(.gray)
+                    .fontWeight(.semibold)
+                Spacer()
+            } else {
+                ScrollView {
+                    LazyVStack {
+                        ForEach(viewModel.Posts, id : \.self) { Post in
+                            VStack {
+                                NavigationLink(
+                                    destination:
+                                        ItemInfoView(viewModel:
+                                                        ItemInfoViewModel(
+                                                            token: viewModel.token,
+                                                            postId : Post.postId,
+                                                            isMyPost : (viewModel.memberId == Post.memberId)
+                                                        )
+                                        )/*.onDisappear(perform: {
+                                            // 일반 작업시에는 필요없는데, 삭제 작업 즉시 반영을 위해서 필요함
+                                            // 조회수 2 증가 원인
+                                            viewModel.getPosts(token: viewModel.token)
+                                        })*/
+                                ) {
+                                    ItemCard(viewModel : ItemCardViewModel(post: Post))
+                                }
+                                
+                                Color.systemDefaultGray
+                                    .frame(width : UIScreen.main.bounds.width * 0.9, height : 5)
                             }
-                            
-                            Color.systemDefaultGray
-                                .frame(width : UIScreen.main.bounds.width * 0.9, height : 5)
                         }
                     }
-                }
-                Spacer().frame(height : UIScreen.main.bounds.height * 0.1)
-            }.overlay(
-                VStack(spacing : 0) {
-                    Spacer()
-                    LinearGradient(colors: [.white.opacity(0), .white], startPoint: .top, endPoint: .bottom)
-                        .frame(height : UIScreen.main.bounds.height * 0.1)
-                    Color.white
-                        .frame(height : UIScreen.main.bounds.height * 0.05)
-                }.edgesIgnoringSafeArea(.bottom)
-            )
+                    Spacer().frame(height : UIScreen.main.bounds.height * 0.1)
+                }.overlay(
+                    VStack(spacing : 0) {
+                        Spacer()
+                        LinearGradient(colors: [.white.opacity(0), .white], startPoint: .top, endPoint: .bottom)
+                            .frame(height : UIScreen.main.bounds.height * 0.1)
+                        Color.white
+                            .frame(height : UIScreen.main.bounds.height * 0.05)
+                    }.edgesIgnoringSafeArea(.bottom)
+                )
+            }
         }.onAppear {
             viewModel.getPosts(token: viewModel.token)
         }.onChange(of: viewModel.selectedCamp) { newValue in
             print(newValue)
             viewModel.getPosts(token: viewModel.token)
         }
-        .fullScreenCover(isPresented: $tempBool) {
+        .fullScreenCover(isPresented: $viewModel.isSearchViewShow) {
             print("full screen cover dissmiss action")
         } content: {
             NavigationView {
@@ -188,9 +197,9 @@ struct ItemCard : View {
 
             VStack(alignment : .leading, spacing: 5) {
                 Text(viewModel.itemTitle)
-                    .font(.title2)
-                    .fontWeight(.light)
-                    .foregroundColor(.black)
+                    .font(.system(.title2, design: .rounded))
+                    .fontWeight(.medium)
+                    .foregroundColor(.black.opacity(0.8))
                 HStack(spacing : 5) {
                     Text(viewModel.camp)
                         .fontWeight(.light)
@@ -203,15 +212,14 @@ struct ItemCard : View {
                 Spacer()
                 HStack {
                     Text("$ " + viewModel.itemPrice)
-                        .font(.system(size: 20, weight : .bold))
-                        .foregroundColor(.black)
-                        .fontWeight(.light)
+                        .font(.system(size: 20, weight: .semibold, design: .rounded))
+                        .foregroundColor(.black.opacity(0.8))
                     Spacer()
                     Image(systemName : viewModel.isLiked ? "heart.fill" : "heart")
-                        .font(.system(size : 20))
+                        .font(.system(size : 24))
                 }
             }.foregroundColor(.secondary)
-            .padding(.vertical, 5)
+            .padding(.vertical, 7)
         }
         .padding(5)
         .padding(.horizontal, 10)

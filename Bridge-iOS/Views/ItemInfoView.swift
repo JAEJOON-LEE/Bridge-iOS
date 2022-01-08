@@ -100,7 +100,7 @@ struct ItemInfoView: View {
                     HStack {
                         VStack(alignment : .leading, spacing: 10) {
                             Text(viewModel.itemInfo?.usedPostDetail.title ?? "Title not found")
-                                .font(.largeTitle)
+                                .font(.system(.largeTitle, design: .rounded))
                                 .fontWeight(.bold)
                             HStack(spacing : 5) {
                                 Text(convertReturnedDateString(viewModel.itemInfo?.usedPostDetail.createdAt ?? "2021-10-01 00:00:00"))
