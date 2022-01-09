@@ -115,8 +115,8 @@ struct SlideView : View {
 
                                 VStack(alignment : .leading, spacing: 5) {
                                     Text(PostList.title)
-                                        .font(.title2)
-//                                        .fontWeight(.bold)
+//                                        .font(.title2)
+                                        .font(.system(size: 22, weight : .bold, design : .rounded))
                                         .foregroundColor(.black)
                                     HStack {
                                         Text(PostList.description)
@@ -131,6 +131,10 @@ struct SlideView : View {
                                     HStack(spacing : 5) {
                                         Spacer()
                                         Text(convertReturnedDateString(PostList.createdAt))
+                                            .fontWeight(.light)
+                                            .padding(.horizontal)
+                                        Image(systemName : "message.fill")
+                                        Text("\(PostList.commentCount)")
                                             .fontWeight(.light)
                                         Image(systemName : "hand.thumbsup.fill")
                                         Text("\(PostList.likeCount)")
