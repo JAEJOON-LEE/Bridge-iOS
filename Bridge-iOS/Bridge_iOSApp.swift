@@ -11,6 +11,8 @@ import URLImage
 import Firebase
 import FirebaseMessaging
 
+var myToken : String = ""
+
 @main
 struct Bridge_iOSApp: App {
     
@@ -65,6 +67,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     
     // fcm 토큰이 등록 되었을 때
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        print("등록 token : ", deviceToken)
         Messaging.messaging().apnsToken = deviceToken
     }
     
@@ -74,7 +77,8 @@ extension AppDelegate : MessagingDelegate {
     
     // fcm 등록 토큰을 받았을 때
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
-        print("AppDelegate - 파베 토큰을 받았다.")
+        //very important !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        myToken = fcmToken!
         print("AppDelegate - Firebase registration token: \(String(describing: fcmToken))")
     }
 }

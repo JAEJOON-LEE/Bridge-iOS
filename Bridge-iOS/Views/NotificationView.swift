@@ -13,5 +13,9 @@ struct NotificationView : View {
             Text("Notification View")
                 .font(.largeTitle)
         }
+        .onAppear{
+            UIApplication.shared.applicationIconBadgeNumber = 0 // badge 초기화
+        }
+
     }
 }

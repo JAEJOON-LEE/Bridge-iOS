@@ -165,6 +165,10 @@ struct PostInfoView: View { // 게시글 상세 페이지
                                 }else{
                                     viewModel.getSecretPostDetail()
                                 }
+                                
+                                if(viewModel.isMyPost == false){
+                                    viewModel.sendMessageTouser(to: viewModel.ReceiverFCMToken, title: "Bridge", body: "Somebody likes your post!")
+                                }
                             } label : {
                                 
                                 if(viewModel.isSecret == false){
@@ -296,6 +300,10 @@ struct PostInfoView: View { // 게시글 상세 페이지
 //                                viewModel.getBoardPostDetail()
 //                                viewModel.getComment()
 //                                commentArea.scrollTo(viewModel.commentLists.count, anchor: .bottom)
+                            }
+                            
+                            if(viewModel.isMyPost == false){
+                                viewModel.sendMessageTouser(to: viewModel.ReceiverFCMToken, title: "Bridge", body: "Check a new comment of your post!")
                             }
                         }else{
                             viewModel.commentSended = false

@@ -7,6 +7,11 @@
 
 import SwiftUI
 import URLImage
+import Firebase
+
+//test
+//let ReceiverFCMToken = "cmVSK2fCfE-shqrUThTwe-:APA91bHiBs07yGWkHsGNF49cxzhuQ-Wa_vfCVT0RybUwHdhOJ8eGB2nkFiGFVDeKWDXZbJri0KrMZecw54yT9BO5A5zYLTQYnwva_hPZJ-_MTGrM2PRy-_k8o3_eboLYGFeiWAraCnTM"
+//let legacyServerKey = "AAAAFYLL65I:APA91bF_g2671df_634Qyr3V4RzDnGN6IP3YAcvbujSmUDqoq_mxLwYVIi6RJOeVILSIecTBPjFQKeR2hDeui1xf5OPBjNNbwsEXAptA0yvkZwp1AMgknVdEM20byDdh8if5qzLxuQ4D"
 
 struct BoardView : View {
     @StateObject private var viewModel : BoardViewModel
@@ -133,6 +138,7 @@ struct BoardView : View {
         }.onAppear {
 //            sleep(30000)
             self.setNotification() //test
+//            self.sendMessageTouser(to: ReceiverFCMToken, title: "test fcm", body: "test")
             usleep(200000)
             viewModel.getBoardPosts(token: viewModel.token)
         }
@@ -148,6 +154,52 @@ struct BoardView : View {
         manager.addNotification(title: "Bridge")
         manager.schedule()
     }
+    
+//    func sendMessageTouser(to token: String, title: String, body: String) {
+//            print("sendMessageTouser()")
+//            let urlString = "https://fcm.googleapis.com/fcm/send"
+//            let url = NSURL(string: urlString)!
+//            let paramString: [String : Any] = ["to" : token,
+//                                               "notification" : ["title" : title, "body" : body],
+//                                               "data" : ["user" : "test_id"]
+//            ]
+//            let request = NSMutableURLRequest(url: url as URL)
+//            request.httpMethod = "POST"
+//            request.httpBody = try? JSONSerialization.data(withJSONObject:paramString, options: [.prettyPrinted])
+//            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+//            request.setValue("key=\(legacyServerKey)", forHTTPHeaderField: "Authorization")
+//            let task =  URLSession.shared.dataTask(with: request as URLRequest)  { (data, response, error) in
+//                do {
+//                    if let jsonData = data {
+//                        if let jsonDataDict  = try JSONSerialization.jsonObject(with: jsonData, options: JSONSerialization.ReadingOptions.allowFragments) as? [String: AnyObject] {
+//                            NSLog("Received data:\n\(jsonDataDict))")
+//                        }
+//                    }
+//                } catch let err as NSError {
+//                    print(err.debugDescription)
+//                }
+//            }
+//            task.resume()
+//        }
+        
+//        func handleLogTokenTouch() {
+//            // [START log_fcm_reg_token]
+//            let token = Messaging.messaging().fcmToken
+//            print("FCM token: \(token ?? "")")
+//            // [END log_fcm_reg_token]
+//            self.fcmTokenMessage  = "Logged FCM token: \(token ?? "")"
+//
+//            // [START log_iid_reg_token]
+//            InstanceID.instanceID().instanceID { (result, error) in
+//              if let error = error {
+//                print("Error fetching remote instance ID: \(error)")
+//              } else if let result = result {
+//                print("Remote instance ID token: \(result.token)")
+//                self.instanceIDTokenMessage  = "Remote InstanceID token: \(result.token)"
+//              }
+//            }
+//            // [END log_iid_reg_token]
+//        }
 }
 
 

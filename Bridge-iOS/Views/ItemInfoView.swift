@@ -210,7 +210,12 @@ struct ItemInfoView: View {
                     
                     HStack {
                         Spacer()
-                        Button { } label : {
+                        Button {
+                            //fcm test
+                            if(viewModel.isMyPost == false){
+                                viewModel.sendMessageTouser(to: viewModel.ReceiverFCMToken, title: "Bridge", body: "Somebody knocks you!")
+                            }
+                        } label : {
                             HStack {
                                 Text("Knock Now!")
                                     .font(.system(size : 20, weight : .bold))
@@ -299,6 +304,7 @@ struct ItemInfoView: View {
                         viewModel.itemInfo?.usedPostDetail.likeCount -= 1
                     } else {
                         viewModel.itemInfo?.usedPostDetail.likeCount += 1
+                        viewModel.sendMessageTouser(to: viewModel.ReceiverFCMToken, title: "Bridge", body: "Somebody likes your item!")
                     }
                     viewModel.isLiked?.toggle()
                     viewModel.likePost(isliked: !(viewModel.isLiked ?? false))
