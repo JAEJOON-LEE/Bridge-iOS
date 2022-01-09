@@ -22,7 +22,7 @@ struct LandingView: View {
                     Text("Welcome !")
                         .font(.largeTitle)
                         .fontWeight(.bold)
-                    Text("Thanks for using our app, Here you can sell your own items, or participate in various activities led by your partner")
+                    Text("Thanks for using our app, Here you can sell your own items, or participate in various activities led by your partner.")
                         .kerning(1) // 자간
                         .lineSpacing(5) // 행간
                         .fixedSize(horizontal: false, vertical: true)
