@@ -132,12 +132,21 @@ struct BoardView : View {
             }.listStyle(PlainListStyle()) // iOS 15 대응
         }.onAppear {
 //            sleep(30000)
+            self.setNotification() //test
             usleep(200000)
             viewModel.getBoardPosts(token: viewModel.token)
         }
 //        .refreshable{ // only for ios15
 //            viewModel.getBoardPosts(token: viewModel.token)
 //        }
+    }
+    
+    //test
+    func setNotification() -> Void {
+        let manager = LocalNotificationManager()
+        manager.requestPermission()
+        manager.addNotification(title: "Bridge")
+        manager.schedule()
     }
 }
 

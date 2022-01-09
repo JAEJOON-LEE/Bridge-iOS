@@ -89,6 +89,10 @@
 		6DBAAC9A274AB4F700FCE93A /* PostSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBAAC99274AB4F700FCE93A /* PostSearchView.swift */; };
 		6DBAAC9C274AB63B00FCE93A /* SecretBoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBAAC9B274AB63B00FCE93A /* SecretBoardView.swift */; };
 		6DBAAC9E274AB64500FCE93A /* HotBoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBAAC9D274AB64500FCE93A /* HotBoardView.swift */; };
+		6DE698FC278A97FE0048EB76 /* LocalNotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DE698FB278A97FD0048EB76 /* LocalNotificationManager.swift */; };
+		6DE698FE278A984C0048EB76 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6DE698FD278A984C0048EB76 /* GoogleService-Info.plist */; };
+		6DE69902278A98B00048EB76 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 6DE69901278A98B00048EB76 /* FirebaseAnalytics */; };
+		6DE69904278A98B00048EB76 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 6DE69903278A98B00048EB76 /* FirebaseMessaging */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -174,6 +178,9 @@
 		6DBAAC99274AB4F700FCE93A /* PostSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostSearchView.swift; sourceTree = "<group>"; };
 		6DBAAC9B274AB63B00FCE93A /* SecretBoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecretBoardView.swift; sourceTree = "<group>"; };
 		6DBAAC9D274AB64500FCE93A /* HotBoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotBoardView.swift; sourceTree = "<group>"; };
+		6DE698FB278A97FD0048EB76 /* LocalNotificationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalNotificationManager.swift; sourceTree = "<group>"; };
+		6DE698FD278A984C0048EB76 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		6DE698FF278A986F0048EB76 /* Bridge-iOSDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Bridge-iOSDebug.entitlements"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -183,6 +190,8 @@
 			files = (
 				1ADD9DEB270363A1008342A7 /* URLImage in Frameworks */,
 				1ADD9DED270363A1008342A7 /* URLImageStore in Frameworks */,
+				6DE69904278A98B00048EB76 /* FirebaseMessaging in Frameworks */,
+				6DE69902278A98B00048EB76 /* FirebaseAnalytics in Frameworks */,
 				1ADD9DDF27032237008342A7 /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -209,6 +218,8 @@
 		1AA8B40B26F32AF500C28E02 /* Bridge-iOS */ = {
 			isa = PBXGroup;
 			children = (
+				6DE698FF278A986F0048EB76 /* Bridge-iOSDebug.entitlements */,
+				6DE698FD278A984C0048EB76 /* GoogleService-Info.plist */,
 				1AA6D2F527881303008357BE /* Bridge-iOS.entitlements */,
 				1AA8B40C26F32AF500C28E02 /* Bridge_iOSApp.swift */,
 				1ADD9DE027032597008342A7 /* Models */,
@@ -305,6 +316,7 @@
 		1AA8B43326F3685E00C28E02 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				6DE698FB278A97FD0048EB76 /* LocalNotificationManager.swift */,
 				1AA8B43426F3688200C28E02 /* TabContainerViewModel.swift */,
 				1AA6D2E5278571A7008357BE /* ChatViewModel.swift */,
 				1ADD9DDB2703220F008342A7 /* SignInViewModel.swift */,
@@ -378,6 +390,8 @@
 				1ADD9DDE27032237008342A7 /* Alamofire */,
 				1ADD9DEA270363A1008342A7 /* URLImage */,
 				1ADD9DEC270363A1008342A7 /* URLImageStore */,
+				6DE69901278A98B00048EB76 /* FirebaseAnalytics */,
+				6DE69903278A98B00048EB76 /* FirebaseMessaging */,
 			);
 			productName = "Bridge-iOS";
 			productReference = 1AA8B40926F32AF500C28E02 /* Bridge-iOS.app */;
@@ -409,6 +423,7 @@
 			packageReferences = (
 				1ADD9DDD27032237008342A7 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				1ADD9DE9270363A0008342A7 /* XCRemoteSwiftPackageReference "url-image" */,
+				6DE69900278A98B00048EB76 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			productRefGroup = 1AA8B40A26F32AF500C28E02 /* Products */;
 			projectDirPath = "";
@@ -426,6 +441,7 @@
 			files = (
 				1AA8B41426F32AF800C28E02 /* Preview Assets.xcassets in Resources */,
 				1AA8B41126F32AF800C28E02 /* Assets.xcassets in Resources */,
+				6DE698FE278A984C0048EB76 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -478,6 +494,7 @@
 				6D8D23AB271728160020B5B0 /* String+Extension.swift in Sources */,
 				6D6BA4ED26F57BB10008B25E /* ItemCardStyle.swift in Sources */,
 				1A572E0B270ECDC6009E2465 /* SlideViewModel.swift in Sources */,
+				6DE698FC278A97FE0048EB76 /* LocalNotificationManager.swift in Sources */,
 				6D2B89DE271347D700319907 /* GeneralPostStyle.swift in Sources */,
 				6D2B89D82713477C00319907 /* PostInfo+ResponseData.swift in Sources */,
 				1AA6D2EC2786C717008357BE /* SettingsView.swift in Sources */,
@@ -645,7 +662,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = "Bridge-iOS/Bridge-iOS.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "Bridge-iOS/Bridge-iOSDebug.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Bridge-iOS/Preview Content\"";
 				DEVELOPMENT_TEAM = ZKRH5N6RGG;
@@ -728,6 +745,14 @@
 				minimumVersion = 3.0.0;
 			};
 		};
+		6DE69900278A98B00048EB76 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -745,6 +770,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 1ADD9DE9270363A0008342A7 /* XCRemoteSwiftPackageReference "url-image" */;
 			productName = URLImageStore;
+		};
+		6DE69901278A98B00048EB76 /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6DE69900278A98B00048EB76 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		6DE69903278A98B00048EB76 /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6DE69900278A98B00048EB76 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
