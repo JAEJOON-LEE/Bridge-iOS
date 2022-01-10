@@ -164,15 +164,13 @@ struct SlideView : View {
             VStack(alignment: .leading, spacing : 15) {
                 HStack {
                     Spacer()
-                    Button{
-                        // user info edit api call!
-                    } label : {
-                        HStack {
-                            Text("Edit")
-                            Image(systemName: "pencil.circle")
-                        }
-                        .foregroundColor(.gray)
-                        .font(.system(size : 12, weight: .semibold))
+                    NavigationLink(
+                        destination: MyPageView(viewModel: MyPageViewModel(signInResponse:viewModel.userInfo))
+                    ) {
+                        Text("Edit")
+                            .foregroundColor(.gray)
+                            .font(.subheadline)
+                            .fontWeight(.bold)
                     }
                 }
                 

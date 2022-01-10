@@ -319,7 +319,7 @@ struct ItemInfoView: View {
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarItems(trailing:
                 Button {
-                    if viewModel.isLiked! {
+                    if viewModel.isLiked ?? false {
                         viewModel.itemInfo?.usedPostDetail.likeCount -= 1
                     } else {
                         viewModel.itemInfo?.usedPostDetail.likeCount += 1
@@ -355,18 +355,7 @@ struct ItemInfoView: View {
                 }),
                 secondaryButton: .cancel(Text("No")))
         }
-//        .fullScreenCover(isPresented: $viewModel.showPostModify, content: {
-//            NavigationView {
-//                ModifyUsedPostView(
-//                    viewModel: ModifyUsedPostViewModel(
-//                        accessToken : viewModel.token,
-//                        postId : viewModel.postId,
-//                        contents: viewModel.itemInfo!.usedPostDetail
-//                    ),
-//                    isModifyDone : self.$isModifyDone
-//                )
-//            }
-//        })
+        //.fullScreenCover(isPresented: $viewModel.showPostModify, content: {
         .sheet(isPresented: $viewModel.showPostModify, content: {
             NavigationView {
                 ModifyUsedPostView(
