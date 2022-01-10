@@ -23,24 +23,39 @@ struct ItemInfoView: View {
         ZStack {
             // Image Area
             VStack {
-                TabView(selection : $viewModel.currentImageIndex) {
-                    ForEach(viewModel.itemInfo?.usedPostDetail.postImages ?? [], id : \.self) { imageInfo in
-                        URLImage(
-                            URL(string : imageInfo.image) ??
-                            URL(string: "https://static.thenounproject.com/png/741653-200.png")!
-                        ) { image in
-                            image
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
+                ZStack(alignment : .bottom) {
+                    TabView(selection : $viewModel.currentImageIndex) {
+                        ForEach(viewModel.itemInfo?.usedPostDetail.postImages ?? [], id : \.self) { imageInfo in
+                            URLImage(
+                                URL(string : imageInfo.image) ??
+                                URL(string: "https://static.thenounproject.com/png/741653-200.png")!
+                            ) { image in
+                                image
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                            }
+                            .tag(imageInfo.imageId)
+                            .onTapGesture {
+                                viewModel.currentImageIndex = imageInfo.imageId
+                            }
                         }
-                        .tag(imageInfo.imageId)
-                        .onTapGesture {
-                            viewModel.currentImageIndex = imageInfo.imageId
+                    }.tabViewStyle(PageTabViewStyle())
+                    //.indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .never))
+                    
+                    TabView(selection : $viewModel.currentImageIndex) {
+                        ForEach(viewModel.itemInfo?.usedPostDetail.postImages ?? [], id : \.self) {
+                            Color.white.opacity(0)
+                                .tag($0.imageId)
                         }
-                    }
-                }.tabViewStyle(PageTabViewStyle())
-                .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
-                .frame(width : UIScreen.main.bounds.width, height: UIScreen.main.bounds.height / 3 + offset.height)
+                    }.frame(height : 40)
+                    .tabViewStyle(PageTabViewStyle())
+                    .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
+                    .padding(.bottom, 40)
+                }
+                .frame(
+                    width : UIScreen.main.bounds.width,
+                    height: UIScreen.main.bounds.height * 0.38 + offset.height)
+                
                 Spacer()
             }.blur(radius: viewModel.isMemberInfoClicked ? 5 : 0)
             .onTapGesture {
@@ -290,6 +305,7 @@ struct ItemInfoView: View {
                         .foregroundColor(.gray)
                     Spacer()
                 }
+                .zIndex(5)
                 .frame(width : UIScreen.main.bounds.width * 0.7, height: UIScreen.main.bounds.height * 1/3)
                 .background(Color.mainTheme)
                 .cornerRadius(15)
@@ -299,6 +315,7 @@ struct ItemInfoView: View {
         .onChange(of: self.isModifyDone, perform: { _ in
             self.presentationMode.wrappedValue.dismiss()
         })
+        .navigationBarTitle(Text(viewModel.itemInfo?.usedPostDetail.title ?? ""))
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarItems(trailing:
                 Button {
