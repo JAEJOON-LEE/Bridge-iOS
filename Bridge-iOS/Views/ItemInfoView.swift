@@ -102,6 +102,8 @@ struct ItemInfoView: View {
                             Text(viewModel.itemInfo?.usedPostDetail.title ?? "Title not found")
                                 .font(.system(.largeTitle, design: .rounded))
                                 .fontWeight(.bold)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.4)
                             HStack(spacing : 5) {
                                 Text(convertReturnedDateString(viewModel.itemInfo?.usedPostDetail.createdAt ?? "2021-10-01 00:00:00"))
                                 Text("|").foregroundColor(.mainTheme)
