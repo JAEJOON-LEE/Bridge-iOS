@@ -261,9 +261,7 @@ struct SlideView : View {
                         SlideItem(ImageName: "person", text: "Seller page")
                     }
                     
-                    Button{
-                        print("Invite friends is clicked")
-                    } label : {
+                    NavigationLink(destination: InviteFriendsView()) {
                         SlideItem(ImageName: "person", text: "Invite friends")
                     }
                     
