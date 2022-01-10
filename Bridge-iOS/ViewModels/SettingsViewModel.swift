@@ -11,7 +11,7 @@ import Combine
 
 final class SettingsViewModel : ObservableObject {
     // May have to change this var to AppStorage var.
-    @Published var entireAlarm : Bool = false
+    //@Published var entireAlarm : Bool = false
     @Published var chatAlarm : Bool = false
     @Published var boardAlarm : Bool = false
     @Published var sellingAlarm : Bool = false
@@ -22,16 +22,32 @@ final class SettingsViewModel : ObservableObject {
     @Published var signOutConfirm : Bool = false
     
     private var subscription = Set<AnyCancellable>()
-
-    let userInfo : SignInResponse
     
-    init(signInResponse : SignInResponse) {
-        userInfo = signInResponse
+    var entireAlarm : Bool {
+        get {
+            return (chatAlarm && boardAlarm) && (chatAlarm && sellingAlarm) && (boardAlarm && sellingAlarm)
+        }
+        set(value) {
+            chatAlarm = value
+            boardAlarm = value
+            sellingAlarm = value
+        }
+    }
+    
+    let userInfo : MemeberInformation
+    let token : String
+    
+    init(memberInformation : MemeberInformation, accessToken : String) {
+        userInfo = memberInformation
+        chatAlarm = userInfo.chatAlarm
+        boardAlarm = userInfo.playgroundAlarm
+        sellingAlarm = userInfo.usedAlarm
+        token = accessToken
         getBlockedUsers()
     }
     
     func getBlockedUsers() {
-        let header: HTTPHeaders = [ "X-AUTH-TOKEN": userInfo.token.accessToken ]
+        let header: HTTPHeaders = [ "X-AUTH-TOKEN": token ]
         let requestURL : String = "http://3.36.233.180:8080/members/\(userInfo.memberId)/blocks"
         
         AF.request(requestURL,
@@ -55,7 +71,7 @@ final class SettingsViewModel : ObservableObject {
     }
     
     func UnblockUser(blockId : Int) {
-        let header: HTTPHeaders = [ "X-AUTH-TOKEN": userInfo.token.accessToken ]
+        let header: HTTPHeaders = [ "X-AUTH-TOKEN": token ]
         let requestURL : String = "http://3.36.233.180:8080/members/\(userInfo.memberId)/blocks/\(blockId)"
         
         AF.request(requestURL,
@@ -66,7 +82,7 @@ final class SettingsViewModel : ObservableObject {
     }
     
     func signOut() {
-        let header: HTTPHeaders = [ "X-AUTH-TOKEN": userInfo.token.accessToken ]
+        let header: HTTPHeaders = [ "X-AUTH-TOKEN": token ]
         let requestURL : String = "http://3.36.233.180:8080/sign-out"
         
         AF.request(requestURL,

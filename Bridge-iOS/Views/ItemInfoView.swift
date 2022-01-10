@@ -301,8 +301,8 @@ struct ItemInfoView: View {
                     Text(viewModel.itemInfo?.member.username ?? "Unknown UserName")
                         .font(.system(size : 20, weight : .bold))
                         .foregroundColor(.white)
-                    Text("\"" + (viewModel.itemInfo?.member.description  ?? "User not found") + "\"")
-                        .foregroundColor(.gray)
+                    Text(viewModel.itemInfo?.member.description  ?? "User not found")
+                        .foregroundColor(.white)
                     Spacer()
                 }
                 .zIndex(5)

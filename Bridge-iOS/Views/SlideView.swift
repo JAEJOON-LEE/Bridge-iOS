@@ -164,9 +164,7 @@ struct SlideView : View {
             VStack(alignment: .leading, spacing : 15) {
                 HStack {
                     Spacer()
-                    NavigationLink(
-                        destination: MyPageView(viewModel: MyPageViewModel(signInResponse:viewModel.userInfo))
-                    ) {
+                    NavigationLink(destination: MyPageView(viewModel: MyPageViewModel(memberInformation: viewModel.memberInfo, accessToken: viewModel.userInfo.token.accessToken))) {
                         Text("Edit")
                             .foregroundColor(.gray)
                             .font(.subheadline)
@@ -175,6 +173,8 @@ struct SlideView : View {
                 }
                 
                 HStack(spacing : 20) {
+                    // MARK: - API 수정되면 교체해야됨. 현재 프로필 이미지가 주소가 아니고 파일명으로 옴
+                    //URLImage(URL(string: viewModel.memberInfo?.profileImage)!) { image in
                     URLImage(URL(string: viewModel.userInfo.profileImage)!) { image in
                         image
                             .resizable()
@@ -185,10 +185,11 @@ struct SlideView : View {
                     .shadow(radius: 5)
                     
                     VStack(alignment: .leading, spacing : 15) {
-                        Text(viewModel.userInfo.username)
+                        //Text(viewModel.userInfo.username)
+                        Text(viewModel.memberInfo.username)
                             .font(.system(size : 20, weight : .bold))
-                            //.fontWeight(.bold)
-                        Text("\"" + viewModel.userInfo.description + "\"")
+                        //Text("\"" + viewModel.userInfo.description + "\"")
+                        Text(viewModel.memberInfo.description)
                     }
                 }
                 .padding(.leading, 10)
@@ -259,6 +260,7 @@ struct SlideView : View {
                         SlideItem(ImageName: "person", text: "Seller page")
                     }
                     
+                    //
                     NavigationLink(destination: InviteFriendsView()) {
                         SlideItem(ImageName: "person", text: "Invite friends")
                     }
@@ -271,7 +273,9 @@ struct SlideView : View {
                     
                     Spacer()
                     
-                    NavigationLink(destination: SettingsView(viewModel: SettingsViewModel(signInResponse: viewModel.userInfo))) {
+                    NavigationLink {
+                        SettingsView(viewModel : SettingsViewModel(memberInformation : viewModel.memberInfo, accessToken : viewModel.userInfo.token.accessToken))
+                    } label : {
                         SlideItem(ImageName: "gearshape", text: "Setting")
                     }.padding(.bottom, 20)
                 }
@@ -285,12 +289,7 @@ struct SlideView : View {
                     .aspectRatio(contentMode: .fill)
                     .frame(width: UIScreen.main.bounds.width * 0.75)
             )
+            .onAppear { viewModel.getUserInfo() }
         }
     }
 }
-
-//struct SlideView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        SlideView(viewModel: SlideViewModel())
-//    }
-//}

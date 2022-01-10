@@ -69,7 +69,7 @@ struct InviteFriendsView: View {
         }.padding(20)
     }
     var bottomNotation : some View {
-        Text("- Number go up when the person you invite finish the registration(including e-mail confirmation)\n- You should visit Katusa Snack Bar and show this page to get a special gift")
+        Text("- Number go up when the person you invite finish the registration (including e-mail confirmation)\n- You should visit Katusa Snack Bar and show this page to get a special gift")
             .foregroundColor(.gray)
     }
     

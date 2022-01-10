@@ -11,15 +11,48 @@ import Combine
 
 final class SlideViewModel : ObservableObject {
     @Published var usedPostList : [Post] = []
-    //@Published var playPostList
     @Published var likedPostList : [Post] = []
     @Published var playPostLists : [PlayPostList] = []
+    @Published var memberInfo : MemeberInformation
+                                    = MemeberInformation(
+                                        memberId: -1,
+                                        username: "Unknown",
+                                        description: "Unknown Error",
+                                        profileImage: "",
+                                        chatAlarm: false,
+                                        playgroundAlarm: false,
+                                        usedAlarm: false
+                                    )
     
     private var subscription = Set<AnyCancellable>()
     var userInfo : SignInResponse
     
     init(userInfo : SignInResponse) {
         self.userInfo = userInfo
+    }
+    
+    func getUserInfo() {
+        let url = "http://3.36.233.180:8080/members/\(userInfo.memberId)"
+        let header: HTTPHeaders = [ "X-AUTH-TOKEN": userInfo.token.accessToken ]
+        
+        AF.request(url,
+                   method: .get,
+                   encoding: URLEncoding.default,
+                   headers: header)
+            //.responseJSON { response in print(response) }
+            .publishDecodable(type : MemeberInformation.self)
+            .compactMap { $0.value }
+            .sink { completion in
+                switch completion {
+                case let .failure(error) :
+                    print(error.localizedDescription)
+                case .finished :
+                    print("Get UserInfo Finished")
+                }
+            } receiveValue: { [weak self] (recievedValue) in
+                print(recievedValue)
+                self?.memberInfo = recievedValue
+            }.store(in: &subscription)
     }
     
     func getSellingList() {

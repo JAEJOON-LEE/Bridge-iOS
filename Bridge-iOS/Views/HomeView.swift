@@ -28,8 +28,10 @@ struct HomeView : View {
                     Image(systemName: "text.justify")
                         .foregroundColor(.mainTheme)
                 }
-                
+
                 URLImage(
+                    // MARK: - API 수정되면 교체해야됨. 현재 프로필 이미지가 주소가 아니고 파일명으로 옴
+                    //URL(string : viewModel.memberInfo?.profileImage ?? "https://static.thenounproject.com/png/741653-200.png")!
                     URL(string : profileImage) ??
                     URL(string: "https://static.thenounproject.com/png/741653-200.png")!
                 ) { image in
@@ -64,8 +66,6 @@ struct HomeView : View {
             } // HStack
 
             // Search
-//            NavigationLink {
-//                UsedSearchView(viewModel: UsedSearchViewModel(accessToken: viewModel.token, memberId: viewModel.memberId, currentCamp : viewModel.selectedCamp))
             Button {
                 viewModel.isSearchViewShow = true
             } label: {
@@ -102,7 +102,7 @@ struct HomeView : View {
                     .fontWeight(.semibold)
                 Spacer()
                 Button {
-                    viewModel.getPosts(token: viewModel.token)
+                    viewModel.getPosts()
                 } label : {
                     Image(systemName: "arrow.clockwise")
                 }
@@ -159,10 +159,10 @@ struct HomeView : View {
                 )
             }
         }.onAppear {
-            viewModel.getPosts(token: viewModel.token)
+            viewModel.getPosts()
         }.onChange(of: viewModel.selectedCamp) { newValue in
             print(newValue)
-            viewModel.getPosts(token: viewModel.token)
+            viewModel.getPosts()
         }
         .fullScreenCover(isPresented: $viewModel.isSearchViewShow) {
             print("full screen cover dissmiss action")

@@ -15,12 +15,6 @@ struct SettingsView: View {
     
     @StateObject private var viewModel : SettingsViewModel
     
-    // Temporal Var.
-    @State private var testToggleVar1 : Bool = false
-    @State private var testToggleVar2 : Bool = false
-    @State private var testToggleVar3 : Bool = false
-    @State private var testToggleVar4 : Bool = false
-    
     init(viewModel : SettingsViewModel) {
         self._viewModel = StateObject(wrappedValue: viewModel)
     }
@@ -35,10 +29,7 @@ struct SettingsView: View {
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
                         }
-                        .frame(
-                            width : UIScreen.main.bounds.width * 0.15,
-                            height : UIScreen.main.bounds.width * 0.15
-                        )
+                        .frame(width : UIScreen.main.bounds.width * 0.15, height : UIScreen.main.bounds.width * 0.15)
                         .clipShape(Circle())
                         Text(blockInfo.blockedMember.username)
                             .fontWeight(.semibold)
@@ -51,7 +42,8 @@ struct SettingsView: View {
                     viewModel.blockList.remove(atOffsets: indexOffset)
                 }
             }.toolbar { EditButton() }
-        }.navigationTitle(Text("Blocked Users"))
+        }.navigationBarTitleDisplayMode(.large)
+        .navigationTitle(Text("Blocked Users"))   
     }
     
     var OpenSoureUsage : some View {
@@ -72,26 +64,26 @@ struct SettingsView: View {
                     Text("Do not disturb mode")
                         .fontWeight(.bold)
                     Spacer()
-                    Toggle("", isOn : $testToggleVar4)
+                    Toggle("", isOn : $viewModel.entireAlarm)
                         .toggleStyle(SwitchToggleStyle(tint: .mainTheme))
                 }
                 VStack {
                     HStack {
                         Text("Chat alarm")
                         Spacer()
-                        Toggle("", isOn : $testToggleVar1)
+                        Toggle("", isOn : $viewModel.chatAlarm)
                             .toggleStyle(SwitchToggleStyle(tint: .mainTheme))
                     }
                     HStack {
                         Text("Board alarm")
                         Spacer()
-                        Toggle("", isOn : $testToggleVar2)
+                        Toggle("", isOn : $viewModel.boardAlarm)
                             .toggleStyle(SwitchToggleStyle(tint: .mainTheme))
                     }
                     HStack {
                         Text("Selling list alarm")
                         Spacer()
-                        Toggle("", isOn : $testToggleVar3)
+                        Toggle("", isOn : $viewModel.sellingAlarm)
                             .toggleStyle(SwitchToggleStyle(tint: .mainTheme))
                     }
                 }.padding(.leading, 20)
@@ -106,7 +98,7 @@ struct SettingsView: View {
                     .fontWeight(.bold)
                     .padding(.vertical, 5)
                 Divider()
-                NavigationLink(destination: MyPageView(viewModel: MyPageViewModel(signInResponse: viewModel.userInfo))) {
+                NavigationLink(destination: MyPageView(viewModel: MyPageViewModel(memberInformation: viewModel.userInfo, accessToken: viewModel.token))) {
                     HStack {
                         Image(systemName: "person.circle")
                         Text("Account Info")

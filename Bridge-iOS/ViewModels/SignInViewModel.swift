@@ -53,7 +53,7 @@ final class SignInViewModel : ObservableObject {
                     self?.showPrgoressView = false
                 }
             } receiveValue: { [weak self] (receivedValue : SignInResponse) in
-                //print(receivedValue)
+                print(receivedValue)
                 self?.signInResponse = .init(
                     memberId: receivedValue.memberId,
                     name: receivedValue.name,

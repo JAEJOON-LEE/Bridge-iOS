@@ -14,9 +14,8 @@ final class HomeViewModel : ObservableObject {
     @Published var selectedCamp : String = "Casey/Hovey" //"Camp Casey"
     @Published var isSearchViewShow : Bool = false
     @Published var postFetchDone : Bool = false
-    //@Published var profileImage : String = ""
+    @Published var memberInfo : MemeberInformation?
     
-    private let url = "http://3.36.233.180:8080/used-posts?"
     private var subscription = Set<AnyCancellable>()
     let token : String
     let memberId : Int
@@ -26,10 +25,12 @@ final class HomeViewModel : ObservableObject {
     init(accessToken : String, memberId : Int) {
         self.token = accessToken
         self.memberId = memberId
-        getPosts(token : accessToken)
+        getPosts()
+        getUserInfo()
     }
     
-    func getPosts(token : String) {
+    func getPosts() {
+        let url = "http://3.36.233.180:8080/used-posts?"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN": token ]
         
         AF.request(url,
@@ -61,6 +62,30 @@ final class HomeViewModel : ObservableObject {
             } receiveValue: { [weak self] (recievedValue : [Post]) in
 //                print(recievedValue)
                 self?.Posts = recievedValue
+            }.store(in: &subscription)
+    }
+    
+    func getUserInfo() {
+        let url = "http://3.36.233.180:8080/members/\(memberId)"
+        let header: HTTPHeaders = [ "X-AUTH-TOKEN": token ]
+        
+        AF.request(url,
+                   method: .get,
+                   encoding: URLEncoding.default,
+                   headers: header)
+            //.responseJSON { response in print(response) }
+            .publishDecodable(type : MemeberInformation.self)
+            .compactMap { $0.value }
+            .sink { completion in
+                switch completion {
+                case let .failure(error) :
+                    print(error.localizedDescription)
+                case .finished :
+                    print("Get UserInfo Finished")
+                }
+            } receiveValue: { [weak self] (recievedValue) in
+                print(recievedValue)
+                self?.memberInfo = recievedValue
             }.store(in: &subscription)
     }
 }
