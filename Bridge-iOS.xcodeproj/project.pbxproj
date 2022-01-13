@@ -13,6 +13,9 @@
 		1A572DDF270B679E009E2465 /* ItemInfo+ResponseData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A572DDE270B679E009E2465 /* ItemInfo+ResponseData.swift */; };
 		1A572E0B270ECDC6009E2465 /* SlideViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A572E0A270ECDC5009E2465 /* SlideViewModel.swift */; };
 		1A641630273C35B200A44A53 /* FindPassword+Response.swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A64162F273C35B200A44A53 /* FindPassword+Response.swift.swift */; };
+		1A74AEB227907F9900F97046 /* ChatRoomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A74AEB127907F9900F97046 /* ChatRoomView.swift */; };
+		1A74AEB427907FC900F97046 /* ChatContents+ResponseData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A74AEB327907FC800F97046 /* ChatContents+ResponseData.swift */; };
+		1A74AEB62790800800F97046 /* ChatRoomViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A74AEB52790800800F97046 /* ChatRoomViewModel.swift */; };
 		1A936DC5271877C300750DE6 /* ModifyUsedPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A936DC4271877C300750DE6 /* ModifyUsedPostView.swift */; };
 		1A936DC7271878A600750DE6 /* ModifyUsedPostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A936DC6271878A500750DE6 /* ModifyUsedPostViewModel.swift */; };
 		1A976EA827412EF600B743CE /* UsedSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A976EA727412EF600B743CE /* UsedSearchView.swift */; };
@@ -105,6 +108,9 @@
 		1A572DDE270B679E009E2465 /* ItemInfo+ResponseData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ItemInfo+ResponseData.swift"; sourceTree = "<group>"; };
 		1A572E0A270ECDC5009E2465 /* SlideViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideViewModel.swift; sourceTree = "<group>"; };
 		1A64162F273C35B200A44A53 /* FindPassword+Response.swift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FindPassword+Response.swift.swift"; sourceTree = "<group>"; };
+		1A74AEB127907F9900F97046 /* ChatRoomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomView.swift; sourceTree = "<group>"; };
+		1A74AEB327907FC800F97046 /* ChatContents+ResponseData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChatContents+ResponseData.swift"; sourceTree = "<group>"; };
+		1A74AEB52790800800F97046 /* ChatRoomViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomViewModel.swift; sourceTree = "<group>"; };
 		1A936DC4271877C300750DE6 /* ModifyUsedPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifyUsedPostView.swift; sourceTree = "<group>"; };
 		1A936DC6271878A500750DE6 /* ModifyUsedPostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifyUsedPostViewModel.swift; sourceTree = "<group>"; };
 		1A976EA727412EF600B743CE /* UsedSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsedSearchView.swift; sourceTree = "<group>"; };
@@ -260,6 +266,7 @@
 				6D7D94CF273C187100A104FD /* FindPasswordView.swift */,
 				1AA8B40E26F32AF500C28E02 /* TabContainer.swift */,
 				1AA6D2E127856A6B008357BE /* ChatView.swift */,
+				1A74AEB127907F9900F97046 /* ChatRoomView.swift */,
 				1AA8B42926F348F100C28E02 /* SignUpView.swift */,
 				6DAD1F5527102918006B01FC /* SignUpAppendixView.swift */,
 				6DAD1F5927102985006B01FC /* SignUpVerifyView.swift */,
@@ -327,6 +334,7 @@
 				6DE698FB278A97FD0048EB76 /* LocalNotificationManager.swift */,
 				1AA8B43426F3688200C28E02 /* TabContainerViewModel.swift */,
 				1AA6D2E5278571A7008357BE /* ChatViewModel.swift */,
+				1A74AEB52790800800F97046 /* ChatRoomViewModel.swift */,
 				1ADD9DDB2703220F008342A7 /* SignInViewModel.swift */,
 				6D7D94CB273C184700A104FD /* FindPasswordViewModel.swift */,
 				1ADD9DE527034B8A008342A7 /* HomeViewModel.swift */,
@@ -381,6 +389,7 @@
 				6D2B89D32713477100319907 /* Secret+ResponseData.swift */,
 				6D2B89D52713477700319907 /* Comment+ResponseData.swift */,
 				1AA6D2E327856A9F008357BE /* Chat+ResponseData.swift */,
+				1A74AEB327907FC800F97046 /* ChatContents+ResponseData.swift */,
 				1AA6D2EF278713C5008357BE /* BlockUser+ResponseData.swift */,
 				1AB18537278C7C4B00764165 /* Member+ResponseData.swift */,
 			);
@@ -486,6 +495,7 @@
 				1AA6D2E227856A6B008357BE /* ChatView.swift in Sources */,
 				1AA6D2E6278571A7008357BE /* ChatViewModel.swift in Sources */,
 				1AB18538278C7C4C00764165 /* Member+ResponseData.swift in Sources */,
+				1A74AEB427907FC900F97046 /* ChatContents+ResponseData.swift in Sources */,
 				1AA6D2EA2786B641008357BE /* BaseView.swift in Sources */,
 				1A572DDF270B679E009E2465 /* ItemInfo+ResponseData.swift in Sources */,
 				6D2B89E9271349B200319907 /* GeneralPostViewModel.swift in Sources */,
@@ -496,6 +506,7 @@
 				6D2B89EC271349B200319907 /* BoardViewModel.swift in Sources */,
 				6D7D94CC273C184700A104FD /* FindPasswordViewModel.swift in Sources */,
 				6DAD1F5A27102985006B01FC /* SignUpVerifyView.swift in Sources */,
+				1A74AEB227907F9900F97046 /* ChatRoomView.swift in Sources */,
 				1AD9CC4D273EFD9B006C2FB7 /* View+Extension.swift in Sources */,
 				6DAD1F5427102873006B01FC /* SignUpViewModel.swift in Sources */,
 				6D2B89D62713477700319907 /* Comment+ResponseData.swift in Sources */,
@@ -522,6 +533,7 @@
 				1AA8B43726F370CF00C28E02 /* NotificationView.swift in Sources */,
 				1ADD9DE4270325CC008342A7 /* SignIn+ResponseData.swift in Sources */,
 				1AA8B42826F3485900C28E02 /* Color+Extension.swift in Sources */,
+				1A74AEB62790800800F97046 /* ChatRoomViewModel.swift in Sources */,
 				1A976EAA274186E200B743CE /* UsedSearchViewModel.swift in Sources */,
 				1AA8B41D26F32E7E00C28E02 /* HomeView.swift in Sources */,
 				1AA8B43226F35EF800C28E02 /* LocationPicker.swift in Sources */,

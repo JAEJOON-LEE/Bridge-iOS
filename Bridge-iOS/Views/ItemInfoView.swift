@@ -375,7 +375,7 @@ struct ItemInfoView: View {
         })
         .background(
             NavigationLink(
-                destination : Text("\(viewModel.createdChatId)"),
+                destination : Text("\(viewModel.createdChatId)"), // TEMP : To the chat room
                 isActive : $viewModel.chatCreation
             ) { }
         )

@@ -44,14 +44,14 @@ struct ChatView: View {
                     }, id : \.self
                     ) { chatroom in
                         if chatroom.message != nil { // chat room with no message
+                            
                             VStack {
                                 NavigationLink(
                                     destination:
-                                        Text("Chat room \(chatroom.chatId)")
-//                                            ChatroomView(
-//                                                viewModel: ChatroomViewModel(chatroom.chatId),
-//                                                with: chatroom.memberTo?.username ?? "Anonymous"
-//                                            )
+                                        ChatroomView(
+                                            viewModel: ChatroomViewModel(chatroom.chatId, userInfo : viewModel.userInfo),
+                                            with: chatroom.memberTo?.username ?? "Anonymous"
+                                        )
                                 ) {
                                     HStack {
                                         // 1. Profile Image
@@ -112,6 +112,7 @@ struct ChatView: View {
                                 Color.systemDefaultGray
                                     .frame(width : UIScreen.main.bounds.width * 0.9, height : 5)
                             } // VStack
+                            
                         } // if
                     } // ForEach
                     Spacer().frame(height : UIScreen.main.bounds.height * 0.1)

@@ -51,7 +51,7 @@ struct TabContainer: View {
                         Spacer()
                     }.frame(width : UIScreen.main.bounds.width)
                 case 5 :
-                    ChatView(viewModel: ChatViewModel(accessToken: signInViewModel.signInResponse?.token.accessToken ?? ""))
+                    ChatView(viewModel: ChatViewModel(userInfo: signInViewModel.signInResponse!))
                 default:
                     BoardView(viewModel:
                                 BoardViewModel(

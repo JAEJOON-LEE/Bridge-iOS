@@ -16,8 +16,8 @@ final class SlideViewModel : ObservableObject {
     @Published var memberInfo : MemeberInformation
                                     = MemeberInformation(
                                         memberId: -1,
-                                        username: "Unknown",
-                                        description: "Unknown Error",
+                                        username: "",
+                                        description: "",
                                         profileImage: "",
                                         chatAlarm: false,
                                         playgroundAlarm: false,

@@ -16,15 +16,15 @@ final class ChatViewModel : ObservableObject {
     private var subscription = Set<AnyCancellable>()
     
     private let url = "http://3.36.233.180:8080/chats"
-    private let token : String
-
-    init(accessToken : String) {
-        token = accessToken
+    let userInfo : SignInResponse
+    
+    init(userInfo : SignInResponse) {
+        self.userInfo = userInfo
         //getChats()
     }
     
     func getChats() {
-        let header : HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
+        let header : HTTPHeaders = [ "X-AUTH-TOKEN" : userInfo.token.accessToken ]
         
         AF.request(url,
                    method: .get,
