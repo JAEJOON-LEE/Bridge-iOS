@@ -23,6 +23,8 @@ final class ItemInfoViewModel : ObservableObject {
     @Published var showConfirmDeletion : Bool = false
     @Published var showPostModify : Bool = false
     @Published var currentImageIndex : Int = 0
+    @Published var chatCreation : Bool = false
+    @Published var createdChatId : Int = 0
     
     private var subscription = Set<AnyCancellable>()
     
@@ -105,6 +107,31 @@ final class ItemInfoViewModel : ObservableObject {
         ).responseJSON { json in
 //            print(json)
         }
+    }
+
+    func createChat() {
+        let url = "http://3.36.233.180:8080/chats"
+        let header: HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
+
+        AF.request(url,
+                   method: .post,
+                   parameters: [ "postId" : postId ],
+                   encoder: JSONParameterEncoder.prettyPrinted,
+                   headers: header
+        ).responseJSON { json in print(json) }
+        .publishDecodable(type : CreateChat.self)
+        .compactMap { $0.value }
+        .map { $0.chatId }
+        .sink { completion in
+            switch completion {
+            case let .failure(error) :
+                print(error.localizedDescription)
+            case .finished :
+                print("Create Chat Finished")
+            }
+        } receiveValue: { [weak self] recievedValue in
+            self?.createdChatId =  recievedValue //.chatId
+        }.store(in: &subscription)
     }
     
     func sendMessageTouser(to token: String, title: String, body: String) {

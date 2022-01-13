@@ -58,7 +58,7 @@ final class BoardViewModel : ObservableObject {
                 }
             } receiveValue: { [weak self] (recievedValue : [PostList]) in
                 self?.postLists = recievedValue
-                print(recievedValue)
+                //print(recievedValue)
                 
             }.store(in: &subscription)
     }

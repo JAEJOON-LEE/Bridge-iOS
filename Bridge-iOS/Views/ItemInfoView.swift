@@ -225,26 +225,31 @@ struct ItemInfoView: View {
                     
                     Spacer()
                     
-                    HStack {
-                        Spacer()
-                        Button {
-                            //fcm test
-                            if(viewModel.isMyPost == false){
-                                viewModel.sendMessageTouser(to: viewModel.ReceiverFCMToken, title: "Bridge", body: "Somebody knocks you!")
+                    if !viewModel.isMyPost {
+                        HStack {
+                            Spacer()
+                            Button {
+                                viewModel.createChat()
+                                viewModel.chatCreation = true
+                                
+                                //fcm test
+                                if(viewModel.isMyPost == false){
+                                    viewModel.sendMessageTouser(to: viewModel.ReceiverFCMToken, title: "Bridge", body: "Somebody knocks you!")
+                                }
+                            } label : {
+                                HStack {
+                                    Text("Knock Now!")
+                                        .font(.system(size : 20, weight : .bold))
+                                    Image(systemName : "hand.wave.fill")
+                                        .font(.system(size : 20, weight : .bold))
+                                }
+                                .foregroundColor(.white)
+                                .frame(width: UIScreen.main.bounds.width * 0.8, height: UIScreen.main.bounds.height * 0.08)
+                                .background(Color.mainTheme)
+                                .cornerRadius(30)
                             }
-                        } label : {
-                            HStack {
-                                Text("Knock Now!")
-                                    .font(.system(size : 20, weight : .bold))
-                                Image(systemName : "hand.wave.fill")
-                                    .font(.system(size : 20, weight : .bold))
-                            }
-                            .foregroundColor(.white)
-                            .frame(width: UIScreen.main.bounds.width * 0.8, height: UIScreen.main.bounds.height * 0.08)
-                            .background(Color.mainTheme)
-                            .cornerRadius(30)
+                            Spacer()
                         }
-                        Spacer()
                     }
                     Spacer().frame(height: UIScreen.main.bounds.height * 0.04)
                 }
@@ -368,5 +373,11 @@ struct ItemInfoView: View {
                 )
             }
         })
+        .background(
+            NavigationLink(
+                destination : Text("\(viewModel.createdChatId)"),
+                isActive : $viewModel.chatCreation
+            ) { }
+        )
     }
 }

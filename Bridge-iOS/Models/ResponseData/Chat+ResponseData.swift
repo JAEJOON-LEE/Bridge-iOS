@@ -7,6 +7,10 @@
 
 import Foundation
 
+struct CreateChat : Codable {
+    var chatId : Int
+}
+
 struct Chats : Codable {
     var chatList : [Chat]
 }
