@@ -109,17 +109,17 @@ struct CouponView: View {
                 }
                 ForEach(viewModel.shops, id : \.self) { shop in
                     VStack {
-                        NavigationLink(destination: Text(shop.name)) {
+                        NavigationLink(destination: CouponInfoView(viewModel: CouponInfoViewModel(shop.shopId))) {
                             HStack(spacing : 20) {
-//                                URLImage(
-//                                    URL(string : shop.image) ??
-//                                    URL(string: "https://static.thenounproject.com/png/741653-200.png")!
-//                                ) { image in
-//                                    image
-//                                        .resizable()
-//                                        .aspectRatio(contentMode: .fill)
-//                                }
-                                Color.systemDefaultGray // temp
+                                URLImage(
+                                    URL(string : shop.image) ??
+                                    URL(string: "https://static.thenounproject.com/png/741653-200.png")!
+                                ) { image in
+                                    image
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fill)
+                                }
+                                //Color.systemDefaultGray // temp
                                 .frame(width : UIScreen.main.bounds.width * 0.33,
                                        height: UIScreen.main.bounds.height * 0.12)
                                 .cornerRadius(10)
@@ -175,17 +175,19 @@ struct CouponView: View {
             HStack {
                 Spacer()
                 if !viewModel.shopsRandom.isEmpty {
-                    NavigationLink(destination : Text("")) {
+                    NavigationLink(
+                        destination : CouponInfoView(viewModel: CouponInfoViewModel(viewModel.shopsRandom[0].shopId))
+                    ) {
                         VStack {
-//                            URLImage(
-//                                URL(string : viewModel.shopsRandom[0].image) ??
-//                                URL(string: "https://static.thenounproject.com/png/741653-200.png")!
-//                            ) { image in
-//                                image
-//                                    .resizable()
-//                                    .aspectRatio(contentMode: .fill)
-//                            }
-                            Color.systemDefaultGray // temp
+                            URLImage(
+                                URL(string : viewModel.shopsRandom[0].image) ??
+                                URL(string: "https://static.thenounproject.com/png/741653-200.png")!
+                            ) { image in
+                                image
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                            }
+                            //Color.systemDefaultGray // temp
                             .frame(width : UIScreen.main.bounds.width * 0.33,
                                    height: UIScreen.main.bounds.height * 0.12)
                             .cornerRadius(10)
@@ -209,17 +211,19 @@ struct CouponView: View {
 
                 if viewModel.shopsRandom.count > 1 {
                     Spacer()
-                    NavigationLink(destination : Text("")) {
+                    NavigationLink(
+                        destination : CouponInfoView(viewModel: CouponInfoViewModel(viewModel.shopsRandom[1].shopId))
+                    ) {
                         VStack {
-//                            URLImage(
-//                                URL(string : viewModel.shopsRandom[0].image) ??
-//                                URL(string: "https://static.thenounproject.com/png/741653-200.png")!
-//                            ) { image in
-//                                image
-//                                    .resizable()
-//                                    .aspectRatio(contentMode: .fill)
-//                            }
-                            Color.systemDefaultGray // temp
+                            URLImage(
+                                URL(string : viewModel.shopsRandom[0].image) ??
+                                URL(string: "https://static.thenounproject.com/png/741653-200.png")!
+                            ) { image in
+                                image
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                            }
+                            //Color.systemDefaultGray // temp
                             .frame(width : UIScreen.main.bounds.width * 0.33,
                                    height: UIScreen.main.bounds.height * 0.12)
                             .cornerRadius(10)
