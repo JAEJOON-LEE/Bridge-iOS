@@ -24,7 +24,7 @@ final class ChatViewModel : ObservableObject {
     }
     
     func getChats() {
-        let header : HTTPHeaders = [ "X-AUTH-TOKEN" : userInfo.token.accessToken ]
+        let header : HTTPHeaders = [ "X-AUTH-TOKEN" : SignInViewModel.accessToken ]
         
         AF.request(url,
                    method: .get,

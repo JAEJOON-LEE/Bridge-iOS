@@ -129,13 +129,11 @@ struct HomeView : View {
                                     destination:
                                         ItemInfoView(viewModel:
                                                         ItemInfoViewModel(
-                                                            token: viewModel.token,
                                                             postId : Post.postId,
                                                             isMyPost : (viewModel.memberId == Post.memberId)
                                                         )
                                         )/*.onDisappear(perform: {
                                             // 일반 작업시에는 필요없는데, 삭제 작업 즉시 반영을 위해서 필요함
-                                            // 조회수 2 증가 원인
                                             viewModel.getPosts(token: viewModel.token)
                                         })*/
                                 ) {
@@ -158,6 +156,8 @@ struct HomeView : View {
                     }.edgesIgnoringSafeArea(.bottom)
                 )
             }
+        }.onChange(of: SignInViewModel.accessToken) { _ in
+            viewModel.getPosts()
         }.onAppear {
             viewModel.getPosts()
         }.onChange(of: viewModel.selectedCamp) { newValue in
@@ -168,10 +168,14 @@ struct HomeView : View {
             print("full screen cover dissmiss action")
         } content: {
             NavigationView {
-                UsedSearchView(viewModel: UsedSearchViewModel(accessToken: viewModel.token, memberId: viewModel.memberId, currentCamp : viewModel.selectedCamp))
+                UsedSearchView(viewModel:
+                                UsedSearchViewModel(
+                                    memberId: viewModel.memberId,
+                                    currentCamp : viewModel.selectedCamp
+                                )
+                )
             }.accentColor(.mainTheme)
         }
-
     }
 }
 

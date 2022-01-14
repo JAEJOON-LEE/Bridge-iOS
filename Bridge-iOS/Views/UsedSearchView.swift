@@ -101,7 +101,6 @@ struct UsedSearchView : View {
                                 destination:
                                     ItemInfoView(viewModel:
                                                     ItemInfoViewModel(
-                                                        token: viewModel.token,
                                                         postId : Post.postId,
                                                         isMyPost : (viewModel.memberId == Post.memberId)
                                                     )
@@ -158,7 +157,6 @@ struct UsedSearchView : View {
                                             destination:
                                                 ItemInfoView(viewModel:
                                                                 ItemInfoViewModel(
-                                                                    token: viewModel.token,
                                                                     postId : Post.postId,
                                                                     isMyPost : (viewModel.memberId == Post.memberId)
                                                                 )
@@ -214,7 +212,6 @@ struct UsedSearchView : View {
                                             destination:
                                                 ItemInfoView(viewModel:
                                                                 ItemInfoViewModel(
-                                                                    token: viewModel.token,
                                                                     postId : Post.postId,
                                                                     isMyPost : (viewModel.memberId == Post.memberId)
                                                                 )

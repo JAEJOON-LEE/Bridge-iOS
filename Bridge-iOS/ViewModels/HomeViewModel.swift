@@ -17,13 +17,11 @@ final class HomeViewModel : ObservableObject {
     @Published var memberInfo : MemeberInformation?
     
     private var subscription = Set<AnyCancellable>()
-    let token : String
     let memberId : Int
     //let locations = ["Camp Casey", "Camp Hovey", "USAG Yongsan", "K-16", "Suwon A/B", "Osan A/B", "Camp Humperys", "Camp Carroll", "Camp Henry", "Camp Walker", "Gunsan A/B"]
     let locations = ["Casey/Hovey", "USAG Yongsan", "K-16", "Suwon A/B", "Osan A/B", "Camp Humperys", "Camp Carroll", "Henry/Walker", "Gunsan A/B"]
 
-    init(accessToken : String, memberId : Int) {
-        self.token = accessToken
+    init(memberId : Int) {
         self.memberId = memberId
         getPosts()
         getUserInfo()
@@ -31,7 +29,7 @@ final class HomeViewModel : ObservableObject {
     
     func getPosts() {
         let url = "http://3.36.233.180:8080/used-posts?"
-        let header: HTTPHeaders = [ "X-AUTH-TOKEN": token ]
+        let header: HTTPHeaders = [ "X-AUTH-TOKEN": SignInViewModel.accessToken ]
         
         AF.request(url,
                    method: .get,
@@ -48,6 +46,7 @@ final class HomeViewModel : ObservableObject {
                         self?.postFetchDone = true
                     default :
                         print("Post Fetching Fail : \(statusCode)")
+                        self?.getPosts()
                 }
             }.publishDecodable(type : Element.self)
             .compactMap { $0.value }
@@ -67,7 +66,7 @@ final class HomeViewModel : ObservableObject {
     
     func getUserInfo() {
         let url = "http://3.36.233.180:8080/members/\(memberId)"
-        let header: HTTPHeaders = [ "X-AUTH-TOKEN": token ]
+        let header: HTTPHeaders = [ "X-AUTH-TOKEN": SignInViewModel.accessToken ]
         
         AF.request(url,
                    method: .get,

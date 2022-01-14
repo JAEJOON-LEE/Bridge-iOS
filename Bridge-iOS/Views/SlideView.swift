@@ -41,7 +41,6 @@ struct SlideView : View {
                             destination:
                                 ItemInfoView(viewModel:
                                                 ItemInfoViewModel(
-                                                    token: viewModel.userInfo.token.accessToken,
                                                     postId : Post.postId,
                                                     isMyPost : (viewModel.userInfo.memberId == Post.postId)
                                                 )
@@ -69,7 +68,6 @@ struct SlideView : View {
                             destination:
                                 ItemInfoView(viewModel:
                                                 ItemInfoViewModel(
-                                                    token: viewModel.userInfo.token.accessToken,
                                                     postId : Post.postId,
                                                     isMyPost : (viewModel.userInfo.memberId == Post.postId)
                                                 )

@@ -10,6 +10,8 @@ import Combine
 import Alamofire
 
 final class SignInViewModel : ObservableObject {
+    static var accessToken : String = ""
+    
     @Published var email = ""
     @Published var password = ""
     @Published var checked = false
@@ -63,12 +65,13 @@ final class SignInViewModel : ObservableObject {
                     description: receivedValue.description,
                     createdAt: receivedValue.createdAt
                 )
+                SignInViewModel.accessToken = receivedValue.token.accessToken
                 //print(self?.signInResponse as Any)
             }
             .store(in: &subscription)
         
         DispatchQueue.main.asyncAfter(
-            deadline: .now() + DispatchTimeInterval.seconds((self.signInResponse?.token.accessTokenExpiresIn ?? 1800) - 10)
+            deadline: .now() + DispatchTimeInterval.seconds((self.signInResponse?.token.accessTokenExpiresIn ?? 60) - 5)
         ) {
             print("Token refreshing request will call after token expired time.")
             self.refreshToken()
@@ -104,11 +107,12 @@ final class SignInViewModel : ObservableObject {
             } receiveValue: { [weak self] (receivedValue : Token) in
                 print(receivedValue)
                 self?.signInResponse?.token = receivedValue
+                SignInViewModel.accessToken = receivedValue.accessToken
             }
             .store(in: &subscription)
         
         DispatchQueue.main.asyncAfter(
-            deadline: .now() + DispatchTimeInterval.seconds((self.signInResponse?.token.accessTokenExpiresIn ?? 1800) - 10  )
+            deadline: .now() + DispatchTimeInterval.seconds((self.signInResponse?.token.accessTokenExpiresIn ?? 60) - 5)
         ) {
             print("Token refreshing request will call after token expired time.")
             self.refreshToken()

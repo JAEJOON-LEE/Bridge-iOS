@@ -363,13 +363,12 @@ struct ItemInfoView: View {
         //.fullScreenCover(isPresented: $viewModel.showPostModify, content: {
         .sheet(isPresented: $viewModel.showPostModify, content: {
             NavigationView {
-                ModifyUsedPostView(
-                    viewModel: ModifyUsedPostViewModel(
-                        accessToken : viewModel.token,
+                ModifyUsedPostView(viewModel:
+                    ModifyUsedPostViewModel(
                         postId : viewModel.postId,
                         contents: viewModel.itemInfo!.usedPostDetail
                     ),
-                    isModifyDone : self.$isModifyDone
+                   isModifyDone : self.$isModifyDone
                 )
             }
         })

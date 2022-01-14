@@ -22,7 +22,7 @@ struct TabContainer: View {
                 case 1 :
                     HomeView(viewModel:
                                 HomeViewModel(
-                                    accessToken: signInViewModel.signInResponse?.token.accessToken ?? "",
+                                    //accessToken: signInViewModel.signInResponse?.token.accessToken ?? "",
                                     memberId : signInViewModel.signInResponse?.memberId ?? -1
                                 ),
                              isSlideShow : $isSlideShow,

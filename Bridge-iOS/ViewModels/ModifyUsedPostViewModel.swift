@@ -62,7 +62,6 @@ final class ModifyUsedPostViewModel : ObservableObject {
         11 : "Gunsan A/B"
     ]
     
-    private let token : String
     private let postId : Int
 
     var configuration : PHPickerConfiguration {
@@ -77,8 +76,7 @@ final class ModifyUsedPostViewModel : ObservableObject {
     var removeList : [Int] = []
     var removeImage : [Int] = []
     
-    init(accessToken : String, postId : Int, contents : UsedPostDetail) {
-        self.token = accessToken
+    init(postId : Int, contents : UsedPostDetail) {
         self.postId = postId
         
         self.title = contents.title
@@ -94,7 +92,7 @@ final class ModifyUsedPostViewModel : ObservableObject {
         let url = "http://3.36.233.180:8080/used-posts/\(postId)"
         let header : HTTPHeaders = [
             "Content-Type": "multipart/form-data",
-            "X-AUTH-TOKEN": token
+            "X-AUTH-TOKEN": SignInViewModel.accessToken
         ]
         for c in selectedCamps {
             if !previousSelectedCamps.contains(c) { addList.append(c) }

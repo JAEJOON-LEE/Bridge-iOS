@@ -30,12 +30,10 @@ final class ItemInfoViewModel : ObservableObject {
     
     var previousLikeStatus : Bool = false
     
-    let token : String
     let postId : Int
     let isMyPost : Bool
     
-    init(token : String, postId : Int, isMyPost : Bool) {
-        self.token = token
+    init(postId : Int, isMyPost : Bool) {
         self.postId = postId
         self.isMyPost = isMyPost
         getItemInfo()
@@ -57,7 +55,7 @@ final class ItemInfoViewModel : ObservableObject {
     
     func getItemInfo() {
         let url = "http://3.36.233.180:8080/used-posts/\(postId)"
-        let header: HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
+        let header: HTTPHeaders = [ "X-AUTH-TOKEN" : SignInViewModel.accessToken ]
         
         AF.request(url,
                    method: .get,
@@ -84,7 +82,7 @@ final class ItemInfoViewModel : ObservableObject {
     
     func likePost(isliked : Bool) {
         let url = "http://3.36.233.180:8080/used-posts/\(postId)/likes"
-        let header: HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
+        let header: HTTPHeaders = [ "X-AUTH-TOKEN" : SignInViewModel.accessToken ]
         let method : HTTPMethod = isliked ? .delete : .post
         
         AF.request(url,
@@ -98,7 +96,7 @@ final class ItemInfoViewModel : ObservableObject {
     
     func deletePost() {
         let url = "http://3.36.233.180:8080/used-posts/\(postId)"
-        let header: HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
+        let header: HTTPHeaders = [ "X-AUTH-TOKEN" : SignInViewModel.accessToken ]
         
         AF.request(url,
                    method: .delete,
@@ -111,7 +109,7 @@ final class ItemInfoViewModel : ObservableObject {
 
     func createChat() {
         let url = "http://3.36.233.180:8080/chats"
-        let header: HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
+        let header: HTTPHeaders = [ "X-AUTH-TOKEN" : SignInViewModel.accessToken ]
 
         AF.request(url,
                    method: .post,

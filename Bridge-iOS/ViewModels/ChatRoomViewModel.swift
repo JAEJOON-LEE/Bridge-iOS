@@ -35,7 +35,7 @@ final class ChatroomViewModel : ObservableObject {
     }
     
     func getChatContents(_ chatId : Int) {
-        let header : HTTPHeaders = [ "X-AUTH-TOKEN" : userInfo.token.accessToken ]
+        let header : HTTPHeaders = [ "X-AUTH-TOKEN" : SignInViewModel.accessToken ]
         let url = "http://3.36.233.180:8080/chats/\(chatId)/messages?lastMessageId=0"
         
         AF.request(url,
@@ -62,7 +62,7 @@ final class ChatroomViewModel : ObservableObject {
     
     func exitChat() {
         let url = "http://3.36.233.180:8080/chats/\(chatId)"
-        let header: HTTPHeaders = [ "X-AUTH-TOKEN" : userInfo.token.accessToken ]
+        let header: HTTPHeaders = [ "X-AUTH-TOKEN" : SignInViewModel.accessToken ]
         
         AF.request(url,
                    method: .delete,

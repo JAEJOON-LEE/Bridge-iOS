@@ -23,22 +23,20 @@ final class UsedSearchViewModel : ObservableObject {
     private let url = "http://3.36.233.180:8080/used-posts?"
     private var subscription = Set<AnyCancellable>()
 
-    let token : String
     let memberId : Int
     
     var categories : [String] = ["Digital", "Interior", "Fashion", "Life", "Beauty", "Etc"]
     //["Digital", "Furniture", "Food", "Clothes", "Beauty", "Etc."]
     var currentCamp : String = ""
     
-    init(accessToken : String, memberId : Int, currentCamp : String) {
-        self.token = accessToken
+    init(memberId : Int, currentCamp : String) {
         self.memberId = memberId
         self.currentCamp = currentCamp
         getHotDealPosts()
     }
     
     func getPostsByCategory(category : String) {
-        let header: HTTPHeaders = [ "X-AUTH-TOKEN": token ]
+        let header: HTTPHeaders = [ "X-AUTH-TOKEN": SignInViewModel.accessToken ]
         Posts.removeAll()
         
         AF.request(url,
@@ -66,7 +64,7 @@ final class UsedSearchViewModel : ObservableObject {
     }
     
     func getHotDealPosts() {
-        let header: HTTPHeaders = [ "X-AUTH-TOKEN": token ]
+        let header: HTTPHeaders = [ "X-AUTH-TOKEN": SignInViewModel.accessToken ]
         Posts.removeAll()
         
         AF.request(url,
@@ -94,7 +92,7 @@ final class UsedSearchViewModel : ObservableObject {
     }
     
     func getPostsByQuery(query : String) {
-        let header: HTTPHeaders = [ "X-AUTH-TOKEN": token ]
+        let header: HTTPHeaders = [ "X-AUTH-TOKEN": SignInViewModel.accessToken ]
         searchedPosts.removeAll()
         
         AF.request(url,
