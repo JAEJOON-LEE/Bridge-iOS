@@ -33,7 +33,7 @@ final class SlideViewModel : ObservableObject {
     
     func getUserInfo() {
         let url = "http://3.36.233.180:8080/members/\(userInfo.memberId)"
-        let header: HTTPHeaders = [ "X-AUTH-TOKEN": userInfo.token.accessToken ]
+        let header: HTTPHeaders = [ "X-AUTH-TOKEN": SignInViewModel.accessToken ]
         
         AF.request(url,
                    method: .get,
@@ -56,7 +56,7 @@ final class SlideViewModel : ObservableObject {
     }
     
     func getSellingList() {
-        let header: HTTPHeaders = [ "X-AUTH-TOKEN": userInfo.token.accessToken ]
+        let header: HTTPHeaders = [ "X-AUTH-TOKEN": SignInViewModel.accessToken ]
         let requestURL : String
         = "http://3.36.233.180:8080/members/\(userInfo.memberId)/used-posts?lastPostId=0"
 
@@ -80,7 +80,7 @@ final class SlideViewModel : ObservableObject {
             }.store(in: &subscription)
     }
     func getLikedList() {
-        let header: HTTPHeaders = [ "X-AUTH-TOKEN": userInfo.token.accessToken ]
+        let header: HTTPHeaders = [ "X-AUTH-TOKEN": SignInViewModel.accessToken ]
         let requestURL : String
         = "http://3.36.233.180:8080/members/\(userInfo.memberId)/liked-used-posts?lastPostId=0"
 

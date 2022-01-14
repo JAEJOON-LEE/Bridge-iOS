@@ -43,6 +43,9 @@ final class ChatViewModel : ObservableObject {
                 }
             } receiveValue: { [weak self] receivedValue in
                 self?.ChatList = receivedValue
+                self?.ChatList.sort {
+                    return $0.message?.createdAt ?? "" > $1.message?.createdAt ?? ""
+                }
                 //print(self?.ChatList)
             }.store(in: &subscription)
     }

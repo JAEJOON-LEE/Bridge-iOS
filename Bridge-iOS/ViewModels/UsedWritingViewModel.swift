@@ -29,11 +29,6 @@ final class UsedWritingViewModel : ObservableObject {
     
     @Published var isImageTap : Bool = false
     
-    private let token : String
-    init(accessToken : String) {
-        self.token = accessToken
-    }
-    
     private let url = "http://3.36.233.180:8080/used-posts"
 
     let message = "Please fill all field!"
@@ -91,7 +86,7 @@ final class UsedWritingViewModel : ObservableObject {
     func upload() { //(with payload : PostPayload)
         let header : HTTPHeaders = [
             "Content-Type": "multipart/form-data",
-            "X-AUTH-TOKEN": token
+            "X-AUTH-TOKEN": SignInViewModel.accessToken
         ]
         
 //        let payload : [String : [String : Any]] = [

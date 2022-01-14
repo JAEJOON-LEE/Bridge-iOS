@@ -20,11 +20,7 @@ struct TabContainer: View {
             ZStack(alignment : .bottom) {
                 switch viewModel.selectedTabIndex {
                 case 1 :
-                    HomeView(viewModel:
-                                HomeViewModel(
-                                    //accessToken: signInViewModel.signInResponse?.token.accessToken ?? "",
-                                    memberId : signInViewModel.signInResponse?.memberId ?? -1
-                                ),
+                    HomeView(viewModel : HomeViewModel(memberId : signInViewModel.signInResponse?.memberId ?? -1),
                              isSlideShow : $isSlideShow,
                              profileImage : signInViewModel.signInResponse?.profileImage ?? ""
                     ).navigationBarHidden(true)
@@ -110,7 +106,7 @@ struct TabContainer: View {
             }
             .background(
                 NavigationLink(
-                    destination : UsedWritingView(viewModel : UsedWritingViewModel(accessToken: signInViewModel.signInResponse?.token.accessToken ?? "")),
+                    destination : UsedWritingView(viewModel : UsedWritingViewModel()),
                     isActive : $viewModel.showUsedPostWriting) { }
             )
             .overlay(
