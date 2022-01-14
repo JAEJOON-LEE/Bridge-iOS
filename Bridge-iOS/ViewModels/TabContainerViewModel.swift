@@ -16,7 +16,7 @@ final class TabContainerViewModel : ObservableObject {
         case 1 : return ""
         case 2 : return "Playground"
         case 3 : return "Write"
-        case 4 : return "Seller"
+        case 4 : return "Coupons"
         case 5 : return "Chatting"
         default:
             return ""

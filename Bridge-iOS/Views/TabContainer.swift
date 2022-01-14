@@ -41,11 +41,10 @@ struct TabContainer: View {
 //                    )
                 case 4 :
                     // temp
-                    VStack {
-                        Spacer()
-                        Text("Seller View").font(.largeTitle)
-                        Spacer()
-                    }.frame(width : UIScreen.main.bounds.width)
+                    CouponView(
+                        isSlideShow : $isSlideShow,
+                        profileImage : signInViewModel.signInResponse?.profileImage ?? ""
+                    ).navigationBarHidden(true)
                 case 5 :
                     ChatView(viewModel: ChatViewModel(userInfo: signInViewModel.signInResponse!))
                 default:
@@ -207,7 +206,7 @@ extension TabContainer {
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(width : UIScreen.main.bounds.width * 0.1)
-                    Text("Seller")
+                    Text("Coupons")
                         .font(.system(size : 12))
                         .foregroundColor(viewModel.selectedTabIndex == 4 ? .mainTheme : .gray)
                 }

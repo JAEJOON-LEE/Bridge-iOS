@@ -16,6 +16,9 @@
 		1A74AEB227907F9900F97046 /* ChatRoomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A74AEB127907F9900F97046 /* ChatRoomView.swift */; };
 		1A74AEB427907FC900F97046 /* ChatContents+ResponseData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A74AEB327907FC800F97046 /* ChatContents+ResponseData.swift */; };
 		1A74AEB62790800800F97046 /* ChatRoomViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A74AEB52790800800F97046 /* ChatRoomViewModel.swift */; };
+		1A74AEB827918A3500F97046 /* CouponView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A74AEB727918A3500F97046 /* CouponView.swift */; };
+		1A74AEBA27918A8900F97046 /* CouponViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A74AEB927918A8900F97046 /* CouponViewModel.swift */; };
+		1A74AEBC2791960D00F97046 /* Coupon+ResponseData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A74AEBB2791960D00F97046 /* Coupon+ResponseData.swift */; };
 		1A936DC5271877C300750DE6 /* ModifyUsedPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A936DC4271877C300750DE6 /* ModifyUsedPostView.swift */; };
 		1A936DC7271878A600750DE6 /* ModifyUsedPostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A936DC6271878A500750DE6 /* ModifyUsedPostViewModel.swift */; };
 		1A976EA827412EF600B743CE /* UsedSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A976EA727412EF600B743CE /* UsedSearchView.swift */; };
@@ -111,6 +114,9 @@
 		1A74AEB127907F9900F97046 /* ChatRoomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomView.swift; sourceTree = "<group>"; };
 		1A74AEB327907FC800F97046 /* ChatContents+ResponseData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChatContents+ResponseData.swift"; sourceTree = "<group>"; };
 		1A74AEB52790800800F97046 /* ChatRoomViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomViewModel.swift; sourceTree = "<group>"; };
+		1A74AEB727918A3500F97046 /* CouponView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CouponView.swift; sourceTree = "<group>"; };
+		1A74AEB927918A8900F97046 /* CouponViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CouponViewModel.swift; sourceTree = "<group>"; };
+		1A74AEBB2791960D00F97046 /* Coupon+ResponseData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Coupon+ResponseData.swift"; sourceTree = "<group>"; };
 		1A936DC4271877C300750DE6 /* ModifyUsedPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifyUsedPostView.swift; sourceTree = "<group>"; };
 		1A936DC6271878A500750DE6 /* ModifyUsedPostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifyUsedPostViewModel.swift; sourceTree = "<group>"; };
 		1A976EA727412EF600B743CE /* UsedSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsedSearchView.swift; sourceTree = "<group>"; };
@@ -290,6 +296,7 @@
 				1AA6D2F12787241B008357BE /* MyPageView.swift */,
 				1AB18535278C016E00764165 /* InviteFriendsView.swift */,
 				1AA8B43626F370CF00C28E02 /* NotificationView.swift */,
+				1A74AEB727918A3500F97046 /* CouponView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -354,6 +361,7 @@
 				6D2B89E4271349B200319907 /* SecretInfoViewModel.swift */,
 				1AA6D2ED27870DBA008357BE /* SettingsViewModel.swift */,
 				1AA6D2F327872490008357BE /* MyPageViewModel.swift */,
+				1A74AEB927918A8900F97046 /* CouponViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -392,6 +400,7 @@
 				1A74AEB327907FC800F97046 /* ChatContents+ResponseData.swift */,
 				1AA6D2EF278713C5008357BE /* BlockUser+ResponseData.swift */,
 				1AB18537278C7C4B00764165 /* Member+ResponseData.swift */,
+				1A74AEBB2791960D00F97046 /* Coupon+ResponseData.swift */,
 			);
 			path = ResponseData;
 			sourceTree = "<group>";
@@ -490,6 +499,7 @@
 				6DAD1F3F270AC04F006B01FC /* ImagePicker.swift in Sources */,
 				1AD008652711F50B00CAAE5B /* UsedWritingView.swift in Sources */,
 				1AA8B42C26F3521B00C28E02 /* SignInView.swift in Sources */,
+				1A74AEB827918A3500F97046 /* CouponView.swift in Sources */,
 				6D2B89DD271347D700319907 /* CommentStyle.swift in Sources */,
 				1AA6D2EE27870DBA008357BE /* SettingsViewModel.swift in Sources */,
 				1AA6D2E227856A6B008357BE /* ChatView.swift in Sources */,
@@ -525,6 +535,7 @@
 				6D8D23AB271728160020B5B0 /* String+Extension.swift in Sources */,
 				6D6BA4ED26F57BB10008B25E /* ItemCardStyle.swift in Sources */,
 				1A572E0B270ECDC6009E2465 /* SlideViewModel.swift in Sources */,
+				1A74AEBA27918A8900F97046 /* CouponViewModel.swift in Sources */,
 				6DE698FC278A97FE0048EB76 /* LocalNotificationManager.swift in Sources */,
 				6D2B89DE271347D700319907 /* GeneralPostStyle.swift in Sources */,
 				6D2B89D82713477C00319907 /* PostInfo+ResponseData.swift in Sources */,
@@ -544,6 +555,7 @@
 				1AA8B42326F32FB900C28E02 /* BoardView.swift in Sources */,
 				1A572DDD270B6629009E2465 /* ItemInfoViewModel.swift in Sources */,
 				1ADD9DDC2703220F008342A7 /* SignInViewModel.swift in Sources */,
+				1A74AEBC2791960D00F97046 /* Coupon+ResponseData.swift in Sources */,
 				1AA6D2F427872490008357BE /* MyPageViewModel.swift in Sources */,
 				6DAD1F3B27041289006B01FC /* WritingViewModel.swift in Sources */,
 				6D2B89DC271347D700319907 /* SpecialPostStyle.swift in Sources */,
