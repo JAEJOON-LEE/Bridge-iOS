@@ -12,6 +12,7 @@ import URLImage
 struct PostInfoView: View { // 게시글 상세 페이지
     @Environment(\.presentationMode) var presentationMode
     @StateObject private var viewModel : PostInfoViewModel
+    @StateObject var notificationManager = LocalNotificationManager()
     @State var isLinkActive : Bool = false
     //    @FocusState private var focusField: Field?
     //    enum Field: Hashable {
@@ -21,8 +22,6 @@ struct PostInfoView: View { // 게시글 상세 페이지
     init(viewModel : PostInfoViewModel) {
         self._viewModel = StateObject(wrappedValue: viewModel)
     }
-    
-
     
     
     var body: some View {
@@ -166,8 +165,8 @@ struct PostInfoView: View { // 게시글 상세 페이지
                                     viewModel.getSecretPostDetail()
                                 }
                                 
-                                if(viewModel.isMyPost == false){
-                                    viewModel.sendMessageTouser(to: viewModel.ReceiverFCMToken, title: "Bridge", body: "Somebody likes your post!")
+                                if(viewModel.isMyPost == false && viewModel.isLiked == false){
+                                    notificationManager.sendMessageTouser(to: notificationManager.ReceiverFCMToken, title: "Bridge", body: "Somebody likes your post!")
                                 }
                             } label : {
                                 
@@ -197,9 +196,9 @@ struct PostInfoView: View { // 게시글 상세 페이지
                     .padding()
                     .frame(width : UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.03, alignment : .leading)
                     
-//                    VStack(alignment: .leading){
-//                        commentView
-//                    }.listStyle(PlainListStyle()) // iOS 15 대응
+                    VStack(alignment: .leading){
+                        commentView
+                    }.listStyle(PlainListStyle()) // iOS 15 대응
                         .id("COMMENT_AREA")
                 }
                 
@@ -303,7 +302,7 @@ struct PostInfoView: View { // 게시글 상세 페이지
                             }
                             
                             if(viewModel.isMyPost == false){
-                                viewModel.sendMessageTouser(to: viewModel.ReceiverFCMToken, title: "Bridge", body: "Check a new comment of your post!")
+                                notificationManager.sendMessageTouser(to: notificationManager.ReceiverFCMToken, title: "Bridge", body: "Check a new comment of your post!")
                             }
                         }else{
                             viewModel.commentSended = false
@@ -636,90 +635,94 @@ struct PostInfoView: View { // 게시글 상세 페이지
     }
 }
 
-//extension PostInfoView {
-//    var commentView : some View {
-//
-//        ///
-//        ///
-//        ///
-//        ScrollViewReader{ proxyReader in
-//        ForEach(viewModel.commentLists, id : \.self) { Comment in
-//
-//            VStack(alignment: .leading){
-//                HStack{
-//                    URLImage( //프로필 이미지
-//                        URL(string : (Comment.member?.profileImage) ?? "https://static.thenounproject.com/png/741653-200.png") ??
-//                        URL(string: "https://static.thenounproject.com/png/741653-200.png")!
-//                    ) { image in
-//                        image
-//                            .resizable()
-//                            .aspectRatio(contentMode: .fill)
-//                    }
-//                    .frame(width : 40,
-//                           height: 40)
-//                    .cornerRadius(13)
-//
-//
-//                    VStack(alignment: .leading){
-//                        Group{
-//                            Text(Comment.member?.username! ?? "Anonymous" )
-//                                .font(.system(size: 20, weight : .medium))
-//
-//                            Text(viewModel.convertReturnedDateString(Comment.createdAt ?? "2021-10-01 00:00:00"))
-//                                .font(.system(size: 10))
-//                        }
-//                        .foregroundColor(.gray)
-//                    }
-//
-//                    Spacer()
-//                }
-//                .padding(.top, -20)
-//
-//                Text(Comment.content)
-//                    .padding(.leading, 50)
-//
-//                HStack{
-//                    Spacer()
-//
-//
-//                    Button{
-//                        //댓글 라이크 버튼 클릭
-//                        viewModel.isCommentLiked = Comment.like
-//                        viewModel.commentItem = Comment
-//                        viewModel.commentId = Comment.commentId
-//                        viewModel.likeComment(isCommentliked: viewModel.isCommentLiked)
-//
-//
-//                        if(viewModel.isSecret == false){
-//                            viewModel.getComment()
-//                        }else{
-//                            viewModel.getSecretComment()
-//                        }
-//                    } label : {
-//                        Image(systemName: (Comment.like) ? "hand.thumbsup.fill" : "hand.thumbsup")
+extension PostInfoView {
+    var commentView : some View {
+
+        ///
+        ///
+        ///
+        ScrollViewReader{ proxyReader in
+        ForEach(viewModel.commentLists, id : \.self) { Comment in
+
+            VStack(alignment: .leading){
+                HStack{
+                    URLImage( //프로필 이미지
+                        URL(string : (Comment.member?.profileImage) ?? "https://static.thenounproject.com/png/741653-200.png") ??
+                        URL(string: "https://static.thenounproject.com/png/741653-200.png")!
+                    ) { image in
+                        image
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                    }
+                    .frame(width : 40,
+                           height: 40)
+                    .cornerRadius(13)
+
+
+                    VStack(alignment: .leading){
+                        Group{
+                            Text(Comment.member?.username! ?? "Anonymous" )
+                                .font(.system(size: 20, weight : .medium))
+
+                            Text(viewModel.convertReturnedDateString(Comment.createdAt ?? "2021-10-01 00:00:00"))
+                                .font(.system(size: 10))
+                        }
+                        .foregroundColor(.gray)
+                    }
+
+                    Spacer()
+                }
+                .padding(.top, -20)
+
+                Text(Comment.content)
+                    .padding(.leading, 50)
+
+                HStack{
+                    Spacer()
+
+
+                    Button{
+                        //댓글 라이크 버튼 클릭
+                        viewModel.isCommentLiked = Comment.like
+                        viewModel.commentItem = Comment
+                        viewModel.commentId = Comment.commentId
+                        viewModel.likeComment(isCommentliked: viewModel.isCommentLiked)
+
+
+                        if(viewModel.isSecret == false){
+                            viewModel.getComment()
+                        }else{
+                            viewModel.getSecretComment()
+                        }
+                        
+                        if(Comment.like == false){
+                            notificationManager.sendMessageTouser(to: notificationManager.ReceiverFCMToken, title: "Bridge", body: "Somebody likes your comment!")
+                        }
+                    } label : {
+                        Image(systemName: (Comment.like) ? "hand.thumbsup.fill" : "hand.thumbsup")
+                            .foregroundColor(.mainTheme)
+//                        Image(systemName: (viewModel.isLiked ?? true) ? "hand.thumbsup.fill" : "hand.thumbsup")
 //                            .foregroundColor(.mainTheme)
-////                        Image(systemName: (viewModel.isLiked ?? true) ? "hand.thumbsup.fill" : "hand.thumbsup")
-////                            .foregroundColor(.mainTheme)
-//                    }
-//                    Text(String((Comment.likeCount)))
-//                        .padding(.trailing)
-//
-//                    Button{
-//                        //대댓글 클릭
-//                        viewModel.isCocCliked = true
-//                        viewModel.commentId = Comment.commentId
-//                        //                        commentId = viewModel.commentId
-//                        viewModel.contentForViewing = "@" + (Comment.member?.username! ?? "Anonymous")
-//                        //                            viewModel.likeComment(isliked: (viewModel.commentList.like ?? true))
-//                    } label : {
-//                        Image(systemName: "message.fill")
-//                            .foregroundColor(.black)
-//                            .padding(.bottom, 1)
-//                    }
-//                }
-//                .font(.system(size: 13))
-//
-//                // 대댓글
+                    }
+                    Text(String((Comment.likeCount)))
+                        .padding(.trailing)
+
+                    Button{
+                        //대댓글 클릭
+                        viewModel.isCocCliked = true
+                        viewModel.commentId = Comment.commentId
+                        //                        commentId = viewModel.commentId
+                        viewModel.contentForViewing = "@" + (Comment.member?.username! ?? "Anonymous")
+                        //                            viewModel.likeComment(isliked: (viewModel.commentList.like ?? true))
+                    } label : {
+                        Image(systemName: "message.fill")
+                            .foregroundColor(.black)
+                            .padding(.bottom, 1)
+                    }
+                }
+                .font(.system(size: 13))
+
+                // 대댓글
 //                ForEach(Comment.comments!, id : \.self) { Coc in
 //
 //                    HStack{
@@ -817,33 +820,33 @@ struct PostInfoView: View { // 게시글 상세 페이지
 //                    }
 //                    .frame(alignment : .leading)
 //                }
-//                    Divider()
-//                }
-//                .modifier(CommentStyle())
-//                .overlay(
-//                    Button { // menu button
-//                        withAnimation {
-//                            viewModel.isMenuClicked = true
-//                            viewModel.showAction = true
-//                            viewModel.isMyComment = true
-//                            viewModel.commentId = Comment.commentId
-//                            viewModel.contentForPatch = Comment.content
-//                        }
-//                            //menu toggle
-//                    } label: {
-//                        if (Comment.modifiable) {
-//                            Image(systemName : "ellipsis")
-//                                .foregroundColor(.black)
-//                                .font(.system(size : 15, weight : .bold))
-//                        }
-//                    }
-//                    , alignment : .topTrailing
-//                )
-//        }
-//        .id("SCROLL_TO_BOTTOM")
-//        }
-//        ///
-//        ///
-//        ///
-//    }
-//}
+                    Divider()
+                }
+                .modifier(CommentStyle())
+                .overlay(
+                    Button { // menu button
+                        withAnimation {
+                            viewModel.isMenuClicked = true
+                            viewModel.showAction = true
+                            viewModel.isMyComment = true
+                            viewModel.commentId = Comment.commentId
+                            viewModel.contentForPatch = Comment.content
+                        }
+                            //menu toggle
+                    } label: {
+                        if (Comment.modifiable) {
+                            Image(systemName : "ellipsis")
+                                .foregroundColor(.black)
+                                .font(.system(size : 15, weight : .bold))
+                        }
+                    }
+                    , alignment : .topTrailing
+                )
+        }
+        .id("SCROLL_TO_BOTTOM")
+        }
+        ///
+        ///
+        ///
+    }
+}

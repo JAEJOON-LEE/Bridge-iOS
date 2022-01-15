@@ -11,7 +11,6 @@ import URLImage
 import Firebase
 import FirebaseMessaging
 
-var myToken : String = ""
 
 @main
 struct Bridge_iOSApp: App {
@@ -28,7 +27,8 @@ struct Bridge_iOSApp: App {
     }
 }
 
-class AppDelegate: NSObject, UIApplicationDelegate {
+class AppDelegate: NSObject, UIApplicationDelegate, ObservableObject {
+    @AppStorage("fcmToken") var fcmToken : String = ""
     
     // 앱이 켜졌을때
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
@@ -78,7 +78,7 @@ extension AppDelegate : MessagingDelegate {
     // fcm 등록 토큰을 받았을 때
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
         //very important !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        myToken = fcmToken!
+        self.fcmToken = fcmToken!
         print("AppDelegate - Firebase registration token: \(String(describing: fcmToken))")
     }
 }
