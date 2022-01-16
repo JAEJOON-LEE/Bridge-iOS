@@ -11,8 +11,10 @@ import MapKit
 
 struct CouponInfoView: View {
     @StateObject private var viewModel : CouponInfoViewModel
-
-    init(viewModel : CouponInfoViewModel) {
+    let memberId : Int
+    
+    init(memberId : Int, viewModel : CouponInfoViewModel) {
+        self.memberId = memberId
         self._viewModel = StateObject(wrappedValue: viewModel)
     }
     
@@ -21,7 +23,7 @@ struct CouponInfoView: View {
             // Title
             HStack(spacing : 20) {
                 URLImage(
-                    URL(string : viewModel.shopInfo.images[0].image) ??
+                    URL(string : viewModel.shopImage) ??
                     URL(string: "https://static.thenounproject.com/png/741653-200.png")!
                 ) { image in
                     image
@@ -55,6 +57,15 @@ struct CouponInfoView: View {
                     .font(.system(.title3, design: .rounded))
                     .fontWeight(.semibold)
                 Spacer()
+                Button {
+                    
+                } label : {
+                    HStack {
+                        Text("on Map app").fontWeight(.light)
+                        Image(systemName: "arrowshape.turn.up.forward")
+                    }.font(.system(.footnote, design: .rounded))
+                    .foregroundColor(.black)
+                }
             }
             
             Map(coordinateRegion:  $viewModel.region, interactionModes: .all, showsUserLocation: true, userTrackingMode: .none, annotationItems: viewModel.coor) { place in
@@ -82,10 +93,17 @@ struct CouponInfoView: View {
                 Button {
                     
                 } label : {
-                    Image(systemName : "ellipsis")
+                    Text("See more")
                 }
             }
             
+            // TEMP
+//            ForEach(viewModel.reviews.prefix(3), id : \.self) { review in
+//                HStack {
+//                    Image(systemName : "person.fill")
+//                    Text(review.content).fontWeight(.light)
+//                }.padding(.leading, 10)
+//            }
             HStack {
                 Color.systemDefaultGray
                     .frame(width: UIScreen.main.bounds.width * 0.3, height: UIScreen.main.bounds.width * 0.3)
@@ -102,28 +120,112 @@ struct CouponInfoView: View {
                 .frame(width : UIScreen.main.bounds.width * 0.9, height : 5)
                 .padding(.vertical, 5)
             
+            
+            // Review
             VStack(alignment : .leading, spacing : 3) {
                 HStack {
                     Text("Reviews (\(viewModel.shopInfo.reviewCount))")
                         .font(.system(.title3, design: .rounded))
                         .fontWeight(.semibold)
                     Spacer()
-                    Button {
-                        
+                    NavigationLink {
+                        ScrollView {
+                            VStack {
+                                ForEach(viewModel.reviews, id : \.self) { review in
+                                    HStack(spacing : 20) {
+                                        URLImage(
+                                            URL(string : review.member.profileImage) ??
+                                            URL(string: "https://static.thenounproject.com/png/741653-200.png")!
+                                        ) { image in
+                                            image
+                                                .resizable()
+                                                .aspectRatio(contentMode: .fill)
+                                        }.frame(
+                                            width: UIScreen.main.bounds.width * 0.12,
+                                            height: UIScreen.main.bounds.width * 0.12)
+                                        .cornerRadius(10)
+                                        VStack(alignment : .leading, spacing : 5) {
+                                            HStack {
+                                                Text(review.member.username)
+                                                    .font(.system(.title3, design: .rounded))
+                                                    .fontWeight(.semibold)
+                                                Text(convertReturnedDateString(review.createdAt))
+                                                    .font(.caption)
+                                                    .fontWeight(.light)
+                                                Spacer()
+                                                
+                                                if memberId == review.member.memberId {
+                                                    Button {
+                                                        viewModel.selectedReview = review.reviewId
+                                                        viewModel.showReviewAction = true
+                                                    } label : {
+                                                        Image(systemName : "ellipsis")
+                                                    }
+                                                }
+                                            }
+                                            Text(review.content)
+                                                .fontWeight(.medium)
+                                        }
+                                        Spacer()
+                                        Image(systemName: "star.fill")
+                                            .foregroundColor(.mainTheme)
+                                        Text("\(review.rate, specifier: "%.1f")")
+                                            .font(.system(.title3, design: .rounded))
+                                            .fontWeight(.semibold)
+                                    }.padding(.horizontal, 20)
+                                    
+                                    Color.systemDefaultGray
+                                        .frame(width : UIScreen.main.bounds.width * 0.9, height : 5)
+                                        .padding(.vertical, 5)
+                                }
+                            }
+                        }.navigationTitle(Text("Reviews"))
                     } label : {
-                        Image(systemName : "plus")
-                    }
-                    Button {
-                        
-                    } label : {
-                        Image(systemName : "ellipsis")
+                        Text("See more")
                     }
                 }.padding(.bottom, 5)
                 
-                Text("Review1")
-                Text("Review2")
+                ForEach(viewModel.reviews.prefix(3), id : \.self) { review in
+                    HStack {
+                        Image(systemName : "person.fill")
+                        Text(review.content).fontWeight(.light)
+                    }.padding(.leading, 10)
+                }
+               
+                // Add Review
+                HStack {
+                    Spacer()
+                    Button {
+                        
+                    } label : {
+                        HStack {
+                            Image(systemName: "pencil.circle")
+                            Text("Add Review")
+                                .fontWeight(.semibold)
+                        }.padding(7)
+                        .background(Color.mainTheme)
+                        .foregroundColor(.white)
+                        .cornerRadius(20)
+                    }
+                }
                 Spacer()
             }
         }.padding()
+        .navigationTitle(Text(viewModel.shopInfo.name))
+        .actionSheet(isPresented: $viewModel.showReviewAction) {
+            ActionSheet(title: Text("Review"),
+                        //message: <#T##Text?#>,
+                        buttons: [
+                            .default(Text("Modify Review"), action: {
+                                print("modify \(viewModel.selectedReview)")
+                            }),
+                            .destructive(Text("Delete Review"), action: {
+                                //print("delete \(viewModel.selectedReview)")
+                                viewModel.deleteReview()
+                            }),
+                            .cancel()
+                        ]
+            )
+        }
     }
 }

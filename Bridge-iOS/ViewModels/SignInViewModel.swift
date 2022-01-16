@@ -85,11 +85,13 @@ final class SignInViewModel : ObservableObject {
                                 "accessToken" : signInResponse?.token.accessToken],
                    encoder: JSONParameterEncoder.prettyPrinted
         )
-            .responseJSON { response in
+            .responseJSON { [weak self] response in
+                guard let self = self else { return }
                 guard let statusCode = response.response?.statusCode else { return }
                 switch statusCode {
                 case 403 :
                     print("Refresh Fail : \(statusCode)")
+                    self.SignIn(email : self.email, password : self.password)
                 default :
                     print("Refresh status : \(statusCode)")
                 }
@@ -105,7 +107,7 @@ final class SignInViewModel : ObservableObject {
                     print("Success refeshing token")
                 }
             } receiveValue: { [weak self] (receivedValue : Token) in
-                print(receivedValue)
+                //print(receivedValue)
                 self?.signInResponse?.token = receivedValue
                 SignInViewModel.accessToken = receivedValue.accessToken
             }

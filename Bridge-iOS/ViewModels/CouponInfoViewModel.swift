@@ -23,20 +23,25 @@ final class CouponInfoViewModel : ObservableObject {
                                             benefit: "",
                                             images: []
                                         )
-    
+    @Published var reviews : [Review] = []
+    @Published var showReviewAction : Bool = false
+    @Published var selectedReview : Int = -1
+    @Published var reviewIndexToDelete = 1000
     @Published var region = MKCoordinateRegion(
                                 center: CLLocationCoordinate2D(latitude: 37.520829, longitude: 127.022724),
                                 span: MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005)
                             )
+    private var subscription = Set<AnyCancellable>()
     
     let coor = [Place(name: "Apple Garosu-Gil", latitude: 37.520829, longitude: 127.022724)]
-
-    private var subscription = Set<AnyCancellable>()
     let shopId : Int
+    let shopImage : String
     
-    init(_ shopId : Int) {
+    init(_ shopId : Int, image : String) {
         self.shopId = shopId
+        self.shopImage = image
         getStoreInfo()
+        getReview()
     }
     
     func getStoreInfo() {
@@ -71,6 +76,67 @@ final class CouponInfoViewModel : ObservableObject {
                 self?.shopInfo = recievedValue
             }.store(in: &subscription)
         }
+    
+    func getReview() {
+        let url = "http://3.36.233.180:8080/shops/\(shopId)/reviews"
+        let header: HTTPHeaders = [ "X-AUTH-TOKEN" : SignInViewModel.accessToken ]
+        
+        AF.request(url,
+                   method: .get,
+                   parameters: ["lastReviewId" : 0],
+                   encoding: URLEncoding.default,
+                   headers: header)
+            .responseJSON { response in
+                guard let statusCode = response.response?.statusCode else { return }
+                switch statusCode {
+                    case 200 :
+                        print("Get Reviews Success : \(statusCode)")
+                    default :
+                        print("Get Reviews Fail : \(statusCode)")
+                }
+            }.publishDecodable(type : ReviewList.self)
+            .compactMap { $0.value }
+            .map { $0.reviewList }
+            .sink { completion in
+                switch completion {
+                case let .failure(error) :
+                    print(error.localizedDescription)
+                case .finished :
+                    print("Get Reviews Finished")
+                }
+            } receiveValue: { [weak self] (recievedValue : [Review]) in
+                //print(recievedValue)
+                self?.reviews = recievedValue
+            }.store(in: &subscription)
+    }
+    
+    func modifyReview() {
+        let url = "http://3.36.233.180:8080/shops/\(shopId)/reviews/\(selectedReview)"
+        let header: HTTPHeaders = [ "X-AUTH-TOKEN" : SignInViewModel.accessToken ]
+
+        AF.request(url,
+                   method: .post,
+                   parameters: ["rate" : 0.0,
+                                "content" : ""],
+                   encoding: URLEncoding.default,
+                   headers: header)
+            .responseJSON { response in
+                print(response)
+            }
+    }
+    
+    func deleteReview() {
+        let url = "http://3.36.233.180:8080/shops/\(shopId)/reviews/\(selectedReview)"
+        let header: HTTPHeaders = [ "X-AUTH-TOKEN" : SignInViewModel.accessToken ]
+        
+        AF.request(url,
+                   method: .delete,
+                   encoding: URLEncoding.default,
+                   headers: header)
+            .responseJSON { response in
+                print(response)
+            }
+    }
 }
 
 struct Place: Identifiable {

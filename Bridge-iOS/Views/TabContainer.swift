@@ -42,6 +42,13 @@ struct TabContainer: View {
                 case 4 :
                     // temp
                     CouponView(
+                        viewModel : CouponViewModel(member:
+                            Member(
+                                description: signInViewModel.signInResponse?.description ?? "",
+                                memberId: signInViewModel.signInResponse?.memberId ?? -1,
+                                profileImage: signInViewModel.signInResponse?.profileImage ?? "",
+                                username: signInViewModel.signInResponse?.username ?? "")
+                        ),
                         isSlideShow : $isSlideShow,
                         profileImage : signInViewModel.signInResponse?.profileImage ?? ""
                     ).navigationBarHidden(true)

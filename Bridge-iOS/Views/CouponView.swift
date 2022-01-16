@@ -9,13 +9,12 @@ import SwiftUI
 import URLImage
 
 struct CouponView: View {
-    @StateObject private var viewModel = CouponViewModel()
+    @StateObject private var viewModel : CouponViewModel
     @Binding var isSlideShow : Bool
     private let profileImage : String
     
-    //init(viewModel : HomeViewModel, isSlideShow : Binding<Bool>, profileImage : String) {
-    //    self._viewModel = StateObject(wrappedValue: viewModel)
-    init(isSlideShow : Binding<Bool>, profileImage : String) {
+    init(viewModel : CouponViewModel, isSlideShow : Binding<Bool>, profileImage : String) {
+        self._viewModel = StateObject(wrappedValue: viewModel)
         self._isSlideShow = Binding(projectedValue: isSlideShow)
         self.profileImage = profileImage
     }
@@ -109,7 +108,11 @@ struct CouponView: View {
                 }
                 ForEach(viewModel.shops, id : \.self) { shop in
                     VStack {
-                        NavigationLink(destination: CouponInfoView(viewModel: CouponInfoViewModel(shop.shopId))) {
+                        NavigationLink(destination:
+                            CouponInfoView(
+                                memberId : viewModel.memberInfo.memberId,
+                                viewModel: CouponInfoViewModel(shop.shopId, image : shop.image)))
+                        {
                             HStack(spacing : 20) {
                                 URLImage(
                                     URL(string : shop.image) ??
@@ -175,8 +178,12 @@ struct CouponView: View {
             HStack {
                 Spacer()
                 if !viewModel.shopsRandom.isEmpty {
-                    NavigationLink(
-                        destination : CouponInfoView(viewModel: CouponInfoViewModel(viewModel.shopsRandom[0].shopId))
+                    NavigationLink(destination :
+                        CouponInfoView(
+                            memberId : viewModel.memberInfo.memberId,
+                            viewModel:
+                                CouponInfoViewModel(viewModel.shopsRandom[0].shopId,
+                                                    image : viewModel.shopsRandom[0].image))
                     ) {
                         VStack {
                             URLImage(
@@ -211,8 +218,13 @@ struct CouponView: View {
 
                 if viewModel.shopsRandom.count > 1 {
                     Spacer()
-                    NavigationLink(
-                        destination : CouponInfoView(viewModel: CouponInfoViewModel(viewModel.shopsRandom[1].shopId))
+                    NavigationLink(destination :
+                        CouponInfoView(
+                                memberId : viewModel.memberInfo.memberId,
+                                viewModel: CouponInfoViewModel(
+                                                viewModel.shopsRandom[1].shopId,
+                                                image : viewModel.shopsRandom[0].image)
+                        )
                     ) {
                         VStack {
                             URLImage(

@@ -14,8 +14,14 @@ final class CouponViewModel : ObservableObject {
     @Published var selectedCategory : Int = 1 // 1 : Restaurant , 2 : Local Store , 3 : B-Selection
     @Published var shops : [Shop] = []
     @Published var shopsRandom : [Shop] = []
-    
+
     private var subscription = Set<AnyCancellable>()
+    
+    let memberInfo : Member
+    
+    init(member : Member) {
+        memberInfo = member
+    }
     
     let locations = ["Casey/Hovey", "USAG Yongsan", "K-16", "Suwon A/B", "Osan A/B", "Camp Humperys", "Camp Carroll", "Henry/Walker", "Gunsan A/B"]
 

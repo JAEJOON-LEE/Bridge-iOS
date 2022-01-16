@@ -7,6 +7,7 @@
 
 import Foundation
 
+// shop list
 struct ShopList : Codable {
     var shopList : [Shop]
 }
@@ -20,6 +21,7 @@ struct Shop : Codable, Hashable {
     var image : String
 }
 
+// shop info
 struct ShopInfo : Codable {
     var shopId : Int
     var name : String
@@ -37,3 +39,24 @@ struct ShopImage : Codable {
     var imageId : Int
     var image : String
 }
+
+// review
+struct ReviewList : Codable {
+    var reviewList : [Review]
+}
+struct Review : Codable, Hashable {
+    var reviewId : Int
+    var content : String
+    var rate : Float
+    var createdAt : String
+    var member : Member
+}
+
+/*
+ struct Member : Codable, Hashable {
+     var description : String
+     var memberId : Int
+     var profileImage : String
+     var username : String
+ }
+*/
