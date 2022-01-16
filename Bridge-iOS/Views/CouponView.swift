@@ -165,6 +165,7 @@ struct CouponView: View {
     var body: some View {
         VStack(spacing: 0) {
             LocationPicker
+            
             //추천 페이지 (상단)
             HStack{
                 Text("How about this place?")
@@ -175,19 +176,22 @@ struct CouponView: View {
             .padding(20)
             .padding(.vertical, 10)
             .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.06)
+            
+            if viewModel.shopsRandom.isEmpty {
+                Spacer().frame(height: UIScreen.main.bounds.height * 0.2)
+            }
             HStack {
                 Spacer()
-                if !viewModel.shopsRandom.isEmpty {
+                ForEach(viewModel.shopsRandom.prefix(2), id : \.self) { shop in
                     NavigationLink(destination :
                         CouponInfoView(
                             memberId : viewModel.memberInfo.memberId,
                             viewModel:
-                                CouponInfoViewModel(viewModel.shopsRandom[0].shopId,
-                                                    image : viewModel.shopsRandom[0].image))
+                                CouponInfoViewModel(shop.shopId, image : shop.image))
                     ) {
                         VStack {
                             URLImage(
-                                URL(string : viewModel.shopsRandom[0].image) ??
+                                URL(string : shop.image) ??
                                 URL(string: "https://static.thenounproject.com/png/741653-200.png")!
                             ) { image in
                                 image
@@ -198,60 +202,20 @@ struct CouponView: View {
                             .frame(width : UIScreen.main.bounds.width * 0.33,
                                    height: UIScreen.main.bounds.height * 0.12)
                             .cornerRadius(10)
-                            Text(viewModel.shopsRandom[0].name)
+                            Text(shop.name)
                                 .fontWeight(.semibold)
                                 .foregroundColor(.black)
                                 .padding(.bottom, 3)
                             HStack(spacing :3) {
-                                Text(viewModel.shopsRandom[0].benefit)
+                                Text(shop.benefit)
                                     .foregroundColor(.mainTheme)
                                 Spacer()
                                 Image(systemName : "text.bubble.fill")
-                                Text("\(viewModel.shopsRandom[0].reviewCount)")
+                                Text("\(shop.reviewCount)")
                             }
                             .frame(width : UIScreen.main.bounds.width * 0.3)
                             .foregroundColor(.secondary)
                             .font(.system(size: 9))
-                        }.frame(width: UIScreen.main.bounds.width * 0.4, height: UIScreen.main.bounds.height * 0.2)
-                    }
-                }
-
-                if viewModel.shopsRandom.count > 1 {
-                    Spacer()
-                    NavigationLink(destination :
-                        CouponInfoView(
-                                memberId : viewModel.memberInfo.memberId,
-                                viewModel: CouponInfoViewModel(
-                                                viewModel.shopsRandom[1].shopId,
-                                                image : viewModel.shopsRandom[0].image)
-                        )
-                    ) {
-                        VStack {
-                            URLImage(
-                                URL(string : viewModel.shopsRandom[0].image) ??
-                                URL(string: "https://static.thenounproject.com/png/741653-200.png")!
-                            ) { image in
-                                image
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                            }
-                            //Color.systemDefaultGray // temp
-                            .frame(width : UIScreen.main.bounds.width * 0.33,
-                                   height: UIScreen.main.bounds.height * 0.12)
-                            .cornerRadius(10)
-                            Text(viewModel.shopsRandom[1].name)
-                                .fontWeight(.semibold)
-                                .foregroundColor(.black)
-                            HStack(spacing :3) {
-                                Text(viewModel.shopsRandom[1].benefit)
-                                    .foregroundColor(.mainTheme)
-                                Spacer()
-                                Image(systemName : "text.bubble.fill")
-                                Text("\(viewModel.shopsRandom[1].reviewCount)")
-                            }//.padding(5)
-                            .frame(width : UIScreen.main.bounds.width * 0.33)
-                            .foregroundColor(.secondary)
-                            .font(.system(size: 10))
                         }.frame(width: UIScreen.main.bounds.width * 0.4, height: UIScreen.main.bounds.height * 0.2)
                     }
                 }
@@ -261,6 +225,7 @@ struct CouponView: View {
                 .frame(width : UIScreen.main.bounds.width * 0.9, height : 5)
                 .padding(.vertical, 10)
 
+            // Category Selector
             HStack(spacing : 80) {
                 Button {
                     withAnimation { viewModel.selectedCategory = 1 }

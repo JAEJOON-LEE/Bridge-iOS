@@ -31,9 +31,14 @@ final class CouponInfoViewModel : ObservableObject {
                                 center: CLLocationCoordinate2D(latitude: 37.520829, longitude: 127.022724),
                                 span: MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005)
                             )
+    @Published var showAddReview : Bool = false
+    @Published var reviewRate : Double = 5
+    @Published var reviewText : String = ""
+    
     private var subscription = Set<AnyCancellable>()
     
     let coor = [Place(name: "Apple Garosu-Gil", latitude: 37.520829, longitude: 127.022724)]
+    let mapLink = URL(string: "maps://?saddr=&daddr=\(37.520829),\(127.022724)")
     let shopId : Int
     let shopImage : String
     
@@ -41,7 +46,7 @@ final class CouponInfoViewModel : ObservableObject {
         self.shopId = shopId
         self.shopImage = image
         getStoreInfo()
-        getReview()
+        //getReview()
     }
     
     func getStoreInfo() {
@@ -110,14 +115,27 @@ final class CouponInfoViewModel : ObservableObject {
             }.store(in: &subscription)
     }
     
+    func addReview() {
+        let url = "http://3.36.233.180:8080/shops/\(shopId)/reviews"
+        let header: HTTPHeaders = [ "X-AUTH-TOKEN" : SignInViewModel.accessToken ]
+        
+        AF.request(url,
+                   method: .post,
+                   parameters: [ "rate" : reviewRate,
+                                 "content" : reviewText ],
+                   encoding: URLEncoding.default,
+                   headers: header)
+            .responseJSON { response in print(response) }
+    }
+    
     func modifyReview() {
         let url = "http://3.36.233.180:8080/shops/\(shopId)/reviews/\(selectedReview)"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : SignInViewModel.accessToken ]
-
+        
         AF.request(url,
                    method: .post,
-                   parameters: ["rate" : 0.0,
-                                "content" : ""],
+                   parameters: ["rate" : reviewRate,
+                                "content" : reviewText ],
                    encoding: URLEncoding.default,
                    headers: header)
             .responseJSON { response in

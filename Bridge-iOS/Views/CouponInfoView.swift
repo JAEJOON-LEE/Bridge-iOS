@@ -11,6 +11,7 @@ import MapKit
 
 struct CouponInfoView: View {
     @StateObject private var viewModel : CouponInfoViewModel
+    
     let memberId : Int
     
     init(memberId : Int, viewModel : CouponInfoViewModel) {
@@ -58,11 +59,15 @@ struct CouponInfoView: View {
                     .fontWeight(.semibold)
                 Spacer()
                 Button {
-                    
+                    // Open Map
+                    if UIApplication.shared.canOpenURL(viewModel.mapLink!) {
+                        UIApplication.shared.open(viewModel.mapLink!, options: [:], completionHandler: nil)
+                    }
                 } label : {
-                    HStack {
-                        Text("on Map app").fontWeight(.light)
-                        Image(systemName: "arrowshape.turn.up.forward")
+                    HStack(spacing: 3) {
+                        Text("Open in Map")
+                            .fontWeight(.semibold)
+                        Image(systemName: "arrowshape.turn.up.forward.fill")
                     }.font(.system(.footnote, design: .rounded))
                     .foregroundColor(.black)
                 }
@@ -70,7 +75,8 @@ struct CouponInfoView: View {
             
             Map(coordinateRegion:  $viewModel.region, interactionModes: .all, showsUserLocation: true, userTrackingMode: .none, annotationItems: viewModel.coor) { place in
                 MapMarker(coordinate: place.coordinate)
-            }.frame(height : UIScreen.main.bounds.height * 0.2)
+            }
+            .frame(height : UIScreen.main.bounds.height * 0.2)
             .cornerRadius(20)
             
             HStack {
@@ -97,29 +103,25 @@ struct CouponInfoView: View {
                 }
             }
             
-            // TEMP
-//            ForEach(viewModel.reviews.prefix(3), id : \.self) { review in
-//                HStack {
-//                    Image(systemName : "person.fill")
-//                    Text(review.content).fontWeight(.light)
-//                }.padding(.leading, 10)
-//            }
-            HStack {
-                Color.systemDefaultGray
-                    .frame(width: UIScreen.main.bounds.width * 0.3, height: UIScreen.main.bounds.width * 0.3)
-                    .cornerRadius(10)
-                Color.systemDefaultGray
-                    .frame(width: UIScreen.main.bounds.width * 0.3, height: UIScreen.main.bounds.width * 0.3)
-                    .cornerRadius(10)
-                Color.systemDefaultGray
-                    .frame(width: UIScreen.main.bounds.width * 0.3, height: UIScreen.main.bounds.width * 0.3)
-                    .cornerRadius(10)
+            ScrollView(.horizontal, showsIndicators: true) {
+                HStack {
+                    ForEach(viewModel.shopInfo.images, id : \.self) { imageInfo in // .prefix(3)
+                        URLImage(
+                            URL(string : imageInfo.image) ??
+                            URL(string: "https://static.thenounproject.com/png/741653-200.png")!
+                        ) { image in
+                            image
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                        }.frame(width: UIScreen.main.bounds.width * 0.3, height: UIScreen.main.bounds.width * 0.3)
+                        .cornerRadius(10)
+                    }
+                }
             }
             
             Color.systemDefaultGray
                 .frame(width : UIScreen.main.bounds.width * 0.9, height : 5)
                 .padding(.vertical, 5)
-            
             
             // Review
             VStack(alignment : .leading, spacing : 3) {
@@ -149,9 +151,11 @@ struct CouponInfoView: View {
                                                 Text(review.member.username)
                                                     .font(.system(.title3, design: .rounded))
                                                     .fontWeight(.semibold)
+                                                    .minimumScaleFactor(0.01)
                                                 Text(convertReturnedDateString(review.createdAt))
                                                     .font(.caption)
                                                     .fontWeight(.light)
+                                                    .minimumScaleFactor(0.01)
                                                 Spacer()
                                                 
                                                 if memberId == review.member.memberId {
@@ -191,12 +195,13 @@ struct CouponInfoView: View {
                         Text(review.content).fontWeight(.light)
                     }.padding(.leading, 10)
                 }
-               
+            
+                Spacer()
                 // Add Review
                 HStack {
                     Spacer()
                     Button {
-                        
+                        viewModel.showAddReview = true
                     } label : {
                         HStack {
                             Image(systemName: "pencil.circle")
@@ -207,9 +212,34 @@ struct CouponInfoView: View {
                         .foregroundColor(.white)
                         .cornerRadius(20)
                     }
+                }.sheet(isPresented: $viewModel.showAddReview) {
+                    VStack {
+                        HStack {
+                            Image(systemName: "star.fill")
+                                .foregroundColor(.mainTheme)
+                            Text("\(viewModel.reviewRate, specifier: "%.1f")")
+                        }.font(.largeTitle)
+                        
+                        Slider(value: $viewModel.reviewRate, in: 0...5, step: 0.05)
+                            .accentColor(.mainTheme)
+                            .frame(width : UIScreen.main.bounds.width * 0.3)
+                        TextField("Review", text: $viewModel.reviewText)
+                            .lineLimit(2)
+                            .frame(width : UIScreen.main.bounds.width * 0.8)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                        
+                        Button {
+                            viewModel.addReview()
+                        } label : {
+                            Text("Add Review")
+                                .padding()
+                                .background(Color.mainTheme)
+                                .cornerRadius(20)
+                        }
+                    }
                 }
                 Spacer()
-            }
+            }.onAppear { viewModel.getReview() }
         }.padding()
         .navigationTitle(Text(viewModel.shopInfo.name))
         .actionSheet(isPresented: $viewModel.showReviewAction) {
@@ -217,7 +247,8 @@ struct CouponInfoView: View {
                         //message: <#T##Text?#>,
                         buttons: [
                             .default(Text("Modify Review"), action: {
-                                print("modify \(viewModel.selectedReview)")
+                                //print("modify \(viewModel.selectedReview)")
+                                viewModel.modifyReview()
                             }),
                             .destructive(Text("Delete Review"), action: {
                                 //print("delete \(viewModel.selectedReview)")

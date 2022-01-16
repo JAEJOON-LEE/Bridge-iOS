@@ -318,6 +318,7 @@ struct ItemInfoView: View {
                 .shadow(radius: 5)
             }
         }
+        //.onAppear{ viewModel.getItemInfo() }
         .onChange(of: self.isModifyDone, perform: { _ in
             self.presentationMode.wrappedValue.dismiss()
         })

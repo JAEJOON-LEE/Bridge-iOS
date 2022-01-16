@@ -35,7 +35,7 @@ struct ShopInfo : Codable {
     var images : [ShopImage]
 }
 
-struct ShopImage : Codable {
+struct ShopImage : Codable, Hashable {
     var imageId : Int
     var image : String
 }
