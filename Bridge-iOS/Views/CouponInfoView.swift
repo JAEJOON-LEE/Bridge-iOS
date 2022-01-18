@@ -19,40 +19,76 @@ struct CouponInfoView: View {
         self._viewModel = StateObject(wrappedValue: viewModel)
     }
     
-    var body: some View {
-        VStack {
-            // Title
-            HStack(spacing : 20) {
+    
+    var StoreImages : some View {
+        TabView(selection : $viewModel.currentImageIndex) {
+            ForEach(viewModel.shopInfo.images, id : \.self) { imageInfo in
                 URLImage(
-                    URL(string : viewModel.shopImage) ??
+                    URL(string : imageInfo.image) ??
                     URL(string: "https://static.thenounproject.com/png/741653-200.png")!
                 ) { image in
                     image
                         .resizable()
                         .aspectRatio(contentMode: .fill)
-                }.frame(width: UIScreen.main.bounds.width / 4, height: UIScreen.main.bounds.width / 4)
-                .cornerRadius(20)
-                VStack(alignment : .leading, spacing : 10) {
-                    Text(viewModel.shopInfo.name)
-                        .font(.system(.title3, design: .rounded))
-                        .fontWeight(.bold)
-                    HStack {
-                        Image(systemName: "star.fill")
-                            .foregroundColor(.mainTheme)
-                        Text("\(viewModel.shopInfo.rate, specifier: "%.1f") (\(viewModel.shopInfo.reviewCount))")
-                            .font(.system(.title3, design: .rounded))
-                            .fontWeight(.semibold)
-                    }
-                    Text(viewModel.shopInfo.description)
-                        .font(.system(.caption, design: .rounded))
-                        .fontWeight(.light)
                 }
+                .tag(imageInfo.imageId)
+                .onTapGesture { viewModel.currentImageIndex = imageInfo.imageId }
+            }
+        }.tabViewStyle(PageTabViewStyle())
+        .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .never))
+        .frame(width : UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.35)
+        .onTapGesture {
+            viewModel.isImageTap.toggle() // 이미지 확대 보기 기능
+        }
+        .fullScreenCover(isPresented: $viewModel.isImageTap) {
+            ZStack(alignment : .topTrailing) {
+                TabView(selection : $viewModel.currentImageIndex) {
+                    ForEach(viewModel.shopInfo.images, id : \.self) { imageInfo in
+                        URLImage(
+                            URL(string : imageInfo.image) ??
+                            URL(string: "https://static.thenounproject.com/png/741653-200.png")!
+                        ) { image in
+                            image
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                        }.tag(imageInfo.imageId)
+                    }
+                }.tabViewStyle(PageTabViewStyle())
+                .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
+                .frame(width : UIScreen.main.bounds.width)
+                
+                Button {
+                    viewModel.isImageTap.toggle()
+                } label : {
+                    Image(systemName : "xmark")
+                        .foregroundColor(.mainTheme)
+                        .font(.system(size : 20))
+                        .padding()
+                }
+            }
+        }
+    }
+    var Title : some View {
+        VStack(alignment : .leading, spacing : 10) {
+            HStack {
+                Text(viewModel.shopInfo.name)
+                    .font(.system(.title2, design: .rounded))
+                    .fontWeight(.bold)
                 Spacer()
+                Image(systemName: "star.fill")
+                    .foregroundColor(.mainTheme)
+                Text("\(viewModel.shopInfo.rate, specifier: "%.1f") (\(viewModel.shopInfo.reviewCount))")
+                    .font(.system(.title3, design: .rounded))
+                    .fontWeight(.semibold)
             }
             
-            Color.systemDefaultGray
-                .frame(width : UIScreen.main.bounds.width * 0.9, height : 5)
-            
+            Text(viewModel.shopInfo.description)
+                .font(.system(.subheadline, design: .rounded))
+                .fontWeight(.light)
+        }.padding(.horizontal, 10)
+    }
+    var Location : some View {
+        VStack {
             HStack {
                 Text("Location")
                     .font(.system(.title3, design: .rounded))
@@ -73,190 +109,238 @@ struct CouponInfoView: View {
                 }
             }
             
-            Map(coordinateRegion:  $viewModel.region, interactionModes: .all, showsUserLocation: true, userTrackingMode: .none, annotationItems: viewModel.coor) { place in
-                MapMarker(coordinate: place.coordinate)
-            }
-            .frame(height : UIScreen.main.bounds.height * 0.2)
-            .cornerRadius(20)
+            Map(coordinateRegion:  $viewModel.region,
+                interactionModes: .all,
+                showsUserLocation: true,
+                userTrackingMode: .none,
+                annotationItems: viewModel.coor) { place in
+//                annotationItems: [Place(name : viewModel.shopInfo.name,
+//                                        latitude : Double(viewModel.latitude),
+//                                        longitude: Double(viewModel.longtitude)
+//                                       )]) { place in
+                    MapMarker(coordinate: place.coordinate)
+                }.frame(height : UIScreen.main.bounds.height * 0.15)
+                .cornerRadius(20)
             
             HStack {
                 Spacer()
-                Text("43, Garosu-gil, Gangnam-gu, Seoul, Republic of Korea") // place holder
-                //Text(viewModel.shopInfo.location)
+                Text(viewModel.shopInfo.location)
                     .font(.system(.caption, design: .rounded))
                     .fontWeight(.light)
             }
-            
-            Color.systemDefaultGray
-                .frame(width : UIScreen.main.bounds.width * 0.9, height : 5)
-                .padding(.vertical, 3)
-            
-            HStack {
-                Text("Photos (\(viewModel.shopInfo.images.count))")
-                    .font(.system(.title3, design: .rounded))
-                    .fontWeight(.semibold)
-                Spacer()
-                Button {
-                    
-                } label : {
-                    Text("See more")
-                }
-            }
-            
-            ScrollView(.horizontal, showsIndicators: true) {
-                HStack {
-                    ForEach(viewModel.shopInfo.images, id : \.self) { imageInfo in // .prefix(3)
+        }.padding(.horizontal, 10)
+    }
+    var ReviewsView : some View {
+        ScrollView {
+            VStack {
+                ForEach(viewModel.reviews, id : \.self) { review in
+                    HStack(spacing : 10) {
                         URLImage(
-                            URL(string : imageInfo.image) ??
+                            URL(string : review.member.profileImage) ??
                             URL(string: "https://static.thenounproject.com/png/741653-200.png")!
                         ) { image in
                             image
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
-                        }.frame(width: UIScreen.main.bounds.width * 0.3, height: UIScreen.main.bounds.width * 0.3)
+                        }.frame(
+                            width: UIScreen.main.bounds.width * 0.12,
+                            height: UIScreen.main.bounds.width * 0.12)
                         .cornerRadius(10)
+                        VStack(alignment : .leading, spacing : 5) {
+                            HStack {
+                                Text(review.member.username)
+                                    .font(.system(.title3, design: .rounded))
+                                    .fontWeight(.semibold)
+                                    .minimumScaleFactor(0.01)
+                                Text(convertReturnedDateString(review.createdAt))
+                                    .font(.caption)
+                                    .fontWeight(.light)
+                                    .minimumScaleFactor(0.01)
+                                Spacer()
+                                
+                                if memberId == review.member.memberId {
+                                    Button {
+                                        viewModel.selectedReview = review.reviewId
+                                        viewModel.showReviewAction = true
+                                    } label : {
+                                        Image(systemName : "ellipsis")
+                                    }
+                                }
+                            }
+                            Text(review.content)
+                                .fontWeight(.medium)
+                        }
+                        Spacer()
+                        Image(systemName: "star.fill")
+                            .foregroundColor(.mainTheme)
+                        Text("\(review.rate, specifier: "%.1f")")
+                            .font(.system(.title3, design: .rounded))
+                            .fontWeight(.semibold)
+                    }.padding(.horizontal, 20)
+                    
+                    Color.systemDefaultGray
+                        .frame(width : UIScreen.main.bounds.width * 0.9, height : 5)
+                        .padding(.vertical, 5)
+                }
+            }
+        }.navigationTitle(Text("Reviews"))
+    }
+    var CountingStars : some View {
+        VStack {
+            HStack {
+                Spacer()
+                Button {
+                    withAnimation { viewModel.showAddReview = false }
+                } label : {
+                    Image(systemName : "xmark")
+                        .foregroundColor(.mainTheme)
+                        .font(.system(size : 20))
+                        .padding(.trailing, 10)
+                    
+                }
+            }
+            URLImage(
+                URL(string : viewModel.shopImage) ??
+                URL(string: "https://static.thenounproject.com/png/741653-200.png")!
+            ) { image in
+                image
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+            }.frame(width: UIScreen.main.bounds.width / 4, height: UIScreen.main.bounds.width / 4)
+            .cornerRadius(20)
+           
+            Text(viewModel.shopInfo.name)
+                .font(.system(.title, design: .rounded))
+                .fontWeight(.bold)
+            
+            ZStack {
+                HStack(spacing : 0) {
+                    ForEach(1...5, id: \.self) { _ in
+                        Rectangle()
+                            .frame(width : 40, height : 40)
+                            .foregroundColor(.systemDefaultGray)
+                            .overlay(
+                                Image(systemName: "star.fill")
+                                    .font(.system(size : 30))
+                                    .foregroundColor(.mainTheme)
+                            )
+                    }
+                }
+                HStack(spacing : 0) {
+                    ForEach(viewModel.rateArray, id: \.self) { i in
+                        Rectangle()
+                            .frame(width : 20, height : 40)
+                            .foregroundColor(.systemDefaultGray)
+                            .opacity(viewModel.reviewRate - Double(i) * 0.5 > 0 ? 0 : 1 )
+                    }
+                }
+                HStack(spacing : 0) {
+                    ForEach(viewModel.rateArray, id: \.self) { i in
+                        Rectangle()
+                            .frame(width : 20, height : 40)
+                            .foregroundColor(.systemDefaultGray.opacity(0.00001))
+                            .onTapGesture {
+                                viewModel.reviewRate = Double(i + 1) * 0.5
+                            }
+
                     }
                 }
             }
+ 
+            TextField("Review", text: $viewModel.reviewText)
+                .lineLimit(2)
+                .frame(width : UIScreen.main.bounds.width * 0.6)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
             
-            Color.systemDefaultGray
-                .frame(width : UIScreen.main.bounds.width * 0.9, height : 5)
-                .padding(.vertical, 5)
-            
-            // Review
-            VStack(alignment : .leading, spacing : 3) {
-                HStack {
-                    Text("Reviews (\(viewModel.shopInfo.reviewCount))")
-                        .font(.system(.title3, design: .rounded))
-                        .fontWeight(.semibold)
-                    Spacer()
-                    NavigationLink {
-                        ScrollView {
-                            VStack {
-                                ForEach(viewModel.reviews, id : \.self) { review in
-                                    HStack(spacing : 20) {
-                                        URLImage(
-                                            URL(string : review.member.profileImage) ??
-                                            URL(string: "https://static.thenounproject.com/png/741653-200.png")!
-                                        ) { image in
-                                            image
-                                                .resizable()
-                                                .aspectRatio(contentMode: .fill)
-                                        }.frame(
-                                            width: UIScreen.main.bounds.width * 0.12,
-                                            height: UIScreen.main.bounds.width * 0.12)
-                                        .cornerRadius(10)
-                                        VStack(alignment : .leading, spacing : 5) {
-                                            HStack {
-                                                Text(review.member.username)
-                                                    .font(.system(.title3, design: .rounded))
-                                                    .fontWeight(.semibold)
-                                                    .minimumScaleFactor(0.01)
-                                                Text(convertReturnedDateString(review.createdAt))
-                                                    .font(.caption)
-                                                    .fontWeight(.light)
-                                                    .minimumScaleFactor(0.01)
-                                                Spacer()
-                                                
-                                                if memberId == review.member.memberId {
-                                                    Button {
-                                                        viewModel.selectedReview = review.reviewId
-                                                        viewModel.showReviewAction = true
-                                                    } label : {
-                                                        Image(systemName : "ellipsis")
-                                                    }
-                                                }
-                                            }
-                                            Text(review.content)
-                                                .fontWeight(.medium)
-                                        }
-                                        Spacer()
-                                        Image(systemName: "star.fill")
-                                            .foregroundColor(.mainTheme)
-                                        Text("\(review.rate, specifier: "%.1f")")
-                                            .font(.system(.title3, design: .rounded))
-                                            .fontWeight(.semibold)
-                                    }.padding(.horizontal, 20)
-                                    
-                                    Color.systemDefaultGray
-                                        .frame(width : UIScreen.main.bounds.width * 0.9, height : 5)
-                                        .padding(.vertical, 5)
-                                }
-                            }
-                        }.navigationTitle(Text("Reviews"))
-                    } label : {
-                        Text("See more")
-                    }
-                }.padding(.bottom, 5)
+            Button {
+                viewModel.addReview()
+                viewModel.showAddReview = false
+            } label : {
+                Text("Add Review")
+                    .foregroundColor(.white)
+                    .padding(10)
+                    .background(Color.mainTheme)
+                    .cornerRadius(20)
+            }
+        }.zIndex(5)
+            .frame(width : UIScreen.main.bounds.width * 0.7, height: UIScreen.main.bounds.height * 0.4)
+        .background(Color.systemDefaultGray)
+        .cornerRadius(15)
+        .shadow(radius: 5)
+    }
+    
+    var body: some View {
+        ZStack {
+            VStack {
+                StoreImages
+                Title
+                Color.systemDefaultGray
+                    .frame(width : UIScreen.main.bounds.width * 0.9, height : 5)
+                Location
+                Color.systemDefaultGray
+                    .frame(width : UIScreen.main.bounds.width * 0.9, height : 5)
                 
-                ForEach(viewModel.reviews.prefix(3), id : \.self) { review in
+                // Review
+                VStack(alignment : .leading, spacing : 3) {
                     HStack {
-                        Image(systemName : "person.fill")
-                        Text(review.content).fontWeight(.light)
-                    }.padding(.leading, 10)
-                }
-            
-                Spacer()
-                // Add Review
-                HStack {
-                    Spacer()
-                    Button {
-                        viewModel.showAddReview = true
-                    } label : {
-                        HStack {
-                            Image(systemName: "pencil.circle")
-                            Text("Add Review")
-                                .fontWeight(.semibold)
-                        }.padding(7)
-                        .background(Color.mainTheme)
-                        .foregroundColor(.white)
-                        .cornerRadius(20)
-                    }
-                }.sheet(isPresented: $viewModel.showAddReview) {
-                    VStack {
-                        HStack {
-                            Image(systemName: "star.fill")
-                                .foregroundColor(.mainTheme)
-                            Text("\(viewModel.reviewRate, specifier: "%.1f")")
-                        }.font(.largeTitle)
-                        
-                        Slider(value: $viewModel.reviewRate, in: 0...5, step: 0.05)
-                            .accentColor(.mainTheme)
-                            .frame(width : UIScreen.main.bounds.width * 0.3)
-                        TextField("Review", text: $viewModel.reviewText)
-                            .lineLimit(2)
-                            .frame(width : UIScreen.main.bounds.width * 0.8)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
-                        
-                        Button {
-                            viewModel.addReview()
+                        Text("Reviews (\(viewModel.shopInfo.reviewCount))")
+                            .font(.system(.title3, design: .rounded))
+                            .fontWeight(.semibold)
+                        Spacer()
+                        NavigationLink {
+                            ReviewsView
                         } label : {
-                            Text("Add Review")
-                                .padding()
-                                .background(Color.mainTheme)
-                                .cornerRadius(20)
+                            Text("See more")
+                        }
+                    }.padding(.bottom, 5)
+                    
+                    ForEach(viewModel.reviews.prefix(3), id : \.self) { review in
+                        HStack {
+                            Image(systemName : "person.fill")
+                            Text(review.content).fontWeight(.light)
+                        }.padding(.leading, 10)
+                    }
+                
+                    // Add Review
+                    Spacer()
+                    HStack {
+                        Spacer()
+                        Button {
+                            withAnimation { viewModel.showAddReview = true }
+                        } label : {
+                            HStack {
+                                Image(systemName: "pencil.circle")
+                                Text("Add Review")
+                                    .fontWeight(.semibold)
+                            }.padding(7)
+                            .background(Color.mainTheme)
+                            .foregroundColor(.white)
+                            .cornerRadius(20)
                         }
                     }
-                }
-                Spacer()
-            }.onAppear { viewModel.getReview() }
-        }.padding()
-        .navigationTitle(Text(viewModel.shopInfo.name))
-        .actionSheet(isPresented: $viewModel.showReviewAction) {
-            ActionSheet(title: Text("Review"),
-                        //message: <#T##Text?#>,
-                        buttons: [
-                            .default(Text("Modify Review"), action: {
-                                //print("modify \(viewModel.selectedReview)")
-                                viewModel.modifyReview()
-                            }),
-                            .destructive(Text("Delete Review"), action: {
-                                //print("delete \(viewModel.selectedReview)")
-                                viewModel.deleteReview()
-                            }),
-                            .cancel()
-                        ]
-            )
+                    Spacer()
+                }.onAppear { viewModel.getReview() }
+                .padding(.horizontal, 10)
+            }.padding()
+            .navigationTitle(Text(viewModel.shopInfo.name))
+            .actionSheet(isPresented: $viewModel.showReviewAction) {
+                ActionSheet(title: Text("Review"),
+                            buttons: [
+                                .default(Text("Modify Review"), action: {
+                                    //print("modify \(viewModel.selectedReview)")
+                                    viewModel.modifyReview()
+                                }),
+                                .destructive(Text("Delete Review"), action: {
+                                    //print("delete \(viewModel.selectedReview)")
+                                    viewModel.deleteReview()
+                                }),
+                                .cancel()
+                            ]
+                )
+            }
+            .overlay(Color.black.opacity(viewModel.showAddReview ? 0.7 : 0).edgesIgnoringSafeArea(.all))
+         
+            if viewModel.showAddReview { CountingStars }
         }
     }
 }

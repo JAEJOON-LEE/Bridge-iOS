@@ -24,21 +24,29 @@ final class CouponInfoViewModel : ObservableObject {
                                             images: []
                                         )
     @Published var reviews : [Review] = []
+    
     @Published var showReviewAction : Bool = false
     @Published var selectedReview : Int = -1
     @Published var reviewIndexToDelete = 1000
+    
     @Published var region = MKCoordinateRegion(
                                 center: CLLocationCoordinate2D(latitude: 37.520829, longitude: 127.022724),
                                 span: MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005)
                             )
+    
     @Published var showAddReview : Bool = false
     @Published var reviewRate : Double = 5
     @Published var reviewText : String = ""
     
+    @Published var isImageTap : Bool = false
+    @Published var currentImageIndex : Int = 0
+    
     private var subscription = Set<AnyCancellable>()
     
-    let coor = [Place(name: "Apple Garosu-Gil", latitude: 37.520829, longitude: 127.022724)]
-    let mapLink = URL(string: "maps://?saddr=&daddr=\(37.520829),\(127.022724)")
+    @Published var coor : [Place] = [Place(name: "Apple Garosu-Gil", latitude: 37.520829, longitude: 127.022724)]
+    var mapLink = URL(string: "maps://?saddr=&daddr=\(37.520829),\(127.022724)")
+    
+    let rateArray = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     let shopId : Int
     let shopImage : String
     
@@ -77,8 +85,15 @@ final class CouponInfoViewModel : ObservableObject {
                     print("Get Store Info Finished")
                 }
             } receiveValue: { [weak self] (recievedValue : ShopInfo) in
-                print(recievedValue)
+//                let coordinate = recievedValue.coordinate.components(separatedBy: [","," "])
+//                let latitude = Double(coordinate[0]) ?? -1.0
+//                let longtitude = Double(coordinate[2]) ?? -1.0
+//                self?.region.center = CLLocationCoordinate2D(latitude: latitude, longitude: longtitude)
+//                self?.coor.append(Place(name: recievedValue.name, latitude: latitude, longitude: longtitude))
+//                self?.mapLink = URL(string: "maps://?saddr=&daddr=\(latitude),\(longtitude)")
+                //print(recievedValue)
                 self?.shopInfo = recievedValue
+                
             }.store(in: &subscription)
         }
     
