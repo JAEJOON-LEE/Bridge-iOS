@@ -34,13 +34,14 @@ final class CouponInfoViewModel : ObservableObject {
                                             images: []
                                         )
     @Published var reviews : [Review] = []
+    @Published var lastReviewId : Int = 0
     
     @Published var showReviewAction : Bool = false
     @Published var selectedReview : Int = -1
     @Published var reviewIndexToDelete = 1000
     
     @Published var showAddReview : Bool = false
-    @Published var reviewRate : Double = 5
+    @Published var reviewRate : Float = 5
     @Published var reviewText : String = ""
     
     @Published var isImageTap : Bool = false
@@ -126,7 +127,7 @@ final class CouponInfoViewModel : ObservableObject {
         
         AF.request(url,
                    method: .get,
-                   parameters: ["lastReviewId" : 0],
+                   parameters: ["lastReviewId" : lastReviewId],
                    encoding: URLEncoding.default,
                    headers: header)
             .responseJSON { response in
@@ -149,7 +150,7 @@ final class CouponInfoViewModel : ObservableObject {
                 }
             } receiveValue: { [weak self] (recievedValue : [Review]) in
                 //print(recievedValue)
-                self?.reviews = recievedValue
+                self?.reviews.append(contentsOf: recievedValue)
             }.store(in: &subscription)
     }
     

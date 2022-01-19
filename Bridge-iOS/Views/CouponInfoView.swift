@@ -218,6 +218,19 @@ struct CouponInfoView: View {
                         .frame(width : UIScreen.main.bounds.width * 0.9, height : 5)
                         .padding(.vertical, 5)
                 }
+                
+                // review 20개 이상 있을 경우
+                if viewModel.reviews.count == 20 {
+                    Button {
+                        viewModel.lastReviewId = viewModel.reviews.last?.reviewId ?? 0
+                        viewModel.getReview()
+                    } label : {
+                        Text("Load more")
+                            .foregroundColor(.mainTheme)
+                            .font(.system(.title2, design: .rounded))
+                            .fontWeight(.semibold)
+                    }
+                }
             }
         }.navigationTitle(Text("Reviews"))
     }
@@ -267,7 +280,7 @@ struct CouponInfoView: View {
                         Rectangle()
                             .frame(width : 20, height : 40)
                             .foregroundColor(.systemDefaultGray)
-                            .opacity(viewModel.reviewRate - Double(i) * 0.5 > 0 ? 0 : 1 )
+                            .opacity(viewModel.reviewRate - Float(i) * 0.5 > 0 ? 0 : 1 )
                     }
                 }
                 HStack(spacing : 0) {
@@ -276,7 +289,7 @@ struct CouponInfoView: View {
                             .frame(width : 20, height : 40)
                             .foregroundColor(.systemDefaultGray.opacity(0.00001))
                             .onTapGesture {
-                                viewModel.reviewRate = Double(i + 1) * 0.5
+                                viewModel.reviewRate = Float(i + 1) * 0.5
                             }
 
                     }
@@ -299,10 +312,9 @@ struct CouponInfoView: View {
                     .cornerRadius(20)
             }
         }.zIndex(5)
-            .frame(width : UIScreen.main.bounds.width * 0.7, height: UIScreen.main.bounds.height * 0.4)
+        .frame(width : UIScreen.main.bounds.width * 0.7, height: UIScreen.main.bounds.height * 0.4)
         .background(Color.systemDefaultGray)
         .cornerRadius(15)
-        .shadow(radius: 5)
     }
     
     var body: some View {
