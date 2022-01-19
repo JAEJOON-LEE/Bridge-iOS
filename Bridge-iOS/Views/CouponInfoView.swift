@@ -19,7 +19,6 @@ struct CouponInfoView: View {
         self._viewModel = StateObject(wrappedValue: viewModel)
     }
     
-    
     var StoreImages : some View {
         TabView(selection : $viewModel.currentImageIndex) {
             ForEach(viewModel.shopInfo.images, id : \.self) { imageInfo in
@@ -56,6 +55,23 @@ struct CouponInfoView: View {
                 }.tabViewStyle(PageTabViewStyle())
                 .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
                 .frame(width : UIScreen.main.bounds.width)
+                .offset(x : 0, y : viewModel.ImageViewOffset.height)
+                .gesture(
+                    DragGesture()
+                        .onChanged { gesture in
+                            if -50 < gesture.translation.height && gesture.translation.height < 100 {
+                                viewModel.ImageViewOffset = gesture.translation
+                            } else if gesture.translation.height >= 100 {
+                                viewModel.isImageTap.toggle()
+                                viewModel.ImageViewOffset = .zero
+                            }
+                        }
+                        .onEnded { _ in
+                            withAnimation {
+                                viewModel.ImageViewOffset = .zero
+                            }
+                        }
+                )
                 
                 Button {
                     viewModel.isImageTap.toggle()
@@ -69,22 +85,22 @@ struct CouponInfoView: View {
         }
     }
     var Title : some View {
-        VStack(alignment : .leading, spacing : 10) {
-            HStack {
+        HStack(spacing: 3) {
+            VStack(alignment : .leading, spacing : 10) {
                 Text(viewModel.shopInfo.name)
                     .font(.system(.title2, design: .rounded))
                     .fontWeight(.bold)
-                Spacer()
-                Image(systemName: "star.fill")
-                    .foregroundColor(.mainTheme)
-                Text("\(viewModel.shopInfo.rate, specifier: "%.1f") (\(viewModel.shopInfo.reviewCount))")
-                    .font(.system(.title3, design: .rounded))
-                    .fontWeight(.semibold)
+                Text(viewModel.shopInfo.description)
+                    .font(.system(.subheadline, design: .rounded))
+                    .fontWeight(.light)
             }
-            
-            Text(viewModel.shopInfo.description)
-                .font(.system(.subheadline, design: .rounded))
-                .fontWeight(.light)
+            Spacer()
+            Image(systemName: "star.fill")
+                .foregroundColor(.mainTheme)
+                .font(.system(size: 22))
+            Text("\(viewModel.shopInfo.rate, specifier: "%.1f")(\(viewModel.shopInfo.reviewCount))")
+                .font(.system(.title2, design: .rounded))
+                .fontWeight(.semibold)
         }.padding(.horizontal, 10)
     }
     var Location : some View {
@@ -94,39 +110,59 @@ struct CouponInfoView: View {
                     .font(.system(.title3, design: .rounded))
                     .fontWeight(.semibold)
                 Spacer()
-                Button {
-                    // Open Map
-                    if UIApplication.shared.canOpenURL(viewModel.mapLink!) {
-                        UIApplication.shared.open(viewModel.mapLink!, options: [:], completionHandler: nil)
+                if !viewModel.invalidLocation {
+                    Button {
+                        // Open Map
+                        if UIApplication.shared.canOpenURL(viewModel.mapLink!) {
+                            UIApplication.shared.open(viewModel.mapLink!, options: [:], completionHandler: nil)
+                        }
+                        
+                        // Temp value for test
+                        //viewModel.region.center.latitude = 35.868847
+                        //viewModel.region.center.longitude = 128.597108
+                    } label : {
+                        HStack(spacing: 3) {
+                            Text("Open in Map")
+                                .fontWeight(.semibold)
+                            Image(systemName: "arrowshape.turn.up.forward.fill")
+                        }.font(.system(.footnote, design: .rounded))
+                        .foregroundColor(.black)
                     }
-                } label : {
-                    HStack(spacing: 3) {
-                        Text("Open in Map")
-                            .fontWeight(.semibold)
-                        Image(systemName: "arrowshape.turn.up.forward.fill")
-                    }.font(.system(.footnote, design: .rounded))
-                    .foregroundColor(.black)
                 }
             }
             
-            Map(coordinateRegion:  $viewModel.region,
-                interactionModes: .all,
-                showsUserLocation: true,
-                userTrackingMode: .none,
-                annotationItems: viewModel.coor) { place in
-//                annotationItems: [Place(name : viewModel.shopInfo.name,
-//                                        latitude : Double(viewModel.latitude),
-//                                        longitude: Double(viewModel.longtitude)
-//                                       )]) { place in
-                    MapMarker(coordinate: place.coordinate)
-                }.frame(height : UIScreen.main.bounds.height * 0.15)
-                .cornerRadius(20)
-            
+            if viewModel.invalidLocation {
+                Text("Sorry, We can't fetch store location")
+                    .fontWeight(.semibold)
+                    .foregroundColor(.white)
+                    .frame(
+                        width : UIScreen.main.bounds.width * 0.95,
+                        height : UIScreen.main.bounds.height * 0.15)
+                    .background(
+                        Image("tempMap")
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .overlay(Color.black.opacity(0.7))
+                    )
+                    .cornerRadius(20)
+            } else {
+                Map(coordinateRegion:  $viewModel.region,
+                    interactionModes: .all,
+                    showsUserLocation: true,
+                    userTrackingMode: .none,
+                    annotationItems: viewModel.coor) { place in
+                        MapMarker(coordinate: place.coordinate)
+                    }
+                    .frame(height : UIScreen.main.bounds.height * 0.15)
+                    .cornerRadius(20)
+            }
+                
             HStack {
                 Spacer()
                 Text(viewModel.shopInfo.location)
                     .font(.system(.caption, design: .rounded))
                     .fontWeight(.light)
+                    .padding(.trailing, 10)
             }
         }.padding(.horizontal, 10)
     }
@@ -301,7 +337,7 @@ struct CouponInfoView: View {
                         }.padding(.leading, 10)
                     }
                 
-                    // Add Review
+                    // Add Review Btn
                     Spacer()
                     HStack {
                         Spacer()
