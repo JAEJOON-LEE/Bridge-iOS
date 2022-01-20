@@ -85,22 +85,16 @@ struct CouponInfoView: View {
         }
     }
     var Title : some View {
-        HStack(spacing: 3) {
+        HStack {
             VStack(alignment : .leading, spacing : 10) {
                 Text(viewModel.shopInfo.name)
-                    .font(.system(.title2, design: .rounded))
+                    .font(.system(.title, design: .rounded))
                     .fontWeight(.bold)
                 Text(viewModel.shopInfo.description)
                     .font(.system(.subheadline, design: .rounded))
                     .fontWeight(.light)
             }
             Spacer()
-            Image(systemName: "star.fill")
-                .foregroundColor(.mainTheme)
-                .font(.system(size: 22))
-            Text("\(viewModel.shopInfo.rate, specifier: "%.1f")(\(viewModel.shopInfo.reviewCount))")
-                .font(.system(.title2, design: .rounded))
-                .fontWeight(.semibold)
         }.padding(.horizontal, 10)
     }
     var Location : some View {
@@ -132,7 +126,8 @@ struct CouponInfoView: View {
             }
             
             if viewModel.invalidLocation {
-                Text("Sorry, We can't fetch store location")
+                Text("Sorry, We can't fetch location of store")
+                    .font(.system(.body, design: .rounded))
                     .fontWeight(.semibold)
                     .foregroundColor(.white)
                     .frame(
@@ -166,9 +161,37 @@ struct CouponInfoView: View {
             }
         }.padding(.horizontal, 10)
     }
+    var Reviews : some View {
+        VStack(alignment : .leading, spacing : 3) {
+            HStack {
+                Text("Reviews (\(viewModel.shopInfo.reviewCount))")
+                    .font(.system(.title3, design: .rounded))
+                    .fontWeight(.semibold)
+                Spacer()
+                NavigationLink {
+                    ReviewsView
+                } label : {
+                    Text("See more")
+                        .font(.system(.footnote, design: .rounded))
+                        .fontWeight(.semibold)
+                }
+            }.padding(.bottom, 5)
+            
+            ForEach(viewModel.reviews.prefix(3), id : \.self) { review in
+                HStack {
+                    Image(systemName : "person.fill")
+                    Text(review.content).fontWeight(.light)
+                }.padding(.leading, 10)
+            }
+        }.onAppear { viewModel.getReview() }
+        .padding(.horizontal, 10)
+    }
     var ReviewsView : some View {
         ScrollView {
             VStack {
+                if viewModel.reviews.isEmpty {
+                    Spacer()
+                }
                 ForEach(viewModel.reviews, id : \.self) { review in
                     HStack(spacing : 10) {
                         URLImage(
@@ -207,13 +230,41 @@ struct CouponInfoView: View {
                                 .fontWeight(.medium)
                         }
                         Spacer()
-                        Image(systemName: "star.fill")
-                            .foregroundColor(.mainTheme)
-                        Text("\(review.rate, specifier: "%.1f")")
-                            .font(.system(.title3, design: .rounded))
-                            .fontWeight(.semibold)
+//                        Image(systemName: "star.fill")
+//                            .foregroundColor(.mainTheme)
+//                        Text("\(review.rate, specifier: "%.1f")")
+//                            .font(.system(.title3, design: .rounded))
+//                            .fontWeight(.semibold)
                     }.padding(.horizontal, 20)
                     
+                    // 리뷰 수정
+                    if viewModel.isModifying && review.reviewId == viewModel.selectedReview {
+                        HStack {
+                            TextField("", text: $viewModel.modifyText)
+                                .disableAutocorrection(true)
+                                .padding(.horizontal, 10)
+                                .frame(minWidth: UIScreen.main.bounds.width * 0.5, maxWidth: .infinity)
+                                .frame(height : UIScreen.main.bounds.height * 0.04)
+                                .background(Color.white)
+                                .cornerRadius(10)
+                                .shadow(radius: 1)
+                            Button {
+                                withAnimation {
+                                    viewModel.isModifying = false
+                                    viewModel.modifyReview()
+                                    viewModel.modifyText = ""
+                                }
+                            } label : {
+                                Text("Done")
+                                    .fontWeight(.semibold)
+                                    .padding(5)
+                                    .foregroundColor(.white)
+                                    .background(viewModel.modifyText.isEmpty ? Color.gray : Color.mainTheme)
+                                    .cornerRadius(10)
+                            }.disabled(viewModel.modifyText.isEmpty)
+                        }.padding(.horizontal, 20)
+                    }
+                        
                     Color.systemDefaultGray
                         .frame(width : UIScreen.main.bounds.width * 0.9, height : 5)
                         .padding(.vertical, 5)
@@ -233,7 +284,38 @@ struct CouponInfoView: View {
                 }
             }
         }.navigationTitle(Text("Reviews"))
+        .onDisappear {
+            viewModel.isModifying = false
+            viewModel.modifyText = ""
+        }
     }
+    var AddReview : some View {
+        HStack {
+            TextField("", text: $viewModel.reviewText)
+                .disableAutocorrection(true)
+                .padding(.horizontal, 10)
+                .frame(minWidth: UIScreen.main.bounds.width * 0.5, maxWidth: .infinity)
+                .frame(height : UIScreen.main.bounds.height * 0.04)
+                .background(Color.white)
+                .cornerRadius(10)
+            Button {
+                viewModel.addReview()
+                viewModel.reviewText = ""
+            } label : {
+                Text("Add Review")
+                    .font(.system(.footnote, design: .rounded))
+                    .fontWeight(.semibold)
+            }.padding(3)
+            .padding(.vertical, 5)
+            .background(viewModel.reviewText == "" ? Color.gray : Color.mainTheme)
+            .foregroundColor(.white)
+            .cornerRadius(10)
+            .disabled(viewModel.reviewText == "")
+        }.padding()
+        .foregroundColor(.gray)
+        .background(Color.systemDefaultGray)
+    }
+    /*
     var CountingStars : some View {
         VStack {
             HStack {
@@ -276,7 +358,7 @@ struct CouponInfoView: View {
                     }
                 }
                 HStack(spacing : 0) {
-                    ForEach(viewModel.rateArray, id: \.self) { i in
+                    ForEach([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], id: \.self) { i in
                         Rectangle()
                             .frame(width : 20, height : 40)
                             .foregroundColor(.systemDefaultGray)
@@ -284,7 +366,7 @@ struct CouponInfoView: View {
                     }
                 }
                 HStack(spacing : 0) {
-                    ForEach(viewModel.rateArray, id: \.self) { i in
+                    ForEach([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], id: \.self) { i in
                         Rectangle()
                             .frame(width : 20, height : 40)
                             .foregroundColor(.systemDefaultGray.opacity(0.00001))
@@ -316,79 +398,42 @@ struct CouponInfoView: View {
         .background(Color.systemDefaultGray)
         .cornerRadius(15)
     }
+    */
     
     var body: some View {
-        ZStack {
-            VStack {
-                StoreImages
-                Title
-                Color.systemDefaultGray
-                    .frame(width : UIScreen.main.bounds.width * 0.9, height : 5)
-                Location
-                Color.systemDefaultGray
-                    .frame(width : UIScreen.main.bounds.width * 0.9, height : 5)
-                
-                // Review
-                VStack(alignment : .leading, spacing : 3) {
-                    HStack {
-                        Text("Reviews (\(viewModel.shopInfo.reviewCount))")
-                            .font(.system(.title3, design: .rounded))
-                            .fontWeight(.semibold)
-                        Spacer()
-                        NavigationLink {
-                            ReviewsView
-                        } label : {
-                            Text("See more")
-                        }
-                    }.padding(.bottom, 5)
-                    
-                    ForEach(viewModel.reviews.prefix(3), id : \.self) { review in
-                        HStack {
-                            Image(systemName : "person.fill")
-                            Text(review.content).fontWeight(.light)
-                        }.padding(.leading, 10)
-                    }
-                
-                    // Add Review Btn
-                    Spacer()
-                    HStack {
-                        Spacer()
-                        Button {
-                            withAnimation { viewModel.showAddReview = true }
-                        } label : {
-                            HStack {
-                                Image(systemName: "pencil.circle")
-                                Text("Add Review")
-                                    .fontWeight(.semibold)
-                            }.padding(7)
-                            .background(Color.mainTheme)
-                            .foregroundColor(.white)
-                            .cornerRadius(20)
-                        }
-                    }
-                    Spacer()
-                }.onAppear { viewModel.getReview() }
-                .padding(.horizontal, 10)
-            }.padding()
-            .navigationTitle(Text(viewModel.shopInfo.name))
-            .actionSheet(isPresented: $viewModel.showReviewAction) {
-                ActionSheet(title: Text("Review"),
-                            buttons: [
-                                .default(Text("Modify Review"), action: {
-                                    //print("modify \(viewModel.selectedReview)")
-                                    viewModel.modifyReview()
-                                }),
-                                .destructive(Text("Delete Review"), action: {
-                                    //print("delete \(viewModel.selectedReview)")
-                                    viewModel.deleteReview()
-                                }),
-                                .cancel()
-                            ]
-                )
-            }
-            .overlay(Color.black.opacity(viewModel.showAddReview ? 0.7 : 0).edgesIgnoringSafeArea(.all))
-         
-            if viewModel.showAddReview { CountingStars }
+        VStack {
+            StoreImages
+            Title
+            Color.systemDefaultGray
+                .frame(width : UIScreen.main.bounds.width * 0.9, height : 5)
+            Location
+            Color.systemDefaultGray
+                .frame(width : UIScreen.main.bounds.width * 0.9, height : 5)
+            Reviews
+            Spacer()
+            AddReview
+        }
+        .navigationTitle(Text(viewModel.shopInfo.name))
+        .actionSheet(isPresented: $viewModel.showReviewAction) {
+            ActionSheet(title: Text("Review"),
+                        buttons: [
+                            .default(Text("Modify Review"), action: {
+                                //print("modify \(viewModel.selectedReview)")
+                                //viewModel.modifyReview()
+                                withAnimation { viewModel.isModifying = true }
+                            }),
+                            .destructive(Text("Delete Review"), action: {
+                                //print("delete \(viewModel.selectedReview)")
+                                viewModel.deleteReview()
+                            }),
+                            .cancel()
+                        ]
+            )
+        }
+        .alert(isPresented: $viewModel.addReviewDone) {
+            Alert(title: Text("Add Review Done"),
+                  dismissButton: .default(Text("OK"))
+            )
         }
     }
 }

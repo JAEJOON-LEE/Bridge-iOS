@@ -180,47 +180,48 @@ struct CouponView: View {
             if viewModel.shopsRandom.isEmpty {
                 Spacer().frame(height: UIScreen.main.bounds.height * 0.2)
             }
-            HStack {
-                Spacer()
-                ForEach(viewModel.shopsRandom.prefix(2), id : \.self) { shop in
-                    NavigationLink(destination :
-                        CouponInfoView(
-                            memberId : viewModel.memberInfo.memberId,
-                            viewModel:
-                                CouponInfoViewModel(shop.shopId, image : shop.image))
-                    ) {
-                        VStack {
-                            URLImage(
-                                URL(string : shop.image) ??
-                                URL(string: "https://static.thenounproject.com/png/741653-200.png")!
-                            ) { image in
-                                image
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                            }
-                            //Color.systemDefaultGray // temp
-                            .frame(width : UIScreen.main.bounds.width * 0.33,
-                                   height: UIScreen.main.bounds.height * 0.12)
-                            .cornerRadius(10)
-                            Text(shop.name)
-                                .fontWeight(.semibold)
-                                .foregroundColor(.black)
-                                .padding(.bottom, 3)
-                            HStack(spacing :3) {
-                                Text(shop.benefit)
-                                    .foregroundColor(.mainTheme)
-                                Spacer()
-                                Image(systemName : "text.bubble.fill")
-                                Text("\(shop.reviewCount)")
-                            }
-                            .frame(width : UIScreen.main.bounds.width * 0.3)
-                            .foregroundColor(.secondary)
-                            .font(.system(size: 9))
-                        }.frame(width: UIScreen.main.bounds.width * 0.4, height: UIScreen.main.bounds.height * 0.2)
+            ScrollView(.horizontal, showsIndicators: true) {
+                HStack {
+                    ForEach(viewModel.shopsRandom, id : \.self) { shop in
+                        NavigationLink(destination :
+                            CouponInfoView(
+                                memberId : viewModel.memberInfo.memberId,
+                                viewModel:
+                                    CouponInfoViewModel(shop.shopId, image : shop.image))
+                        ) {
+                            VStack {
+                                URLImage(
+                                    URL(string : shop.image) ??
+                                    URL(string: "https://static.thenounproject.com/png/741653-200.png")!
+                                ) { image in
+                                    image
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fill)
+                                }
+                                //Color.systemDefaultGray // temp
+                                .frame(width : UIScreen.main.bounds.width * 0.33,
+                                       height: UIScreen.main.bounds.height * 0.12)
+                                .cornerRadius(10)
+                                Text(shop.name)
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(.black)
+                                    .padding(.bottom, 3)
+                                HStack(spacing :3) {
+                                    Text(shop.benefit)
+                                        .foregroundColor(.mainTheme)
+                                    Spacer()
+                                    Image(systemName : "text.bubble.fill")
+                                    Text("\(shop.reviewCount)")
+                                }
+                                .frame(width : UIScreen.main.bounds.width * 0.3)
+                                .foregroundColor(.secondary)
+                                .font(.system(size: 9))
+                            }.frame(width: UIScreen.main.bounds.width * 0.4, height: UIScreen.main.bounds.height * 0.2)
+                        }
                     }
                 }
-                Spacer()
             }
+            
             Color.systemDefaultGray
                 .frame(width : UIScreen.main.bounds.width * 0.9, height : 5)
                 .padding(.vertical, 10)

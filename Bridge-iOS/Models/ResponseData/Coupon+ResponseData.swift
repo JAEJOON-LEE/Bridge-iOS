@@ -15,7 +15,7 @@ struct ShopList : Codable {
 struct Shop : Codable, Hashable {
     var shopId : Int
     var name : String
-    var rate : Float
+    //var rate : Float
     var reviewCount : Int
     var benefit : String
     var image : String
@@ -29,7 +29,7 @@ struct ShopInfo : Codable {
     var coordinate : String
     var description : String
     var oneLineDescription : String
-    var rate : Float
+    //var rate : Float
     var reviewCount : Int
     var benefit : String
     var images : [ShopImage]
@@ -47,7 +47,7 @@ struct ReviewList : Codable {
 struct Review : Codable, Hashable {
     var reviewId : Int
     var content : String
-    var rate : Float
+    //var rate : Float
     var createdAt : String
     var member : Member
 }

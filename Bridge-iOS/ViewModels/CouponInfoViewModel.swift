@@ -28,7 +28,7 @@ final class CouponInfoViewModel : ObservableObject {
                                             coordinate: "",
                                             description: "",
                                             oneLineDescription: "",
-                                            rate: 0.0,
+                                            //rate: 0.0,
                                             reviewCount: 0,
                                             benefit: "",
                                             images: []
@@ -38,10 +38,11 @@ final class CouponInfoViewModel : ObservableObject {
     
     @Published var showReviewAction : Bool = false
     @Published var selectedReview : Int = -1
+    @Published var isModifying : Bool = false
+    @Published var modifyText : String = ""
     @Published var reviewIndexToDelete = 1000
     
-    @Published var showAddReview : Bool = false
-    @Published var reviewRate : Float = 5
+    @Published var addReviewDone : Bool = false
     @Published var reviewText : String = ""
     
     @Published var isImageTap : Bool = false
@@ -61,7 +62,6 @@ final class CouponInfoViewModel : ObservableObject {
     
     private var subscription = Set<AnyCancellable>()
     
-    let rateArray = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     let shopId : Int
     let shopImage : String
     
@@ -150,7 +150,8 @@ final class CouponInfoViewModel : ObservableObject {
                 }
             } receiveValue: { [weak self] (recievedValue : [Review]) in
                 //print(recievedValue)
-                self?.reviews.append(contentsOf: recievedValue)
+                if self?.lastReviewId == 0 { self?.reviews = recievedValue }
+                else { self?.reviews.append(contentsOf: recievedValue) }
             }.store(in: &subscription)
     }
     
@@ -160,11 +161,21 @@ final class CouponInfoViewModel : ObservableObject {
         
         AF.request(url,
                    method: .post,
-                   parameters: [ "rate" : reviewRate,
-                                 "content" : reviewText ],
-                   encoding: URLEncoding.default,
+                   parameters: [ "content" : reviewText ],
+                   encoder: JSONParameterEncoder.prettyPrinted,
                    headers: header)
-            .responseJSON { response in print(response) }
+            .responseJSON { [weak self] response in
+                print(response)
+                guard let statusCode = response.response?.statusCode else { return }
+                switch statusCode {
+                case 500 :
+                    print("Add Review Fail : \(statusCode)")
+                default :
+                    print("Add Review Done : \(statusCode)")
+                    self?.addReviewDone = true
+                    self?.getReview()
+                }
+            }
     }
     
     func modifyReview() {
@@ -173,12 +184,19 @@ final class CouponInfoViewModel : ObservableObject {
         
         AF.request(url,
                    method: .post,
-                   parameters: ["rate" : reviewRate,
-                                "content" : reviewText ],
-                   encoding: URLEncoding.default,
+                   parameters: [ "content" : modifyText ],
+                   encoder: JSONParameterEncoder.prettyPrinted,
                    headers: header)
-            .responseJSON { response in
+            .responseJSON { [weak self] response in
                 print(response)
+                guard let statusCode = response.response?.statusCode else { return }
+                switch statusCode {
+                case 500 :
+                    print("Modify Review Fail : \(statusCode)")
+                default :
+                    print("Modify Review Done : \(statusCode)")
+                    self?.getReview()
+                }
             }
     }
     
@@ -190,8 +208,9 @@ final class CouponInfoViewModel : ObservableObject {
                    method: .delete,
                    encoding: URLEncoding.default,
                    headers: header)
-            .responseJSON { response in
+            .responseJSON { [weak self] response in
                 print(response)
+                self?.getReview()
             }
     }
 }
