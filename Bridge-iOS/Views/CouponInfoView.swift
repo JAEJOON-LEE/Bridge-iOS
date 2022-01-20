@@ -85,7 +85,7 @@ struct CouponInfoView: View {
         }
     }
     var Title : some View {
-        HStack {
+        HStack(spacing : 3) {
             VStack(alignment : .leading, spacing : 10) {
                 Text(viewModel.shopInfo.name)
                     .font(.system(.title, design: .rounded))
@@ -95,10 +95,18 @@ struct CouponInfoView: View {
                     .fontWeight(.light)
             }
             Spacer()
+            Image(systemName : "text.bubble.fill")
+                .font(.system(size: 20))
+            Text("\(viewModel.reviews.count)")
+                .font(.system(size: 20, design: .rounded))
+                .fontWeight(.semibold)
+                .padding(.trailing, 5)
         }.padding(.horizontal, 10)
     }
     var Location : some View {
         VStack {
+            Color.systemDefaultGray
+                .frame(width : UIScreen.main.bounds.width * 0.9, height : 5)
             HStack {
                 Text("Location")
                     .font(.system(.title3, design: .rounded))
@@ -110,10 +118,6 @@ struct CouponInfoView: View {
                         if UIApplication.shared.canOpenURL(viewModel.mapLink!) {
                             UIApplication.shared.open(viewModel.mapLink!, options: [:], completionHandler: nil)
                         }
-                        
-                        // Temp value for test
-                        //viewModel.region.center.latitude = 35.868847
-                        //viewModel.region.center.longitude = 128.597108
                     } label : {
                         HStack(spacing: 3) {
                             Text("Open in Map")
@@ -125,6 +129,7 @@ struct CouponInfoView: View {
                 }
             }
             
+            // Maps
             if viewModel.invalidLocation {
                 Text("Sorry, We can't fetch location of store")
                     .font(.system(.body, design: .rounded))
@@ -152,15 +157,18 @@ struct CouponInfoView: View {
                     .cornerRadius(20)
             }
                 
+            // Address
             HStack {
                 Spacer()
                 Text(viewModel.shopInfo.location)
                     .font(.system(.caption, design: .rounded))
-                    .fontWeight(.light)
+                    .fontWeight(.medium)
                     .padding(.trailing, 10)
             }
         }.padding(.horizontal, 10)
+        .padding(.bottom, 10)
     }
+    /*
     var Reviews : some View {
         VStack(alignment : .leading, spacing : 3) {
             HStack {
@@ -186,108 +194,121 @@ struct CouponInfoView: View {
         }.onAppear { viewModel.getReview() }
         .padding(.horizontal, 10)
     }
+    */
     var ReviewsView : some View {
-        ScrollView {
-            VStack {
-                if viewModel.reviews.isEmpty {
-                    Spacer()
-                }
-                ForEach(viewModel.reviews, id : \.self) { review in
-                    HStack(spacing : 10) {
-                        URLImage(
-                            URL(string : review.member.profileImage) ??
-                            URL(string: "https://static.thenounproject.com/png/741653-200.png")!
-                        ) { image in
-                            image
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                        }.frame(
-                            width: UIScreen.main.bounds.width * 0.12,
-                            height: UIScreen.main.bounds.width * 0.12)
-                        .cornerRadius(10)
-                        VStack(alignment : .leading, spacing : 5) {
-                            HStack {
-                                Text(review.member.username)
-                                    .font(.system(.title3, design: .rounded))
-                                    .fontWeight(.semibold)
-                                    .minimumScaleFactor(0.01)
-                                Text(convertReturnedDateString(review.createdAt))
-                                    .font(.caption)
-                                    .fontWeight(.light)
-                                    .minimumScaleFactor(0.01)
-                                Spacer()
-                                
-                                if memberId == review.member.memberId {
-                                    Button {
-                                        viewModel.selectedReview = review.reviewId
-                                        viewModel.showReviewAction = true
-                                    } label : {
-                                        Image(systemName : "ellipsis")
-                                    }
+        VStack {
+            // Title
+            HStack {
+                Text("Reviews (\(viewModel.shopInfo.reviewCount))")
+                    .font(.system(.title3, design: .rounded))
+                    .fontWeight(.semibold)
+                Spacer()
+//                NavigationLink {
+//                    //ReviewsView
+//                } label : {
+//                    Text("See more")
+//                        .font(.system(.footnote, design: .rounded))
+//                        .fontWeight(.semibold)
+//                }
+            }
+            
+            // Contents
+            ForEach(viewModel.reviews, id : \.self) { review in
+                HStack(spacing : 10) {
+                    URLImage(
+                        URL(string : review.member.profileImage) ??
+                        URL(string: "https://static.thenounproject.com/png/741653-200.png")!
+                    ) { image in
+                        image
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                    }.frame(
+                        width: UIScreen.main.bounds.width * 0.12,
+                        height: UIScreen.main.bounds.width * 0.12)
+                    .cornerRadius(10)
+                    VStack(alignment : .leading, spacing : 5) {
+                        HStack {
+                            Text(review.member.username)
+                                .font(.system(.title3, design: .rounded))
+                                .fontWeight(.semibold)
+                                .minimumScaleFactor(0.01)
+                            Text(convertReturnedDateString(review.createdAt))
+                                .font(.caption)
+                                .fontWeight(.light)
+                                .minimumScaleFactor(0.01)
+                            Spacer()
+                            
+                            if memberId == review.member.memberId {
+                                Button {
+                                    viewModel.selectedReview = review.reviewId
+                                    viewModel.showReviewAction = true
+                                } label : {
+                                    Image(systemName : "ellipsis")
                                 }
                             }
-                            Text(review.content)
-                                .fontWeight(.medium)
                         }
-                        Spacer()
-//                        Image(systemName: "star.fill")
-//                            .foregroundColor(.mainTheme)
-//                        Text("\(review.rate, specifier: "%.1f")")
-//                            .font(.system(.title3, design: .rounded))
-//                            .fontWeight(.semibold)
-                    }.padding(.horizontal, 20)
-                    
-                    // 리뷰 수정
-                    if viewModel.isModifying && review.reviewId == viewModel.selectedReview {
-                        HStack {
-                            TextField("", text: $viewModel.modifyText)
-                                .disableAutocorrection(true)
-                                .padding(.horizontal, 10)
-                                .frame(minWidth: UIScreen.main.bounds.width * 0.5, maxWidth: .infinity)
-                                .frame(height : UIScreen.main.bounds.height * 0.04)
-                                .background(Color.white)
-                                .cornerRadius(10)
-                                .shadow(radius: 1)
-                            Button {
-                                withAnimation {
-                                    viewModel.isModifying = false
-                                    viewModel.modifyReview()
-                                    viewModel.modifyText = ""
-                                }
-                            } label : {
-                                Text("Done")
-                                    .fontWeight(.semibold)
-                                    .padding(5)
-                                    .foregroundColor(.white)
-                                    .background(viewModel.modifyText.isEmpty ? Color.gray : Color.mainTheme)
-                                    .cornerRadius(10)
-                            }.disabled(viewModel.modifyText.isEmpty)
-                        }.padding(.horizontal, 20)
+                        Text(review.content)
+                            .fontWeight(.medium)
                     }
-                        
-                    Color.systemDefaultGray
-                        .frame(width : UIScreen.main.bounds.width * 0.9, height : 5)
-                        .padding(.vertical, 5)
+                    Spacer()
                 }
                 
-                // review 20개 이상 있을 경우
-                if viewModel.reviews.count == 20 {
-                    Button {
-                        viewModel.lastReviewId = viewModel.reviews.last?.reviewId ?? 0
-                        viewModel.getReview()
-                    } label : {
-                        Text("Load more")
-                            .foregroundColor(.mainTheme)
-                            .font(.system(.title2, design: .rounded))
-                            .fontWeight(.semibold)
+                // 리뷰 수정
+                if viewModel.isModifying && review.reviewId == viewModel.selectedReview {
+                    HStack {
+                        TextField("", text: $viewModel.modifyText)
+                            .disableAutocorrection(true)
+                            .padding(.horizontal, 10)
+                            .frame(minWidth: UIScreen.main.bounds.width * 0.5, maxWidth: .infinity)
+                            .frame(height : UIScreen.main.bounds.height * 0.04)
+                            .background(Color.white)
+                            .cornerRadius(10)
+                        Button {
+                            withAnimation {
+                                viewModel.isModifying = false
+                                viewModel.modifyReview()
+                                viewModel.modifyText = ""
+                            }
+                        } label : {
+                            Text("Done")
+                                .fontWeight(.semibold)
+                                .padding(5)
+                                .padding(.vertical, 3)
+                                .foregroundColor(.white)
+                                .background(viewModel.modifyText.isEmpty ? Color.gray : Color.mainTheme)
+                                .cornerRadius(10)
+                        }.disabled(viewModel.modifyText.isEmpty)
                     }
                 }
+                
+                Color.darkGray.opacity(0.1)
+                    .frame(width : UIScreen.main.bounds.width * 0.9, height : 3)
+                    .cornerRadius(5)
+                    .padding(.vertical, 3)
+            }.onDisappear {
+                viewModel.isModifying = false
+                viewModel.modifyText = ""
             }
-        }.navigationTitle(Text("Reviews"))
-        .onDisappear {
-            viewModel.isModifying = false
-            viewModel.modifyText = ""
-        }
+            
+            // Button for load more
+            if viewModel.reviews.count == 20 {
+                Button {
+                    viewModel.lastReviewId = viewModel.reviews.last?.reviewId ?? 0
+                    viewModel.getReview()
+                } label : {
+                    Text("Load more")
+                        .foregroundColor(.mainTheme)
+                        .font(.system(.title2, design: .rounded))
+                        .fontWeight(.semibold)
+                }
+            }
+        }.onAppear { viewModel.getReview() }
+        .padding()
+        .frame(width: UIScreen.main.bounds.width * 0.95)
+        .background(Color.systemDefaultGray)
+        .cornerRadius(15)
+        .shadow(color: .gray.opacity(0.6), radius: 2, x: 0, y: 2)
+        .padding(.bottom, 15)
     }
     var AddReview : some View {
         HStack {
@@ -401,17 +422,14 @@ struct CouponInfoView: View {
     */
     
     var body: some View {
-        VStack {
-            StoreImages
-            Title
-            Color.systemDefaultGray
-                .frame(width : UIScreen.main.bounds.width * 0.9, height : 5)
-            Location
-            Color.systemDefaultGray
-                .frame(width : UIScreen.main.bounds.width * 0.9, height : 5)
-            Reviews
-            Spacer()
-            AddReview
+        VStack(spacing : 0) {
+            ScrollView {
+                StoreImages
+                Title
+                Location
+                ReviewsView
+            }
+            if !viewModel.isModifying { AddReview }
         }
         .navigationTitle(Text(viewModel.shopInfo.name))
         .actionSheet(isPresented: $viewModel.showReviewAction) {
