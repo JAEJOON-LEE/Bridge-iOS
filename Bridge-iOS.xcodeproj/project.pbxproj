@@ -56,6 +56,7 @@
 		1ABDEA5326F3B9310031DF0B /* SubmitButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ABDEA5226F3B9310031DF0B /* SubmitButtonStyle.swift */; };
 		1AD008652711F50B00CAAE5B /* UsedWritingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD008642711F50B00CAAE5B /* UsedWritingView.swift */; };
 		1AD9CC4D273EFD9B006C2FB7 /* View+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD9CC4C273EFD9B006C2FB7 /* View+Extension.swift */; };
+		1ADA2869279AC2540069FB69 /* SwiftUIPullToRefresh in Frameworks */ = {isa = PBXBuildFile; productRef = 1ADA2868279AC2540069FB69 /* SwiftUIPullToRefresh */; };
 		1ADD9DDC2703220F008342A7 /* SignInViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADD9DDB2703220F008342A7 /* SignInViewModel.swift */; };
 		1ADD9DDF27032237008342A7 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 1ADD9DDE27032237008342A7 /* Alamofire */; };
 		1ADD9DE4270325CC008342A7 /* SignIn+ResponseData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADD9DE3270325CC008342A7 /* SignIn+ResponseData.swift */; };
@@ -212,6 +213,7 @@
 			files = (
 				1ADD9DEB270363A1008342A7 /* URLImage in Frameworks */,
 				1ADD9DED270363A1008342A7 /* URLImageStore in Frameworks */,
+				1ADA2869279AC2540069FB69 /* SwiftUIPullToRefresh in Frameworks */,
 				6DE69904278A98B00048EB76 /* FirebaseMessaging in Frameworks */,
 				6DE69902278A98B00048EB76 /* FirebaseAnalytics in Frameworks */,
 				1ADD9DDF27032237008342A7 /* Alamofire in Frameworks */,
@@ -433,6 +435,7 @@
 				1ADD9DEC270363A1008342A7 /* URLImageStore */,
 				6DE69901278A98B00048EB76 /* FirebaseAnalytics */,
 				6DE69903278A98B00048EB76 /* FirebaseMessaging */,
+				1ADA2868279AC2540069FB69 /* SwiftUIPullToRefresh */,
 			);
 			productName = "Bridge-iOS";
 			productReference = 1AA8B40926F32AF500C28E02 /* Bridge-iOS.app */;
@@ -465,6 +468,7 @@
 				1ADD9DDD27032237008342A7 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				1ADD9DE9270363A0008342A7 /* XCRemoteSwiftPackageReference "url-image" */,
 				6DE69900278A98B00048EB76 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				1ADA2867279AC2530069FB69 /* XCRemoteSwiftPackageReference "swiftui-pull-to-refresh" */,
 			);
 			productRefGroup = 1AA8B40A26F32AF500C28E02 /* Products */;
 			projectDirPath = "";
@@ -781,6 +785,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		1ADA2867279AC2530069FB69 /* XCRemoteSwiftPackageReference "swiftui-pull-to-refresh" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/globulus/swiftui-pull-to-refresh";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 		1ADD9DDD27032237008342A7 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
@@ -808,6 +820,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		1ADA2868279AC2540069FB69 /* SwiftUIPullToRefresh */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1ADA2867279AC2530069FB69 /* XCRemoteSwiftPackageReference "swiftui-pull-to-refresh" */;
+			productName = SwiftUIPullToRefresh;
+		};
 		1ADD9DDE27032237008342A7 /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 1ADD9DDD27032237008342A7 /* XCRemoteSwiftPackageReference "Alamofire" */;

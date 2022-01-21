@@ -7,6 +7,7 @@
 
 import SwiftUI
 import URLImage
+import SwiftUIPullToRefresh
 
 struct HomeView : View {
     @StateObject private var viewModel : HomeViewModel
@@ -101,11 +102,6 @@ struct HomeView : View {
                     .font(.system(.title2, design : .rounded))
                     .fontWeight(.semibold)
                 Spacer()
-                Button {
-                    viewModel.getPosts()
-                } label : {
-                    Image(systemName: "arrow.clockwise")
-                }
             }
             .foregroundColor(.gray)
             .padding(20)
@@ -121,7 +117,10 @@ struct HomeView : View {
                     .fontWeight(.semibold)
                 Spacer()
             } else {
-                ScrollView {
+                RefreshableScrollView(onRefresh: { done in
+                    viewModel.getPosts()
+                    done()
+                }) {
                     LazyVStack {
                         ForEach(viewModel.Posts, id : \.self) { Post in
                             VStack {
