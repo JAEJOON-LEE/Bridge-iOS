@@ -167,7 +167,7 @@ final class BoardViewModel : ObservableObject {
 //        var date : Date
 //        isoFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssX"
 //        date = isoFormatter.date(from: time)!
-//        
+//
 //        return date;
 //    }
 }

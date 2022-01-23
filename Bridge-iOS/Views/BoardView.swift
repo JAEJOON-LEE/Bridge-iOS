@@ -8,6 +8,7 @@
 import SwiftUI
 import URLImage
 import Firebase
+import SwiftUIPullToRefresh
 
 //test
 //let ReceiverFCMToken = "cmVSK2fCfE-shqrUThTwe-:APA91bHiBs07yGWkHsGNF49cxzhuQ-Wa_vfCVT0RybUwHdhOJ8eGB2nkFiGFVDeKWDXZbJri0KrMZecw54yT9BO5A5zYLTQYnwva_hPZJ-_MTGrM2PRy-_k8o3_eboLYGFeiWAraCnTM"
@@ -21,8 +22,12 @@ struct BoardView : View {
     }
     
     var body : some View {
+        RefreshableScrollView(onRefresh: { done in
+            viewModel.getBoardPosts(token: viewModel.token)
+            done()
+        }){
         VStack {
-            List {
+                LazyVStack {
             
             //Hot Posts
                 
@@ -33,14 +38,14 @@ struct BoardView : View {
                                         memberId : viewModel.memberId))
                 ) {
                     HStack{
-                        Text("Hot board 😎")
+                        Text("        Hot board 😎")
                             .fontWeight(.semibold)
                             .foregroundColor(.mainTheme)
                         Spacer()
                         Button {
                             //                    viewModel.getPosts(token: viewModel.token)
                         } label : {
-                            Text("MORE")
+                            Text("MORE >         ")
                                 .foregroundColor(.gray)
                                 .fontWeight(.light)
                         }
@@ -68,35 +73,61 @@ struct BoardView : View {
             .frame(height:UIScreen.main.bounds.height * 1/7 )
             
             //Secret Posts
-                
-                Button {
-                } label : {
-                    HStack{
-                        Text("S-SPACE")
-                            .padding()
-                        Spacer()
-                        Text("ALL ANONYMOUS!")
-                            .padding()
-                    }
-                    .font(.system(size: 12, weight : .bold))
-                    .frame(width : UIScreen.main.bounds.width * 0.83, height : UIScreen.main.bounds.height * 0.02)
-                    .padding()
-                    .foregroundColor(.white)
-                    .background(Color.black)
-                    .cornerRadius(20)
-                    .shadow(radius: 3)
                     
-                }.background(
                     NavigationLink(
                         destination:
                             SecretBoardView(viewModel:
-                                        BoardViewModel(
-                                            accessToken: viewModel.token,
-                                            memberId : viewModel.memberId
-                                        )
-                            )
-                    ){ }
-                )
+                                                BoardViewModel(
+                                                    accessToken: viewModel.token,
+                                                    memberId : viewModel.memberId
+                                                )
+                                           )
+                    ){
+                        
+                        HStack{
+                            Text("S-SPACE")
+                                .padding()
+                            Spacer()
+                            Text("ALL ANONYMOUS!")
+                                .padding()
+                        }
+                        .font(.system(size: 12, weight : .bold))
+                        .frame(width : UIScreen.main.bounds.width * 0.83, height : UIScreen.main.bounds.height * 0.02)
+                        .padding()
+                        .foregroundColor(.white)
+                        .background(Color.black)
+                        .cornerRadius(20)
+                        .shadow(radius: 3)
+                    }
+                    
+//                Button {
+//                } label : {
+//                    HStack{
+//                        Text("S-SPACE")
+//                            .padding()
+//                        Spacer()
+//                        Text("ALL ANONYMOUS!")
+//                            .padding()
+//                    }
+//                    .font(.system(size: 12, weight : .bold))
+//                    .frame(width : UIScreen.main.bounds.width * 0.83, height : UIScreen.main.bounds.height * 0.02)
+//                    .padding()
+//                    .foregroundColor(.white)
+//                    .background(Color.black)
+//                    .cornerRadius(20)
+//                    .shadow(radius: 3)
+//
+//                }.background(
+//                    NavigationLink(
+//                        destination:
+//                            SecretBoardView(viewModel:
+//                                        BoardViewModel(
+//                                            accessToken: viewModel.token,
+//                                            memberId : viewModel.memberId
+//                                        )
+//                            )
+//                    ){ }
+//                )
                 
 ////            List {
 //                ForEach(viewModel.secretLists, id : \.self) { SecretList in
@@ -119,25 +150,30 @@ struct BoardView : View {
             //General Posts
 //            List {
                 ForEach(viewModel.postLists, id : \.self) { PostList in
-                    
-                    Button {
-                    } label : {
+                    NavigationLink(
+                        destination:
+                            PostInfoView(viewModel: PostInfoViewModel(
+                                            token: viewModel.token,
+                                            postId : PostList.postInfo.postId,
+                                            memberId : viewModel.memberId,
+                                            isMyPost : (viewModel.memberId == PostList.member?.memberId)))
+                    ){
                         GeneralPost(viewModel : GeneralPostViewModel(postList: PostList))
-                    }.background(
-                        NavigationLink(
-                            destination:
-                                PostInfoView(viewModel: PostInfoViewModel(
-                                                token: viewModel.token,
-                                                postId : PostList.postInfo.postId,
-                                                memberId : viewModel.memberId,
-                                                isMyPost : (viewModel.memberId == PostList.member?.memberId)))
-                        ){ }
-                    )
+                    }
                 }
-            }.listStyle(PlainListStyle()) // iOS 15 대응
-        }.onAppear {
+            }
+        }.listStyle(PlainListStyle()) // iOS 15 대응
+        }.overlay(
+            VStack(spacing : 0) {
+                Spacer()
+                LinearGradient(colors: [.white.opacity(0), .white], startPoint: .top, endPoint: .bottom)
+                    .frame(height : UIScreen.main.bounds.height * 0.1)
+                Color.white
+                    .frame(height : UIScreen.main.bounds.height * 0.05)
+            }.edgesIgnoringSafeArea(.bottom)
+        ).onAppear {
 //            sleep(30000)
-            self.setNotification() //test
+//            self.setNotification() //test
 //            self.sendMessageTouser(to: ReceiverFCMToken, title: "test fcm", body: "test")
             usleep(200000)
             viewModel.getBoardPosts(token: viewModel.token)
@@ -148,12 +184,12 @@ struct BoardView : View {
     }
     
     //test
-    func setNotification() -> Void {
-        let manager = LocalNotificationManager()
-        manager.requestPermission()
-        manager.addNotification(title: "Bridge")
-        manager.schedule()
-    }
+//    func setNotification() -> Void {
+//        let manager = LocalNotificationManager()
+//        manager.requestPermission()
+//        manager.addNotification(title: "Bridge")
+//        manager.schedule()
+//    }
     
 //    func sendMessageTouser(to token: String, title: String, body: String) {
 //            print("sendMessageTouser()")
