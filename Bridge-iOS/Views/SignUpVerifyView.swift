@@ -43,11 +43,11 @@ struct SignUpVerifyView: View {
             viewModel.VerifyEmail(email : viewModel.email, verifyCode : viewModel.verifyCode)
             
             if(viewModel.statusCode3 == 200 || viewModel.statusCode3 == 201){
-                viewModel.showSignUpFailAlert = false
-                isLinkActive = true
+//                viewModel.showSignUpFailAlert = false
+//                isLinkActive = true
             }else{
-                viewModel.showSignUpFailAlert = true
-                isLinkActive = false
+//                viewModel.showSignUpFailAlert = true
+//                isLinkActive = false
             }
 //            viewModel.SignUp(name : viewModel.name, email : viewModel.email, password : viewModel.password, role : viewModel.role, nickname : viewModel.nickname, description : viewModel.description, profileImage : viewModel.profileImage, verifyCode : viewModel.verifyCode)
         } label : {
@@ -62,7 +62,7 @@ struct SignUpVerifyView: View {
                         NavigationLink(
                             destination: SignUpAppendixView(viewModel: viewModel)
                                 .environmentObject(viewModel),
-                            isActive : $isLinkActive
+                            isActive : $viewModel.isSecondLinkActive
                         ) {
                             // label
                         }

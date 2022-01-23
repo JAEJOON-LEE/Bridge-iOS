@@ -85,7 +85,7 @@ struct SignUpAppendixView: View {
             }else{
                 isLinkActive = true
                 viewModel.showSignUpFailAlert = false
-                viewModel.SignUp(name : viewModel.name, email : viewModel.email, password : viewModel.password, role : "user", nickname : viewModel.nickname, description : viewModel.description, profileImage : viewModel.profileImage, verifyCode : viewModel.verifyCode)
+                viewModel.SignUp(name : viewModel.name, email : viewModel.email, password : viewModel.password, role : "user", nickname : viewModel.nickname, description : viewModel.description, recommenderUsername : "", profileImage : viewModel.profileImage, verifyCode : viewModel.verifyCode)
             }
         } label : {
             Text("Done")

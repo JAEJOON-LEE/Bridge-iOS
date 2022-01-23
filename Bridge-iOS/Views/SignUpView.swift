@@ -88,12 +88,13 @@ struct SignUpView: View {
     
     var nextButton : some View {
         Button {
-            if(viewModel.CheckValidation() == 1){
+            viewModel.CheckValidation()
+            if(viewModel.signUpDone == true){
                 viewModel.CheckDuplication(email: viewModel.email)
-                    if(viewModel.statusCode1 == 200 && viewModel.statusCode2 == 200){
-                        viewModel.showSignUpFailAlert = false
-                        isLinkActive = true
-                    }
+                usleep(300)
+//                if(viewModel.statusCode1 == 200 && viewModel.statusCode2 == 200){
+//                    viewModel.SendEmail(email: viewModel.email)
+//                }
                 
             //                    else if(viewModel.check == 1){
             //                        isLinkActive = false
@@ -109,7 +110,7 @@ struct SignUpView: View {
             NavigationLink(
                 destination: SignUpVerifyView(viewModel: viewModel)
                     .environmentObject(viewModel),
-                isActive : $isLinkActive
+                isActive : $viewModel.isFirstLinkActive
             ) {
                 // label
             }

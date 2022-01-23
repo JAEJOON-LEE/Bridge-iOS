@@ -33,6 +33,8 @@ final class SignUpViewModel : ObservableObject {
     @Published var statusCode2 = 0
     @Published var statusCode3 = 0
     @Published var isLinkActive = false
+    @Published var isFirstLinkActive = false
+    @Published var isSecondLinkActive = false
     
     private var subscription = Set<AnyCancellable>()
     
@@ -131,7 +133,7 @@ final class SignUpViewModel : ObservableObject {
     
     func CheckDuplication(email : String){
         
-        var checkDup = 0
+//        var checkDup = 0
         
         //유저네임 중복 확인
         AF.request("http://3.36.233.180:8080/members/usernames/\(name)",
@@ -142,17 +144,43 @@ final class SignUpViewModel : ObservableObject {
                 self.statusCode1 = response.response?.statusCode ?? 200
                 
                 print("username check = " + String(self.statusCode1))
+                usleep(300)
                 
-            if(self.statusCode1 == 409){
+            if(!(self.statusCode1 == 200 || self.statusCode1 == 201)){
                 self.showSignUpFailAlert = true
                 self.message = "the username is already enlisted"
                 print("duplicated user name")
 //                self.check = 1
-                checkDup = 0
+//                checkDup = 0
             }else{
                 self.showSignUpFailAlert = false
-                checkDup = 1
+//                checkDup = 1
 //                self.check = 0
+                //이메일 중복 확인
+                AF.request("http://3.36.233.180:8080/members/emails/\(email)",
+                           method: .get,
+                           encoding: URLEncoding.default)
+                    .responseString{ (response) in
+                        
+                    self.statusCode2 = response.response?.statusCode ?? 200
+                
+                    print("email check = " + String(self.statusCode2))
+                        usleep(300)
+                    if(!(self.statusCode2 == 200 || self.statusCode2 == 201)){
+                        self.showSignUpFailAlert = true
+                        self.message = "the email is already enlisted"
+                        print("duplicated email")
+        //                self.check = 1
+                        
+//                        checkDup = 0
+                    }else{
+                        self.showSignUpFailAlert = false
+                        self.SendEmail(email: email)
+                        self.isFirstLinkActive = true
+//                        checkDup = 1
+        //                self.check = 0
+                    }
+                }
             }
         }
 //        if(self.check == 1){
@@ -161,37 +189,13 @@ final class SignUpViewModel : ObservableObject {
 //            return
 //        }
         
-        //이메일 중복 확인
-        AF.request("http://3.36.233.180:8080/members/emails/\(email)",
-                   method: .get,
-                   encoding: URLEncoding.default)
-            .responseString{ (response) in
-                
-            self.statusCode2 = response.response?.statusCode ?? 200
-        
-            print("email check = " + String(self.statusCode2))
-            
-            if(self.statusCode2 == 409){
-                self.showSignUpFailAlert = true
-                self.message = "the email is already enlisted"
-                print("duplicated email")
-//                self.check = 1
-                
-                checkDup = 0
-            }else{
-                self.showSignUpFailAlert = false
-                checkDup = 1
-                
-                self.SendEmail(email: email)
-//                self.check = 0
-            }
-        }
 //        if(self.check == 1){
 ////            self.showSignUpFailAlert = true
 //            self.check = 0
 //            return
 //        }
-        print(checkDup)
+        
+        
 //        return checkDup
     }
     
@@ -260,7 +264,8 @@ final class SignUpViewModel : ObservableObject {
             switch self.statusCode3 {
                 case 200, 201 :
                     print("email verify =  \(self.statusCode3)")
-//                    self.showSignUpFailAlert = false
+                    self.showSignUpFailAlert = false
+                    self.isSecondLinkActive = true
 //                    self.signUpDone = true
                     checkVery = 1
                 default :
@@ -275,7 +280,7 @@ final class SignUpViewModel : ObservableObject {
     /* ------------------------------------------------------------------------------------------------*/
     
     /* ------------------------------------------------------------------------------------------------*/
-    func SignUp(name : String, email : String, password : String, role : String, nickname : String, description : String, profileImage : UIImage?, verifyCode : String) {
+    func SignUp(name : String, email : String, password : String, role : String, nickname : String, description : String, recommenderUsername : String, profileImage : UIImage?, verifyCode : String) {
         
         self.isLinkActive = false
 //        self.signUpDone = false
