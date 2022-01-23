@@ -8,12 +8,17 @@
 import SwiftUI
 import URLImage
 
+enum ActiveAlert {
+    case first, second, third
+}
+
 //@available(iOS 15.0, *)
 struct PostInfoView: View { // 게시글 상세 페이지
     @Environment(\.presentationMode) var presentationMode
     @StateObject private var viewModel : PostInfoViewModel
-    @StateObject var notificationManager = LocalNotificationManager()
+//    @StateObject var notificationManager = LocalNotificationManager()
     @State var isLinkActive : Bool = false
+    @State private var activeAlert : ActiveAlert = .first
     //    @FocusState private var focusField: Field?
     //    enum Field: Hashable {
     //        case commentfield
@@ -83,40 +88,40 @@ struct PostInfoView: View { // 게시글 상세 페이지
                 ScrollView(.vertical, showsIndicators: false) {
                     //Images
                     ScrollView(.horizontal, showsIndicators: true) {
-                        HStack {
-                            if(viewModel.isSecret == false){
-                                ForEach(viewModel.totalBoardPostDetail?.boardPostDetail.postImages! ?? [], id : \.self) { imageInfo in
-                                    URLImage(
-                                        URL(string : imageInfo.image) ??
-                                        URL(string: "https://static.thenounproject.com/png/741653-200.png")!
-                                    ) { image in
-                                        image
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fill)
-                                            .frame(width : viewModel.totalBoardPostDetail?.boardPostDetail.postImages!.count == 1 ? UIScreen.main.bounds.width * 0.93 : UIScreen.main.bounds.width * 0.58, height: viewModel.totalBoardPostDetail?.boardPostDetail.postImages!.count == 1 ? UIScreen.main.bounds.height * 0.3 : UIScreen.main.bounds.height * 0.23)
-                                            .cornerRadius(10)
-                                            .padding(.horizontal)
-                                    }
-                                    .frame(width : viewModel.totalBoardPostDetail?.boardPostDetail.postImages!.count == 1 ? UIScreen.main.bounds.width * 0.93 : UIScreen.main.bounds.width * 0.58, height: viewModel.totalBoardPostDetail?.boardPostDetail.postImages!.count == 1 ? UIScreen.main.bounds.height * 0.3 : UIScreen.main.bounds.height * 0.23)
-                                }
-                            }else {
-                                ForEach(viewModel.totalSecretPostDetail?.secretPostDetail.postImages! ?? [], id : \.self) { imageInfo in
-                                    URLImage(
-                                        URL(string : imageInfo.image) ??
-                                        URL(string: "https://static.thenounproject.com/png/741653-200.png")!
-                                    ) { image in
-                                        image
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fill)
-                                            .frame(width : viewModel.totalSecretPostDetail?.secretPostDetail.postImages! .count == 1 ? UIScreen.main.bounds.width * 0.93 : UIScreen.main.bounds.width * 0.58, height: viewModel.totalSecretPostDetail?.secretPostDetail.postImages!.count == 1 ? UIScreen.main.bounds.height * 0.3 : UIScreen.main.bounds.height * 0.23)
-                                            .cornerRadius(10)
-                                            .padding(.horizontal)
-                                    }
-                                    .frame(width : viewModel.totalSecretPostDetail?.secretPostDetail.postImages! .count == 1 ? UIScreen.main.bounds.width * 0.93 : UIScreen.main.bounds.width * 0.58, height: viewModel.totalSecretPostDetail?.secretPostDetail.postImages!.count == 1 ? UIScreen.main.bounds.height * 0.3 : UIScreen.main.bounds.height * 0.23)
-                                }
-                            }
-                        }
-                        .padding()
+//                        HStack {
+//                            if(viewModel.isSecret == false){
+//                                ForEach(viewModel.totalBoardPostDetail?.boardPostDetail.postImages! ?? [], id : \.self) { imageInfo in
+//                                    URLImage(
+//                                        URL(string : imageInfo.image) ??
+//                                        URL(string: "https://static.thenounproject.com/png/741653-200.png")!
+//                                    ) { image in
+//                                        image
+//                                            .resizable()
+//                                            .aspectRatio(contentMode: .fill)
+//                                            .frame(width : viewModel.totalBoardPostDetail?.boardPostDetail.postImages!.count == 1 ? UIScreen.main.bounds.width * 0.93 : UIScreen.main.bounds.width * 0.58, height: viewModel.totalBoardPostDetail?.boardPostDetail.postImages!.count == 1 ? UIScreen.main.bounds.height * 0.3 : UIScreen.main.bounds.height * 0.23)
+//                                            .cornerRadius(10)
+//                                            .padding(.horizontal)
+//                                    }
+//                                    .frame(width : viewModel.totalBoardPostDetail?.boardPostDetail.postImages!.count == 1 ? UIScreen.main.bounds.width * 0.93 : UIScreen.main.bounds.width * 0.58, height: viewModel.totalBoardPostDetail?.boardPostDetail.postImages!.count == 1 ? UIScreen.main.bounds.height * 0.3 : UIScreen.main.bounds.height * 0.23)
+//                                }
+//                            }else {
+//                                ForEach(viewModel.totalSecretPostDetail?.secretPostDetail.postImages! ?? [], id : \.self) { imageInfo in
+//                                    URLImage(
+//                                        URL(string : imageInfo.image) ??
+//                                        URL(string: "https://static.thenounproject.com/png/741653-200.png")!
+//                                    ) { image in
+//                                        image
+//                                            .resizable()
+//                                            .aspectRatio(contentMode: .fill)
+//                                            .frame(width : viewModel.totalSecretPostDetail?.secretPostDetail.postImages! .count == 1 ? UIScreen.main.bounds.width * 0.93 : UIScreen.main.bounds.width * 0.58, height: viewModel.totalSecretPostDetail?.secretPostDetail.postImages!.count == 1 ? UIScreen.main.bounds.height * 0.3 : UIScreen.main.bounds.height * 0.23)
+//                                            .cornerRadius(10)
+//                                            .padding(.horizontal)
+//                                    }
+//                                    .frame(width : viewModel.totalSecretPostDetail?.secretPostDetail.postImages! .count == 1 ? UIScreen.main.bounds.width * 0.93 : UIScreen.main.bounds.width * 0.58, height: viewModel.totalSecretPostDetail?.secretPostDetail.postImages!.count == 1 ? UIScreen.main.bounds.height * 0.3 : UIScreen.main.bounds.height * 0.23)
+//                                }
+//                            }
+//                        }
+//                        .padding()
                         /// 살려
                     }
                     
@@ -165,17 +170,19 @@ struct PostInfoView: View { // 게시글 상세 페이지
                                     viewModel.getSecretPostDetail()
                                 }
                                 
-                                if(viewModel.isMyPost == false && viewModel.isLiked == false){
-                                    notificationManager.sendMessageTouser(to: notificationManager.ReceiverFCMToken, title: "Bridge", body: "Somebody likes your post!")
-                                }
+//                                if(viewModel.isMyPost == false && viewModel.isLiked == false){
+//                                    notificationManager.sendMessageTouser(to: notificationManager.ReceiverFCMToken, title: "Bridge", body: "Somebody likes your post!")
+//                                }
                             } label : {
                                 
                                 if(viewModel.isSecret == false){
-                                    Image(systemName: (viewModel.totalBoardPostDetail?.boardPostDetail.like ?? true) ? "hand.thumbsup.fill" : "hand.thumbsup")
+                                    Image((viewModel.totalBoardPostDetail?.boardPostDetail.like ?? true) ? "like" : "like_border")
                                         .foregroundColor(.mainTheme)
+                                        .font(.system(size : 10))
                                 }else{
-                                    Image(systemName: (viewModel.totalSecretPostDetail?.secretPostDetail.like ?? true) ? "hand.thumbsup.fill" : "hand.thumbsup")
+                                    Image((viewModel.totalSecretPostDetail?.secretPostDetail.like ?? true) ? "like" : "like_border")
                                         .foregroundColor(.mainTheme)
+                                        .font(.system(size : 10))
                                 }
                             }
                             if(viewModel.isSecret == false){
@@ -218,100 +225,148 @@ struct PostInfoView: View { // 게시글 상세 페이지
                     Spacer()
                     
                     HStack {
-                        Text("Anonymous").foregroundColor(.gray)
+//                        Text("Anonymous").foregroundColor(.gray)
                         Button {
                             viewModel.isAnonymous.toggle()
                         } label : {
-                            Image(systemName: !viewModel.isAnonymous ? "square" : "checkmark.square.fill")
-                                .foregroundColor(!viewModel.isAnonymous ? .gray : .mainTheme)
-                        }
-                    }
-                    
-                    Spacer()
-                    
-                    Button{
-                        if(viewModel.commentInput.count != 0){
-                            if(viewModel.isCocCliked){
-                                if(viewModel.isSecret == false){
-                                    viewModel.sendCommentOfComment(content: viewModel.commentInput, anonymous: String(viewModel.isAnonymous), cocId: viewModel.commentId!)
-                                    viewModel.contentForViewing = "Say something..."
-                                    viewModel.contentForPatch = ""
-                                    viewModel.commentInput = ""
-                                    viewModel.getBoardPostDetail()
-                                    viewModel.getComment()
-                                    viewModel.isCocCliked = false
-                                }
-                                else{
-                                    viewModel.sendSecretCommentOfComment(content: viewModel.commentInput, anonymous: String(viewModel.isAnonymous), cocId: viewModel.commentId!)
-                                    viewModel.contentForViewing = "Say something..."
-                                    viewModel.contentForPatch = ""
-                                    viewModel.commentInput = ""
-                                    viewModel.getSecretPostDetail()
-                                    viewModel.getSecretComment()
-                                    viewModel.isCocCliked = false
-                                }
-                            }
-                            else if(viewModel.showCommentModify == true){
-                                if(viewModel.isSecret == false){
-                                    viewModel.patchComment(content: viewModel.commentInput)
-                                    viewModel.contentForViewing = "Say something..."
-                                    viewModel.contentForPatch = ""
-                                    viewModel.commentInput = ""
-                                    viewModel.getBoardPostDetail()
-                                    viewModel.getComment()
-                                    viewModel.isCocCliked = false
-                                }
-                                else{
-                                    viewModel.patchSecretComment(content: viewModel.commentInput)
-                                    viewModel.contentForViewing = "Say something..."
-                                    viewModel.contentForPatch = ""
-                                    viewModel.commentInput = ""
-                                    viewModel.getSecretPostDetail()
-                                    viewModel.getSecretComment()
-                                    viewModel.isCocCliked = false
-                                }
-                                viewModel.showCommentModify = false
-                            }
-                            else{
-                                if(viewModel.isSecret == false){
-                                    viewModel.sendComment(content: viewModel.commentInput, anonymous: String(viewModel.isAnonymous))
-                                    viewModel.contentForViewing = "Say something..."
-                                    viewModel.contentForPatch = ""
-                                    viewModel.commentInput = ""
-                                    viewModel.getBoardPostDetail()
-                                    viewModel.getComment()
-                                    viewModel.isCocCliked = false
-                                }else{
-                                    viewModel.sendSecretComment(content: viewModel.commentInput, anonymous: String(viewModel.isAnonymous))
-                                    viewModel.contentForViewing = "Say something..."
-                                    viewModel.contentForPatch = ""
-                                    viewModel.commentInput = ""
-                                    viewModel.getSecretPostDetail()
-                                    viewModel.getSecretComment()
-                                    viewModel.isCocCliked = false
-                                }
-                            }
-                            withAnimation {
-                                viewModel.isProgressShow = true
-                                viewModel.commentSended = true
-                                viewModel.isAnonymous = false
-                                commentArea.scrollTo("COMMENT_AREA", anchor: .bottom)
-//                                viewModel.getBoardPostDetail()
-//                                viewModel.getComment()
-//                                commentArea.scrollTo(viewModel.commentLists.count, anchor: .bottom)
-                            }
+                            Capsule()
+//                                .fill(!viewModel.isAnonymous ? Color.gray : Color.mainTheme)
+                                .foregroundColor(!viewModel.isAnonymous ? Color.gray : Color.mainTheme)
+                                .frame(width: 110, height: 36)
+                                .overlay(
+                                    Button {
+                                        viewModel.isAnonymous.toggle()
+                                    } label : {
+                                        Spacer(minLength: 55)
+                                    }
+                                )
+                                .overlay(
+                                    //send button
+                                    HStack{
+                                        Spacer()
+                                        Image("anonymous1")
+                                            .resizable()
+                                            .aspectRatio(CGSize(width : 0.7, height : 0.5), contentMode: .fit)
+                                            
+                                        Spacer()
+                                            Button{
+                                                if(viewModel.commentInput.count != 0){
+                                                    if(viewModel.isCocCliked){
+                                                        if(viewModel.isSecret == false){
+                                                            viewModel.sendCommentOfComment(content: viewModel.commentInput, anonymous: String(viewModel.isAnonymous), cocId: viewModel.commentId!)
+                                                            viewModel.contentForViewing = "Write a comment."
+                                                            viewModel.contentForPatch = ""
+                                                            viewModel.commentInput = ""
+                                                            viewModel.getBoardPostDetail()
+                                                            viewModel.getComment()
+                                                            viewModel.isCocCliked = false
+                                                        }
+                                                        else{
+                                                            viewModel.sendSecretCommentOfComment(content: viewModel.commentInput, anonymous: String(viewModel.isAnonymous), cocId: viewModel.commentId!)
+                                                            viewModel.contentForViewing = "Write a comment."
+                                                            viewModel.contentForPatch = ""
+                                                            viewModel.commentInput = ""
+                                                            viewModel.getSecretPostDetail()
+                                                            viewModel.getSecretComment()
+                                                            viewModel.isCocCliked = false
+                                                        }
+                                                    }
+                                                    else if(viewModel.showCommentModify == true){
+                                                        if(viewModel.isSecret == false){
+                                                            viewModel.patchComment(content: viewModel.commentInput)
+                                                            viewModel.contentForViewing = "Write a comment."
+                                                            viewModel.contentForPatch = ""
+                                                            viewModel.commentInput = ""
+                                                            viewModel.getBoardPostDetail()
+                                                            viewModel.getComment()
+                                                            viewModel.isCocCliked = false
+                                                        }
+                                                        else{
+                                                            viewModel.patchSecretComment(content: viewModel.commentInput)
+                                                            viewModel.contentForViewing = "Write a comment."
+                                                            viewModel.contentForPatch = ""
+                                                            viewModel.commentInput = ""
+                                                            viewModel.getSecretPostDetail()
+                                                            viewModel.getSecretComment()
+                                                            viewModel.isCocCliked = false
+                                                        }
+                                                        viewModel.showCommentModify = false
+                                                    }
+                                                    else{
+                                                        if(viewModel.isSecret == false){
+                                                            viewModel.sendComment(content: viewModel.commentInput, anonymous: String(viewModel.isAnonymous))
+                                                            viewModel.contentForViewing = "Write a comment."
+                                                            viewModel.contentForPatch = ""
+                                                            viewModel.commentInput = ""
+                                                            viewModel.getBoardPostDetail()
+                                                            viewModel.getComment()
+                                                            viewModel.isCocCliked = false
+                                                        }else{
+                                                            viewModel.sendSecretComment(content: viewModel.commentInput, anonymous: String(viewModel.isAnonymous))
+                                                            viewModel.contentForViewing = "Write a comment."
+                                                            viewModel.contentForPatch = ""
+                                                            viewModel.commentInput = ""
+                                                            viewModel.getSecretPostDetail()
+                                                            viewModel.getSecretComment()
+                                                            viewModel.isCocCliked = false
+                                                        }
+                                                    }
+                                                    withAnimation {
+                                                        viewModel.isProgressShow = true
+                                                        viewModel.commentSended = true
+                                                        viewModel.isAnonymous = false
+                                                        usleep(300)
+                                                        commentArea.scrollTo("COMMENT_AREA", anchor: .bottom)
+                        //                                viewModel.getBoardPostDetail()
+                        //                                viewModel.getComment()
+                        //                                commentArea.scrollTo(viewModel.commentLists.count, anchor: .bottom)
+                                                    }
+                                                    
+                        //                            if(viewModel.isMyPost == false){
+                        //                                notificationManager.sendMessageTouser(to: notificationManager.ReceiverFCMToken, title: "Bridge", body: "Check a new comment of your post!")
+                        //                            }
+                                                }else{
+                                                    viewModel.commentSended = false
+                                                    viewModel.showCommentAlert = true
+                                                    self.activeAlert = .second
+                                                    viewModel.isAlertShow = true
+                                                }
+                                                viewModel.getComment()
+                                            } label : {
+                                                Capsule()
+                                                    .stroke(Color.black, lineWidth: 1)
+                                                    .background(Capsule().foregroundColor(Color.mainTheme))
+                                                    .frame(width: 60, height: 36)
+//                                                    .cornerRadius(60)
+                                                    .overlay(
+                                                        Image("send")
+                                                            .resizable()
+                                                            .aspectRatio(CGSize(width : 0.8, height : 0.7), contentMode: .fit)
+                                                    )
+                                            }
+                                    }
+                                )
                             
-                            if(viewModel.isMyPost == false){
-                                notificationManager.sendMessageTouser(to: notificationManager.ReceiverFCMToken, title: "Bridge", body: "Check a new comment of your post!")
-                            }
-                        }else{
-                            viewModel.commentSended = false
-                            viewModel.showCommentAlert = true
+//                                .overlay(
+//                                    Image("anonymous1")
+//                                        .resizable()
+//                                        .aspectRatio(contentMode: .fill)
+//                                        .foregroundColor(.black)
+//                                        .overlay(
+//                                            Image("anonymous2")
+//                                                .resizable()
+//                                                .aspectRatio(contentMode: .fill)
+//                                                .overlay(
+//                                                    Image("anonymous3")
+//                                                        .resizable()
+//                                                        .aspectRatio(contentMode: .fill)
+//                                                )
+//                                        )
+//                                )
+//                            Image(systemName: !viewModel.isAnonymous ? "square" : "checkmark.square.fill")
+//                                .foregroundColor(!viewModel.isAnonymous ? .gray : .mainTheme)
+//
                         }
-                        viewModel.getComment()
-                    } label : {
-                        Image(systemName: "paperplane")
-                            .foregroundColor(.black)
                     }
                 }
                 .padding()
@@ -371,7 +426,7 @@ struct PostInfoView: View { // 게시글 상세 페이지
 //            }
         }.onAppear {
             if(viewModel.isMyPost != nil){
-                viewModel.contentForViewing = "Say something..."
+                viewModel.contentForViewing = "Write a comment."
                 viewModel.contentForPatch = ""
                 viewModel.commentInput = ""
                 viewModel.getBoardPostDetail()
@@ -381,7 +436,7 @@ struct PostInfoView: View { // 게시글 상세 페이지
                 viewModel.isMenuClicked = false
             }else{
 //                viewModel.sendSecretComment(content: viewModel.commentInput, anonymous: String(viewModel.isAnonymous))
-                viewModel.contentForViewing = "Say something..."
+                viewModel.contentForViewing = "Write a comment."
                 viewModel.contentForPatch = ""
                 viewModel.commentInput = ""
                 viewModel.getSecretPostDetail()
@@ -393,14 +448,14 @@ struct PostInfoView: View { // 게시글 상세 페이지
         }
         .onDisappear {
             if(viewModel.isMyPost != nil){
-                viewModel.contentForViewing = "Say something..."
+                viewModel.contentForViewing = "Write a comment."
                 viewModel.contentForPatch = ""
                 viewModel.commentInput = ""
                 viewModel.getBoardPostDetail()
                 viewModel.getComment()
             }else{
 //                viewModel.sendSecretComment(content: viewModel.commentInput, anonymous: String(viewModel.isAnonymous))
-                viewModel.contentForViewing = "Say something..."
+                viewModel.contentForViewing = "Write a comment."
                 viewModel.contentForPatch = ""
                 viewModel.commentInput = ""
                 viewModel.getSecretPostDetail()
@@ -411,6 +466,7 @@ struct PostInfoView: View { // 게시글 상세 페이지
             
                 viewModel.getComment()
                 viewModel.getSecretComment()
+                usleep(300)
             
                 if(viewModel.isMyPost != nil){
                     viewModel.getComment()
@@ -426,19 +482,20 @@ struct PostInfoView: View { // 게시글 상세 페이지
             
             viewModel.commentSended = false
             withAnimation{
+                usleep(300)
                 commentArea.scrollTo("COMMENT_AREA", anchor: .bottom)
             }
         })
         .onChange(of: viewModel.isProgressShow, perform: { _ in
             
                 if(viewModel.isMyPost != nil){
-                    viewModel.contentForViewing = "Say something..."
+                    viewModel.contentForViewing = "Write a comment."
                     viewModel.contentForPatch = ""
                     viewModel.commentInput = ""
                     viewModel.getBoardPostDetail()
                     viewModel.getComment()
                 }else{
-                    viewModel.contentForViewing = "Say something..."
+                    viewModel.contentForViewing = "Write a comment."
                     viewModel.contentForPatch = ""
                     viewModel.commentInput = ""
                     viewModel.getSecretPostDetail()
@@ -447,19 +504,20 @@ struct PostInfoView: View { // 게시글 상세 페이지
             
             viewModel.isProgressShow = false
             withAnimation{
+                usleep(300)
                 commentArea.scrollTo("COMMENT_AREA", anchor: .bottom)
             }
         })
         .onChange(of: viewModel.showConfirmDeletion, perform: { _ in
             
                 if(viewModel.isMyPost != nil){
-                    viewModel.contentForViewing = "Say something..."
+                    viewModel.contentForViewing = "Write a comment."
                     viewModel.contentForPatch = ""
                     viewModel.commentInput = ""
                     viewModel.getBoardPostDetail()
                     viewModel.getComment()
                 }else{
-                    viewModel.contentForViewing = "Say something..."
+                    viewModel.contentForViewing = "Write a comment."
                     viewModel.contentForPatch = ""
                     viewModel.commentInput = ""
                     viewModel.getSecretPostDetail()
@@ -469,7 +527,7 @@ struct PostInfoView: View { // 게시글 상세 페이지
         .onChange(of: viewModel.showAction, perform: { _ in
             
                 if(viewModel.isMyPost != nil){
-                    viewModel.contentForViewing = "Say something..."
+                    viewModel.contentForViewing = "Write a comment."
                     viewModel.contentForPatch = ""
                     viewModel.commentInput = ""
                     viewModel.getBoardPostDetail()
@@ -477,7 +535,7 @@ struct PostInfoView: View { // 게시글 상세 페이지
 //                    viewModel.isMenuClicked = false
 //                    viewModel.isMyComment = false
                 }else{
-                    viewModel.contentForViewing = "Say something..."
+                    viewModel.contentForViewing = "Write a comment."
                     viewModel.contentForPatch = ""
                     viewModel.commentInput = ""
                     viewModel.getSecretPostDetail()
@@ -529,6 +587,9 @@ struct PostInfoView: View { // 게시글 상세 페이지
                             viewModel.showAction = true
                         
                         viewModel.isMyComment = false
+                        if(viewModel.isMyPost == false){
+                            viewModel.isPostReport = true
+                        }
                     }
                     //menu toggle
                 } label: {
@@ -538,45 +599,97 @@ struct PostInfoView: View { // 게시글 상세 페이지
                 }
         )
         .actionSheet(isPresented: $viewModel.showAction, content: getActionSheet)
-        .alert(isPresented: $viewModel.showCommentAlert) {
-            Alert(title: Text("Alert"),
-                  message: Text("Please fill the comment"),
-                  dismissButton: .default(Text("Close")))
-        }
-        .alert(isPresented: $viewModel.showConfirmDeletion) {
-            Alert(
-                title: Text("Confirmation"),
-                message: Text((viewModel.isMyComment) ? "Do you want to delete this comment?" : "Do you want to delete this post?"),
-                primaryButton: .destructive(Text("Yes"), action : {
-                    if(viewModel.isSecret == false){
-                        if(viewModel.isMyComment){
-                            viewModel.deleteComment()
-                            viewModel.getBoardPostDetail()
-                            viewModel.getComment()
-                            viewModel.showAction = false
-                        }
-                        else{
-                            viewModel.deletePost()
-                            self.presentationMode.wrappedValue.dismiss()
-                            viewModel.showAction = false
-                        }
-                    }else{
-                        if(viewModel.isMyComment){
-                            viewModel.deleteSecretComment()
-                            viewModel.getSecretPostDetail()
-                            viewModel.getSecretComment()
-                            viewModel.showAction = false
-                        }
-                        else{
-                            viewModel.deleteSecretPost()
-                            self.presentationMode.wrappedValue.dismiss()
-                            viewModel.showAction = false
-                        }
-                    }
+        .alert(isPresented: $viewModel.isAlertShow) {
+            switch activeAlert {
+                case .first:
+                    return Alert(title: Text("Report"),
+                                 message: Text("Your report has been successfully received."),
+                                 dismissButton: .default(Text("Close")))
+                case .second:
+                    return Alert(title: Text("Alert"),
+                                 message: Text("Please fill the comment"),
+                                 dismissButton: .default(Text("Close")))
+                case .third:
+                    return
+                        Alert(
+                            title: Text("Confirmation"),
+                            message: Text((viewModel.isMyComment) ? "Do you want to delete this comment?" : "Do you want to delete this post?"),
+                            primaryButton: .destructive(Text("Yes"), action : {
+                                if(viewModel.isSecret == false){
+                                    if(viewModel.isMyComment){
+                                        viewModel.deleteComment()
+                                        viewModel.getBoardPostDetail()
+                                        viewModel.getComment()
+                                        viewModel.showAction = false
+                                    }
+                                    else{
+                                        viewModel.deletePost()
+                                        self.presentationMode.wrappedValue.dismiss()
+                                        viewModel.showAction = false
+                                    }
+                                }else{
+                                    if(viewModel.isMyComment){
+                                        viewModel.deleteSecretComment()
+                                        viewModel.getSecretPostDetail()
+                                        viewModel.getSecretComment()
+                                        viewModel.showAction = false
+                                    }
+                                    else{
+                                        viewModel.deleteSecretPost()
+                                        self.presentationMode.wrappedValue.dismiss()
+                                        viewModel.showAction = false
+                                    }
+                                }
+
+                            }),
+                            secondaryButton: .cancel(Text("No")))
                     
-                }),
-                secondaryButton: .cancel(Text("No")))
+            }
         }
+//        .alert(isPresented: $viewModel.isReportDone) {
+//            Alert(title: Text("Report"),
+//                  message: Text("Your report has been successfully received."),
+//                  dismissButton: .default(Text("Close")))
+//        }
+//        .alert(isPresented: $viewModel.showCommentAlert) {
+//            Alert(title: Text("Alert"),
+//                  message: Text("Please fill the comment"),
+//                  dismissButton: .default(Text("Close")))
+//        }
+//        .alert(isPresented: $viewModel.showConfirmDeletion) {
+//            Alert(
+//                title: Text("Confirmation"),
+//                message: Text((viewModel.isMyComment) ? "Do you want to delete this comment?" : "Do you want to delete this post?"),
+//                primaryButton: .destructive(Text("Yes"), action : {
+//                    if(viewModel.isSecret == false){
+//                        if(viewModel.isMyComment){
+//                            viewModel.deleteComment()
+//                            viewModel.getBoardPostDetail()
+//                            viewModel.getComment()
+//                            viewModel.showAction = false
+//                        }
+//                        else{
+//                            viewModel.deletePost()
+//                            self.presentationMode.wrappedValue.dismiss()
+//                            viewModel.showAction = false
+//                        }
+//                    }else{
+//                        if(viewModel.isMyComment){
+//                            viewModel.deleteSecretComment()
+//                            viewModel.getSecretPostDetail()
+//                            viewModel.getSecretComment()
+//                            viewModel.showAction = false
+//                        }
+//                        else{
+//                            viewModel.deleteSecretPost()
+//                            self.presentationMode.wrappedValue.dismiss()
+//                            viewModel.showAction = false
+//                        }
+//                    }
+//
+//                }),
+//                secondaryButton: .cancel(Text("No")))
+//        }
         .background(
             NavigationLink(
                 destination :
@@ -605,17 +718,33 @@ struct PostInfoView: View { // 게시글 상세 페이지
         let btnDC: ActionSheet.Button = (
             .destructive(Text("Delete Comment")) {
             viewModel.showConfirmDeletion = true
+                self.activeAlert = .third
+            viewModel.isAlertShow = true
+
         })
         
         let btnDP: ActionSheet.Button = (
             .destructive(Text("Delete Post")) {
             viewModel.showConfirmDeletion = true
+            self.activeAlert = .third
+            viewModel.isAlertShow = true
+
         })
         
         let btnReport: ActionSheet.Button = (
             .default(Text("Report")){
-                // 신고 기능 추가
+                // 신고 기능
                 viewModel.isMenuClicked = false
+                viewModel.isReportDone = true
+                self.activeAlert = .first
+                viewModel.isAlertShow = true
+                if(viewModel.isPostReport == false){
+                    //댓글
+                    viewModel.reportComment()
+                }else{
+                    //게시물
+                    viewModel.reportPost()
+                }
             })
         
         let btnCancle: ActionSheet.Button = .cancel()
@@ -623,8 +752,13 @@ struct PostInfoView: View { // 게시글 상세 페이지
         if((viewModel.isMyComment == true)){
             return ActionSheet(title: Text("Options"), message: nil, buttons: [btnMC, btnDC, btnCancle])
         }
-        else if((viewModel.isMyPost == true )){
-            return ActionSheet(title: Text("Options"), message: nil, buttons: [btnMP, btnDP, btnCancle])
+        else if(viewModel.isMyPost == true ){
+            if(viewModel.isMyComment == false && viewModel.isNotMyComment == true){
+               return ActionSheet(title: Text("Option"), message: nil, buttons: [btnReport, btnCancle])
+            }
+            else{
+                return ActionSheet(title: Text("Options"), message: nil, buttons: [btnMP, btnDP, btnCancle])
+            }
         }else if((viewModel.totalSecretPostDetail?.secretPostDetail.modifiable == true)){
             return ActionSheet(title: Text("Options"), message: nil, buttons: [btnMP, btnDP, btnCancle])
         }else if((viewModel.totalBoardPostDetail?.boardPostDetail.modifiable == true)){
@@ -695,12 +829,13 @@ extension PostInfoView {
                             viewModel.getSecretComment()
                         }
                         
-                        if(Comment.like == false){
-                            notificationManager.sendMessageTouser(to: notificationManager.ReceiverFCMToken, title: "Bridge", body: "Somebody likes your comment!")
-                        }
+//                        if(Comment.like == false){
+//                            notificationManager.sendMessageTouser(to: notificationManager.ReceiverFCMToken, title: "Bridge", body: "Somebody likes your comment!")
+//                        }
                     } label : {
-                        Image(systemName: (Comment.like) ? "hand.thumbsup.fill" : "hand.thumbsup")
+                        Image((Comment.like) ? "like" : "like_border")
                             .foregroundColor(.mainTheme)
+                            .font(.system(size : 10))
 //                        Image(systemName: (viewModel.isLiked ?? true) ? "hand.thumbsup.fill" : "hand.thumbsup")
 //                            .foregroundColor(.mainTheme)
                     }
@@ -821,24 +956,35 @@ extension PostInfoView {
 //                    .frame(alignment : .leading)
 //                }
                     Divider()
+                    .frame(height : 2)
                 }
                 .modifier(CommentStyle())
                 .overlay(
                     Button { // menu button
                         withAnimation {
-                            viewModel.isMenuClicked = true
-                            viewModel.showAction = true
-                            viewModel.isMyComment = true
-                            viewModel.commentId = Comment.commentId
-                            viewModel.contentForPatch = Comment.content
+                            if (Comment.modifiable) {
+                                viewModel.isMenuClicked = true
+                                viewModel.showAction = true
+                                viewModel.isMyComment = true
+                                viewModel.isNotMyComment = false
+                                viewModel.commentId = Comment.commentId
+                                viewModel.contentForPatch = Comment.content
+                            }else{
+                                viewModel.isMyComment = false
+                                viewModel.isMenuClicked = true
+                                viewModel.showAction = true
+                                viewModel.commentId = Comment.commentId
+                                viewModel.isNotMyComment = true
+                                viewModel.isPostReport = false
+                            }
                         }
                             //menu toggle
                     } label: {
-                        if (Comment.modifiable) {
+//                        if (Comment.modifiable) {
                             Image(systemName : "ellipsis")
                                 .foregroundColor(.black)
                                 .font(.system(size : 15, weight : .bold))
-                        }
+//                        }
                     }
                     , alignment : .topTrailing
                 )

@@ -35,6 +35,10 @@ final class PostInfoViewModel : ObservableObject {
     @Published var showCommentAlert : Bool = false
     @Published var commentSended : Bool = false
     @Published var isProgressShow : Bool = false
+    @Published var isPostReport : Bool = false
+    @Published var isReportDone : Bool = false
+    @Published var isAlertShow : Bool = false
+    @Published var isNotMyComment : Bool = false
     
     @Published var commentInput : String = ""
     @Published var isAnonymous : Bool = false
@@ -444,6 +448,36 @@ final class PostInfoViewModel : ObservableObject {
                    headers: header
         ).response { json in
             print(json)
+        }
+    }
+    
+    func reportPost() {
+        let url = "http://3.36.233.180:8080/posts/\(postId)/postReports"
+        let header: HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
+        let method : HTTPMethod = .post
+        
+        AF.request(url,
+                   method: method,
+                   encoding: URLEncoding.default,
+                   headers: header
+        ).response { json in
+            print(json)
+            print("post report")
+        }
+    }
+    
+    func reportComment() {
+        let url = "http://3.36.233.180:8080/comments/\(commentId!)/commentReports"
+        let header: HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
+        let method : HTTPMethod = .post
+        
+        AF.request(url,
+                   method: method,
+                   encoding: URLEncoding.default,
+                   headers: header
+        ).response { json in
+            print(json)
+            print("comment report")
         }
     }
     

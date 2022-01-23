@@ -59,10 +59,12 @@ struct PostSearchView : View {
             
         
             VStack {
-                Image("search")
-                    .font(.system(size : 150))
-                    .foregroundColor(.mainTheme)
-                    .padding()
+                HStack{
+                    Image("search")
+                        .font(.system(size : 150))
+                        .foregroundColor(.mainTheme)
+                }
+                .padding(.leading, 60)
                 Text("Search the information")
                     .foregroundColor(.gray)
                     .fontWeight(.semibold)
