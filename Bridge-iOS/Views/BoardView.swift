@@ -10,10 +10,6 @@ import URLImage
 import Firebase
 import SwiftUIPullToRefresh
 
-//test
-//let ReceiverFCMToken = "cmVSK2fCfE-shqrUThTwe-:APA91bHiBs07yGWkHsGNF49cxzhuQ-Wa_vfCVT0RybUwHdhOJ8eGB2nkFiGFVDeKWDXZbJri0KrMZecw54yT9BO5A5zYLTQYnwva_hPZJ-_MTGrM2PRy-_k8o3_eboLYGFeiWAraCnTM"
-//let legacyServerKey = "AAAAFYLL65I:APA91bF_g2671df_634Qyr3V4RzDnGN6IP3YAcvbujSmUDqoq_mxLwYVIi6RJOeVILSIecTBPjFQKeR2hDeui1xf5OPBjNNbwsEXAptA0yvkZwp1AMgknVdEM20byDdh8if5qzLxuQ4D"
-
 struct BoardView : View {
     @StateObject private var viewModel : BoardViewModel
     
@@ -22,57 +18,52 @@ struct BoardView : View {
     }
     
     var body : some View {
-        RefreshableScrollView(onRefresh: { done in
-            viewModel.getBoardPosts(token: viewModel.token)
-            done()
-        }){
         VStack {
+            RefreshableScrollView(onRefresh: { done in
+                viewModel.getBoardPosts(token: viewModel.token)
+                done()
+            }){
                 LazyVStack {
-            
-            //Hot Posts
-                
-                NavigationLink(
-                    destination:
-                        HotBoardView(viewModel: BoardViewModel(
-                            accessToken: viewModel.token,
-                                        memberId : viewModel.memberId))
-                ) {
-                    HStack{
-                        Text("        Hot board 😎")
-                            .fontWeight(.semibold)
-                            .foregroundColor(.mainTheme)
-                        Spacer()
-                        Button {
-                            //                    viewModel.getPosts(token: viewModel.token)
-                        } label : {
-                            Text("MORE >         ")
+                    //Hot Posts
+                    
+                    NavigationLink(
+                        destination:
+                            HotBoardView(viewModel: BoardViewModel(
+                                accessToken: viewModel.token,
+                                memberId : viewModel.memberId))
+                    ) {
+                        HStack{
+                            Text("     Hot board 😎")
+                                .fontWeight(.semibold)
+                                .foregroundColor(.mainTheme)
+                            Spacer()
+                            Text("MORE >          ")
                                 .foregroundColor(.gray)
                                 .fontWeight(.light)
                         }
+                        .padding(.vertical, 10)
+                        .frame(height: UIScreen.main.bounds.height * 0.06)
                     }
-                    .padding(.vertical, 10)
-                    .frame(height: UIScreen.main.bounds.height * 0.06)
-                }
-            
-//            List {
+                    
+                    //            List {
                     ForEach(viewModel.hotLists, id : \.self) { HotList in
-                    NavigationLink(
-                        destination:
-                            PostInfoView(viewModel: PostInfoViewModel(
-                                            token: viewModel.token,
-                                            postId : HotList.postInfo.postId,
-                                            memberId : viewModel.memberId,
-                                            isMyPost : (viewModel.memberId == HotList.member?.memberId)))
-                    ) {
-                        HotPost(viewModel : GeneralPostViewModel(postList: HotList))
+                        NavigationLink(
+                            destination:
+                                PostInfoView(viewModel: PostInfoViewModel(
+                                    token: viewModel.token,
+                                    postId : HotList.postInfo.postId,
+                                    memberId : viewModel.memberId,
+                                    isMyPost : (viewModel.memberId == HotList.member?.memberId)))
+                        ) {
+                            HotPost(viewModel : GeneralPostViewModel(postList: HotList))
                         }
                     }
-//            }
-            .foregroundColor(Color.mainTheme)
-            .listStyle(PlainListStyle()) // iOS 15 대응
-            .frame(height:UIScreen.main.bounds.height * 1/7 )
-            
-            //Secret Posts
+                    //            }
+                    .foregroundColor(Color.mainTheme)
+                    .listStyle(PlainListStyle()) // iOS 15 대응
+                    .frame(height:UIScreen.main.bounds.height * 1/7 )
+                    
+                    //Secret Posts
                     
                     NavigationLink(
                         destination:
@@ -100,69 +91,70 @@ struct BoardView : View {
                         .shadow(radius: 3)
                     }
                     
-//                Button {
-//                } label : {
-//                    HStack{
-//                        Text("S-SPACE")
-//                            .padding()
-//                        Spacer()
-//                        Text("ALL ANONYMOUS!")
-//                            .padding()
-//                    }
-//                    .font(.system(size: 12, weight : .bold))
-//                    .frame(width : UIScreen.main.bounds.width * 0.83, height : UIScreen.main.bounds.height * 0.02)
-//                    .padding()
-//                    .foregroundColor(.white)
-//                    .background(Color.black)
-//                    .cornerRadius(20)
-//                    .shadow(radius: 3)
-//
-//                }.background(
-//                    NavigationLink(
-//                        destination:
-//                            SecretBoardView(viewModel:
-//                                        BoardViewModel(
-//                                            accessToken: viewModel.token,
-//                                            memberId : viewModel.memberId
-//                                        )
-//                            )
-//                    ){ }
-//                )
-                
-////            List {
-//                ForEach(viewModel.secretLists, id : \.self) { SecretList in
-//                    NavigationLink(
-//                        destination:
-//                            SecretInfoView(viewModel: SecretInfoViewModel(
-//                                            token: viewModel.token,
-//                                            postId : SecretList.postInfo.postId,
-//                                            memberId : viewModel.memberId,
-//                                            isMyPost : (viewModel.memberId == SecretList.member?.memberId)))
-//                    ) {
-//                        SecretPost(viewModel : SecretViewModel(postList: SecretList))
-//                    }
-//                }
-////            }
-//            .foregroundColor(Color.mainTheme)
-//            .listStyle(PlainListStyle()) // iOS 15 대응
-//            .frame(height:UIScreen.main.bounds.height * 1/7 )
-            
-            //General Posts
-//            List {
-                ForEach(viewModel.postLists, id : \.self) { PostList in
-                    NavigationLink(
-                        destination:
-                            PostInfoView(viewModel: PostInfoViewModel(
-                                            token: viewModel.token,
-                                            postId : PostList.postInfo.postId,
-                                            memberId : viewModel.memberId,
-                                            isMyPost : (viewModel.memberId == PostList.member?.memberId)))
-                    ){
-                        GeneralPost(viewModel : GeneralPostViewModel(postList: PostList))
+                    //                Button {
+                    //                } label : {
+                    //                    HStack{
+                    //                        Text("S-SPACE")
+                    //                            .padding()
+                    //                        Spacer()
+                    //                        Text("ALL ANONYMOUS!")
+                    //                            .padding()
+                    //                    }
+                    //                    .font(.system(size: 12, weight : .bold))
+                    //                    .frame(width : UIScreen.main.bounds.width * 0.83, height : UIScreen.main.bounds.height * 0.02)
+                    //                    .padding()
+                    //                    .foregroundColor(.white)
+                    //                    .background(Color.black)
+                    //                    .cornerRadius(20)
+                    //                    .shadow(radius: 3)
+                    //
+                    //                }.background(
+                    //                    NavigationLink(
+                    //                        destination:
+                    //                            SecretBoardView(viewModel:
+                    //                                        BoardViewModel(
+                    //                                            accessToken: viewModel.token,
+                    //                                            memberId : viewModel.memberId
+                    //                                        )
+                    //                            )
+                    //                    ){ }
+                    //                )
+                    
+                    ////            List {
+                    //                ForEach(viewModel.secretLists, id : \.self) { SecretList in
+                    //                    NavigationLink(
+                    //                        destination:
+                    //                            SecretInfoView(viewModel: SecretInfoViewModel(
+                    //                                            token: viewModel.token,
+                    //                                            postId : SecretList.postInfo.postId,
+                    //                                            memberId : viewModel.memberId,
+                    //                                            isMyPost : (viewModel.memberId == SecretList.member?.memberId)))
+                    //                    ) {
+                    //                        SecretPost(viewModel : SecretViewModel(postList: SecretList))
+                    //                    }
+                    //                }
+                    ////            }
+                    //            .foregroundColor(Color.mainTheme)
+                    //            .listStyle(PlainListStyle()) // iOS 15 대응
+                    //            .frame(height:UIScreen.main.bounds.height * 1/7 )
+                    
+                    //General Posts
+                    //            List {
+                    ForEach(viewModel.postLists, id : \.self) { PostList in
+                        NavigationLink(
+                            destination:
+                                PostInfoView(viewModel: PostInfoViewModel(
+                                    token: viewModel.token,
+                                    postId : PostList.postInfo.postId,
+                                    memberId : viewModel.memberId,
+                                    isMyPost : (viewModel.memberId == PostList.member?.memberId)))
+                        ){
+                            GeneralPost(viewModel : GeneralPostViewModel(postList: PostList))
+                        }
                     }
                 }
-            }
-        }.listStyle(PlainListStyle()) // iOS 15 대응
+            }.listStyle(PlainListStyle()) // iOS 15 대응
+                .padding(.top, 5)
         }.overlay(
             VStack(spacing : 0) {
                 Spacer()
@@ -172,70 +164,70 @@ struct BoardView : View {
                     .frame(height : UIScreen.main.bounds.height * 0.05)
             }.edgesIgnoringSafeArea(.bottom)
         ).onAppear {
-//            sleep(30000)
-//            self.setNotification() //test
-//            self.sendMessageTouser(to: ReceiverFCMToken, title: "test fcm", body: "test")
-            usleep(200000)
+            //            sleep(30000)
+            //            self.setNotification() //test
+            //            self.sendMessageTouser(to: ReceiverFCMToken, title: "test fcm", body: "test")
+            //            usleep(200000)
             viewModel.getBoardPosts(token: viewModel.token)
         }
-//        .refreshable{ // only for ios15
-//            viewModel.getBoardPosts(token: viewModel.token)
-//        }
+        //        .refreshable{ // only for ios15
+        //            viewModel.getBoardPosts(token: viewModel.token)
+        //        }
     }
     
     //test
-//    func setNotification() -> Void {
-//        let manager = LocalNotificationManager()
-//        manager.requestPermission()
-//        manager.addNotification(title: "Bridge")
-//        manager.schedule()
-//    }
+    //    func setNotification() -> Void {
+    //        let manager = LocalNotificationManager()
+    //        manager.requestPermission()
+    //        manager.addNotification(title: "Bridge")
+    //        manager.schedule()
+    //    }
     
-//    func sendMessageTouser(to token: String, title: String, body: String) {
-//            print("sendMessageTouser()")
-//            let urlString = "https://fcm.googleapis.com/fcm/send"
-//            let url = NSURL(string: urlString)!
-//            let paramString: [String : Any] = ["to" : token,
-//                                               "notification" : ["title" : title, "body" : body],
-//                                               "data" : ["user" : "test_id"]
-//            ]
-//            let request = NSMutableURLRequest(url: url as URL)
-//            request.httpMethod = "POST"
-//            request.httpBody = try? JSONSerialization.data(withJSONObject:paramString, options: [.prettyPrinted])
-//            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-//            request.setValue("key=\(legacyServerKey)", forHTTPHeaderField: "Authorization")
-//            let task =  URLSession.shared.dataTask(with: request as URLRequest)  { (data, response, error) in
-//                do {
-//                    if let jsonData = data {
-//                        if let jsonDataDict  = try JSONSerialization.jsonObject(with: jsonData, options: JSONSerialization.ReadingOptions.allowFragments) as? [String: AnyObject] {
-//                            NSLog("Received data:\n\(jsonDataDict))")
-//                        }
-//                    }
-//                } catch let err as NSError {
-//                    print(err.debugDescription)
-//                }
-//            }
-//            task.resume()
-//        }
-        
-//        func handleLogTokenTouch() {
-//            // [START log_fcm_reg_token]
-//            let token = Messaging.messaging().fcmToken
-//            print("FCM token: \(token ?? "")")
-//            // [END log_fcm_reg_token]
-//            self.fcmTokenMessage  = "Logged FCM token: \(token ?? "")"
-//
-//            // [START log_iid_reg_token]
-//            InstanceID.instanceID().instanceID { (result, error) in
-//              if let error = error {
-//                print("Error fetching remote instance ID: \(error)")
-//              } else if let result = result {
-//                print("Remote instance ID token: \(result.token)")
-//                self.instanceIDTokenMessage  = "Remote InstanceID token: \(result.token)"
-//              }
-//            }
-//            // [END log_iid_reg_token]
-//        }
+    //    func sendMessageTouser(to token: String, title: String, body: String) {
+    //            print("sendMessageTouser()")
+    //            let urlString = "https://fcm.googleapis.com/fcm/send"
+    //            let url = NSURL(string: urlString)!
+    //            let paramString: [String : Any] = ["to" : token,
+    //                                               "notification" : ["title" : title, "body" : body],
+    //                                               "data" : ["user" : "test_id"]
+    //            ]
+    //            let request = NSMutableURLRequest(url: url as URL)
+    //            request.httpMethod = "POST"
+    //            request.httpBody = try? JSONSerialization.data(withJSONObject:paramString, options: [.prettyPrinted])
+    //            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+    //            request.setValue("key=\(legacyServerKey)", forHTTPHeaderField: "Authorization")
+    //            let task =  URLSession.shared.dataTask(with: request as URLRequest)  { (data, response, error) in
+    //                do {
+    //                    if let jsonData = data {
+    //                        if let jsonDataDict  = try JSONSerialization.jsonObject(with: jsonData, options: JSONSerialization.ReadingOptions.allowFragments) as? [String: AnyObject] {
+    //                            NSLog("Received data:\n\(jsonDataDict))")
+    //                        }
+    //                    }
+    //                } catch let err as NSError {
+    //                    print(err.debugDescription)
+    //                }
+    //            }
+    //            task.resume()
+    //        }
+    
+    //        func handleLogTokenTouch() {
+    //            // [START log_fcm_reg_token]
+    //            let token = Messaging.messaging().fcmToken
+    //            print("FCM token: \(token ?? "")")
+    //            // [END log_fcm_reg_token]
+    //            self.fcmTokenMessage  = "Logged FCM token: \(token ?? "")"
+    //
+    //            // [START log_iid_reg_token]
+    //            InstanceID.instanceID().instanceID { (result, error) in
+    //              if let error = error {
+    //                print("Error fetching remote instance ID: \(error)")
+    //              } else if let result = result {
+    //                print("Remote instance ID token: \(result.token)")
+    //                self.instanceIDTokenMessage  = "Remote InstanceID token: \(result.token)"
+    //              }
+    //            }
+    //            // [END log_iid_reg_token]
+    //        }
 }
 
 
@@ -251,7 +243,7 @@ struct GeneralPost : View {
             HStack{
                 URLImage( //프로필 이미지
                     URL(string : viewModel.profileImage) ??
-                        URL(string: "https://static.thenounproject.com/png/741653-200.png")!
+                    URL(string: "https://static.thenounproject.com/png/741653-200.png")!
                 ) { image in
                     image
                         .resizable()
@@ -276,7 +268,7 @@ struct GeneralPost : View {
             if(viewModel.imageUrl != "null"){
                 URLImage(
                     URL(string : viewModel.imageUrl!) ??
-                        URL(string: "https://static.thenounproject.com/png/741653-200.png")!
+                    URL(string: "https://static.thenounproject.com/png/741653-200.png")!
                 ) { image in
                     image
                         .resizable()
@@ -314,7 +306,7 @@ struct GeneralPost : View {
             }.foregroundColor(.black)
         }
         .modifier(GeneralPostStyle())
-//        .frame(height: viewModel.imageUrl != "null" ? UIScreen.main.bounds.height * 0.27 : UIScreen.main.bounds.height * 0.18)
+        //        .frame(height: viewModel.imageUrl != "null" ? UIScreen.main.bounds.height * 0.27 : UIScreen.main.bounds.height * 0.18)
     }
 }
 
@@ -361,27 +353,27 @@ struct HotPost : View {
     
     var body : some View {
         VStack{
-                Text(viewModel.postTitle)
-                    .font(.system(size: 15, weight : .medium))
+            Text(viewModel.postTitle)
+                .font(.system(size: 15, weight : .medium))
             
-                HStack{
-                    Group{
-                        Image("like")
-                            .font(.system(size: 10))
-                            .foregroundColor(.mainTheme)
-                        Text(String(viewModel.likeCount))
-                            .font(.system(size: 10, weight : .medium))
-                            .foregroundColor(.black)
-                    }
-                    
-                    Group{
-                        Image(systemName: "message.fill")
-                            .font(.system(size: 10))
-                        Text(String(viewModel.commentCount))
-                            .font(.system(size: 10, weight : .medium))
-                    }.foregroundColor(.black)
+            HStack{
+                Group{
+                    Image("like")
+                        .font(.system(size: 10))
+                        .foregroundColor(.mainTheme)
+                    Text(String(viewModel.likeCount))
+                        .font(.system(size: 10, weight : .medium))
+                        .foregroundColor(.black)
                 }
+                
+                Group{
+                    Image(systemName: "message.fill")
+                        .font(.system(size: 10))
+                    Text(String(viewModel.commentCount))
+                        .font(.system(size: 10, weight : .medium))
+                }.foregroundColor(.black)
             }
+        }
         .modifier(SpecialPostStyle())
     }
 }

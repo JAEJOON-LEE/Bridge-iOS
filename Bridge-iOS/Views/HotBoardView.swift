@@ -7,6 +7,7 @@
 
 import SwiftUI
 import URLImage
+import SwiftUIPullToRefresh
 
 struct HotBoardView : View {
     @StateObject private var viewModel : BoardViewModel
@@ -18,27 +19,39 @@ struct HotBoardView : View {
     
     var body : some View {
         VStack {
-            List {
-                ForEach(viewModel.hotLists, id : \.self) { HotList in
-                    Button {
-                    } label : {
-                        GeneralPost(viewModel : GeneralPostViewModel(postList: HotList))
-                    }.background(
-                        NavigationLink(
-                            destination:
-                                PostInfoView(viewModel: PostInfoViewModel(
-                                                token: viewModel.token,
-                                                postId : HotList.postInfo.postId,
-                                                memberId : viewModel.memberId,
-                                                isMyPost : (viewModel.memberId == HotList.member?.memberId)))
-                        ){ }
-                    )
-                }
-            .foregroundColor(Color.mainTheme)
-            .listStyle(PlainListStyle()) // iOS 15 대응
-//            .frame(height:UIScreen.main.bounds.height * 1/7 )
-            
-            }.listStyle(PlainListStyle()) // iOS 15 대응
+            if (viewModel.hotLists.count == 0){
+                Text("No Hot Posts")
+            }
+            else{
+                
+                RefreshableScrollView(onRefresh: { done in
+                    viewModel.getBoardPosts(token: viewModel.token)
+                    done()
+                }){
+                    LazyVStack {
+                        ForEach(viewModel.hotLists, id : \.self) { HotList in
+                            Button {
+                            } label : {
+                                GeneralPost(viewModel : GeneralPostViewModel(postList: HotList))
+                            }.background(
+                                NavigationLink(
+                                    destination:
+                                        PostInfoView(viewModel: PostInfoViewModel(
+                                            token: viewModel.token,
+                                            postId : HotList.postInfo.postId,
+                                            memberId : viewModel.memberId,
+                                            isMyPost : (viewModel.memberId == HotList.member?.memberId)))
+                                ){ }
+                            )
+                        }
+                        .foregroundColor(Color.mainTheme)
+                        .listStyle(PlainListStyle()) // iOS 15 대응
+                        //            .frame(height:UIScreen.main.bounds.height * 1/7 )
+                        
+                    }.listStyle(PlainListStyle()) // iOS 15 대응
+                        .padding(.top, 5)
+                }.padding(.top, 5)
+            }
         }.onAppear {
             viewModel.getSecretPosts(token: viewModel.token)
         }
@@ -53,8 +66,8 @@ struct HotBoardView : View {
                     .font(.system(size : 15, weight : .bold))
             }
         )
-//        .refreshable{ // only for ios15
-//            viewModel.getBoardPosts(token: viewModel.token)
-//        }
+        //        .refreshable{ // only for ios15
+        //            viewModel.getBoardPosts(token: viewModel.token)
+        //        }
     }
 }

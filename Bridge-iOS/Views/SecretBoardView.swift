@@ -7,6 +7,7 @@
 
 import SwiftUI
 import URLImage
+import SwiftUIPullToRefresh
 
 struct SecretBoardView : View {
     @StateObject private var viewModel : BoardViewModel
@@ -17,28 +18,35 @@ struct SecretBoardView : View {
     }
     
     var body : some View {
+        
         VStack {
-            List {
-                ForEach(viewModel.secretLists, id : \.self) { SecretList in
-                    Button {
-                    } label : {
-                        SecretPost(viewModel : SecretViewModel(postList: SecretList))
-                    }.background(
-                        NavigationLink(
-                            destination:
-                                PostInfoView(viewModel: PostInfoViewModel(
-                                                token: viewModel.token,
-                                                postId : SecretList.postId,
-                                                memberId : viewModel.memberId,
-                                                isMyPost : nil))
-                        ){ }
-                    )
-                }
-            .foregroundColor(Color.mainTheme)
-            .listStyle(PlainListStyle()) // iOS 15 대응
-//            .frame(height:UIScreen.main.bounds.height * 1/7 )
-            
-            }.listStyle(PlainListStyle()) // iOS 15 대응
+            RefreshableScrollView(onRefresh: { done in
+                viewModel.getBoardPosts(token: viewModel.token)
+                done()
+            }){
+                LazyVStack {
+                    ForEach(viewModel.secretLists, id : \.self) { SecretList in
+                        Button {
+                        } label : {
+                            SecretPost(viewModel : SecretViewModel(postList: SecretList))
+                        }.background(
+                            NavigationLink(
+                                destination:
+                                    PostInfoView(viewModel: PostInfoViewModel(
+                                        token: viewModel.token,
+                                        postId : SecretList.postId,
+                                        memberId : viewModel.memberId,
+                                        isMyPost : nil))
+                            ){ }
+                        )
+                    }
+                    .foregroundColor(Color.mainTheme)
+                    .listStyle(PlainListStyle()) // iOS 15 대응
+                    //            .frame(height:UIScreen.main.bounds.height * 1/7 )
+                    
+                }.listStyle(PlainListStyle()) // iOS 15 대응
+                    .padding(.top, 5)
+            }.padding(.top, 5)
         }.onAppear {
             usleep(200000)
             viewModel.getSecretPosts(token: viewModel.token)
@@ -54,9 +62,9 @@ struct SecretBoardView : View {
                     .font(.system(size : 15, weight : .bold))
             }
         )
-//        .refreshable{ // only for ios15
-//            viewModel.getBoardPosts(token: viewModel.token)
-//        }
+        //        .refreshable{ // only for ios15
+        //            viewModel.getBoardPosts(token: viewModel.token)
+        //        }
     }
 }
 
@@ -73,7 +81,7 @@ struct SecretPost : View {
             HStack{
                 URLImage( //프로필 이미지
                     URL(string : viewModel.profileImage) ??
-                        URL(string: "https://static.thenounproject.com/png/741653-200.png")!
+                    URL(string: "https://static.thenounproject.com/png/741653-200.png")!
                 ) { image in
                     image
                         .resizable()
@@ -97,7 +105,7 @@ struct SecretPost : View {
             if(viewModel.imageUrl != "null"){
                 URLImage(
                     URL(string : viewModel.imageUrl) ??
-                        URL(string: "https://static.thenounproject.com/png/741653-200.png")!
+                    URL(string: "https://static.thenounproject.com/png/741653-200.png")!
                 ) { image in
                     image
                         .resizable()
@@ -135,7 +143,7 @@ struct SecretPost : View {
             }.foregroundColor(.black)
         }
         .modifier(GeneralPostStyle())
-//        .frame(height: viewModel.imageUrl != "null" ? UIScreen.main.bounds.height * 0.27 : UIScreen.main.bounds.height * 0.18)
+        //        .frame(height: viewModel.imageUrl != "null" ? UIScreen.main.bounds.height * 0.27 : UIScreen.main.bounds.height * 0.18)
     }
 }
 //

@@ -15,6 +15,7 @@ struct GeneralPostStyle : ViewModifier {
             .foregroundColor(Color.black)
             .background(Color.white)
             .cornerRadius(20)
-            .shadow(radius : 5)
+//            .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.black, lineWidth: 1))
+            .shadow(radius : 3)
     }
 }
