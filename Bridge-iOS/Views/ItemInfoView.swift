@@ -179,7 +179,7 @@ struct ItemInfoView: View {
                     .padding(.bottom, 10)
                     
                     // Camp Info
-                    ScrollView(.horizontal, showsIndicators: true) {
+                    ScrollView(.horizontal, showsIndicators: false) {
                         HStack {
                             ForEach(viewModel.itemInfo?.usedPostDetail.camps ?? [], id : \.self) { camp in
                                 Text(camp)

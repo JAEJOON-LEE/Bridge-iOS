@@ -143,8 +143,8 @@ struct HomeView : View {
                                     .frame(width : UIScreen.main.bounds.width * 0.9, height : 5)
                             }
                         }
+                        Spacer().frame(height : UIScreen.main.bounds.height * 0.1)
                     }
-                    Spacer().frame(height : UIScreen.main.bounds.height * 0.1)
                 }.overlay(
                     VStack(spacing : 0) {
                         Spacer()
@@ -203,6 +203,8 @@ struct ItemCard : View {
                     .font(.system(.title2, design: .rounded))
                     .fontWeight(.medium)
                     .foregroundColor(.black.opacity(0.8))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.4)
                 HStack(spacing : 5) {
                     Text(viewModel.camp)
                         .fontWeight(.light)

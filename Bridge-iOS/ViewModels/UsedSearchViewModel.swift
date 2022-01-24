@@ -44,7 +44,7 @@ final class UsedSearchViewModel : ObservableObject {
                    parameters: ["lastCamp" : 0,
                                 "lastArea" : 0,
                                 "category" : category,
-                                "camp" : currentCamp],
+                                "camp" : CampEncoding[currentCamp]! ],
                    encoding: URLEncoding.default,
                    headers: header)
             .publishDecodable(type : Element.self)
@@ -72,7 +72,7 @@ final class UsedSearchViewModel : ObservableObject {
                    parameters: ["lastCamp" : 0,
                                 "lastArea" : 0,
                                 "hot" : true,
-                                "camp" : currentCamp],
+                                "camp" : CampEncoding[currentCamp]! ],
                    encoding: URLEncoding.default,
                    headers: header)
             .publishDecodable(type : Element.self)
@@ -100,7 +100,7 @@ final class UsedSearchViewModel : ObservableObject {
                    parameters: ["lastCamp" : 0,
                                 "lastArea" : 0,
                                 "query" : query,
-                                "camp" : currentCamp],
+                                "camp" : CampEncoding[currentCamp]! ],
                    encoding: URLEncoding.default,
                    headers: header)
             .publishDecodable(type : Element.self)

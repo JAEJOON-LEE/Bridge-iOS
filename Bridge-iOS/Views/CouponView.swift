@@ -282,6 +282,12 @@ struct CouponView: View {
             viewModel.getStore()
             viewModel.getRandomStore()
         }
-        .onChange(of: viewModel.selectedCategory) { _ in viewModel.getStore() }
+        .onChange(of: viewModel.selectedCategory) { _ in
+            viewModel.getStore()
+        }
+        .onChange(of: viewModel.selectedCamp) { _ in
+            viewModel.getStore()
+            viewModel.getRandomStore()
+        }
     }
 }
