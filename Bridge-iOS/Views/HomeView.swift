@@ -144,6 +144,10 @@ struct HomeView : View {
                             }
                         }
                         Spacer().frame(height : UIScreen.main.bounds.height * 0.1)
+                            .onAppear {
+                                // load more
+                                print("Last One")
+                            }
                     }
                 }.overlay(
                     VStack(spacing : 0) {

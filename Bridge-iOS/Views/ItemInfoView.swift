@@ -127,6 +127,8 @@ struct ItemInfoView: View {
                                 Text("|").foregroundColor(.mainTheme)
                                 Text("\(viewModel.itemInfo?.usedPostDetail.likeCount ?? 0) Likes")
                             }.font(.system(size : 11, weight : .semibold))
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.4)
                         }.foregroundColor(.black.opacity(0.8))
                         Spacer()
                         HStack(spacing : 5) {
@@ -137,7 +139,8 @@ struct ItemInfoView: View {
                                 .foregroundColor(.mainTheme)
                                 .font(.largeTitle)
                                 .fontWeight(.bold)
-                        }
+                        }.lineLimit(1)
+                        .minimumScaleFactor(0.4)
                     }
 
                     

@@ -57,6 +57,3 @@ struct ChatAbout : Codable, Hashable {
 //    var description : String
 //    var profileImage : String
 //}
-
-
-

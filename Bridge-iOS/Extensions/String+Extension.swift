@@ -39,3 +39,13 @@ func convertReturnedDateString(_ timeString : String) -> String {
         return str
     }
 }
+
+
+func convertReturnedDateStringTime(_ timeString : String) -> String {
+    var str = timeString // 2021-10-03T21:34:20.209447
+    str.removeSubrange(str.startIndex..<str.index(str.startIndex, offsetBy: 11)) // 21:34:20.209447
+    str.removeSubrange(str.index(str.startIndex, offsetBy: 5)..<str.endIndex) // 21:34
+    
+    return str
+}
+

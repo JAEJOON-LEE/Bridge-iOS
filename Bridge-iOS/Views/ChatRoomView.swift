@@ -27,21 +27,42 @@ struct ChatroomView: View {
             ScrollView {
                 ScrollViewReader { proxy in
                     LazyVStack {
-                        ForEach(viewModel.MessageList.reversed(), id : \.self) { message in // reversed() -> 최신순
+                        Spacer().frame(height : 1)
+                            .onAppear {
+                                // Load more with last message id
+                                print(viewModel.lastMessageId)
+                                //viewModel.getChatContents(viewModel.chatId)
+                            }
+                        ForEach(0..<viewModel.MessageList.count, id : \.self) { index in
+                            if viewModel.checkChatDay(index: index) {
+                                Text(convertReturnedDateString(viewModel.MessageList[index].message.createdAt))
+                                    .foregroundColor(.white)
+                                    .font(.system(size : 13, design: .rounded))
+                                    .padding(.horizontal)
+                                    .background(Color.black.opacity(0.4))
+                                    .cornerRadius(10)
+                                    .padding(8)
+                            }
+                            
                             HStack {
-                                if let user = message.member {
+                                if let user = viewModel.MessageList[index].member {
                                     if user.username == userWith { // 상대방이 보낸 메시지
-                                        MessageBox(message.message)
+                                        MessageBox(viewModel.MessageList[index].message,
+                                                   time : viewModel.checkChatTime(index: index))
                                         Spacer()
                                     } else { // 내가 보낸 메시지
                                         Spacer()
-                                        MessageBox(message.message, mine : true)
+                                        MessageBox(viewModel.MessageList[index].message,
+                                                   mine : true,
+                                                   time : viewModel.checkChatTime(index: index))
                                     }
                                 } else { // Anonymous 익명 메시지
-                                    MessageBox(message.message)
+                                    MessageBox(viewModel.MessageList[index].message,
+                                               time : viewModel.checkChatTime(index: index))
                                     Spacer()
                                 }
-                            }.id(message.message.messageId)
+                            }.id(viewModel.MessageList[index].message.messageId)
+                            .padding(.bottom, viewModel.checkChatTime(index: index) ? 5 : -5)
                         } // ForEach
                     } // LazyVStack
                     .sheet(isPresented: $viewModel.showImagePicker) {
@@ -115,7 +136,8 @@ struct ChatroomView: View {
                     )
                     //viewModel.MessageList.append(newMsg)
                     viewModel.lastMessageId += 1
-                    viewModel.MessageList.insert(newMsg, at: viewModel.MessageList.startIndex)
+                    //viewModel.MessageList.insert(newMsg, at: viewModel.MessageList.startIndex)
+                    viewModel.MessageList.append(newMsg)
                     viewModel.messageText = ""
                     viewModel.selectedImage = nil
                 } label : {
@@ -213,49 +235,66 @@ struct ChatroomView: View {
 struct MessageBox : View {
     var message : MessageContents
     var mine : Bool = false
+    var time : Bool
     
-    init(_ message : MessageContents) {
+    init(_ message : MessageContents, time : Bool) {
         self.message = message
+        self.time = time
     }
-    init(_ message : MessageContents, mine : Bool) {
+    
+    init(_ message : MessageContents, mine : Bool, time : Bool) {
         self.message = message
         self.mine = mine
+        self.time = time
     }
     
     var body : some View {
         VStack(alignment : mine ? .trailing : .leading, spacing : 3) {
-            VStack(alignment : .trailing) {
-                // -- message w/o image
-                if message.message != "" {
-                    Text(message.message)
+            HStack(spacing : 3) {
+                if mine && time {
+                    Text(convertReturnedDateStringTime(message.createdAt))
+                        .foregroundColor(.black.opacity(0.7))
+                        .font(.system(size : 10, design: .rounded))
+                        .padding(.top)
                 }
-                // -- message w/ image
-                if message.image != "null" {
-                    URLImage(
-                        URL(string : message.image)!
-                    ) { image in
-                        image
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(maxWidth : UIScreen.main.bounds.width * 0.6)
-                    }.cornerRadius(10)
+                
+                
+                VStack(alignment : .trailing) {
+                    // -- message w/o image
+                    if message.message != "" {
+                        Text(message.message)
+                    }
+                    // -- message w/ image
+                    if message.image != "null" {
+                        URLImage(
+                            URL(string : message.image)!
+                        ) { image in
+                            image
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(maxWidth : UIScreen.main.bounds.width * 0.6)
+                        }.cornerRadius(10)
+                    }
+//                    내가 보낸 이미지 메시지 처리 방식 !!
+//                    else if message.image == "localImage" {
+//                        Image()
+//                            .resizable()
+//                            .aspectRatio(contentMode: .fill)
+//                            .frame(maxWidth : UIScreen.main.bounds.width * 0.6)
+//                            .cornerRadius(10)
+//                    }
                 }
-//                내가 보낸 이미지 메시지 처리 방식 !!
-//                else if message.image == "localImage" {
-//                    Image()
-//                        .resizable()
-//                        .aspectRatio(contentMode: .fill)
-//                        .frame(maxWidth : UIScreen.main.bounds.width * 0.6)
-//                        .cornerRadius(10)
-//                }
+                .padding(10)
+                .background(mine ? Color.mainTheme : Color.systemDefaultGray)
+                .cornerRadius(15)
+                
+                if !mine && time {
+                    Text(convertReturnedDateStringTime(message.createdAt))
+                        .foregroundColor(.black.opacity(0.7))
+                        .font(.system(size : 10, design: .rounded))
+                        .padding(.top)
+                }
             }
-            .padding()
-            .background(mine ? Color.mainTheme : Color.systemDefaultGray)
-            .cornerRadius(10)
-        
-            Text(convertReturnedDateString(message.createdAt))
-                .foregroundColor(.black.opacity(0.7))
-                .font(.system(size : 10))
         }.padding(.horizontal, 10)
     }
 }

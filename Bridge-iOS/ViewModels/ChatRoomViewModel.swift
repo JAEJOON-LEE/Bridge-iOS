@@ -36,7 +36,7 @@ final class ChatroomViewModel : ObservableObject {
     
     func getChatContents(_ chatId : Int) {
         let header : HTTPHeaders = [ "X-AUTH-TOKEN" : SignInViewModel.accessToken ]
-        let url = "http://3.36.233.180:8080/chats/\(chatId)/messages?lastMessageId=0"
+        let url = "http://3.36.233.180:8080/chats/\(chatId)/messages?lastMessageId=\(lastMessageId)"
         
         AF.request(url,
                    method: .get,
@@ -55,9 +55,27 @@ final class ChatroomViewModel : ObservableObject {
                 }
             } receiveValue: { [weak self] (receivedValue : [Message]) in
                 //print(receivedValue)
-                self?.MessageList = receivedValue
+                self?.MessageList = receivedValue.reversed()
                 if !receivedValue.isEmpty { self?.lastMessageId = receivedValue[0].message.messageId }
             }.store(in: &subscription)
+    }
+
+    func checkChatDay(index : Int) -> Bool {
+        if index == 0 { return true }
+        else {
+            if convertReturnedDateString(MessageList[index].message.createdAt) == convertReturnedDateString(MessageList[index - 1].message.createdAt) {
+                return false
+            } else { return true }
+        }
+    }
+    
+    func checkChatTime(index : Int) -> Bool {
+        if index == MessageList.count - 1 { return true }
+        else {
+            if convertReturnedDateStringTime(MessageList[index].message.createdAt) == convertReturnedDateStringTime(MessageList[index + 1].message.createdAt) {
+                return false
+            } else { return true }
+        }
     }
     
     func exitChat() {
