@@ -7,6 +7,7 @@
 
 import SwiftUI
 import URLImage
+import SwiftUIPullToRefresh
 
 enum ActiveAlert {
     case first, second, third
@@ -85,6 +86,13 @@ struct PostInfoView: View { // 게시글 상세 페이지
                 ///
                 ///
                 ///
+                ///
+                RefreshableScrollView(onRefresh: { done in
+                    viewModel.getBoardPostDetail()
+                    viewModel.getComment()
+                    done()
+                })
+                    {
                 ScrollView(.vertical, showsIndicators: false) {
                     //Images
                     ScrollView(.horizontal, showsIndicators: true) {
@@ -208,7 +216,7 @@ struct PostInfoView: View { // 게시글 상세 페이지
                     }.listStyle(PlainListStyle()) // iOS 15 대응
                         .id("COMMENT_AREA")
                 }
-                
+                }
                 ///
                 ///
                 ///
