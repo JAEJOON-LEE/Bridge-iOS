@@ -123,7 +123,13 @@ struct SignUpAppendixView: View {
             .background(Color.white)
             .cornerRadius(15)
             .shadow(radius: 15)
-        }
+        }.overlay(
+            VStack(spacing : 0) {
+                Spacer()
+                Color.white
+                    .frame(height : UIScreen.main.bounds.height * 0.03)
+            }.edgesIgnoringSafeArea(.bottom)
+        )
         .edgesIgnoringSafeArea(.all)
         .alert(isPresented: $viewModel.showSignUpFailAlert) {
             Alert(title: Text("Failed to create your account"),
