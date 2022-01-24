@@ -42,7 +42,7 @@ final class CouponViewModel : ObservableObject {
                    method: .get,
                    parameters: ["lastShopId" : 0,
                                 "shopType" : shopType,
-                                "camp" : selectedCamp],
+                                "camp" : CampEncoding[selectedCamp]! ],
                    encoding: URLEncoding.default,
                    headers: header)
             .responseJSON { [weak self] (response) in
@@ -77,7 +77,7 @@ final class CouponViewModel : ObservableObject {
         AF.request(url,
                    method: .get,
                    parameters: ["lastShopId" : 0,
-                                "camp" : selectedCamp,
+                                "camp" : CampEncoding[selectedCamp]!,
                                 "random" : true],
                    encoding: URLEncoding.default,
                    headers: header)

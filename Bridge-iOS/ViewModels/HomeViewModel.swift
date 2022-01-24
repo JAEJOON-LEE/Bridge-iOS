@@ -35,7 +35,7 @@ final class HomeViewModel : ObservableObject {
                    method: .get,
                    parameters: ["lastCamp" : 0,
                                 "lastArea" : 0,
-                                "camp" : selectedCamp],
+                                "camp" : CampEncoding[selectedCamp]! ],
                    encoding: URLEncoding.default,
                    headers: header)
             .responseJSON { [weak self] (response) in
