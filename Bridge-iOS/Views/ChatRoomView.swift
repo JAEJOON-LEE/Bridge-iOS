@@ -30,8 +30,8 @@ struct ChatroomView: View {
                         Spacer().frame(height : 1)
                             .onAppear {
                                 // Load more with last message id
-                                print(viewModel.lastMessageId)
-                                //viewModel.getChatContents(viewModel.chatId)
+                                print(viewModel.idForLoadMore)
+                                viewModel.getChatContents(viewModel.chatId)
                             }
                         ForEach(0..<viewModel.MessageList.count, id : \.self) { index in
                             if viewModel.checkChatDay(index: index) {
@@ -69,7 +69,7 @@ struct ChatroomView: View {
                         ImagePicker(image: $viewModel.selectedImage)
                     }
                     .onAppear {
-                        viewModel.getChatContents(viewModel.chatId)
+                        //viewModel.getChatContents(viewModel.chatId)
                         proxy.scrollTo(viewModel.lastMessageId)
                     }
                     .onChange(of: viewModel.lastMessageId) { _ in

@@ -204,8 +204,8 @@ struct ItemCard : View {
 
             VStack(alignment : .leading, spacing: 5) {
                 Text(viewModel.itemTitle)
-                    .font(.system(.title2, design: .rounded))
-                    .fontWeight(.medium)
+                    .font(.system(.title3, design: .rounded))
+                    .fontWeight(.semibold)
                     .foregroundColor(.black.opacity(0.8))
                     .lineLimit(1)
                     .minimumScaleFactor(0.4)
@@ -217,7 +217,7 @@ struct ItemCard : View {
                     Image(systemName : "eye")
                     Text("\(viewModel.viewCount)")
                         .fontWeight(.light)
-                }.font(.system(size : 9))
+                }.font(.system(size : 9, design : .rounded))
                 Spacer()
                 HStack {
                     Text("$ " + viewModel.itemPrice)
@@ -225,7 +225,9 @@ struct ItemCard : View {
                         .foregroundColor(.black.opacity(0.8))
                     Spacer()
                     Image(systemName : viewModel.isLiked ? "heart.fill" : "heart")
-                        .font(.system(size : 24))
+                        .font(.system(size : 20))
+                        .foregroundColor(viewModel.isLiked ? .pink : .gray)
+                        .padding(.trailing, 10)
                 }
             }.foregroundColor(.secondary)
             .padding(.vertical, 7)

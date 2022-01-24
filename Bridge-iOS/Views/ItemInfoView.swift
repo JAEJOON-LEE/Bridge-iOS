@@ -113,7 +113,7 @@ struct ItemInfoView: View {
                 Spacer()
                 VStack(alignment : .leading) {
                     // Title
-                    HStack {
+                    HStack(spacing: 10) {
                         VStack(alignment : .leading, spacing: 10) {
                             Text(viewModel.itemInfo?.usedPostDetail.title ?? "Title not found")
                                 .font(.system(.largeTitle, design: .rounded))

@@ -19,6 +19,7 @@ final class ChatroomViewModel : ObservableObject {
     @Published var showSelectedImage : Bool = false
     @Published var toolbarButtonClicked : Bool = false
     @Published var toolbarButtonClickedConfirm : Bool = false
+    @Published var idForLoadMore : Int64 = 0
     
     private var subscription = Set<AnyCancellable>()
     
@@ -36,7 +37,7 @@ final class ChatroomViewModel : ObservableObject {
     
     func getChatContents(_ chatId : Int) {
         let header : HTTPHeaders = [ "X-AUTH-TOKEN" : SignInViewModel.accessToken ]
-        let url = "http://3.36.233.180:8080/chats/\(chatId)/messages?lastMessageId=\(lastMessageId)"
+        let url = "http://3.36.233.180:8080/chats/\(chatId)/messages?lastMessageId=\(idForLoadMore)"
         
         AF.request(url,
                    method: .get,
@@ -55,7 +56,10 @@ final class ChatroomViewModel : ObservableObject {
                 }
             } receiveValue: { [weak self] (receivedValue : [Message]) in
                 //print(receivedValue)
-                self?.MessageList = receivedValue.reversed()
+                //self?.MessageList = receivedValue.reversed()
+                if let lastMsg = receivedValue.last?.message { self?.idForLoadMore = lastMsg.messageId }
+                self?.MessageList.insert(contentsOf: receivedValue.reversed(), at: 0)
+
                 if !receivedValue.isEmpty { self?.lastMessageId = receivedValue[0].message.messageId }
             }.store(in: &subscription)
     }

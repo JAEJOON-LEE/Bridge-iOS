@@ -42,12 +42,13 @@ final class ItemInfoViewModel : ObservableObject {
     var formattedPrice : String {
         guard let numToCal = itemInfo?.usedPostDetail.price else { return "" }
         var src = String(Int(numToCal))
-        let len = src.count
+        var len = src.count
         var count = 1
 
         while (len > (4 * count - 1)) { //
             src.insert(",", at: src.index(src.endIndex, offsetBy: (4 * count - 1) * -1))
             count += 1
+            len += 1
         }
         
         return src
