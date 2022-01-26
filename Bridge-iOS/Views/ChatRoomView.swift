@@ -33,9 +33,15 @@ struct ChatroomView: View {
                                 print(viewModel.idForLoadMore)
                                 viewModel.getChatContents(viewModel.chatId)
                             }
+//                        Button {
+//                            viewModel.getChatContents(viewModel.chatId)
+//                        } label : {
+//                            Text("Load more")
+//                                .foregroundColor(.mainTheme)
+//                        }
                         ForEach(0..<viewModel.MessageList.count, id : \.self) { index in
                             if viewModel.checkChatDay(index: index) {
-                                Text(convertReturnedDateString(viewModel.MessageList[index].message.createdAt))
+                                Text(convertReturnedDateStringToDay(viewModel.MessageList[index].message.createdAt))
                                     .foregroundColor(.white)
                                     .font(.system(size : 13, design: .rounded))
                                     .padding(.horizontal)

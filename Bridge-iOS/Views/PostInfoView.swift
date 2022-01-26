@@ -806,7 +806,8 @@ extension PostInfoView {
                             Text(Comment.member?.username! ?? "Anonymous" )
                                 .font(.system(size: 20, weight : .medium))
 
-                            Text(viewModel.convertReturnedDateString(Comment.createdAt ?? "2021-10-01 00:00:00"))
+                            //Text(viewModel.convertReturnedDateString(Comment.createdAt ?? "2021-10-01 00:00:00"))
+                            Text(viewModel.convertReturnedDateString(Comment.createdAt))
                                 .font(.system(size: 10))
                         }
                         .foregroundColor(.gray)

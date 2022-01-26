@@ -67,7 +67,7 @@ final class ChatroomViewModel : ObservableObject {
     func checkChatDay(index : Int) -> Bool {
         if index == 0 { return true }
         else {
-            if convertReturnedDateString(MessageList[index].message.createdAt) == convertReturnedDateString(MessageList[index - 1].message.createdAt) {
+            if convertReturnedDateStringToDay(MessageList[index].message.createdAt) == convertReturnedDateStringToDay(MessageList[index - 1].message.createdAt) {
                 return false
             } else { return true }
         }

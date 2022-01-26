@@ -40,6 +40,15 @@ func convertReturnedDateString(_ timeString : String) -> String {
     }
 }
 
+func convertReturnedDateStringToDay(_ timeString : String) -> String {
+    var str = timeString // 2021-10-03T21:34:20.209447
+    str.removeSubrange(str.index(str.startIndex, offsetBy: 10)..<str.endIndex)
+//    str.remove(at: str.index(str.startIndex, offsetBy: 10))
+//    str.insert(" ", at: str.index(str.startIndex, offsetBy: 10))
+//
+//    str.removeSubrange(str.index(str.endIndex, offsetBy: -9)..<str.endIndex)
+    return str
+}
 
 func convertReturnedDateStringTime(_ timeString : String) -> String {
     var str = timeString // 2021-10-03T21:34:20.209447
