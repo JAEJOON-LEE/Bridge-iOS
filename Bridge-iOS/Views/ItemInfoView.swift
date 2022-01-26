@@ -234,7 +234,7 @@ struct ItemInfoView: View {
                             Spacer()
                             Button {
                                 viewModel.createChat()
-                                viewModel.chatCreation = true
+                                //viewModel.chatCreation = true
                                 
                                 //fcm test
                                 if(viewModel.isMyPost == false){
@@ -378,8 +378,12 @@ struct ItemInfoView: View {
             }
         })
         .background(
-            NavigationLink(
-                destination : Text("\(viewModel.createdChatId)"), // TEMP : To the chat room
+            NavigationLink(destination :
+                ChatroomView(viewModel:
+                    ChatroomViewModel(viewModel.createdChatId,
+                                      userInfo : viewModel.userInfo),
+                        with: viewModel.itemInfo?.member.username ?? "Anonymous"
+                    ),
                 isActive : $viewModel.chatCreation
             ) { }
         )

@@ -31,11 +31,13 @@ final class ItemInfoViewModel : ObservableObject {
     var previousLikeStatus : Bool = false
     
     let postId : Int
+    let userInfo : MemeberInformation
     let isMyPost : Bool
     
-    init(postId : Int, isMyPost : Bool) {
+    init(postId : Int, isMyPost : Bool, userInfo : MemeberInformation) {
         self.postId = postId
         self.isMyPost = isMyPost
+        self.userInfo = userInfo
         getItemInfo()
     }
     
@@ -130,6 +132,7 @@ final class ItemInfoViewModel : ObservableObject {
             }
         } receiveValue: { [weak self] recievedValue in
             self?.createdChatId =  recievedValue //.chatId
+            self?.chatCreation = true
         }.store(in: &subscription)
     }
 }

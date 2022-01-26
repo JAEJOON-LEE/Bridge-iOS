@@ -14,8 +14,16 @@ final class HomeViewModel : ObservableObject {
     @Published var selectedCamp : String = "Casey/Hovey" //"Camp Casey"
     @Published var isSearchViewShow : Bool = false
     @Published var postFetchDone : Bool = false
-    @Published var memberInfo : MemeberInformation?
-    
+    @Published var memberInfo = MemeberInformation(
+                                    memberId: -1,
+                                    username: "",
+                                    description: "",
+                                    profileImage: "",
+                                    chatAlarm: false,
+                                    playgroundAlarm: false,
+                                    usedAlarm: false
+                                )
+                                
     private var subscription = Set<AnyCancellable>()
     let memberId : Int
     //let locations = ["Camp Casey", "Camp Hovey", "USAG Yongsan", "K-16", "Suwon A/B", "Osan A/B", "Camp Humperys", "Camp Carroll", "Camp Henry", "Camp Walker", "Gunsan A/B"]

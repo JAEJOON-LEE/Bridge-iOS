@@ -24,14 +24,16 @@ final class UsedSearchViewModel : ObservableObject {
     private var subscription = Set<AnyCancellable>()
 
     let memberId : Int
+    let userInfo : MemeberInformation
     
     var categories : [String] = ["Digital", "Interior", "Fashion", "Life", "Beauty", "Etc"]
     //["Digital", "Furniture", "Food", "Clothes", "Beauty", "Etc."]
     var currentCamp : String = ""
     
-    init(memberId : Int, currentCamp : String) {
+    init(memberId : Int, currentCamp : String, userInfo : MemeberInformation) {
         self.memberId = memberId
         self.currentCamp = currentCamp
+        self.userInfo = userInfo
         getHotDealPosts()
     }
     

@@ -46,12 +46,17 @@ struct ChatView: View {
                         if chatroom.message != nil { // chat room with no message
                             
                             VStack {
-                                NavigationLink(
-                                    destination:
-                                        ChatroomView(
-                                            viewModel: ChatroomViewModel(chatroom.chatId, userInfo : viewModel.userInfo),
-                                            with: chatroom.memberTo?.username ?? "Anonymous"
-                                        )
+                                NavigationLink(destination :
+                                                ChatroomView(viewModel: ChatroomViewModel(chatroom.chatId,
+                                                                                         userInfo : MemeberInformation(
+                                                                                                memberId: viewModel.userInfo.memberId,
+                                                                                                username: viewModel.userInfo.username,
+                                                                                                description: viewModel.userInfo.description,
+                                                                                                profileImage: viewModel.userInfo.profileImage,
+                                                                                                chatAlarm: false,
+                                                                                                playgroundAlarm: false,
+                                                                                                usedAlarm: false)),
+                                                            with: chatroom.memberTo?.username ?? "Anonymous")
                                 ) {
                                     HStack {
                                         // 1. Profile Image

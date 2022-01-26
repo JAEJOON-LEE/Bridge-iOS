@@ -129,7 +129,7 @@ struct HomeView : View {
                                         ItemInfoView(viewModel:
                                                         ItemInfoViewModel(
                                                             postId : Post.postId,
-                                                            isMyPost : (viewModel.memberId == Post.memberId)
+                                                            isMyPost : (viewModel.memberId == Post.memberId), userInfo: viewModel.memberInfo
                                                         )
                                         )/*.onDisappear(perform: {
                                             // 일반 작업시에는 필요없는데, 삭제 작업 즉시 반영을 위해서 필요함
@@ -171,11 +171,10 @@ struct HomeView : View {
             print("full screen cover dissmiss action")
         } content: {
             NavigationView {
-                UsedSearchView(viewModel:
-                                UsedSearchViewModel(
-                                    memberId: viewModel.memberId,
-                                    currentCamp : viewModel.selectedCamp
-                                )
+                UsedSearchView(viewModel: UsedSearchViewModel(
+                                                memberId: viewModel.memberId,
+                                                currentCamp : viewModel.selectedCamp,
+                                                userInfo : viewModel.memberInfo)
                 )
             }.accentColor(.mainTheme)
         }

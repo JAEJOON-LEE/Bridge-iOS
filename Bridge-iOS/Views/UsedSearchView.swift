@@ -102,7 +102,8 @@ struct UsedSearchView : View {
                                     ItemInfoView(viewModel:
                                                     ItemInfoViewModel(
                                                         postId : Post.postId,
-                                                        isMyPost : (viewModel.memberId == Post.memberId)
+                                                        isMyPost : (viewModel.memberId == Post.memberId),
+                                                        userInfo : viewModel.userInfo
                                                     )
                                     )
                                     .onDisappear(perform: {
@@ -158,7 +159,8 @@ struct UsedSearchView : View {
                                                 ItemInfoView(viewModel:
                                                                 ItemInfoViewModel(
                                                                     postId : Post.postId,
-                                                                    isMyPost : (viewModel.memberId == Post.memberId)
+                                                                    isMyPost : (viewModel.memberId == Post.memberId),
+                                                                    userInfo : viewModel.userInfo
                                                                 )
                                                 )
                                                 .onDisappear(perform: {
@@ -213,7 +215,8 @@ struct UsedSearchView : View {
                                                 ItemInfoView(viewModel:
                                                                 ItemInfoViewModel(
                                                                     postId : Post.postId,
-                                                                    isMyPost : (viewModel.memberId == Post.memberId)
+                                                                    isMyPost : (viewModel.memberId == Post.memberId),
+                                                                    userInfo : viewModel.userInfo
                                                                 )
                                                 )
                                                 .onDisappear(perform: {

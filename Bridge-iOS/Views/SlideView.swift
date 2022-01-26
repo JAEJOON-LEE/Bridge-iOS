@@ -42,7 +42,8 @@ struct SlideView : View {
                                 ItemInfoView(viewModel:
                                                 ItemInfoViewModel(
                                                     postId : Post.postId,
-                                                    isMyPost : (viewModel.userInfo.memberId == Post.postId)
+                                                    isMyPost : (viewModel.userInfo.memberId == Post.postId),
+                                                    userInfo: viewModel.memberInfo
                                                 )
                                 )
                         ) {
@@ -69,7 +70,8 @@ struct SlideView : View {
                                 ItemInfoView(viewModel:
                                                 ItemInfoViewModel(
                                                     postId : Post.postId,
-                                                    isMyPost : (viewModel.userInfo.memberId == Post.postId)
+                                                    isMyPost : (viewModel.userInfo.memberId == Post.postId),
+                                                    userInfo: viewModel.memberInfo
                                                 )
                                 )
                         ) {

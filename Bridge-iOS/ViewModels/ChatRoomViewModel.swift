@@ -31,10 +31,10 @@ class ChatroomViewModel : ObservableObject {
     private let url = URL(string: "ws://3.36.233.180:8080/stomp/chat/websocket")!
 
     let chatId : Int
-    let userInfo : SignInResponse
+    let userInfo : MemeberInformation //SignInResponse
     
     // init 시점 : ChatView load 될때
-    init(_ chatId : Int, userInfo : SignInResponse) {
+    init(_ chatId : Int, userInfo : MemeberInformation) {
         self.chatId = chatId
         self.userInfo = userInfo
         
