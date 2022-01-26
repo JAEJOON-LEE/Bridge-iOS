@@ -122,7 +122,7 @@ struct ChatroomView: View {
                     print("Publish message " + viewModel.messageText)
                     
                     // MESSAGE PUBLISHING
-                    //viewModel.stompManager.sendMessage(message: text)
+                    viewModel.sendMessage()
                     
                     let newMsg = Message(
                         member:
@@ -160,6 +160,8 @@ struct ChatroomView: View {
             .background(Color.systemDefaultGray)
         } // VStack
         //.edgesIgnoringSafeArea(.bottom)
+        .onAppear { viewModel.registerSockect() }
+        .onDisappear { viewModel.disconnect() }
         .navigationTitle(Text(userWith))
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarItems(
