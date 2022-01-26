@@ -236,7 +236,6 @@
 				AF74D8EC0CC98F86C18D948C /* Pods-Bridge-iOS.debug.xcconfig */,
 				F94B0A79403B0D1F662B7C2B /* Pods-Bridge-iOS.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -495,7 +494,7 @@
 			);
 			mainGroup = 1AA8B40026F32AF500C28E02;
 			packageReferences = (
-				1ADD9DDD27032237008342A7 /* XCRemoteSwiftPackageReference "Alamofire.git" */,
+				1ADD9DDD27032237008342A7 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				1ADD9DE9270363A0008342A7 /* XCRemoteSwiftPackageReference "url-image" */,
 				6DE69900278A98B00048EB76 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				1ADA2867279AC2530069FB69 /* XCRemoteSwiftPackageReference "swiftui-pull-to-refresh" */,
@@ -868,12 +867,12 @@
 				minimumVersion = 1.0.0;
 			};
 		};
-		1ADD9DDD27032237008342A7 /* XCRemoteSwiftPackageReference "Alamofire.git" */ = {
+		1ADD9DDD27032237008342A7 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.0.0;
+				kind = exactVersion;
+				version = 5.4.4;
 			};
 		};
 		1ADD9DE9270363A0008342A7 /* XCRemoteSwiftPackageReference "url-image" */ = {
@@ -902,7 +901,7 @@
 		};
 		1ADD9DDE27032237008342A7 /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 1ADD9DDD27032237008342A7 /* XCRemoteSwiftPackageReference "Alamofire.git" */;
+			package = 1ADD9DDD27032237008342A7 /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
 		};
 		1ADD9DEA270363A1008342A7 /* URLImage */ = {

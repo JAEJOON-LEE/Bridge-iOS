@@ -15,8 +15,8 @@
         "repositoryURL": "https://github.com/Alamofire/Alamofire.git",
         "state": {
           "branch": null,
-          "revision": "f82c23a8a7ef8dc1a49a8bfc6a96883e79121864",
-          "version": "5.5.0"
+          "revision": "d120af1e8638c7da36c8481fd61a66c0c08dc4fc",
+          "version": "5.4.4"
         }
       },
       {
@@ -33,7 +33,7 @@
         "repositoryURL": "https://github.com/firebase/firebase-ios-sdk",
         "state": {
           "branch": "master",
-          "revision": "7a141fd867ef09053d6b215393ca9a543bfda79c",
+          "revision": "c506d394f8297ec2e64e8f49072cf26ef7d4b0db",
           "version": null
         }
       },
@@ -123,8 +123,8 @@
         "repositoryURL": "https://github.com/globulus/swiftui-pull-to-refresh",
         "state": {
           "branch": null,
-          "revision": "c0dea26161afb46d1160eb81eed6f85fbd5aba2b",
-          "version": "1.1.4"
+          "revision": "5a1e0f8f239381df7e75a63e6d01e42633d0903f",
+          "version": "1.1.5"
         }
       },
       {
