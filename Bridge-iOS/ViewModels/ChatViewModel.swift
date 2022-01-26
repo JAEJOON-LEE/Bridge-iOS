@@ -17,9 +17,11 @@ final class ChatViewModel : ObservableObject {
     
     private let url = "http://3.36.233.180:8080/chats"
     let userInfo : SignInResponse
+    let userId : Int
     
     init(userInfo : SignInResponse) {
         self.userInfo = userInfo
+        userId = userInfo.memberId
         //getChats()
     }
     
@@ -48,6 +50,15 @@ final class ChatViewModel : ObservableObject {
                 }
                 //print(self?.ChatList)
             }.store(in: &subscription)
+    }
+    
+    func chatWith(chatroom : Chat) -> ChatMember? {
+        guard let memberTo = chatroom.memberTo, let memberFrom = chatroom.memberFrom else { return nil }
+        
+        if userId == memberTo.memberId { return memberFrom }
+        else if userId == memberFrom.memberId { return memberTo }
+        
+        return nil
     }
 }
 

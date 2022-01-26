@@ -118,32 +118,33 @@ struct ChatroomView: View {
                     .frame(height : UIScreen.main.bounds.height * 0.04)
                     .background(Color.white)
                     .cornerRadius(10)
+                
                 Button {
                     print("Publish message " + viewModel.messageText)
                     
                     // MESSAGE PUBLISHING
                     viewModel.sendMessage()
                     
-                    let newMsg = Message(
-                        member:
-                            Sender(
-                                memberId: viewModel.userInfo.memberId,
-                                username: viewModel.userInfo.username,
-                                description: viewModel.userInfo.description,
-                                profileImage: viewModel.userInfo.profileImage
-                            ),
-                        message:
-                            MessageContents(
-                                messageId: viewModel.lastMessageId + 1,
-                                message: viewModel.messageText,
-                                image: "null",
-                                createdAt: "\(Date(timeIntervalSinceNow: 32400))"
-                            )
-                    )
-                    //viewModel.MessageList.append(newMsg)
-                    viewModel.lastMessageId += 1
-                    //viewModel.MessageList.insert(newMsg, at: viewModel.MessageList.startIndex)
-                    viewModel.MessageList.append(newMsg)
+//                    let newMsg = Message(
+//                        member:
+//                            Sender(
+//                                memberId: viewModel.userInfo.memberId,
+//                                username: viewModel.userInfo.username,
+//                                description: viewModel.userInfo.description,
+//                                profileImage: viewModel.userInfo.profileImage
+//                            ),
+//                        message:
+//                            MessageContents(
+//                                messageId: viewModel.lastMessageId + 1,
+//                                message: viewModel.messageText,
+//                                image: "null",
+//                                createdAt: "\(Date(timeIntervalSinceNow: 32400))"
+//                            )
+//                    )
+//                    //viewModel.MessageList.append(newMsg)
+//                    viewModel.lastMessageId += 1
+//                    //viewModel.MessageList.insert(newMsg, at: viewModel.MessageList.startIndex)
+//                    viewModel.MessageList.append(newMsg)
                     viewModel.messageText = ""
                     viewModel.selectedImage = nil
                 } label : {

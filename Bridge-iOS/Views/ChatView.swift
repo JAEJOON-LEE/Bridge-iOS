@@ -36,7 +36,7 @@ struct ChatView: View {
             ScrollView {
                 LazyVStack {
                     ForEach(viewModel.ChatList.filter{ chatroom in
-                        guard let userName = chatroom.memberTo?.username else {
+                        guard let userName = viewModel.chatWith(chatroom: chatroom)?.username else {
                             if viewModel.searchText.isEmpty { return true }
                             else { return false }
                         }
@@ -56,12 +56,12 @@ struct ChatView: View {
                                                                                                 chatAlarm: false,
                                                                                                 playgroundAlarm: false,
                                                                                                 usedAlarm: false)),
-                                                            with: chatroom.memberTo?.username ?? "Anonymous")
+                                                             with : viewModel.chatWith(chatroom: chatroom)?.username ?? "Anonymous")
                                 ) {
                                     HStack {
                                         // 1. Profile Image
                                         URLImage(
-                                            URL(string : chatroom.memberTo?.profileImage ?? "https://www.gravatar.com/avatar/3b37be7c3ac00a1237fe8d4252fd4540.jpg?size=240&d=https%3A%2F%2Fwww.artstation.com%2Fassets%2Fdefault_avatar.jpg")!
+                                            URL(string : viewModel.chatWith(chatroom: chatroom)?.profileImage ?? "https://www.gravatar.com/avatar/3b37be7c3ac00a1237fe8d4252fd4540.jpg?size=240&d=https%3A%2F%2Fwww.artstation.com%2Fassets%2Fdefault_avatar.jpg")!
                                         ) { image in
                                             image
                                                 .resizable()
@@ -76,7 +76,7 @@ struct ChatView: View {
                                         
                                         // 2. Text Area
                                         VStack(alignment : .leading, spacing : 5) {
-                                            Text(chatroom.memberTo?.username ?? "Anonymous")
+                                            Text(viewModel.chatWith(chatroom: chatroom)?.username ?? "Anonymous")
                                                 .font(.system(size: 18, weight : .bold, design : .rounded))
                                                 .foregroundColor(.black)
                                             

@@ -64,24 +64,41 @@ class ChatroomViewModel : ObservableObject {
         print("Subscribe topic - /sub/chat/room/\(chatId)")// + chatId)
         //print("-- Subscribe with header : ")
         //print(header)
-        
-        //payloadObject["chatId"] = "\(chatId)"
     }
     
     // Publish Message
     func sendMessage() {
-        let payloadObject : [String : Any] = [
-            "memberId" : userInfo.memberId,
-            "chatId" : chatId,
-            "message" : messageText,
-            //"image" : "null",
-            "accessToken" : SignInViewModel.accessToken
-        ]
-//        payloadObject["message"] = message
-//        payloadObject["image"] = "null"
-//        payloadObject["accessToken"] = accessToken
+        var payloadObject : [String : Any] = [ : ]
+        // w/ Image
+        if let image = selectedImage, let imageData = image.jpegData(compressionQuality: 1.0) {
+            payloadObject = [
+                "memberId" : userInfo.memberId,
+                "chatId" : chatId,
+                //"message" : messageText,
+                "image" : imageData,
+                "accessToken" : SignInViewModel.accessToken
+            ]
+        } else { // w/o Image
+            payloadObject = [
+                "memberId" : userInfo.memberId,
+                "chatId" : chatId,
+                "message" : messageText,
+                //"image" : "null",
+                "accessToken" : SignInViewModel.accessToken
+            ]
+        }
         
-        socketClient.sendJSONForDict(dict: payloadObject as AnyObject, toDestination: "/pub/chat/message")
+//        let payloadObject : [String : Any] = [
+//            "memberId" : userInfo.memberId,
+//            "chatId" : chatId,
+//            "message" : messageText,
+//            //"image" : "null",
+//            "accessToken" : SignInViewModel.accessToken
+//        ]
+
+        socketClient.sendJSONForDict(
+                        dict: payloadObject as AnyObject,
+                        toDestination: "/pub/chat/message")
     }
     
     // Unsubscribe
@@ -161,7 +178,37 @@ extension ChatroomViewModel : StompClientLibDelegate {
             print("DESTINATION : \(destination)")
             print("HEADER : \(header ?? ["nil":"nil"])")
             print("JSON BODY : \(String(describing: jsonBody))")
-            //print("String Body : \(stringBody ?? "nil")")
+            
+            guard let JSON = jsonBody as? [String : AnyObject] else { return }
+            //print(JSON)
+            
+            guard let innerJSON_Message = JSON ["message"] else {return}
+            guard let innerJSON_Member = JSON ["member"] else {return}
+
+            //print("message Info : ")
+            //print(innerJSON_Message)
+
+            //print("member Info : ")
+            //print(innerJSON_Member)
+
+            let newMsg = Message(
+                member:
+                    Sender(
+                        memberId: innerJSON_Member["memberId"] as? Int ?? -1,
+                        username: innerJSON_Member["username"] as? String ?? "",
+                        description: innerJSON_Member["description"] as? String ?? "",
+                        profileImage: innerJSON_Member["profileImage"] as? String ?? ""
+                    ),
+                message :
+                    MessageContents(
+                        messageId: lastMessageId + 1,
+                        message: innerJSON_Message["message"] as? String ?? "",
+                        image: innerJSON_Message["image"] as? String ?? "",
+                        createdAt: "\(Date(timeIntervalSinceNow: 32400))"
+                    )
+            )
+            lastMessageId += 1
+            MessageList.append(newMsg)
     }
     
     // didReceiveMessageWithJSONBody ( Message Received via STOMP as String )
@@ -185,7 +232,6 @@ extension ChatroomViewModel : StompClientLibDelegate {
         print("Stomp socket \(chatId) is connected")
     
         subscribe()
-        // -> register 랑 subscribe 분리
     }
     
     // Error - disconnect and reconnect socket
