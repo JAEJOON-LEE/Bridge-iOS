@@ -213,7 +213,7 @@ extension TabContainer {
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(width : UIScreen.main.bounds.width * 0.1)
-                    Text("Coupons")
+                    Text("Coupon")
                         .font(.system(size : 12))
                         .foregroundColor(viewModel.selectedTabIndex == 4 ? .mainTheme : .gray)
                 }
@@ -227,7 +227,7 @@ extension TabContainer {
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(width : UIScreen.main.bounds.width * 0.1)
-                    Text("Chatting")
+                    Text("Chat")
                         .font(.system(size : 12))
                         .foregroundColor(viewModel.selectedTabIndex == 5 ? .mainTheme : .gray)
                 }
