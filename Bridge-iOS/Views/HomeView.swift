@@ -11,13 +11,16 @@ import SwiftUIPullToRefresh
 
 struct HomeView : View {
     @StateObject private var viewModel : HomeViewModel
-    @Binding var isSlideShow : Bool
-    private let profileImage : String
     
-    init(viewModel : HomeViewModel, isSlideShow : Binding<Bool>, profileImage : String) {
+    @Binding var isSlideShow : Bool
+    @Binding var isLocationPickerShow : Bool
+    @Binding var selectedDistrict : String
+    
+    init(viewModel : HomeViewModel, isSlideShow : Binding<Bool>, isLocationPickerShow : Binding<Bool>, selectedDistrict : Binding<String>) {
         self._viewModel = StateObject(wrappedValue: viewModel)
         self._isSlideShow = Binding(projectedValue: isSlideShow)
-        self.profileImage = profileImage
+        self._isLocationPickerShow = Binding(projectedValue: isLocationPickerShow)
+        self._selectedDistrict = Binding(projectedValue: selectedDistrict)
     }
     
     var LocationPicker : some View {
@@ -31,38 +34,29 @@ struct HomeView : View {
                 }
 
                 URLImage(
-                    // MARK: - API 수정되면 교체해야됨. 현재 프로필 이미지가 주소가 아니고 파일명으로 옴
-                    //URL(string : viewModel.memberInfo?.profileImage ?? "https://static.thenounproject.com/png/741653-200.png")!
-                    URL(string : profileImage) ??
-                    URL(string: "https://static.thenounproject.com/png/741653-200.png")!
+                    URL(string : viewModel.memberInfo.profileImage)
+                    ?? URL(string : "https://static.thenounproject.com/png/741653-200.png")!
                 ) { image in
                     image
                         .resizable()
                         .aspectRatio(contentMode: .fill)
                 }.clipShape(Circle())
-                .frame(
-                    width : UIScreen.main.bounds.width * 0.04,
-                    height: UIScreen.main.bounds.height * 0.04
-                )
+                .frame(width : UIScreen.main.bounds.width * 0.04, height: UIScreen.main.bounds.height * 0.04)
 
                 VStack (alignment : .leading, spacing : 0) {
                     Text("Bridge in")
-                        .font(.system(size : 10))
+                        .font(.system(size : 10, design : .rounded))
                     HStack {
-                        Picker("\(viewModel.selectedCamp)", selection: $viewModel.selectedCamp) {
-                            ForEach(viewModel.locations, id: \.self) {
-                                Text($0).foregroundColor(.gray)
+                        Button {
+                            withAnimation(.spring()) {
+                                isLocationPickerShow.toggle()
                             }
+                        } label : {
+                            Text(selectedDistrict + " ▾")
+                                .font(.system(size : 24, design: .rounded))
                         }
-                        .pickerStyle(MenuPickerStyle())
-                        .scaleEffect(1.4)
-                        .padding(.leading, 15)
-                        Image(systemName : "arrowtriangle.down.fill")
-                                .padding(.leading, 15)
-                                .font(.system(size : 15))
-                                .foregroundColor(.darkGray)
                     }
-                }.accentColor(.black.opacity(0.8))
+                }.foregroundColor(.darkGray)
                 Spacer()
             } // HStack
 
@@ -85,7 +79,7 @@ struct HomeView : View {
                 .background(Color.systemDefaultGray)
                 .cornerRadius(15)
             }
-            .padding(.vertical, 5)
+            .padding(.bottom, 5)
         } // VStack
         .background(
             Color.white
@@ -163,8 +157,9 @@ struct HomeView : View {
             viewModel.getPosts()
         }.onAppear {
             viewModel.getPosts()
-        }.onChange(of: viewModel.selectedCamp) { newValue in
+        }.onChange(of: selectedDistrict) { newValue in
             print(newValue)
+            viewModel.selectedCamp = selectedDistrict
             viewModel.getPosts()
         }
         .fullScreenCover(isPresented: $viewModel.isSearchViewShow) {

@@ -22,7 +22,8 @@ struct TabContainer: View {
                 case 1 :
                     HomeView(viewModel : HomeViewModel(memberId : signInViewModel.signInResponse?.memberId ?? -1),
                              isSlideShow : $isSlideShow,
-                             profileImage : signInViewModel.signInResponse?.profileImage ?? ""
+                             isLocationPickerShow : $viewModel.isLocationBtnClicked,
+                             selectedDistrict : $viewModel.selectedDistrict
                     ).navigationBarHidden(true)
                 case 2 :
                     BoardView(viewModel:
@@ -40,7 +41,6 @@ struct TabContainer: View {
 //                        )
 //                    )
                 case 4 :
-                    // temp
                     CouponView(
                         viewModel : CouponViewModel(member:
                             Member(
@@ -50,7 +50,8 @@ struct TabContainer: View {
                                 username: signInViewModel.signInResponse?.username ?? "")
                         ),
                         isSlideShow : $isSlideShow,
-                        profileImage : signInViewModel.signInResponse?.profileImage ?? ""
+                        isLocationPickerShow : $viewModel.isLocationBtnClicked,
+                        selectedDistrict : $viewModel.selectedDistrict
                     ).navigationBarHidden(true)
                 case 5 :
                     ChatView(viewModel: ChatViewModel(userInfo: signInViewModel.signInResponse!))
@@ -64,6 +65,8 @@ struct TabContainer: View {
                 }
                 
                 TabSelector
+                
+                
             }.accentColor(.mainTheme)
             .navigationBarItems(
                 leading:
@@ -116,17 +119,54 @@ struct TabContainer: View {
                     isActive : $viewModel.showUsedPostWriting) { }
             )
             .overlay(
-                Color.black.opacity(isSlideShow ? 0.5 : 0)
-                    .edgesIgnoringSafeArea(.bottom)
-                    .onTapGesture {withAnimation { isSlideShow = false }}
+                Color.black.opacity(isSlideShow || viewModel.isLocationBtnClicked ? 0.5 : 0)
+                    .edgesIgnoringSafeArea(isSlideShow ? .bottom : .vertical)
+                    .onTapGesture {
+                        withAnimation {
+                            isSlideShow = false
+                            viewModel.isLocationBtnClicked = false
+                        }
+                    }
             )
+            
+            if viewModel.isLocationBtnClicked {
+                VStack {
+                    HStack {
+                        Text("Select district : ")
+                            .font(.headline)
+                        Text(viewModel.selectedDistrict)
+                            .fontWeight(.light)
+                        Spacer()
+                        Button {
+                            withAnimation { viewModel.isLocationBtnClicked = false }
+                        } label : {
+                            Text("✓ OK")
+                                .font(.footnote)
+                                .fontWeight(.semibold)
+                                .foregroundColor(.black)
+                        }
+                    }
+                    Divider()
+                    Picker("District", selection: $viewModel.selectedDistrict) {
+                        ForEach(viewModel.locations, id: \.self) {
+                            Text($0)
+                        }
+                    }.pickerStyle(.wheel)
+                }.padding()
+                .frame(height : UIScreen.main.bounds.height * 0.35)
+                .background(Color.systemDefaultGray)
+                .cornerRadius(20)
+                .transition(.move(edge: .bottom))
+                .offset(y: UIScreen.main.bounds.width * 0.7)
+                .zIndex(5)
+            }
             
             if isSlideShow {
                 SlideView(viewModel : SlideViewModel(userInfo: signInViewModel.signInResponse!))
                     .transition(.move(edge: .leading))
                     .offset(x: -UIScreen.main.bounds.width * 0.25)
                     .edgesIgnoringSafeArea(.bottom)
-                    .zIndex(2.0)
+                    .zIndex(5)
             }
         }
     }

@@ -85,22 +85,28 @@ struct CouponInfoView: View {
         }
     }
     var Title : some View {
-        HStack(spacing : 3) {
-            VStack(alignment : .leading, spacing : 10) {
-                Text(viewModel.shopInfo.name)
-                    .font(.system(.title, design: .rounded))
-                    .fontWeight(.bold)
-                Text(viewModel.shopInfo.description)
-                    .font(.system(.subheadline, design: .rounded))
-                    .fontWeight(.light)
+        VStack (alignment : .leading, spacing : 10) {
+            HStack(spacing : 3) {
+                VStack(alignment : .leading) {
+                    Text(viewModel.shopInfo.name)
+                        .font(.system(.title, design: .rounded))
+                        .fontWeight(.bold)
+                    Text(viewModel.shopInfo.benefit)
+                        .foregroundColor(.mainTheme)
+                        .font(.system(.headline, design: .rounded))
+                }
+                Spacer()
+                Image(systemName : "text.bubble.fill")
+                    .font(.system(size: 20))
+                Text("\(viewModel.reviews.count)")
+                    .font(.system(size: 20, design: .rounded))
+                    .fontWeight(.semibold)
+                    .padding(.trailing, 5)
             }
-            Spacer()
-            Image(systemName : "text.bubble.fill")
-                .font(.system(size: 20))
-            Text("\(viewModel.reviews.count)")
-                .font(.system(size: 20, design: .rounded))
-                .fontWeight(.semibold)
-                .padding(.trailing, 5)
+            
+            Text(viewModel.shopInfo.description)
+                .font(.system(.subheadline, design: .rounded))
+                .fontWeight(.light)
         }.padding(.horizontal, 10)
     }
     var Location : some View {
