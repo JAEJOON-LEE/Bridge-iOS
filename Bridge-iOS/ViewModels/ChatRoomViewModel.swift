@@ -18,8 +18,11 @@ class ChatroomViewModel : ObservableObject {
     @Published var selectedImage : UIImage? = nil
     @Published var showImagePicker : Bool = false
     @Published var showSelectedImage : Bool = false
+    
     @Published var toolbarButtonClicked : Bool = false
-    @Published var toolbarButtonClickedConfirm : Bool = false
+    @Published var toolbarActionType : Int = 0 // 2 : Block, 1 : Exit
+    @Published var showAlert : Bool = false
+        
     @Published var idForLoadMore : Int64 = 0
     
     private var subscription = Set<AnyCancellable>()
@@ -151,6 +154,18 @@ class ChatroomViewModel : ObservableObject {
                 return false
             } else { return true }
         }
+    }
+    
+    func blockUser(_ memberToBlock : Int) {
+        let url = "http://3.36.233.180:8080/members/\(userInfo.memberId)/blocks"
+        let header: HTTPHeaders = [ "X-AUTH-TOKEN" : SignInViewModel.accessToken ]
+        
+        AF.request(url,
+                   method: .post,
+                   parameters: [ "memberId" : memberToBlock ],
+                   encoder: JSONParameterEncoder.prettyPrinted,
+                   headers: header
+        ).responseJSON { json in print(json) }
     }
     
     func exitChat() {

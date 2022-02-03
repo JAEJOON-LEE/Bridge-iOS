@@ -228,7 +228,7 @@ struct UsedWritingView: View {
             })
             .navigationBarTitle(Text("Sell your stuff"), displayMode: .inline)
             .sheet(isPresented: $viewModel.showImagePicker) {
-                PhotoPicker(configuration: viewModel.configuration, isPresented: $viewModel.showImagePicker, pickerResult: $viewModel.selectedImages)
+                PhotoPicker(configuration: viewModel.configuration, isPresented: $viewModel.showImagePicker, pickerResult: $viewModel.selectedImages).edgesIgnoringSafeArea(.bottom)
             }
             .sheet(isPresented: $viewModel.showCampPicker) {
                 NavigationView {

@@ -217,7 +217,10 @@ struct ItemInfoView: View {
                                 .padding(.leading, 2)
                             Spacer()
                             if viewModel.isMyPost {
-                                Button { viewModel.showAction = true } label : {
+                                Button {
+                                    viewModel.actionSheetType = 1
+                                    viewModel.showAction = true
+                                } label : {
                                     Image(systemName : "ellipsis")
                                         .foregroundColor(.black)
                                         .font(.system(size : 15, weight : .bold))
@@ -313,6 +316,21 @@ struct ItemInfoView: View {
                     Text(viewModel.itemInfo?.member.description  ?? "User not found")
                         .foregroundColor(.white)
                     Spacer()
+                    if !viewModel.isMyPost {
+                        Button {
+                            viewModel.actionSheetType = 2
+                            viewModel.showAction = true
+                        } label : {
+                            Text("Block")
+                                .foregroundColor(.white)
+                                .fontWeight(.semibold)
+                                .padding(7)
+                                .frame(width : UIScreen.main.bounds.width * 0.3)
+                                .background(Color.red.opacity(0.5))
+                                .cornerRadius(20)
+                        }
+                        Spacer()
+                    }
                 }
                 .zIndex(5)
                 .frame(width : UIScreen.main.bounds.width * 0.7, height: UIScreen.main.bounds.height * 1/3)
@@ -346,14 +364,30 @@ struct ItemInfoView: View {
                 }
         )
         .actionSheet(isPresented: $viewModel.showAction) {
-            ActionSheet(
-                title: Text("Post Options"),
-                buttons: [
-                    .default(Text("Modify Post")) { viewModel.showPostModify = true },
-                    .destructive(Text("Delete Post")) { viewModel.showConfirmDeletion = true },
-                    .cancel()
-                ]
-            )
+            if viewModel.actionSheetType == 1 {
+                return
+                    ActionSheet(
+                        title: Text("Post Options"),
+                        buttons: [
+                            .default(Text("Modify Post")) { viewModel.showPostModify = true },
+                            .destructive(Text("Delete Post")) { viewModel.showConfirmDeletion = true },
+                            .cancel()
+                        ]
+                    )
+            } else { // viewModel.actionSheetType == 2 {
+                return ActionSheet(
+                    title: Text("Do you want to block this user?"),
+                    buttons: [
+                        .destructive(Text("Block")) {
+                            viewModel.blockUser()
+                            withAnimation {
+                                viewModel.isMemberInfoClicked = false
+                            }
+                        },
+                        .cancel()
+                    ]
+                )
+            }
         }
         .alert(isPresented: $viewModel.showConfirmDeletion) {
             Alert(
@@ -382,7 +416,8 @@ struct ItemInfoView: View {
                 ChatroomView(viewModel:
                     ChatroomViewModel(viewModel.createdChatId,
                                       userInfo : viewModel.userInfo),
-                        with: viewModel.itemInfo?.member.username ?? "Anonymous"
+                        with: viewModel.itemInfo?.member.username ?? "Anonymous",
+                        withId: viewModel.itemInfo?.member.memberId ?? 0
                     ),
                 isActive : $viewModel.chatCreation
             ) { }

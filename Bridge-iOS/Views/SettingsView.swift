@@ -151,7 +151,7 @@ struct SettingsView: View {
                         Text(blockInfo.blockedMember.username)
                             .fontWeight(.semibold)
                         Spacer()
-                    }
+                    }.padding(.vertical, 3)
                 }.onDelete { indexOffset in
                     let index = indexOffset[indexOffset.startIndex]
                     let blockId = viewModel.blockList[index].blockId

@@ -275,7 +275,7 @@ struct SlideView : View {
                         SlideItem(ImageName: "person", text: "User Suggestion")
                     }
                     NavigationLink(destination: InviteFriendsView()) {
-                        SlideItem(ImageName: "person.fill.badge.plus", text: "Invite friends")
+                        SlideItem(ImageName: "person.badge.plus", text: "Invite friends")
                     }
                     NavigationLink(destination : SettingsView(viewModel : SettingsViewModel(memberInformation : viewModel.memberInfo))) {
                         SlideItem(ImageName: "gearshape", text: "Setting")

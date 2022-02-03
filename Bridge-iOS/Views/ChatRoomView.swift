@@ -16,9 +16,11 @@ struct ChatroomView: View {
     @State private var ImageViewOffset = CGSize.zero
     
     let userWith : String
+    let userIdWith : Int
     
-    init(viewModel : ChatroomViewModel, with user : String) {
+    init(viewModel : ChatroomViewModel, with user : String, withId : Int) {
         userWith = user
+        userIdWith = withId
         self._viewModel = StateObject(wrappedValue: viewModel)
     }
     
@@ -160,7 +162,6 @@ struct ChatroomView: View {
             .foregroundColor(.gray)
             .background(Color.systemDefaultGray)
         } // VStack
-        //.edgesIgnoringSafeArea(.bottom)
         .onAppear { viewModel.registerSockect() }
         .onDisappear { viewModel.disconnect() }
         .navigationTitle(Text(userWith))
@@ -177,23 +178,41 @@ struct ChatroomView: View {
             ActionSheet(title: Text("More Action"),
                         buttons:
                             [
-                                //.default(Text("Exit Room")) { print("Exit chat room") },
+                                .destructive(Text("Block This User")) {
+                                    viewModel.toolbarActionType = 2
+                                    viewModel.showAlert = true
+                                },
                                 .destructive(Text("Exit Room")) {
-                                    viewModel.toolbarButtonClickedConfirm = true
+                                    viewModel.toolbarActionType = 1
+                                    viewModel.showAlert = true
                                 },
                                 .cancel()
                             ]
             )
         }
-        .alert(isPresented: $viewModel.toolbarButtonClickedConfirm) {
-            Alert(title: Text("Do you really want to Exit?"),
-                  primaryButton: .destructive(Text("Yes")) {
-                                    print("Exit chat room \(viewModel.chatId)")
-                                    viewModel.exitChat() // API Calling
-                                    presentationMode.wrappedValue.dismiss()
-                                  },
-                  secondaryButton: .cancel(Text("No"))
-            )
+        .alert(isPresented: $viewModel.showAlert) {
+            if viewModel.toolbarActionType == 1 { // Exit
+                return
+                    Alert(title: Text("Do you really want to Exit?"),
+                      primaryButton: .destructive(Text("Yes")) {
+                                        print("Exit chat room \(viewModel.chatId)")
+                                        viewModel.exitChat() // API Calling
+                                        presentationMode.wrappedValue.dismiss()
+                                      },
+                      secondaryButton: .cancel(Text("No"))
+                    )
+            } else { // viewModel.toolbarActionType == 2 // Block
+                return
+                    Alert(title: Text("Do you really want to Block this user?"),
+                      primaryButton: .destructive(Text("Yes")) {
+                                        print("Block user \(userIdWith)")
+                                        viewModel.blockUser(userIdWith)
+                                        viewModel.exitChat()
+                                        presentationMode.wrappedValue.dismiss()
+                                      },
+                      secondaryButton: .cancel(Text("No"))
+                    )
+            }
         }
         .fullScreenCover(isPresented: $viewModel.showSelectedImage) {
             ZStack(alignment : .topTrailing) {

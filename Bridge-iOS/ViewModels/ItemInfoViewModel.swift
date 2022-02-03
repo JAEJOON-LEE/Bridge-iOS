@@ -19,12 +19,17 @@ final class ItemInfoViewModel : ObservableObject {
     @Published var isMemberInfoClicked : Bool = false
     @Published var isLiked : Bool?
     @Published var isImageTap : Bool = false
+    
+    @Published var actionSheetType : Int = 0 // 1 : Post Action, 2 : Block Action
     @Published var showAction : Bool = false
     @Published var showConfirmDeletion : Bool = false
     @Published var showPostModify : Bool = false
+    @Published var blockConfirmation : Bool = false
+    
     @Published var currentImageIndex : Int = 0
     @Published var chatCreation : Bool = false
     @Published var createdChatId : Int = 0
+    
     
     private var subscription = Set<AnyCancellable>()
     
@@ -92,9 +97,7 @@ final class ItemInfoViewModel : ObservableObject {
                    method: method,
                    encoding: URLEncoding.default,
                    headers: header
-        ).response { json in
-//            print(json)
-        }
+        ).response { json in print(json) }
     }
     
     func deletePost() {
@@ -105,9 +108,7 @@ final class ItemInfoViewModel : ObservableObject {
                    method: .delete,
                    encoding: URLEncoding.default,
                    headers: header
-        ).responseJSON { json in
-//            print(json)
-        }
+        ).responseJSON { json in print(json) }
     }
 
     func createChat() {
@@ -134,5 +135,19 @@ final class ItemInfoViewModel : ObservableObject {
             self?.createdChatId =  recievedValue //.chatId
             self?.chatCreation = true
         }.store(in: &subscription)
+    }
+    
+    func blockUser() {
+        let url = "http://3.36.233.180:8080/members/\(userInfo.memberId)/blocks"
+        let header: HTTPHeaders = [ "X-AUTH-TOKEN" : SignInViewModel.accessToken ]
+
+        guard let memberToBlock = itemInfo?.member.memberId else { return }
+        
+        AF.request(url,
+                   method: .post,
+                   parameters: [ "memberId" : memberToBlock ],
+                   encoder: JSONParameterEncoder.prettyPrinted,
+                   headers: header
+        ).responseJSON { json in print(json) }
     }
 }

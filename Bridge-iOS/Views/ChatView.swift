@@ -56,7 +56,9 @@ struct ChatView: View {
                                                                                                 chatAlarm: false,
                                                                                                 playgroundAlarm: false,
                                                                                                 usedAlarm: false)),
-                                                             with : viewModel.chatWith(chatroom: chatroom)?.username ?? "Anonymous")
+                                                             with : viewModel.chatWith(chatroom: chatroom)?.username ?? "Anonymous",
+                                                             withId : viewModel.chatWith(chatroom: chatroom)?.memberId ?? 0
+                                                            )
                                 ) {
                                     HStack {
                                         // 1. Profile Image
