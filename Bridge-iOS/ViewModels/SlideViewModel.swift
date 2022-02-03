@@ -23,6 +23,8 @@ final class SlideViewModel : ObservableObject {
                                         playgroundAlarm: false,
                                         usedAlarm: false
                                     )
+    @Published var isSignOutClicked : Bool = false
+    @Published var signOutConfirm : Bool = false
     
     private var subscription = Set<AnyCancellable>()
     var userInfo : SignInResponse
@@ -132,5 +134,16 @@ final class SlideViewModel : ObservableObject {
                 self?.playPostLists = recievedValue
                 
             }.store(in: &subscription)
+    }
+    
+    func signOut() {
+        let header: HTTPHeaders = [ "X-AUTH-TOKEN": SignInViewModel.accessToken ]
+        let requestURL : String = "http://3.36.233.180:8080/sign-out"
+        
+        AF.request(requestURL,
+                   method: .post,
+                   encoding: URLEncoding.default,
+                   headers: header)
+            .responseJSON { json in print(json)}
     }
 }

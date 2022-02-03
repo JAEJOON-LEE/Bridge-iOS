@@ -28,7 +28,7 @@ struct AutoSignInView: View {
             NavigationView {
                 TabContainer()
                     .environmentObject(viewModel)
-            }.accentColor(.mainTheme)
+            }.accentColor(.black)
         }
         
     }

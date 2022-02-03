@@ -28,21 +28,15 @@ struct FindPasswordView: View {
             }
         } label : {
             Text("Next")
-                //.modifier(SubmitButtonStyle())
+                .fontWeight(.semibold)
                 .frame(width : UIScreen.main.bounds.width * 0.8)
                 .padding()
                 .foregroundColor(.white)
-                .background(viewModel.isPasswordConfirmation ? Color.mainTheme : Color.gray)
+                //.background(viewModel.isPasswordConfirmation ? Color.mainTheme : Color.gray)
+                .background(viewModel.nextButtonValidation(viewModel.buttonAction) ? Color.gray.opacity(0.8) : Color.mainTheme)
                 .cornerRadius(20)
                 .shadow(radius: 3)
-        }
-    }
-    var dissmissButton : some View {
-        HStack {
-            Text("Already have an account?").foregroundColor(.gray)
-            Button { self.presentationMode.wrappedValue.dismiss() }
-                label : { Text("Sign in").foregroundColor(.mainTheme) }
-        }
+        }.disabled(viewModel.nextButtonValidation(viewModel.buttonAction))
     }
     
     var body: some View {
@@ -65,6 +59,7 @@ struct FindPasswordView: View {
                     HStack {
                         Image(systemName: "envelope")
                         TextField("Email", text: $viewModel.email)
+                            .disableAutocorrection(true)
                             .autocapitalization(.none)
                             .accentColor(.mainTheme)
                     }.modifier(SignViewTextFieldStyle())
@@ -73,6 +68,7 @@ struct FindPasswordView: View {
                 case 1 :
                     HStack {
                         TextField("Enter your code", text: $viewModel.key)
+                            .disableAutocorrection(true)
                             .autocapitalization(.none)
                             .accentColor(.mainTheme)
                     }.modifier(SignViewTextFieldStyle())
@@ -84,10 +80,12 @@ struct FindPasswordView: View {
                             Image(systemName: "lock.fill")
                             if viewModel.showPassword {
                                 TextField("Password", text: $viewModel.password)
+                                    .disableAutocorrection(true)
                                     .autocapitalization(.none)
                                     .accentColor(.mainTheme)
                             } else {
                                 SecureField("Password", text: $viewModel.password)
+                                    .disableAutocorrection(true)
                                     .autocapitalization(.none)
                                     .accentColor(.mainTheme)
                             }
@@ -102,10 +100,12 @@ struct FindPasswordView: View {
                             Image(systemName: "lock.fill")
                             if viewModel.showPasswordConfirmation {
                                 TextField("Password", text: $viewModel.passwordConfirmation)
+                                    .disableAutocorrection(true)
                                     .autocapitalization(.none)
                                     .accentColor(.mainTheme)
                             } else {
                                 SecureField("Password", text: $viewModel.passwordConfirmation)
+                                    .disableAutocorrection(true)
                                     .autocapitalization(.none)
                                     .accentColor(.mainTheme)
                             }
@@ -132,31 +132,26 @@ struct FindPasswordView: View {
                 
                 if (viewModel.buttonAction != 3) {
                     submitButton
-                        .disabled(!viewModel.isPasswordConfirmation)
-                } else {
+                } else { // complete change password
                     Button {
                         self.presentationMode.wrappedValue.dismiss()
                     } label : {
                         Text("Done").modifier(SubmitButtonStyle())
                     }
                 }
-                
-                // show "back to sign in" button till second flow
-                if (viewModel.buttonAction == 0 || viewModel.buttonAction == 1) {
-                    dissmissButton
-                }
             } // VStack
             .frame(width : UIScreen.main.bounds.width, height : UIScreen.main.bounds.height * 0.8)
             .background(Color.white)
             .cornerRadius(15)
             .shadow(radius: 15)
+            .offset(y : 10)
         } // ZStack
         .edgesIgnoringSafeArea(.vertical)
-//        .alert(isPresented: $viewModel.isEmailSended) {
-//            Alert(title: Text("Email is just sended"),
-//                  message: Text(""),
-//                  dismissButton: .default(Text("OK")))
-//        }
+        .alert(isPresented: $viewModel.inputWrongKey) {
+            Alert(title: Text("Wrong Key"),
+                  message: Text("Try again with right key"),
+                  dismissButton: .default(Text("OK")))
+        }
     }
 }
 

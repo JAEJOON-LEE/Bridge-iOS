@@ -321,7 +321,7 @@ struct ItemInfoView: View {
                 .shadow(radius: 5)
             }
         }
-        //.onAppear{ viewModel.getItemInfo() }
+        .onAppear{ viewModel.getItemInfo() }
         .onChange(of: self.isModifyDone, perform: { _ in
             self.presentationMode.wrappedValue.dismiss()
         })
@@ -341,7 +341,7 @@ struct ItemInfoView: View {
                     if !viewModel.isMyPost {
                         Image(systemName: (viewModel.isLiked ?? true) ? "heart.fill" : "heart")
                             .font(.system(size : 15, weight : .bold))
-                            .foregroundColor(.black)
+                            .foregroundColor((viewModel.isLiked ?? true) ? .pink : .black)
                     }
                 }
         )

@@ -65,9 +65,8 @@ struct TabContainer: View {
                 }
                 
                 TabSelector
-                
-                
-            }.accentColor(.mainTheme)
+                    .padding(.bottom, UIDevice.current.hasNotch ? 0 : 20)
+            }.accentColor(.black)
             .navigationBarItems(
                 leading:
                 Button {

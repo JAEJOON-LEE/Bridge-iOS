@@ -6,12 +6,17 @@
 //
 
 import Foundation
+import Alamofire
 
 final class ItemCardViewModel : ObservableObject {
     let post : Post
+    @Published var isLiked : Bool
+    
     init(post : Post) {
         self.post = post
+        self.isLiked = post.liked
     }
+    
     var imageUrl : String { post.image }
     var itemTitle : String { post.title }
     var itemPrice : String {
@@ -29,6 +34,20 @@ final class ItemCardViewModel : ObservableObject {
         return src
     }
     var camp : String { post.camp }
-    var isLiked : Bool { post.liked }
+    //var isLiked : Bool { post.liked }
     var viewCount : Int { post.viewCount }
+    
+    func likePost() {
+        let url = "http://3.36.233.180:8080/used-posts/\(post.postId)/likes"
+        let header: HTTPHeaders = [ "X-AUTH-TOKEN" : SignInViewModel.accessToken ]
+        let method : HTTPMethod = isLiked ? .post : .delete
+        
+        print(isLiked ? "좋아요 할거임" : "좋아요 취소할거임")
+        
+        AF.request(url,
+                   method: method,
+                   encoding: URLEncoding.default,
+                   headers: header
+        ).responseJSON { response in print(response) }
+    }
 }

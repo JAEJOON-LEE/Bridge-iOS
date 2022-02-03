@@ -20,6 +20,9 @@ final class UsedSearchViewModel : ObservableObject {
     @Published var categoryViewShow = false
     @Published var searchResultViewShow = false
     
+    @Published var isSearchResultEmpty : Bool = false
+    @Published var isCategoryResultEmpty : Bool = false
+    
     private let url = "http://3.36.233.180:8080/used-posts?"
     private var subscription = Set<AnyCancellable>()
 
@@ -61,6 +64,7 @@ final class UsedSearchViewModel : ObservableObject {
                 }
             } receiveValue: { [weak self] (recievedValue : [Post]) in
 //                print(recievedValue)
+                if recievedValue.isEmpty { self?.isCategoryResultEmpty = true }
                 self?.Posts = recievedValue
             }.store(in: &subscription)
     }
@@ -95,7 +99,7 @@ final class UsedSearchViewModel : ObservableObject {
     
     func getPostsByQuery(query : String) {
         let header: HTTPHeaders = [ "X-AUTH-TOKEN": SignInViewModel.accessToken ]
-        searchedPosts.removeAll()
+        isSearchResultEmpty = false
         
         AF.request(url,
                    method: .get,
@@ -105,6 +109,7 @@ final class UsedSearchViewModel : ObservableObject {
                                 "camp" : CampEncoding[currentCamp]! ],
                    encoding: URLEncoding.default,
                    headers: header)
+            .responseJSON { response in print(response) }
             .publishDecodable(type : Element.self)
             .compactMap { $0.value }
             .map { $0.postList }
@@ -116,7 +121,8 @@ final class UsedSearchViewModel : ObservableObject {
                     print("Get Posts by query Finished")
                 }
             } receiveValue: { [weak self] (recievedValue : [Post]) in
-//                print(recievedValue)
+                //print(recievedValue)
+                if recievedValue.isEmpty { self?.isSearchResultEmpty = true }
                 self?.searchedPosts = recievedValue
             }.store(in: &subscription)
     }

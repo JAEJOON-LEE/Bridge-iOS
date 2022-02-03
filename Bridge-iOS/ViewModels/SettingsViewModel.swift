@@ -15,11 +15,25 @@ final class SettingsViewModel : ObservableObject {
     @Published var chatAlarm : Bool = false
     @Published var boardAlarm : Bool = false
     @Published var sellingAlarm : Bool = false
-    //
+    
     @Published var blockList : [BlockInfo] = []
-    @Published var showActionSheet : Bool = false
-    @Published var actionSheetType : Int = 0
-    @Published var signOutConfirm : Bool = false
+    
+    @Published var isDeleteMemeberClicked : Bool = false
+    @Published var deleteMemeberConfirmation : Bool = false
+    
+    @Published var password : String = ""
+    @Published var passwordConfirmation : String = ""
+    @Published var showPassword : Bool = false
+    @Published var showPasswordConfirmation : Bool = false
+    @Published var passwordChangeDone : Bool = false
+    
+    var passwordCorrespondence : Bool { password == passwordConfirmation }
+    var isPasswordEmpty : Bool { password.isEmpty || passwordConfirmation.isEmpty }
+
+    func disableButton() -> Bool {
+        if !passwordCorrespondence || isPasswordEmpty { return true }
+        else { return false }
+    }
     
     private var subscription = Set<AnyCancellable>()
     
@@ -35,19 +49,17 @@ final class SettingsViewModel : ObservableObject {
     }
     
     let userInfo : MemeberInformation
-    let token : String
     
-    init(memberInformation : MemeberInformation, accessToken : String) {
+    init(memberInformation : MemeberInformation) {
         userInfo = memberInformation
         chatAlarm = userInfo.chatAlarm
         boardAlarm = userInfo.playgroundAlarm
         sellingAlarm = userInfo.usedAlarm
-        token = accessToken
         getBlockedUsers()
     }
     
     func getBlockedUsers() {
-        let header: HTTPHeaders = [ "X-AUTH-TOKEN": token ]
+        let header: HTTPHeaders = [ "X-AUTH-TOKEN": SignInViewModel.accessToken ]
         let requestURL : String = "http://3.36.233.180:8080/members/\(userInfo.memberId)/blocks"
         
         AF.request(requestURL,
@@ -71,24 +83,46 @@ final class SettingsViewModel : ObservableObject {
     }
     
     func UnblockUser(blockId : Int) {
-        let header: HTTPHeaders = [ "X-AUTH-TOKEN": token ]
+        let header: HTTPHeaders = [ "X-AUTH-TOKEN": SignInViewModel.accessToken ]
         let requestURL : String = "http://3.36.233.180:8080/members/\(userInfo.memberId)/blocks/\(blockId)"
         
         AF.request(requestURL,
-                   method: .delete,
+                   method: .patch,
                    encoding: URLEncoding.default,
                    headers: header)
             .responseJSON { json in print(json)}
     }
     
-    func signOut() {
-        let header: HTTPHeaders = [ "X-AUTH-TOKEN": token ]
-        let requestURL : String = "http://3.36.233.180:8080/sign-out"
+    func changePassword() {
+        let url = "http://3.36.233.180:8080/password"
+        let header: HTTPHeaders = [ "X-AUTH-TOKEN" : SignInViewModel.accessToken ]
         
-        AF.request(requestURL,
-                   method: .post,
+        AF.request(url,
+                   method: .patch,
+                   parameters: ["password" : password],
+                   encoder: JSONParameterEncoder.prettyPrinted,
+                   headers: header
+        ).responseJSON { [weak self] json in
+            guard let statusCode = json.response?.statusCode else { return }
+            switch statusCode {
+                case 200 :
+                    print("Password change done")
+                    self?.passwordChangeDone = true
+                default :
+                    print("Password change fail")
+            }
+            
+        }
+    }
+    
+    func deleteAccount() {
+        let url = "http://3.36.233.180:8080/members/\(userInfo.memberId)"
+        let header: HTTPHeaders = [ "X-AUTH-TOKEN" : SignInViewModel.accessToken ]
+        
+        AF.request(url,
+                   method: .delete,
                    encoding: URLEncoding.default,
-                   headers: header)
-            .responseJSON { json in print(json)}
+                   headers: header
+        ).responseJSON { json in print(json) }
     }
 }

@@ -86,18 +86,16 @@ struct SignUpVerifyView: View {
                                     value.scrollTo(1, anchor: .bottom)
                                 }
                             }
-                        Divider()
-                        doneButton
+                        Spacer()
                         HStack(alignment: .lastTextBaseline) {
                             Button(action: {
-                                
                                 viewModel.SendEmail(email: viewModel.email)
-                                //                            self.presentationMode.wrappedValue.dismiss()
+                                //self.presentationMode.wrappedValue.dismiss()
                             }) {
-                                Text("send again")
-                                    .foregroundColor(.mainTheme)
-                            }
+                                Text("Send again")
+                            }.modifier(SubmitButtonStyle())
                         }
+                        doneButton
                         Spacer()
                     }
                     .frame(width : UIScreen.main.bounds.width, height : UIScreen.main.bounds.height * 0.8)

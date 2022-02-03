@@ -68,7 +68,9 @@ struct SignInView: View {
             viewModel.SignIn(email: viewModel.email, password: viewModel.password)
         } label : {
             Text("Login")
+                .fontWeight(.semibold)
                 .modifier(SubmitButtonStyle())
+                
         }.background(
             NavigationLink(
                 destination: TabContainer().environmentObject(viewModel),
@@ -79,9 +81,10 @@ struct SignInView: View {
     var findPassword : some View {
         NavigationLink(destination: FindPasswordView()){
             Text("Forgot Password?")
+                .fontWeight(.semibold)
                 .foregroundColor(.mainTheme)
                 .padding(10)
-        }
+        }.padding(.bottom, UIDevice.current.hasNotch ? 0 : 30)
     }
     var otherSignInMethod : some View {
         HStack(spacing : 20) {
@@ -98,6 +101,7 @@ struct SignInView: View {
     var body: some View {
         ZStack(alignment: .bottom) {
             Color.systemDefaultGray
+            
             VStack(spacing : 30) {
                 titleField
                 emailField
@@ -105,7 +109,7 @@ struct SignInView: View {
                 remeberButton
                 nextButton
                 Spacer()
-                otherSignInMethod
+                //otherSignInMethod
                 findPassword
                 Spacer()
             }
@@ -113,6 +117,7 @@ struct SignInView: View {
             .background(Color.white)
             .cornerRadius(15)
             .shadow(radius: 15)
+            .offset(y : 10)
             
             if viewModel.showPrgoressView {
                 VStack {
@@ -137,7 +142,8 @@ struct SignInView: View {
                 userPW = ""
             }
         }
-        .edgesIgnoringSafeArea(.all)
+        .edgesIgnoringSafeArea(.vertical)
+        .navigationTitle(Text(""))
         .alert(isPresented: $viewModel.showSignInFailAlert) {
             Alert(title: Text("Sign-In Failed"),
                   message: Text("Incorrect Email or Password"),

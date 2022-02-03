@@ -130,7 +130,7 @@ struct HomeView : View {
                                             viewModel.getPosts(token: viewModel.token)
                                         })*/
                                 ) {
-                                    ItemCard(viewModel : ItemCardViewModel(post: Post))
+                                    ItemCard(viewModel : ItemCardViewModel(post: Post), isMyPost : (viewModel.memberId == Post.memberId))
                                 }
                                 
                                 Color.systemDefaultGray
@@ -171,16 +171,22 @@ struct HomeView : View {
                                                 currentCamp : viewModel.selectedCamp,
                                                 userInfo : viewModel.memberInfo)
                 )
-            }.accentColor(.mainTheme)
+            }.accentColor(.black)
         }
     }
 }
 
 struct ItemCard : View {
-    private let viewModel : ItemCardViewModel
+    @StateObject private var viewModel : ItemCardViewModel
+    var isMyPost : Bool = false
     
-    init(viewModel : ItemCardViewModel) {
-        self.viewModel = viewModel
+//    init(viewModel : ItemCardViewModel) {
+//        self._viewModel = StateObject(wrappedValue: viewModel)
+//    }
+    
+    init(viewModel : ItemCardViewModel, isMyPost : Bool) {
+        self._viewModel = StateObject(wrappedValue: viewModel)
+        self.isMyPost = isMyPost
     }
     
     var body : some View {
@@ -198,11 +204,11 @@ struct ItemCard : View {
 
             VStack(alignment : .leading, spacing: 5) {
                 Text(viewModel.itemTitle)
-                    .font(.system(.title3, design: .rounded))
+                    .font(.system(.headline, design: .rounded))
                     .fontWeight(.semibold)
                     .foregroundColor(.black.opacity(0.8))
                     .lineLimit(1)
-                    .minimumScaleFactor(0.4)
+                    //.minimumScaleFactor(0.4)
                 HStack(spacing : 5) {
                     Text(viewModel.camp)
                         .fontWeight(.light)
@@ -218,10 +224,17 @@ struct ItemCard : View {
                         .font(.system(size: 20, weight: .semibold, design: .rounded))
                         .foregroundColor(.black.opacity(0.8))
                     Spacer()
-                    Image(systemName : viewModel.isLiked ? "heart.fill" : "heart")
-                        .font(.system(size : 20))
-                        .foregroundColor(viewModel.isLiked ? .pink : .gray)
-                        .padding(.trailing, 10)
+                    if !isMyPost {
+                        Button {
+                            viewModel.isLiked.toggle()
+                            viewModel.likePost()
+                        } label : {
+                            Image(systemName : viewModel.isLiked ? "heart.fill" : "heart")
+                                .font(.system(size : 20))
+                                .foregroundColor(viewModel.isLiked ? .pink : .gray)
+                                .padding(.trailing, 10)
+                        }
+                    }
                 }
             }.foregroundColor(.secondary)
             .padding(.vertical, 7)

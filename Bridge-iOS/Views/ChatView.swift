@@ -82,6 +82,7 @@ struct ChatView: View {
                                             
                                             if let msg = chatroom.message {
                                                 Text(msg.message.isEmpty ? "📷 Image" : msg.message)
+                                                    .lineLimit(1)
                                                     .font(.system(size: 13, weight : .bold, design : .rounded))
                                                     .foregroundColor(.gray)
                                             }

@@ -13,48 +13,30 @@ final class MyPageViewModel : ObservableObject {
     @Published var usernameToEdit : String = ""
     @Published var description : String = ""
     @Published var descriptionToEdit : String = ""
-    @Published var password : String = ""
-    @Published var passwordConfirmation : String = ""
     @Published var isEditing : Bool = false
     @Published var isEditDone : Bool = false
-    @Published var showPassword : Bool = false
-    @Published var showPasswordConfirmation : Bool = false
     @Published var showImagePicker : Bool = false
     @Published var selectedImage : UIImage? = nil
     
-    var passwordCorrespondence : Bool { password == passwordConfirmation }
-    var isPasswordEmpty : Bool { password.isEmpty || passwordConfirmation.isEmpty }
-    
     let userInfo : MemeberInformation //SignInResponse
-    let token : String
     
-    init(memberInformation : MemeberInformation, accessToken : String) {
+    init(memberInformation : MemeberInformation) {
         userInfo = memberInformation
-        token = accessToken
         username = userInfo.username
         usernameToEdit = userInfo.username
         description = userInfo.description
         descriptionToEdit = userInfo.description
     }
     
-    func disableButton() -> Bool {
-        if !passwordCorrespondence || isPasswordEmpty {
-            return true
-        } else {
-            return false
-        }
-    }
-    
     func updateProfile() {
         let url = "http://3.36.233.180:8080/members/\(userInfo.memberId)"
         let header : HTTPHeaders = [
             "Content-Type": "multipart/form-data",
-            "X-AUTH-TOKEN": token
+            "X-AUTH-TOKEN": SignInViewModel.accessToken
         ]
         let payload = """
             {
                 "username" : \"\(usernameToEdit)\",
-                "password" : \"\(password)\",
                 "description" : \"\(descriptionToEdit)\"
             }
         """.data(using: .nonLossyASCII)!
@@ -64,7 +46,7 @@ final class MyPageViewModel : ObservableObject {
         
         AF.upload(multipartFormData: { [weak self] (multipartFormData) in
             // image
-            if let image = self?.selectedImage { // optional binding
+            if let image = self?.selectedImage { // optional binding : 이미지가 있을때만 실행
                 multipartFormData.append(
                     image.jpegData(compressionQuality: 1.0)!,
                     withName : "profileImage",

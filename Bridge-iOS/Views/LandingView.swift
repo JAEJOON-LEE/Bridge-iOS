@@ -42,6 +42,7 @@ struct LandingView: View {
                             .background(Color.mainTheme)
                             .cornerRadius(30)
                     }
+                    
                     NavigationLink(destination : SignUpView()) {
                         Text("Sign Up")
                             .font(.system(size : 20))
@@ -55,10 +56,10 @@ struct LandingView: View {
                 }
                 .shadow(radius : 3)
                 .padding(.vertical, 50)
-            
-            
                 .frame(maxWidth : UIScreen.main.bounds.width)
+                .padding(.bottom, UIDevice.current.hasNotch ? 0 : 20)
             }.edgesIgnoringSafeArea(.bottom)
+            .navigationTitle(Text(""))
         } // NavigationView
         .accentColor(.black)
         .navigationViewStyle(StackNavigationViewStyle())

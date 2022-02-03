@@ -111,7 +111,7 @@ struct UsedSearchView : View {
                                         viewModel.getHotDealPosts()
                                     })
                             ) {
-                                ItemCard(viewModel : ItemCardViewModel(post: Post))
+                                ItemCard(viewModel : ItemCardViewModel(post: Post), isMyPost : (viewModel.memberId == Post.memberId))
                             }
                             Color.systemDefaultGray
                                 .frame(width : UIScreen.main.bounds.width * 0.9, height : 5)
@@ -123,13 +123,14 @@ struct UsedSearchView : View {
         }
         .edgesIgnoringSafeArea(.bottom)
         .navigationBarHidden(true)
-        .navigationBarTitle(Text("Search"))
+        .navigationBarTitle(Text(""))
         .background(
             NavigationLink(
                 destination :
                     ScrollView {
+                        Divider()
                         LazyVStack {
-                            if (viewModel.Posts.isEmpty) {
+                            if (viewModel.isCategoryResultEmpty) {
                                 VStack {
                                     Image(systemName: "magnifyingglass")
                                         .font(.system(size : 150))
@@ -168,7 +169,7 @@ struct UsedSearchView : View {
                                                     viewModel.getPostsByCategory(category: viewModel.selectedCategory)
                                                 })
                                         ) {
-                                            ItemCard(viewModel : ItemCardViewModel(post: Post))
+                                            ItemCard(viewModel : ItemCardViewModel(post: Post), isMyPost : (viewModel.memberId == Post.memberId))
                                         }
                                         
                                         Color.systemDefaultGray
@@ -177,15 +178,18 @@ struct UsedSearchView : View {
                                 }
                             }
                         }
-                    }.navigationTitle(Text(viewModel.selectedCategory)),
+                    }
+                    .navigationTitle(Text(viewModel.selectedCategory))
+                    .navigationBarTitleDisplayMode(.inline),
                 isActive : $viewModel.categoryViewShow) { }
         )
         .background(
             NavigationLink(
                 destination :
                     ScrollView {
+                        Divider()
                         LazyVStack {
-                            if (viewModel.searchedPosts.isEmpty) {
+                            if (viewModel.isSearchResultEmpty) {
                                 VStack {
                                     Image(systemName: "magnifyingglass")
                                         .font(.system(size : 150))
@@ -224,7 +228,7 @@ struct UsedSearchView : View {
                                                     viewModel.getPostsByQuery(query: viewModel.searchString)
                                                 })
                                         ) {
-                                            ItemCard(viewModel : ItemCardViewModel(post: Post))
+                                            ItemCard(viewModel : ItemCardViewModel(post: Post), isMyPost : (viewModel.memberId == Post.memberId))
                                         }
                                         Color.systemDefaultGray
                                             .frame(width : UIScreen.main.bounds.width * 0.9, height : 5)
@@ -232,7 +236,9 @@ struct UsedSearchView : View {
                                 }
                             }
                         }
-                    }.navigationTitle(Text("Posts about \"\(viewModel.searchString)\"")),
+                    }
+                    .navigationTitle(Text("Posts about \"\(viewModel.searchString)\""))
+                    .navigationBarTitleDisplayMode(.inline),
                 isActive : $viewModel.searchResultViewShow) { }
         )
     }

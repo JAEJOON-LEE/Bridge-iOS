@@ -19,6 +19,123 @@ struct SettingsView: View {
         self._viewModel = StateObject(wrappedValue: viewModel)
     }
     
+    var AccountSettingsView : some View {
+        VStack(spacing : 0) {
+            Divider()
+            VStack(alignment : .leading, spacing : 20) {
+                NavigationLink (destination : ChangePasswordView) {
+                    Text("Change your password")
+                        .fontWeight(.semibold)
+                }
+                Divider()
+                Button {
+                    viewModel.isDeleteMemeberClicked = true
+                } label : {
+                    Text("Delete Account")
+                        .foregroundColor(.red)
+                        .fontWeight(.semibold)
+                }
+                Divider()
+                Spacer()
+            }.padding()
+        }
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationTitle(Text("Account Settings"))
+    }
+    
+    var ChangePasswordView : some View {
+        VStack {
+            Divider()
+            VStack(alignment : .leading, spacing : 5) {
+                Text("Password")
+                    .font(.system(.caption, design: .rounded))
+                    .foregroundColor(.gray)
+                HStack {
+                    if viewModel.showPassword {
+                        TextField("enter password", text: $viewModel.password)
+                            .autocapitalization(.none)
+                            .padding(.leading, 10)
+                            .font(.system(.title2, design : .rounded))
+                    } else {
+                        SecureField("enter password", text: $viewModel.password)
+                            .autocapitalization(.none)
+                            .padding(.leading, 10)
+                            .font(.system(.title2, design : .rounded))
+                    }
+                    Button {
+                        viewModel.showPassword.toggle()
+                    } label : {
+                        Image(systemName: viewModel.showPassword ? "eye.slash" : "eye")
+                            .foregroundColor(.darkGray)
+                            .padding(.trailing, 10)
+                    }
+                }
+                .frame(width: UIScreen.main.bounds.width * 0.8,
+                       height: UIScreen.main.bounds.height * 0.05)
+                .background(Color.white)
+                .cornerRadius(10)
+                .shadow(radius: 1)
+
+                Spacer().frame(height : 10)
+
+                Text("Password Confirmation")
+                    .font(.system(.caption, design: .rounded))
+                    .foregroundColor(.gray)
+                HStack {
+                    if viewModel.showPasswordConfirmation {
+                        TextField("Re-enter password", text: $viewModel.passwordConfirmation)
+                            .autocapitalization(.none)
+                            .padding(.leading, 10)
+                            .font(.system(.title2, design : .rounded))
+                    } else {
+                        SecureField("Re-enter password", text: $viewModel.passwordConfirmation)
+                            .autocapitalization(.none)
+                            .padding(.leading, 10)
+                            .font(.system(.title2, design : .rounded))
+                    }
+                    Button {
+                        viewModel.showPasswordConfirmation.toggle()
+                    } label : {
+                        Image(systemName: viewModel.showPasswordConfirmation ? "eye.slash" : "eye")
+                            .foregroundColor(.darkGray)
+                            .padding(.trailing, 10)
+                    }
+                }
+                .frame(width: UIScreen.main.bounds.width * 0.8,
+                       height: UIScreen.main.bounds.height * 0.05)
+                .background(Color.white)
+                .cornerRadius(10)
+                .shadow(radius: 1)
+            }.padding()
+            .onAppear {
+                viewModel.password = ""
+                viewModel.passwordConfirmation = ""
+            }
+            Spacer()
+            Button {
+                viewModel.changePassword()
+            } label : {
+                Text("Done")
+                    .fontWeight(.semibold)
+                    .frame(width: UIScreen.main.bounds.width * 0.7, height: UIScreen.main.bounds.height * 0.07)
+                    .foregroundColor(.white)
+                    .background(Color.mainTheme)
+                    .cornerRadius(30)
+                    .opacity(viewModel.disableButton() ? 0.5 : 1)
+            }.disabled(viewModel.disableButton())
+        }.navigationTitle(Text("Change your password"))
+        .navigationBarTitleDisplayMode(.inline)
+        .alert(isPresented: $viewModel.passwordChangeDone) {
+            Alert(title: Text("Your password is changed."),
+                  dismissButton: .default(Text("OK")) {
+                                    userPW = viewModel.password
+                                    viewModel.password = ""
+                                    viewModel.passwordConfirmation = ""
+                                }
+            )
+        }
+    }
+    
     var BlockedUsersView : some View {
         VStack {
             List {
@@ -42,18 +159,29 @@ struct SettingsView: View {
                     viewModel.blockList.remove(atOffsets: indexOffset)
                 }
             }.toolbar { EditButton() }
-        }.navigationBarTitleDisplayMode(.large)
+        }.navigationBarTitleDisplayMode(.inline)
         .navigationTitle(Text("Blocked Users"))   
     }
     
     var OpenSoureUsage : some View {
         VStack {
-            Text("Open")
-        }.navigationTitle(Text("Open Source"))
+            Text("Open Source")
+        }.navigationBarTitleDisplayMode(.inline)
+        .navigationTitle(Text("Open Source"))
     }
     
     var body: some View {
-        VStack {
+        VStack { //(spacing : 0) {
+            HStack(spacing : 5) {
+                Image(systemName: "gearshape")
+                    .font(.system(size : 22))
+                Text("Settings")
+                    .font(.title2)
+                    .fontWeight(.semibold)
+            }.padding()
+            .frame(maxWidth : .infinity)
+            .padding(.top, UIDevice.current.hasNotch ? UIScreen.main.bounds.height * 0.05 : UIScreen.main.bounds.height * 0.02)
+            
             VStack(alignment : .leading) {
                 Text("Alarm Settings")
                     .font(.headline)
@@ -62,7 +190,9 @@ struct SettingsView: View {
                 HStack {
                     Image(systemName: "bell.slash")
                     Text("Do not disturb mode")
-                        .fontWeight(.bold)
+                        .fontWeight(.semibold)
+                        .minimumScaleFactor(0.4)
+                        .lineLimit(1)
                     Spacer()
                     Toggle("", isOn : $viewModel.entireAlarm)
                         .toggleStyle(SwitchToggleStyle(tint: .mainTheme))
@@ -87,7 +217,8 @@ struct SettingsView: View {
                             .toggleStyle(SwitchToggleStyle(tint: .mainTheme))
                     }
                 }.padding(.leading, 20)
-            } // VStack : Alarm settings
+            }
+            // VStack - Alarm settings
             
             Color.systemDefaultGray
                 .frame(width : UIScreen.main.bounds.width, height : 10)
@@ -98,10 +229,10 @@ struct SettingsView: View {
                     .fontWeight(.bold)
                     .padding(.vertical, 5)
                 Divider()
-                NavigationLink(destination: MyPageView(viewModel: MyPageViewModel(memberInformation: viewModel.userInfo, accessToken: viewModel.token))) {
+                NavigationLink(destination: AccountSettingsView) {
                     HStack {
                         Image(systemName: "person.circle")
-                        Text("Account Info")
+                        Text("Account Settings")
                         Spacer()
                         Image(systemName: "chevron.right")
                     }
@@ -133,71 +264,31 @@ struct SettingsView: View {
                 Divider()
             }
             Spacer()
-            Divider()
-            if rememberUser {
-                Button {
-                    print("Disable remember me")
-                    viewModel.actionSheetType = 1
-                    viewModel.showActionSheet = true
-                } label : {
-                    HStack {
-                        Image(systemName: "switch.2")
-                        Text("Disable Remeber Me")
-                            .fontWeight(.semibold)
-                    }
-                }
-                .foregroundColor(.mainTheme)
-                .padding(7)
-            }
-            Button {
-                viewModel.actionSheetType = 2
-                viewModel.showActionSheet = true
-            } label : {
-                HStack {
-                    Image(systemName: "arrow.right.square")
-                    Text("Log Out")
-                        .fontWeight(.semibold)
-                }
-                .foregroundColor(.mainTheme)
-                .padding(7)
-            }
         } //VStack
-        .navigationBarTitle(Text("Settings"))
-        .navigationBarTitleDisplayMode(.inline)
         .padding()
-        .actionSheet(isPresented: $viewModel.showActionSheet) {
-            if viewModel.actionSheetType == 1 {
-                return ActionSheet(
-                    title: Text("Do you want to disable Remeber Me?\nYour account will be logged out."),
-                    buttons: [
-                        .destructive(Text("Disable")) {
-                            userEmail = ""
-                            userPW = ""
-                            rememberUser = false
-                        },
-                        .cancel()
-                    ]
-                )
-            } else {
-                return ActionSheet(
-                    title: Text("Do you really want to logout?"),
-                    buttons: [
-                        .destructive(Text("Log Out")) {
-                            userEmail = ""
-                            userPW = ""
-                            rememberUser = false
-                            viewModel.signOut()
-                            viewModel.signOutConfirm = true
-                        },
-                        .cancel()
-                    ]
-                )
-            }
-        } // actionSheet
+        .edgesIgnoringSafeArea(.top)
+        .navigationBarTitle(Text(""))
+        .actionSheet(isPresented: $viewModel.isDeleteMemeberClicked) {
+            ActionSheet(
+                title: Text("Do you really want to delete your account?"),
+                //message: <#T##SwiftUI.Text?#>,
+                buttons: [
+                    .destructive(Text("Yes")) {
+                        userEmail = ""
+                        userPW = ""
+                        rememberUser = false
+                        viewModel.deleteAccount()
+                        viewModel.deleteMemeberConfirmation = true
+                    },
+                    .cancel()
+                ]
+            )
+        }
         .background(
             NavigationLink(
                 destination : LandingView().navigationBarHidden(true),
-                isActive : $viewModel.signOutConfirm) { }
+                isActive : $viewModel.deleteMemeberConfirmation
+            ) { }
         )
     }
 }
