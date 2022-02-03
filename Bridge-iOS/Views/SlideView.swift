@@ -271,7 +271,7 @@ struct SlideView : View {
                 
                 
                 VStack(alignment : .leading, spacing : 30) {
-                    NavigationLink(destination : Text("User Suggestion")) {
+                    NavigationLink(destination : UserSuggestionView()) {
                         SlideItem(ImageName: "person", text: "User Suggestion")
                     }
                     NavigationLink(destination: InviteFriendsView()) {
