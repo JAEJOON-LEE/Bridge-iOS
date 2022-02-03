@@ -30,19 +30,16 @@ struct HotBoardView : View {
                 }){
                     LazyVStack {
                         ForEach(viewModel.hotLists, id : \.self) { HotList in
-                            Button {
-                            } label : {
+                            NavigationLink(
+                                destination:
+                                    PostInfoView(viewModel: PostInfoViewModel(
+                                        token: viewModel.token,
+                                        postId : HotList.postInfo.postId,
+                                        memberId : viewModel.memberId,
+                                        isMyPost : (viewModel.memberId == HotList.member?.memberId)))
+                            ) {
                                 GeneralPost(viewModel : GeneralPostViewModel(postList: HotList))
-                            }.background(
-                                NavigationLink(
-                                    destination:
-                                        PostInfoView(viewModel: PostInfoViewModel(
-                                            token: viewModel.token,
-                                            postId : HotList.postInfo.postId,
-                                            memberId : viewModel.memberId,
-                                            isMyPost : (viewModel.memberId == HotList.member?.memberId)))
-                                ){ }
-                            )
+                            }
                         }
                         .foregroundColor(Color.mainTheme)
                         .listStyle(PlainListStyle()) // iOS 15 대응

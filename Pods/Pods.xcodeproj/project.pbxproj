@@ -28,10 +28,11 @@
 		673B7A38B379DA4F96459B673A6A29E6 /* SRURLUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = B2707F9D591077752E6832688C98619E /* SRURLUtilities.m */; };
 		69211D4DA257DD3B167506D3F2A746EC /* SRRunLoopThread.h in Headers */ = {isa = PBXBuildFile; fileRef = 230622BEEF495D7C6FB698E012AF4C22 /* SRRunLoopThread.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		69E9AAB60098EC5A35F44A42542027A0 /* NSURLRequest+SRWebSocketPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 89CD9DBEA04B50A11C055D1A282500ED /* NSURLRequest+SRWebSocketPrivate.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		6D6C6AEE27AA6C8F00AF41DF /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7ABAB7562D0623DFC2D01E0A09448472 /* Security.framework */; };
+		6D6C6AEF27AA6C9000AF41DF /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7ABAB7562D0623DFC2D01E0A09448472 /* Security.framework */; };
 		6F3F0B2EA881D9586B9D7AA2E3504259 /* SRRunLoopThread.m in Sources */ = {isa = PBXBuildFile; fileRef = E7D0D3F2EAAC129AD81DC73AA8177113 /* SRRunLoopThread.m */; };
 		7334F57E4046F0DC518C2F6398BD9DBF /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A6BE90665B4A1053C5FF26D5289CBC83 /* CFNetwork.framework */; };
 		79FF57976BE4902AFE523BA35F9391C4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CB6704A70D55B80A3F7281F31BAE70C /* Foundation.framework */; };
-		7B801DA06F0358D79F62DB99AD56DEE7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CB6704A70D55B80A3F7281F31BAE70C /* Foundation.framework */; };
 		7DEB7F3E448476252892D3A03D1BD98C /* SRMutex.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F3BF83922927DC76ABBE045E04CDBC7 /* SRMutex.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		7FF48C89F4EBEF8F8FF7E8BF51EB65B3 /* SRDelegateController.m in Sources */ = {isa = PBXBuildFile; fileRef = C9DB70F2B24E5D5BB4BAFB69FD7FAD2C /* SRDelegateController.m */; };
 		862A55D2C5843E3ABFD8179F31D610D2 /* SRLog.m in Sources */ = {isa = PBXBuildFile; fileRef = AAB987CCDB58839BE53B0ADB4D4E152F /* SRLog.m */; };
@@ -54,7 +55,6 @@
 		D3230CE83EE3F2C61C2C76210ECDF15E /* SRIOConsumerPool.m in Sources */ = {isa = PBXBuildFile; fileRef = E6A3B9921A90DD60B1D351A4B0FC1C3B /* SRIOConsumerPool.m */; };
 		DB8D866421553A538A8157562FC4AA03 /* SRHash.h in Headers */ = {isa = PBXBuildFile; fileRef = 9675BAFBC2653F686E536DE8AB7B9F73 /* SRHash.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		DC77275127FD9BDB863940B21F3D8BF9 /* SRSecurityPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = B8FB72A19114595F48D76929BD2EE405 /* SRSecurityPolicy.m */; };
-		E3FF3D24545FB1B843CC236A6FDC2491 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CB6704A70D55B80A3F7281F31BAE70C /* Foundation.framework */; };
 		E9865C18CFFC007077A416A53B70B9D3 /* Pods-Bridge-iOS-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = A22A40DC14B2A67C847EA30A4C51E28C /* Pods-Bridge-iOS-dummy.m */; };
 		ECEA218263BDC01B5765DEB51EE5D63F /* SRPinningSecurityPolicy.h in Headers */ = {isa = PBXBuildFile; fileRef = E61A2CCA3BF1B0015D426D07393F2F43 /* SRPinningSecurityPolicy.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		F76DC4BB31D02902C25138211B45A623 /* Pods-Bridge-iOS-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = D6E689535FEBAB36413E807CE2BBF53C /* Pods-Bridge-iOS-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -176,7 +176,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E3FF3D24545FB1B843CC236A6FDC2491 /* Foundation.framework in Frameworks */,
+				6D6C6AEE27AA6C8F00AF41DF /* Security.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -184,7 +184,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7B801DA06F0358D79F62DB99AD56DEE7 /* Foundation.framework in Frameworks */,
+				6D6C6AEF27AA6C9000AF41DF /* Security.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

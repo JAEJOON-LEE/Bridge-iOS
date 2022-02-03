@@ -26,19 +26,16 @@ struct SecretBoardView : View {
             }){
                 LazyVStack {
                     ForEach(viewModel.secretLists, id : \.self) { SecretList in
-                        Button {
-                        } label : {
+                        NavigationLink(
+                            destination:
+                                PostInfoView(viewModel: PostInfoViewModel(
+                                    token: viewModel.token,
+                                    postId : SecretList.postId,
+                                    memberId : viewModel.memberId,
+                                    isMyPost : nil))
+                        ) {
                             SecretPost(viewModel : SecretViewModel(postList: SecretList))
-                        }.background(
-                            NavigationLink(
-                                destination:
-                                    PostInfoView(viewModel: PostInfoViewModel(
-                                        token: viewModel.token,
-                                        postId : SecretList.postId,
-                                        memberId : viewModel.memberId,
-                                        isMyPost : nil))
-                            ){ }
-                        )
+                        }
                     }
                     .foregroundColor(Color.mainTheme)
                     .listStyle(PlainListStyle()) // iOS 15 대응
