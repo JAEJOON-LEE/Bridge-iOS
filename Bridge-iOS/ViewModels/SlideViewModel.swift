@@ -8,6 +8,7 @@
 import Foundation
 import Alamofire
 import Combine
+import SwiftUI
 
 final class SlideViewModel : ObservableObject {
     @Published var usedPostList : [Post] = []
@@ -142,6 +143,7 @@ final class SlideViewModel : ObservableObject {
         
         AF.request(requestURL,
                    method: .post,
+                   parameters: ["deviceCode" : String(UIDevice.current.identifierForVendor!.uuidString)],
                    encoding: URLEncoding.default,
                    headers: header)
             .responseJSON { json in print(json)}

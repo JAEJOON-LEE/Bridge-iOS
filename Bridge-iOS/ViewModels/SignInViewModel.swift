@@ -12,6 +12,7 @@ import SwiftUI
 
 final class SignInViewModel : ObservableObject {
     static var accessToken : String = ""
+    static var memberId : Int = 0
     
     @Published var email = ""
     @Published var password = ""
@@ -27,11 +28,13 @@ final class SignInViewModel : ObservableObject {
     
     private var subscription = Set<AnyCancellable>()
     
+    
     func SignIn(email : String, password : String) {
         
         AF.request(signInUrl,
                    method: .post,
-                   parameters: ["email" : email, "password" : password, "deviceCode" : String(UIDevice.current.identifierForVendor!.uuidString)],
+                   parameters: ["email" : email, "password" : password, "deviceCode" : String(UIDevice.current.identifierForVendor!.uuidString),
+                                "fcmToken" : AppDelegate().fcmToken],
                    encoder: JSONParameterEncoder.prettyPrinted
         )
             .responseJSON { [weak self] (response) in
