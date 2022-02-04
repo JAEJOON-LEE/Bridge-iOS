@@ -8,6 +8,7 @@
 import Foundation
 import Combine
 import Alamofire
+import SwiftUI
 
 final class SignInViewModel : ObservableObject {
     static var accessToken : String = ""
@@ -27,9 +28,10 @@ final class SignInViewModel : ObservableObject {
     private var subscription = Set<AnyCancellable>()
     
     func SignIn(email : String, password : String) {
+        
         AF.request(signInUrl,
                    method: .post,
-                   parameters: ["email" : email, "password" : password],
+                   parameters: ["email" : email, "password" : password, "deviceCode" : String(UIDevice.current.identifierForVendor!.uuidString)],
                    encoder: JSONParameterEncoder.prettyPrinted
         )
             .responseJSON { [weak self] (response) in
