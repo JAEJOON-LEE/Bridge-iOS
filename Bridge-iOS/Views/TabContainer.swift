@@ -109,7 +109,10 @@ struct TabContainer: View {
             .navigationBarTitle(viewModel.navigationBarTitleText(), displayMode: .inline)
             .navigationBarBackButtonHidden(true)
             .sheet(isPresented: $isNotificationShow) {
-                NotificationView()
+                NotificationView(viewModel: NotificationViewModel(
+                    accessToken: signInViewModel.signInResponse?.token.accessToken ?? "",
+                    memberId : signInViewModel.signInResponse?.memberId ?? -1)
+                    )
                     .preferredColorScheme(.light)
             }
             .background(

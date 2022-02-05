@@ -11,7 +11,7 @@ import URLImage
 struct ItemInfoView: View {
     @Environment(\.presentationMode) var presentationMode
     @StateObject private var viewModel : ItemInfoViewModel
-    @StateObject var notificationManager = LocalNotificationManager()
+//    @StateObject var notificationManager = LocalNotificationManager()
     @State var isModifyDone : Bool = false
     @State private var offset = CGSize.zero
     @State private var ImageViewOffset = CGSize.zero
@@ -240,9 +240,9 @@ struct ItemInfoView: View {
                                 //viewModel.chatCreation = true
                                 
                                 //fcm test
-                                if(viewModel.isMyPost == false){
-                                    notificationManager.sendMessageTouser(to: viewModel.ReceiverFCMToken, title: "Bridge", body: "Somebody knocks you!")
-                                }
+//                                if(viewModel.isMyPost == false){
+//                                    notificationManager.sendMessageTouser(to: viewModel.ReceiverFCMToken, title: "Bridge", body: "Somebody knocks you!")
+//                                }
                             } label : {
                                 HStack {
                                     Text("Knock Now!")
@@ -351,7 +351,7 @@ struct ItemInfoView: View {
                         viewModel.itemInfo?.usedPostDetail.likeCount -= 1
                     } else {
                         viewModel.itemInfo?.usedPostDetail.likeCount += 1
-                        notificationManager.sendMessageTouser(to: viewModel.ReceiverFCMToken, title: "Bridge", body: "Somebody likes your item!")
+//                        notificationManager.sendMessageTouser(to: viewModel.ReceiverFCMToken, title: "Bridge", body: "Somebody likes your item!")
                     }
                     viewModel.isLiked?.toggle()
                     viewModel.likePost(isliked: !(viewModel.isLiked ?? false))
