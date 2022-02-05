@@ -26,6 +26,7 @@ final class PostInfoViewModel : ObservableObject {
     @Published var isMemberInfoClicked : Bool = false
     @Published var isMenuClicked : Bool = false
     @Published var isImageTap : Bool = false
+    @Published var currentImageIndex : Int = 0
     @Published var showAction : Bool = false
     @Published var showAction2 : Bool = false
     @Published var showAction3 : Bool = false
@@ -39,6 +40,7 @@ final class PostInfoViewModel : ObservableObject {
     @Published var isReportDone : Bool = false
     @Published var isAlertShow : Bool = false
     @Published var isNotMyComment : Bool = false
+    
     
     @Published var commentInput : String = ""
     @Published var isAnonymous : Bool = false

@@ -20,6 +20,8 @@ struct PostInfoView: View { // 게시글 상세 페이지
 //    @StateObject var notificationManager = LocalNotificationManager()
     @State var isLinkActive : Bool = false
     @State private var activeAlert : ActiveAlert = .first
+    @State private var offset = CGSize.zero
+    @State private var ImageViewOffset = CGSize.zero
     //    @FocusState private var focusField: Field?
     //    enum Field: Hashable {
     //        case commentfield
@@ -111,6 +113,55 @@ struct PostInfoView: View { // 게시글 상세 페이지
                                             .padding(.horizontal)
                                     }
                                     .frame(width : viewModel.totalBoardPostDetail?.boardPostDetail.postImages!.count == 1 ? UIScreen.main.bounds.width * 0.93 : UIScreen.main.bounds.width * 0.58, height: viewModel.totalBoardPostDetail?.boardPostDetail.postImages!.count == 1 ? UIScreen.main.bounds.height * 0.3 : UIScreen.main.bounds.height * 0.23)
+                                    .onTapGesture {
+                                        viewModel.currentImageIndex = imageInfo.imageId
+                                        viewModel.isImageTap.toggle() // 이미지 확대 보기 기능
+                                    }
+                                    .fullScreenCover(isPresented: $viewModel.isImageTap, content: { //규림 이미지확대코드 참고
+                                        ZStack(alignment : .topTrailing) {
+                                            TabView(selection : $viewModel.currentImageIndex) {
+                                                
+                                                ForEach(viewModel.totalBoardPostDetail?.boardPostDetail.postImages! ?? [], id : \.self) { postImage in
+                                                    URLImage(
+                                                        URL(string : postImage.image) ??
+                                                        URL(string: "https://static.thenounproject.com/png/741653-200.png")!
+                                                    ) { image in
+                                                        image
+                                                            .resizable()
+                                                            .aspectRatio(contentMode: .fit)
+                                                    }.tag(postImage.imageId)
+                                                }
+                                            }.tabViewStyle(PageTabViewStyle())
+                                            .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
+                                            .frame(width : UIScreen.main.bounds.width)
+                                            .offset(x : 0, y : ImageViewOffset.height)
+                                            .gesture(
+                                                DragGesture()
+                                                    .onChanged { gesture in
+                                                        if -50 < gesture.translation.height && gesture.translation.height < 100 {
+                                                            self.ImageViewOffset = gesture.translation
+                                                        } else if gesture.translation.height >= 100 {
+                                                            viewModel.isImageTap.toggle()
+                                                            self.ImageViewOffset = .zero
+                                                        }
+                                                    }
+                                                    .onEnded { _ in
+                                                        withAnimation {
+                                                            self.ImageViewOffset = .zero
+                                                        }
+                                                    }
+                                            )
+                                            
+                                            Button {
+                                                viewModel.isImageTap.toggle()
+                                            } label : {
+                                                Image(systemName : "xmark")
+                                                    .foregroundColor(.mainTheme)
+                                                    .font(.system(size : 20))
+                                                    .padding()
+                                            }
+                                        }
+                                    })
                                 }
                             }else {
                                 ForEach(viewModel.totalSecretPostDetail?.secretPostDetail.postImages! ?? [], id : \.self) { imageInfo in
@@ -126,6 +177,57 @@ struct PostInfoView: View { // 게시글 상세 페이지
                                             .padding(.horizontal)
                                     }
                                     .frame(width : viewModel.totalSecretPostDetail?.secretPostDetail.postImages! .count == 1 ? UIScreen.main.bounds.width * 0.93 : UIScreen.main.bounds.width * 0.58, height: viewModel.totalSecretPostDetail?.secretPostDetail.postImages!.count == 1 ? UIScreen.main.bounds.height * 0.3 : UIScreen.main.bounds.height * 0.23)
+                                    .onTapGesture {
+                                        viewModel.currentImageIndex = imageInfo.imageId
+                                        viewModel.isImageTap.toggle() // 이미지 확대 보기 기능
+                                    }
+                                    .fullScreenCover(isPresented: $viewModel.isImageTap, content: { //규림 이미지확대코드 참고
+                                        ZStack(alignment : .topTrailing) {
+                                            TabView(selection : $viewModel.currentImageIndex) {
+                                                
+                                                    ForEach(viewModel.totalSecretPostDetail?.secretPostDetail.postImages! ?? [], id : \.self) { postImage in
+                                                        URLImage(
+                                                            URL(string : postImage.image) ??
+                                                            URL(string: "https://static.thenounproject.com/png/741653-200.png")!
+                                                        ) { image in
+                                                            image
+                                                                .resizable()
+                                                                .aspectRatio(contentMode: .fit)
+                                                        }.tag(postImage.imageId)
+                                                    }
+                                                    
+                                                
+                                            }.tabViewStyle(PageTabViewStyle())
+                                            .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
+                                            .frame(width : UIScreen.main.bounds.width)
+                                            .offset(x : 0, y : ImageViewOffset.height)
+                                            .gesture(
+                                                DragGesture()
+                                                    .onChanged { gesture in
+                                                        if -50 < gesture.translation.height && gesture.translation.height < 100 {
+                                                            self.ImageViewOffset = gesture.translation
+                                                        } else if gesture.translation.height >= 100 {
+                                                            viewModel.isImageTap.toggle()
+                                                            self.ImageViewOffset = .zero
+                                                        }
+                                                    }
+                                                    .onEnded { _ in
+                                                        withAnimation {
+                                                            self.ImageViewOffset = .zero
+                                                        }
+                                                    }
+                                            )
+                                            
+                                            Button {
+                                                viewModel.isImageTap.toggle()
+                                            } label : {
+                                                Image(systemName : "xmark")
+                                                    .foregroundColor(.mainTheme)
+                                                    .font(.system(size : 20))
+                                                    .padding()
+                                            }
+                                        }
+                                    })
                                 }
                             }
                         }
@@ -229,9 +331,9 @@ struct PostInfoView: View { // 게시글 상세 페이지
                     //                        .focused($focusField, equals: .commentfield)
                         .autocapitalization(.none)
                         .accentColor(.mainTheme)
-                    
+
                     Spacer()
-                    
+
                     HStack {
 //                        Text("Anonymous").foregroundColor(.gray)
                         Button {
@@ -255,7 +357,7 @@ struct PostInfoView: View { // 게시글 상세 페이지
                                         Image("anonymous1")
                                             .resizable()
                                             .aspectRatio(CGSize(width : 0.7, height : 0.5), contentMode: .fit)
-                                            
+
                                         Spacer()
                                             Button{
                                                 if(viewModel.commentInput.count != 0){
@@ -329,7 +431,7 @@ struct PostInfoView: View { // 게시글 상세 페이지
                         //                                viewModel.getComment()
                         //                                commentArea.scrollTo(viewModel.commentLists.count, anchor: .bottom)
                                                     }
-                                                    
+
                         //                            if(viewModel.isMyPost == false){
                         //                                notificationManager.sendMessageTouser(to: notificationManager.ReceiverFCMToken, title: "Bridge", body: "Check a new comment of your post!")
                         //                            }
@@ -354,7 +456,7 @@ struct PostInfoView: View { // 게시글 상세 페이지
                                             }
                                     }
                                 )
-                            
+
 //                                .overlay(
 //                                    Image("anonymous1")
 //                                        .resizable()
@@ -454,22 +556,22 @@ struct PostInfoView: View { // 게시글 상세 페이지
                 viewModel.isMenuClicked = false
             }
         }
-        .onDisappear {
-            if(viewModel.isMyPost != nil){
-                viewModel.contentForViewing = "Write a comment."
-                viewModel.contentForPatch = ""
-                viewModel.commentInput = ""
-                viewModel.getBoardPostDetail()
-                viewModel.getComment()
-            }else{
-//                viewModel.sendSecretComment(content: viewModel.commentInput, anonymous: String(viewModel.isAnonymous))
-                viewModel.contentForViewing = "Write a comment."
-                viewModel.contentForPatch = ""
-                viewModel.commentInput = ""
-                viewModel.getSecretPostDetail()
-                viewModel.getSecretComment()
-            }
-        }
+//        .onDisappear {
+//            if(viewModel.isMyPost != nil){
+//                viewModel.contentForViewing = "Write a comment."
+//                viewModel.contentForPatch = ""
+//                viewModel.commentInput = ""
+//                viewModel.getBoardPostDetail()
+//                viewModel.getComment()
+//            }else{
+////                viewModel.sendSecretComment(content: viewModel.commentInput, anonymous: String(viewModel.isAnonymous))
+//                viewModel.contentForViewing = "Write a comment."
+//                viewModel.contentForPatch = ""
+//                viewModel.commentInput = ""
+//                viewModel.getSecretPostDetail()
+//                viewModel.getSecretComment()
+//            }
+//        }
         .onChange(of: viewModel.commentSended, perform: { _ in
             
                 viewModel.getComment()
@@ -654,50 +756,6 @@ struct PostInfoView: View { // 게시글 상세 페이지
                     
             }
         }
-//        .alert(isPresented: $viewModel.isReportDone) {
-//            Alert(title: Text("Report"),
-//                  message: Text("Your report has been successfully received."),
-//                  dismissButton: .default(Text("Close")))
-//        }
-//        .alert(isPresented: $viewModel.showCommentAlert) {
-//            Alert(title: Text("Alert"),
-//                  message: Text("Please fill the comment"),
-//                  dismissButton: .default(Text("Close")))
-//        }
-//        .alert(isPresented: $viewModel.showConfirmDeletion) {
-//            Alert(
-//                title: Text("Confirmation"),
-//                message: Text((viewModel.isMyComment) ? "Do you want to delete this comment?" : "Do you want to delete this post?"),
-//                primaryButton: .destructive(Text("Yes"), action : {
-//                    if(viewModel.isSecret == false){
-//                        if(viewModel.isMyComment){
-//                            viewModel.deleteComment()
-//                            viewModel.getBoardPostDetail()
-//                            viewModel.getComment()
-//                            viewModel.showAction = false
-//                        }
-//                        else{
-//                            viewModel.deletePost()
-//                            self.presentationMode.wrappedValue.dismiss()
-//                            viewModel.showAction = false
-//                        }
-//                    }else{
-//                        if(viewModel.isMyComment){
-//                            viewModel.deleteSecretComment()
-//                            viewModel.getSecretPostDetail()
-//                            viewModel.getSecretComment()
-//                            viewModel.showAction = false
-//                        }
-//                        else{
-//                            viewModel.deleteSecretPost()
-//                            self.presentationMode.wrappedValue.dismiss()
-//                            viewModel.showAction = false
-//                        }
-//                    }
-//
-//                }),
-//                secondaryButton: .cancel(Text("No")))
-//        }
         .background(
             NavigationLink(
                 destination :
