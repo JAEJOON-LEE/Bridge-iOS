@@ -309,6 +309,9 @@ struct ItemInfoView: View {
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarItems(trailing:
             Button {
+                let hapticFeedback = UIImpactFeedbackGenerator(style: .medium)
+                hapticFeedback.impactOccurred()
+            
                 if viewModel.isLiked ?? false { viewModel.itemInfo?.usedPostDetail.likeCount -= 1 }
                 else { viewModel.itemInfo?.usedPostDetail.likeCount += 1 }
                 viewModel.isLiked?.toggle()

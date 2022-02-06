@@ -163,10 +163,25 @@ struct SettingsView: View {
     }
     
     var OpenSoureUsage : some View {
-        VStack {
-            Text("Open Source")
-        }.navigationBarTitleDisplayMode(.inline)
-        .navigationTitle(Text("Open Source"))
+        VStack(spacing : 0) {
+            Divider()
+            ScrollView {
+                OpenSourceElement(imageAddress: "https://raw.githubusercontent.com/Alamofire/Alamofire/master/Resources/AlamofireLogo.png",
+                                  name: "Alamofire", link: "https://github.com/Alamofire/Alamofire")
+                
+                OpenSourceElement(imageAddress: "https://raw.githubusercontent.com/onevcat/Kingfisher/master/images/logo.png",
+                                  name: "Kingfisher",
+                                  link: "https://github.com/onevcat/Kingfisher")
+                
+                OpenSourceElement(imageAddress: "https://github.com/WrathChaos/StompClientLib/raw/master/Screenshots/socket.png",
+                                  name: "StompClientLib",
+                                  link: "https://github.com/WrathChaos/StompClientLib")
+
+                OpenSourceElement(name: "SwiftUIPullToRefresh", link: "https://github.com/globulus/swiftui-pull-to-refresh")
+            }
+        }.font(.headline)
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationTitle(Text("Open Source Usage"))
     }
     
     var body: some View {
@@ -253,7 +268,7 @@ struct SettingsView: View {
                 NavigationLink(destination: OpenSoureUsage) {
                     HStack {
                         Image(systemName: "chevron.left.forwardslash.chevron.right")
-                        Text("Opensource code")
+                        Text("Open Source Usage")
                         Spacer()
                         Image(systemName: "chevron.right")
                     }
@@ -270,7 +285,6 @@ struct SettingsView: View {
         .actionSheet(isPresented: $viewModel.isDeleteMemeberClicked) {
             ActionSheet(
                 title: Text("Do you really want to delete your account?"),
-                //message: <#T##SwiftUI.Text?#>,
                 buttons: [
                     .destructive(Text("Yes")) {
                         userEmail = ""
@@ -289,5 +303,46 @@ struct SettingsView: View {
                 isActive : $viewModel.deleteMemeberConfirmation
             ) { }
         )
+    }
+}
+
+struct OpenSourceElement : View {
+    var image : URL? = nil
+    let name : String
+    let link : String
+    
+    init(imageAddress : String, name : String, link : String) {
+        self.image = URL(string : imageAddress)!
+        self.name = name
+        self.link = link
+    }
+    
+    init(name : String, link : String) {
+        self.name = name
+        self.link = link
+    }
+    
+    var body : some View {
+        VStack(spacing : 10) {
+            if let image = image {
+            KFImage(image)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(height : 50)
+            }
+            Text(name)
+                .font(.title3)
+                .fontWeight(.semibold)
+            Text(link)
+                .foregroundColor(.blue)
+                .underline()
+                .lineLimit(1)
+                .minimumScaleFactor(0.4)
+                .onTapGesture { UIApplication.shared.open(URL(string : link)!, options: [:]) }
+        }.padding()
+        .frame(width : UIScreen.main.bounds.width * 0.9)
+        .background(Color.systemDefaultGray)
+        .cornerRadius(10)
+        .padding(5)
     }
 }

@@ -218,6 +218,9 @@ struct ItemCard : View {
                     Spacer()
                     if !isMyPost {
                         Button {
+                            let hapticFeedback = UIImpactFeedbackGenerator(style: .medium)
+                            hapticFeedback.impactOccurred()
+                            
                             viewModel.isLiked.toggle()
                             viewModel.likePost()
                         } label : {
