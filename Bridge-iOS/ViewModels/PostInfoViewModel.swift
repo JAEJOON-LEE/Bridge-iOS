@@ -40,6 +40,7 @@ final class PostInfoViewModel : ObservableObject {
     @Published var isReportDone : Bool = false
     @Published var isAlertShow : Bool = false
     @Published var isNotMyComment : Bool = false
+    @Published var isBlockActive : Bool = false
     
     
     @Published var commentInput : String = ""
@@ -481,6 +482,20 @@ final class PostInfoViewModel : ObservableObject {
             print(json)
             print("comment report")
         }
+    }
+    
+    func blockUser() {
+        let url = "http://3.36.233.180:8080/members/\(memberId)/blocks"
+        let header: HTTPHeaders = [ "X-AUTH-TOKEN" : SignInViewModel.accessToken ]
+
+//        guard let memberToBlock = memberId else { return }
+        
+        AF.request(url,
+                   method: .post,
+                   parameters: [ "memberId" : memberId ],
+                   encoder: JSONParameterEncoder.prettyPrinted,
+                   headers: header
+        ).responseJSON { json in print(json) }
     }
     
     func convertReturnedDateString(_ timeString : String) -> String {

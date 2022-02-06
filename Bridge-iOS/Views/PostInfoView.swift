@@ -120,7 +120,7 @@ struct PostInfoView: View { // 게시글 상세 페이지
                                     .fullScreenCover(isPresented: $viewModel.isImageTap, content: { //규림 이미지확대코드 참고
                                         ZStack(alignment : .topTrailing) {
                                             TabView(selection : $viewModel.currentImageIndex) {
-                                                
+
                                                 ForEach(viewModel.totalBoardPostDetail?.boardPostDetail.postImages! ?? [], id : \.self) { postImage in
                                                     URLImage(
                                                         URL(string : postImage.image) ??
@@ -151,7 +151,7 @@ struct PostInfoView: View { // 게시글 상세 페이지
                                                         }
                                                     }
                                             )
-                                            
+
                                             Button {
                                                 viewModel.isImageTap.toggle()
                                             } label : {
@@ -184,7 +184,7 @@ struct PostInfoView: View { // 게시글 상세 페이지
                                     .fullScreenCover(isPresented: $viewModel.isImageTap, content: { //규림 이미지확대코드 참고
                                         ZStack(alignment : .topTrailing) {
                                             TabView(selection : $viewModel.currentImageIndex) {
-                                                
+
                                                     ForEach(viewModel.totalSecretPostDetail?.secretPostDetail.postImages! ?? [], id : \.self) { postImage in
                                                         URLImage(
                                                             URL(string : postImage.image) ??
@@ -195,8 +195,8 @@ struct PostInfoView: View { // 게시글 상세 페이지
                                                                 .aspectRatio(contentMode: .fit)
                                                         }.tag(postImage.imageId)
                                                     }
-                                                    
-                                                
+
+
                                             }.tabViewStyle(PageTabViewStyle())
                                             .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
                                             .frame(width : UIScreen.main.bounds.width)
@@ -217,7 +217,7 @@ struct PostInfoView: View { // 게시글 상세 페이지
                                                         }
                                                     }
                                             )
-                                            
+
                                             Button {
                                                 viewModel.isImageTap.toggle()
                                             } label : {
@@ -234,7 +234,7 @@ struct PostInfoView: View { // 게시글 상세 페이지
                         .padding()
                         /// 살려
                     }
-                    
+
                     //Contents
                     VStack(alignment: .leading){
                         if(viewModel.isSecret == false){
@@ -242,7 +242,7 @@ struct PostInfoView: View { // 게시글 상세 페이지
                                 .font(.title2)
                                 .fontWeight(.bold)
                                 .padding(.bottom)
-                            
+
                             HStack{
                                 Text(viewModel.totalBoardPostDetail?.boardPostDetail.description ?? "No description")
                             }
@@ -250,7 +250,7 @@ struct PostInfoView: View { // 게시글 상세 페이지
                             Text(viewModel.totalSecretPostDetail?.secretPostDetail.title ?? "Title not found")
                                 .font(.title2)
                                 .fontWeight(.bold)
-                            
+
                             HStack{
                                 Text(viewModel.totalSecretPostDetail?.secretPostDetail.description ?? "No description")
                             }
@@ -259,11 +259,11 @@ struct PostInfoView: View { // 게시글 상세 페이지
                     .padding(.leading)
                     .padding(.bottom)
                     .frame(width : UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.1, alignment : .leading)
-                    
+
                     VStack(alignment: .trailing){
                         HStack{
                             Spacer()
-                            
+
                             Button{
                                 //라이크 버튼 클릭
                                 if(viewModel.isSecret == false){
@@ -279,12 +279,12 @@ struct PostInfoView: View { // 게시글 상세 페이지
                                 }else{
                                     viewModel.getSecretPostDetail()
                                 }
-                                
+
 //                                if(viewModel.isMyPost == false && viewModel.isLiked == false){
 //                                    notificationManager.sendMessageTouser(to: notificationManager.ReceiverFCMToken, title: "Bridge", body: "Somebody likes your post!")
 //                                }
                             } label : {
-                                
+
                                 if(viewModel.isSecret == false){
                                     Image((viewModel.totalBoardPostDetail?.boardPostDetail.like ?? true) ? "like" : "like_border")
                                         .foregroundColor(.mainTheme)
@@ -304,7 +304,7 @@ struct PostInfoView: View { // 게시글 상세 페이지
                         .padding()
                     }
                     Divider()
-                    
+
                     //Comments Area
                     VStack{
                         Text("Comment")
@@ -312,7 +312,7 @@ struct PostInfoView: View { // 게시글 상세 페이지
                     }
                     .padding()
                     .frame(width : UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.03, alignment : .leading)
-                    
+
                     VStack(alignment: .leading){
                         commentView
                     }.listStyle(PlainListStyle()) // iOS 15 대응
@@ -514,6 +514,21 @@ struct PostInfoView: View { // 게시글 상세 페이지
                     Text("\"" + (viewModel.totalBoardPostDetail?.member?.description  ?? "User not found") + "\"")
                         .foregroundColor(.gray)
                     Spacer()
+                    if !viewModel.isMyPost! {
+                        Button {
+                            viewModel.isBlockActive = true
+                            viewModel.showAction = true
+                        } label : {
+                            Text("Block")
+                                .foregroundColor(.white)
+                                .fontWeight(.semibold)
+                                .padding(7)
+                                .frame(width : UIScreen.main.bounds.width * 0.3)
+                                .background(Color.red.opacity(0.5))
+                                .cornerRadius(20)
+                        }
+                        Spacer()
+                    }
                 }
                 .frame(width : UIScreen.main.bounds.width * 0.7, height: UIScreen.main.bounds.height * 1/3)
                 .background(Color.mainTheme)
@@ -827,6 +842,21 @@ struct PostInfoView: View { // 게시글 상세 페이지
             return ActionSheet(title: Text("Options"), message: nil, buttons: [btnMP, btnDP, btnCancle])
         }else if((viewModel.totalBoardPostDetail?.boardPostDetail.modifiable == true)){
             return ActionSheet(title: Text("Options"), message: nil, buttons: [btnMP, btnDP, btnCancle])
+        }else if(viewModel.isBlockActive == true){
+            return ActionSheet(
+                title: Text("Do you want to block this user?"),
+                buttons: [
+                    .destructive(Text("Block")) {
+                        viewModel.blockUser()
+                        withAnimation {
+                            viewModel.isMemberInfoClicked = false
+                        }
+                    },
+                    .cancel() {
+                        viewModel.isBlockActive = false
+                    }
+                ]
+            )
         }else{
             return ActionSheet(title: Text("Option"), message: nil, buttons: [btnReport, btnCancle])
         }
@@ -893,7 +923,7 @@ extension PostInfoView {
                         }else{
                             viewModel.getSecretComment()
                         }
-                        
+
 //                        if(Comment.like == false){
 //                            notificationManager.sendMessageTouser(to: notificationManager.ReceiverFCMToken, title: "Bridge", body: "Somebody likes your comment!")
 //                        }
