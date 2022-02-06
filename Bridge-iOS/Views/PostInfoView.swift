@@ -481,8 +481,6 @@ struct PostInfoView: View { // 게시글 상세 페이지
                 }
                 .padding()
             
-            }.onTapGesture {
-                viewModel.isImageTap.toggle() // 이미지 확대 보기 기능
             }
             .blur(radius: viewModel.isMemberInfoClicked ? 3 : 0)
             
