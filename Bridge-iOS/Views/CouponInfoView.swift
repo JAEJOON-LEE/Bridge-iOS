@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import URLImage
+import Kingfisher
 import MapKit
 
 struct CouponInfoView: View {
@@ -22,35 +22,28 @@ struct CouponInfoView: View {
     var StoreImages : some View {
         TabView(selection : $viewModel.currentImageIndex) {
             ForEach(viewModel.shopInfo.images, id : \.self) { imageInfo in
-                URLImage(
-                    URL(string : imageInfo.image) ??
-                    URL(string: "https://static.thenounproject.com/png/741653-200.png")!
-                ) { image in
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                }
+                KFImage(URL(string : imageInfo.image) ??
+                        URL(string: "https://static.thenounproject.com/png/741653-200.png")!
+                ).resizable()
+                .fade(duration: 0.5)
+                .aspectRatio(contentMode: .fill)
                 .tag(imageInfo.imageId)
                 .onTapGesture { viewModel.currentImageIndex = imageInfo.imageId }
             }
         }.tabViewStyle(PageTabViewStyle())
-        .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .never))
+        .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
         .frame(width : UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.35)
-        .onTapGesture {
-            viewModel.isImageTap.toggle() // 이미지 확대 보기 기능
-        }
+        .onTapGesture { viewModel.isImageTap.toggle() }
         .fullScreenCover(isPresented: $viewModel.isImageTap) {
             ZStack(alignment : .topTrailing) {
                 TabView(selection : $viewModel.currentImageIndex) {
                     ForEach(viewModel.shopInfo.images, id : \.self) { imageInfo in
-                        URLImage(
-                            URL(string : imageInfo.image) ??
-                            URL(string: "https://static.thenounproject.com/png/741653-200.png")!
-                        ) { image in
-                            image
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                        }.tag(imageInfo.imageId)
+                        KFImage(URL(string : imageInfo.image) ??
+                                URL(string: "https://static.thenounproject.com/png/741653-200.png")!
+                        ).resizable()
+                        .fade(duration: 0.5)
+                        .aspectRatio(contentMode: .fit)
+                        .tag(imageInfo.imageId)
                     }
                 }.tabViewStyle(PageTabViewStyle())
                 .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
@@ -221,17 +214,13 @@ struct CouponInfoView: View {
             // Contents
             ForEach(viewModel.reviews, id : \.self) { review in
                 HStack(spacing : 10) {
-                    URLImage(
-                        URL(string : review.member.profileImage) ??
-                        URL(string: "https://static.thenounproject.com/png/741653-200.png")!
-                    ) { image in
-                        image
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                    }.frame(
-                        width: UIScreen.main.bounds.width * 0.12,
-                        height: UIScreen.main.bounds.width * 0.12)
+                    KFImage(URL(string : review.member.profileImage) ??
+                            URL(string: "https://static.thenounproject.com/png/741653-200.png")!
+                    ).resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: UIScreen.main.bounds.width * 0.12, height: UIScreen.main.bounds.width * 0.12)
                     .cornerRadius(10)
+                    
                     VStack(alignment : .leading, spacing : 5) {
                         HStack {
                             Text(review.member.username)
@@ -441,23 +430,18 @@ struct CouponInfoView: View {
         .actionSheet(isPresented: $viewModel.showReviewAction) {
             ActionSheet(title: Text("Review"),
                         buttons: [
-                            .default(Text("Modify Review"), action: {
-                                //print("modify \(viewModel.selectedReview)")
-                                //viewModel.modifyReview()
+                            .default(Text("Modify Review")) {
                                 withAnimation { viewModel.isModifying = true }
-                            }),
-                            .destructive(Text("Delete Review"), action: {
-                                //print("delete \(viewModel.selectedReview)")
+                            },
+                            .destructive(Text("Delete Review")) {
                                 viewModel.deleteReview()
-                            }),
+                            },
                             .cancel()
                         ]
             )
         }
         .alert(isPresented: $viewModel.addReviewDone) {
-            Alert(title: Text("Add Review Done"),
-                  dismissButton: .default(Text("OK"))
-            )
+            Alert(title: Text("Add Review Done"), dismissButton: .default(Text("OK")))
         }
     }
 }

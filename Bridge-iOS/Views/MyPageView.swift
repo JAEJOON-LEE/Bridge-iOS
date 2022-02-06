@@ -6,14 +6,12 @@
 //
 
 import SwiftUI
-import URLImage
+import Kingfisher
 
 struct MyPageView: View {
     @StateObject private var viewModel : MyPageViewModel
     
-    init(viewModel : MyPageViewModel) {
-        self._viewModel = StateObject(wrappedValue: viewModel)
-    }
+    init(viewModel : MyPageViewModel) { self._viewModel = StateObject(wrappedValue: viewModel) }
     
     var titleArea : some View {
         HStack {
@@ -48,14 +46,13 @@ struct MyPageView: View {
                     .clipShape(Circle())
                     .shadow(radius: 5)
             } else {
-                URLImage(URL(string: viewModel.userInfo.profileImage)!) { image in
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                }
-                .frame(width : UIScreen.main.bounds.width * 0.4, height : UIScreen.main.bounds.width * 0.4)
-                .clipShape(Circle())
-                .shadow(radius: 5)
+                KFImage(URL(string: viewModel.userInfo.profileImage)!)
+                    .resizable()
+                    .fade(duration: 0.5)
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width : UIScreen.main.bounds.width * 0.4, height : UIScreen.main.bounds.width * 0.4)
+                    .clipShape(Circle())
+                    .shadow(radius: 5)
             }
             
             Button {
@@ -157,8 +154,7 @@ struct MyPageView: View {
             buttonArea
         }.padding()
         .alert(isPresented: $viewModel.isEditDone) {
-            Alert(title: Text("Your Information is changed."),
-                  dismissButton: .default(Text("OK")))
+            Alert(title: Text("Your Information is changed."), dismissButton: .default(Text("OK")))
         }
         .sheet(isPresented: $viewModel.showImagePicker) { ImagePicker(image: $viewModel.selectedImage) }
     }

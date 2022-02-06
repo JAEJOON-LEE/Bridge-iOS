@@ -6,8 +6,8 @@
 //
 
 import SwiftUI
-import URLImage
 import SwiftUIPullToRefresh
+import Kingfisher
 
 enum ActiveAlert {
     case first, second, third
@@ -37,11 +37,6 @@ struct PostInfoView: View { // 게시글 상세 페이지
         ScrollViewReader { commentArea in
         ZStack {
             VStack {
-                
-                ///
-                ////
-                ///
-                ///
                 //Profile
                 HStack{
                     //                    if(viewModel.isSecret == false){
@@ -49,16 +44,13 @@ struct PostInfoView: View { // 게시글 상세 페이지
                     Button{
                         viewModel.isMemberInfoClicked.toggle()
                     } label : {
-                        URLImage( //프로필 이미지
-                            URL(string : viewModel.totalBoardPostDetail?.member?.profileImage! ?? "https://static.thenounproject.com/png/741653-200.png" ) ?? URL(string: "https://static.thenounproject.com/png/741653-200.png")!
-                        ) { image in
-                            image
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                        }
-                        .frame(width : 40,
-                               height: 40)
-                        .cornerRadius(13)
+                        KFImage(URL(string : viewModel.totalBoardPostDetail?.member?.profileImage!
+                                    ?? "https://static.thenounproject.com/png/741653-200.png" )
+                                ?? URL(string: "https://static.thenounproject.com/png/741653-200.png")!)
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width : 40, height: 40)
+                            .cornerRadius(13)
                     }
                     //                    }
 
@@ -101,17 +93,13 @@ struct PostInfoView: View { // 게시글 상세 페이지
                         HStack {
                             if(viewModel.isSecret == false){
                                 ForEach(viewModel.totalBoardPostDetail?.boardPostDetail.postImages! ?? [], id : \.self) { imageInfo in
-                                    URLImage(
-                                        URL(string : imageInfo.image) ??
-                                        URL(string: "https://static.thenounproject.com/png/741653-200.png")!
-                                    ) { image in
-                                        image
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fill)
-                                            .frame(width : viewModel.totalBoardPostDetail?.boardPostDetail.postImages!.count == 1 ? UIScreen.main.bounds.width * 0.93 : UIScreen.main.bounds.width * 0.58, height: viewModel.totalBoardPostDetail?.boardPostDetail.postImages!.count == 1 ? UIScreen.main.bounds.height * 0.3 : UIScreen.main.bounds.height * 0.23)
-                                            .cornerRadius(10)
-                                            .padding(.horizontal)
-                                    }
+                                    KFImage(URL(string : imageInfo.image) ??
+                                            URL(string: "https://static.thenounproject.com/png/741653-200.png")!)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width : viewModel.totalBoardPostDetail?.boardPostDetail.postImages!.count == 1 ? UIScreen.main.bounds.width * 0.93 : UIScreen.main.bounds.width * 0.58, height: viewModel.totalBoardPostDetail?.boardPostDetail.postImages!.count == 1 ? UIScreen.main.bounds.height * 0.3 : UIScreen.main.bounds.height * 0.23)
+                                    .cornerRadius(10)
+                                    .padding(.horizontal)
                                     .frame(width : viewModel.totalBoardPostDetail?.boardPostDetail.postImages!.count == 1 ? UIScreen.main.bounds.width * 0.93 : UIScreen.main.bounds.width * 0.58, height: viewModel.totalBoardPostDetail?.boardPostDetail.postImages!.count == 1 ? UIScreen.main.bounds.height * 0.3 : UIScreen.main.bounds.height * 0.23)
                                     .onTapGesture {
                                         viewModel.currentImageIndex = imageInfo.imageId
@@ -120,16 +108,12 @@ struct PostInfoView: View { // 게시글 상세 페이지
                                     .fullScreenCover(isPresented: $viewModel.isImageTap, content: { //규림 이미지확대코드 참고
                                         ZStack(alignment : .topTrailing) {
                                             TabView(selection : $viewModel.currentImageIndex) {
-
                                                 ForEach(viewModel.totalBoardPostDetail?.boardPostDetail.postImages! ?? [], id : \.self) { postImage in
-                                                    URLImage(
-                                                        URL(string : postImage.image) ??
-                                                        URL(string: "https://static.thenounproject.com/png/741653-200.png")!
-                                                    ) { image in
-                                                        image
-                                                            .resizable()
-                                                            .aspectRatio(contentMode: .fit)
-                                                    }.tag(postImage.imageId)
+                                                    KFImage(URL(string : postImage.image) ??
+                                                            URL(string: "https://static.thenounproject.com/png/741653-200.png")!)
+                                                        .resizable()
+                                                        .aspectRatio(contentMode: .fit)
+                                                        .tag(postImage.imageId)
                                                 }
                                             }.tabViewStyle(PageTabViewStyle())
                                             .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
@@ -165,17 +149,13 @@ struct PostInfoView: View { // 게시글 상세 페이지
                                 }
                             }else {
                                 ForEach(viewModel.totalSecretPostDetail?.secretPostDetail.postImages! ?? [], id : \.self) { imageInfo in
-                                    URLImage(
-                                        URL(string : imageInfo.image) ??
-                                        URL(string: "https://static.thenounproject.com/png/741653-200.png")!
-                                    ) { image in
-                                        image
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fill)
-                                            .frame(width : viewModel.totalSecretPostDetail?.secretPostDetail.postImages! .count == 1 ? UIScreen.main.bounds.width * 0.93 : UIScreen.main.bounds.width * 0.58, height: viewModel.totalSecretPostDetail?.secretPostDetail.postImages!.count == 1 ? UIScreen.main.bounds.height * 0.3 : UIScreen.main.bounds.height * 0.23)
-                                            .cornerRadius(10)
-                                            .padding(.horizontal)
-                                    }
+                                    KFImage(URL(string : imageInfo.image) ??
+                                            URL(string: "https://static.thenounproject.com/png/741653-200.png")!)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width : viewModel.totalSecretPostDetail?.secretPostDetail.postImages! .count == 1 ? UIScreen.main.bounds.width * 0.93 : UIScreen.main.bounds.width * 0.58, height: viewModel.totalSecretPostDetail?.secretPostDetail.postImages!.count == 1 ? UIScreen.main.bounds.height * 0.3 : UIScreen.main.bounds.height * 0.23)
+                                    .cornerRadius(10)
+                                    .padding(.horizontal)
                                     .frame(width : viewModel.totalSecretPostDetail?.secretPostDetail.postImages! .count == 1 ? UIScreen.main.bounds.width * 0.93 : UIScreen.main.bounds.width * 0.58, height: viewModel.totalSecretPostDetail?.secretPostDetail.postImages!.count == 1 ? UIScreen.main.bounds.height * 0.3 : UIScreen.main.bounds.height * 0.23)
                                     .onTapGesture {
                                         viewModel.currentImageIndex = imageInfo.imageId
@@ -184,19 +164,13 @@ struct PostInfoView: View { // 게시글 상세 페이지
                                     .fullScreenCover(isPresented: $viewModel.isImageTap, content: { //규림 이미지확대코드 참고
                                         ZStack(alignment : .topTrailing) {
                                             TabView(selection : $viewModel.currentImageIndex) {
-
                                                     ForEach(viewModel.totalSecretPostDetail?.secretPostDetail.postImages! ?? [], id : \.self) { postImage in
-                                                        URLImage(
-                                                            URL(string : postImage.image) ??
-                                                            URL(string: "https://static.thenounproject.com/png/741653-200.png")!
-                                                        ) { image in
-                                                            image
-                                                                .resizable()
-                                                                .aspectRatio(contentMode: .fit)
-                                                        }.tag(postImage.imageId)
+                                                        KFImage(URL(string : postImage.image) ??
+                                                                URL(string: "https://static.thenounproject.com/png/741653-200.png")!)
+                                                            .resizable()
+                                                            .aspectRatio(contentMode: .fit)
+                                                            .tag(postImage.imageId)
                                                     }
-
-
                                             }.tabViewStyle(PageTabViewStyle())
                                             .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
                                             .frame(width : UIScreen.main.bounds.width)
@@ -497,16 +471,13 @@ struct PostInfoView: View { // 게시글 상세 페이지
                         }.padding()
                     }.frame(height: 50)
                     
-                    URLImage(
-                        URL(string : viewModel.totalBoardPostDetail?.member?.profileImage ?? "https://static.thenounproject.com/png/741653-200.png")!
-                    ) { image in
-                        image
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                    }
-                    .clipShape(Circle())
-                    .frame(width: UIScreen.main.bounds.width * 0.25, height: UIScreen.main.bounds.width * 0.25)
-                    .shadow(radius: 5)
+                    KFImage(URL(string : viewModel.totalBoardPostDetail?.member?.profileImage
+                                ?? "https://static.thenounproject.com/png/741653-200.png")!)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .clipShape(Circle())
+                        .frame(width: UIScreen.main.bounds.width * 0.25, height: UIScreen.main.bounds.width * 0.25)
+                        .shadow(radius: 5)
                     
                     Text(viewModel.totalBoardPostDetail?.member?.username ?? "Unknown UserName")
                         .font(.system(size : 20, weight : .bold))
@@ -874,17 +845,12 @@ extension PostInfoView {
 
             VStack(alignment: .leading){
                 HStack{
-                    URLImage( //프로필 이미지
-                        URL(string : (Comment.member?.profileImage) ?? "https://static.thenounproject.com/png/741653-200.png") ??
-                        URL(string: "https://static.thenounproject.com/png/741653-200.png")!
-                    ) { image in
-                        image
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                    }
-                    .frame(width : 40,
-                           height: 40)
-                    .cornerRadius(13)
+                    KFImage(URL(string : (Comment.member?.profileImage) ?? "https://static.thenounproject.com/png/741653-200.png") ??
+                            URL(string: "https://static.thenounproject.com/png/741653-200.png")!)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width : 40, height: 40)
+                        .cornerRadius(13)
 
 
                     VStack(alignment: .leading){

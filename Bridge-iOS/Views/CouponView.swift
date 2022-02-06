@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import URLImage
+import Kingfisher
 
 struct CouponView: View {
     @StateObject private var viewModel : CouponViewModel
@@ -23,36 +23,28 @@ struct CouponView: View {
     }
     
     var LocationPicker : some View {
-        VStack {
-            HStack (spacing : 30) {
+        VStack(spacing : 0) {
+            HStack (spacing : 25) {
                 Button {
                     withAnimation { self.isSlideShow.toggle() }
                 } label : {
                     Image(systemName: "text.justify")
                         .foregroundColor(.mainTheme)
                 }
-
-                URLImage(
-                    URL(string : viewModel.memberInfo.profileImage)
-                    ?? URL(string : "https://static.thenounproject.com/png/741653-200.png")!
-                ) { image in
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                }.clipShape(Circle())
-                .frame(
-                    width : UIScreen.main.bounds.width * 0.04,
-                    height: UIScreen.main.bounds.height * 0.04
-                )
+                KFImage(URL(string : viewModel.memberInfo.profileImage)
+                        ?? URL(string : "https://static.thenounproject.com/png/741653-200.png")!)
+                    .resizable()
+                    .fade(duration: 0.5)
+                    .aspectRatio(contentMode: .fill)
+                    .clipShape(Circle())
+                    .frame(width : UIScreen.main.bounds.width * 0.065, height: UIScreen.main.bounds.height * 0.065)
 
                 VStack (alignment : .leading, spacing : 0) {
                     Text("Bridge in")
                         .font(.system(size : 10, design : .rounded))
                     HStack {
                         Button {
-                            withAnimation(.spring()) {
-                                isLocationPickerShow.toggle()
-                            }
+                            withAnimation(.spring()) { isLocationPickerShow.toggle() }
                         } label : {
                             Text(selectedDistrict + " ▾")
                                 .font(.system(size : 24, design: .rounded))
@@ -62,28 +54,6 @@ struct CouponView: View {
                 
                 Spacer()
             } // HStack
-            .padding(.bottom, 10)
-
-            // Search
-//            Button {
-//                //viewModel.isSearchViewShow = true
-//            } label: {
-//                HStack {
-//                    Image(systemName: "magnifyingglass")
-//                        .padding(.horizontal, 3)
-//                    Text("Search")
-//                        .font(.system(size : 14))
-//                    Spacer()
-//                }
-//                .foregroundColor(.gray)
-//                .frame(
-//                    width: UIScreen.main.bounds.width * 0.95,
-//                    height : UIScreen.main.bounds.height * 0.035
-//                )
-//                .background(Color.systemDefaultGray)
-//                .cornerRadius(15)
-//            }
-//            .padding(.bottom, 5)
         } // VStack
         .background(
             Color.white
@@ -113,17 +83,12 @@ struct CouponView: View {
                                 viewModel: CouponInfoViewModel(shop.shopId, image : shop.image)))
                         {
                             HStack(spacing : 20) {
-                                URLImage(
-                                    URL(string : shop.image) ??
-                                    URL(string: "https://static.thenounproject.com/png/741653-200.png")!
-                                ) { image in
-                                    image
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fill)
-                                }
-                                //Color.systemDefaultGray // temp
-                                .frame(width : UIScreen.main.bounds.width * 0.33,
-                                       height: UIScreen.main.bounds.height * 0.12)
+                                KFImage(URL(string : shop.image) ??
+                                        URL(string: "https://static.thenounproject.com/png/741653-200.png")!
+                                ).resizable()
+                                .fade(duration: 0.5)
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width : UIScreen.main.bounds.width * 0.33, height: UIScreen.main.bounds.height * 0.12)
                                 .cornerRadius(10)
 
                                 VStack(alignment : .leading) {
@@ -189,17 +154,12 @@ struct CouponView: View {
                                     CouponInfoViewModel(shop.shopId, image : shop.image))
                         ) {
                             VStack {
-                                URLImage(
-                                    URL(string : shop.image) ??
-                                    URL(string: "https://static.thenounproject.com/png/741653-200.png")!
-                                ) { image in
-                                    image
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fill)
-                                }
-                                //Color.systemDefaultGray // temp
-                                .frame(width : UIScreen.main.bounds.width * 0.33,
-                                       height: UIScreen.main.bounds.height * 0.12)
+                                KFImage(URL(string : shop.image) ??
+                                        URL(string: "https://static.thenounproject.com/png/741653-200.png")!
+                                ).resizable()
+                                .fade(duration: 0.5)
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width : UIScreen.main.bounds.width * 0.33, height: UIScreen.main.bounds.height * 0.12)
                                 .cornerRadius(10)
                                 Text(shop.name)
                                     .fontWeight(.semibold)

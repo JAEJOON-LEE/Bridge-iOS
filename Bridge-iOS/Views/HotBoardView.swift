@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import URLImage
 import SwiftUIPullToRefresh
 
 struct HotBoardView : View {
@@ -21,13 +20,11 @@ struct HotBoardView : View {
         VStack {
             if (viewModel.hotLists.count == 0){
                 Text("No Hot Posts")
-            }
-            else{
-                
+            } else{
                 RefreshableScrollView(onRefresh: { done in
                     viewModel.getBoardPosts(token: viewModel.token)
                     done()
-                }){
+                }) {
                     LazyVStack {
                         ForEach(viewModel.hotLists, id : \.self) { HotList in
                             NavigationLink(
@@ -43,10 +40,8 @@ struct HotBoardView : View {
                         }
                         .foregroundColor(Color.mainTheme)
                         .listStyle(PlainListStyle()) // iOS 15 대응
-                        //            .frame(height:UIScreen.main.bounds.height * 1/7 )
-                        
                     }.listStyle(PlainListStyle()) // iOS 15 대응
-                        .padding(.top, 5)
+                    .padding(.top, 5)
                 }.padding(.top, 5)
             }
         }.onAppear {
@@ -63,8 +58,5 @@ struct HotBoardView : View {
                     .font(.system(size : 15, weight : .bold))
             }
         )
-        //        .refreshable{ // only for ios15
-        //            viewModel.getBoardPosts(token: viewModel.token)
-        //        }
     }
 }

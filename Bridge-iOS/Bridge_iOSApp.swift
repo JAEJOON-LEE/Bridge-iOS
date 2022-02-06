@@ -6,8 +6,6 @@
 //
 
 import SwiftUI
-import URLImageStore
-import URLImage
 import Firebase
 import FirebaseMessaging
 import Combine
@@ -15,14 +13,11 @@ import Alamofire
 
 @main
 struct Bridge_iOSApp: App {
-
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-    let urlImageService = URLImageService(fileStore: nil, inMemoryStore: URLImageInMemoryStore())
 
     var body: some Scene {
         WindowGroup {
             BaseView()
-                .environment(\.urlImageService, urlImageService)
                 .preferredColorScheme(.light)
         }
     }

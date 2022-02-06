@@ -6,8 +6,8 @@
 //
 
 import SwiftUI
-import URLImage
 import SwiftUIPullToRefresh
+import Kingfisher
 
 struct SecretBoardView : View {
     @StateObject private var viewModel : BoardViewModel
@@ -76,24 +76,19 @@ struct SecretPost : View {
     var body : some View {
         VStack(alignment : .leading){
             HStack{
-                URLImage( //프로필 이미지
-                    URL(string : viewModel.profileImage) ??
-                    URL(string: "https://static.thenounproject.com/png/741653-200.png")!
-                ) { image in
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                }
-                .frame(width : 40,
-                       height: 40)
-                .cornerRadius(20)
+                KFImage(URL(string : viewModel.profileImage) ??
+                        URL(string: "https://static.thenounproject.com/png/741653-200.png")!)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width : 40, height: 40)
+                    .cornerRadius(20)
                 
                 VStack(alignment : .leading){
                     Text(viewModel.userName)
                         .font(.system(size: 20, weight : .medium))
                     
                     //Text(viewModel.convertReturnedDateString(viewModel.createdAt ?? "2021-10-01 00:00:00"))
-                    Text(viewModel.convertReturnedDateString(viewModel.createdAt))
+                    Text(convertReturnedDateString(viewModel.createdAt))
                         .font(.system(size: 10))
                 }
             }
@@ -101,17 +96,12 @@ struct SecretPost : View {
             .padding(.bottom, 2)
             
             if(viewModel.imageUrl != "null"){
-                URLImage(
-                    URL(string : viewModel.imageUrl) ??
-                    URL(string: "https://static.thenounproject.com/png/741653-200.png")!
-                ) { image in
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                }
-                .frame(width : UIScreen.main.bounds.width * 0.83,
-                       height: UIScreen.main.bounds.height * 0.15)
-                .cornerRadius(10)
+                KFImage(URL(string : viewModel.imageUrl) ??
+                        URL(string: "https://static.thenounproject.com/png/741653-200.png")!)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width : UIScreen.main.bounds.width * 0.83, height: UIScreen.main.bounds.height * 0.15)
+                    .cornerRadius(10)
             }
             
             HStack(alignment: .bottom){

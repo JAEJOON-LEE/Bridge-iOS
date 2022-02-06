@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import URLImage
+import Kingfisher
 import SwiftUIPullToRefresh
 
 struct HomeView : View {
@@ -24,8 +24,8 @@ struct HomeView : View {
     }
     
     var LocationPicker : some View {
-        VStack {
-            HStack (spacing : 30) {
+        VStack(spacing : 0) {
+            HStack (spacing : 25) {
                 Button {
                     withAnimation { self.isSlideShow.toggle() }
                 } label : {
@@ -33,24 +33,20 @@ struct HomeView : View {
                         .foregroundColor(.mainTheme)
                 }
 
-                URLImage(
-                    URL(string : viewModel.memberInfo.profileImage)
-                    ?? URL(string : "https://static.thenounproject.com/png/741653-200.png")!
-                ) { image in
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                }.clipShape(Circle())
-                .frame(width : UIScreen.main.bounds.width * 0.04, height: UIScreen.main.bounds.height * 0.04)
-
+                KFImage(URL(string : viewModel.memberInfo.profileImage)
+                        ?? URL(string : "https://static.thenounproject.com/png/741653-200.png")!)
+                    .resizable()
+                    .fade(duration: 0.5)
+                    .aspectRatio(contentMode: .fill)
+                    .clipShape(Circle())
+                    .frame(width : UIScreen.main.bounds.width * 0.065, height: UIScreen.main.bounds.height * 0.065)
+                
                 VStack (alignment : .leading, spacing : 0) {
                     Text("Bridge in")
                         .font(.system(size : 10, design : .rounded))
                     HStack {
                         Button {
-                            withAnimation(.spring()) {
-                                isLocationPickerShow.toggle()
-                            }
+                            withAnimation(.spring()) { isLocationPickerShow.toggle() }
                         } label : {
                             Text(selectedDistrict + " ▾")
                                 .font(.system(size : 24, design: .rounded))
@@ -191,16 +187,12 @@ struct ItemCard : View {
     
     var body : some View {
         HStack(spacing : 13) {
-            URLImage(
-                URL(string : viewModel.imageUrl) ??
-                URL(string: "https://static.thenounproject.com/png/741653-200.png")!
-            ) { image in
-                image
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-            }
-            .frame(width : UIScreen.main.bounds.width * 0.33, height: UIScreen.main.bounds.height * 0.12)
-            .cornerRadius(10)
+            KFImage(URL(string : viewModel.imageUrl) ??
+                    URL(string: "https://static.thenounproject.com/png/741653-200.png")!)
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .frame(width : UIScreen.main.bounds.width * 0.33, height: UIScreen.main.bounds.height * 0.12)
+                .cornerRadius(10)
 
             VStack(alignment : .leading, spacing: 5) {
                 Text(viewModel.itemTitle)

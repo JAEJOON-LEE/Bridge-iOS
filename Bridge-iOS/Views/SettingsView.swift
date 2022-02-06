@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import URLImage
+import Kingfisher
 
 struct SettingsView: View {
     @AppStorage("rememberUser") var rememberUser : Bool = false
@@ -141,13 +141,12 @@ struct SettingsView: View {
             List {
                 ForEach(viewModel.blockList, id : \.self) { blockInfo in
                     HStack(spacing : 15) {
-                        URLImage(URL(string: blockInfo.blockedMember.profileImage)!) { image in
-                            image
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                        }
-                        .frame(width : UIScreen.main.bounds.width * 0.15, height : UIScreen.main.bounds.width * 0.15)
-                        .clipShape(Circle())
+                        KFImage(URL(string: blockInfo.blockedMember.profileImage)!)
+                            .resizable()
+                            .fade(duration: 0.5)
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width : UIScreen.main.bounds.width * 0.15, height : UIScreen.main.bounds.width * 0.15)
+                            .clipShape(Circle())
                         Text(blockInfo.blockedMember.username)
                             .fontWeight(.semibold)
                         Spacer()

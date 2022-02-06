@@ -59,6 +59,8 @@ final class SecretInfoViewModel : ObservableObject {
     }
     
     func likeComment(isliked : Bool) {
+        guard let commentId = commentId else { return }
+        
         let url = "http://3.36.233.180:8080/comments/\(commentId)/likes"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
         let method : HTTPMethod = isliked ? .delete : .post

@@ -88,8 +88,8 @@ struct SignUpView: View {
     
     var nextButton : some View {
         Button {
-            viewModel.CheckValidation()
-            if(viewModel.signUpDone == true){
+            _ = viewModel.CheckValidation()
+            if(viewModel.signUpDone == true) {
                 viewModel.CheckDuplication(email: viewModel.email)
                 usleep(300)
 //                if(viewModel.statusCode1 == 200 && viewModel.statusCode2 == 200){

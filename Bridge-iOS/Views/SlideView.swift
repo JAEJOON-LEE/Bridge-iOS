@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import URLImage
+import Kingfisher
 
 struct SlideItem : View {
     var ImageName : String
@@ -132,16 +132,13 @@ struct SlideView : View {
                                         isMyPost : (PostList.postType == "board" ? true : nil)))
                             ) {
                                 HStack(spacing : 13) {
-                                    URLImage(
-                                        URL(string : PostList.image!) ??
-                                        URL(string: "https://static.thenounproject.com/png/741653-200.png")!
-                                    ) { image in
-                                        image
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fill)
-                                    }
-                                    .frame(width : UIScreen.main.bounds.width * 0.33, height: UIScreen.main.bounds.height * 0.12)
-                                    .cornerRadius(10)
+                                    KFImage(URL(string : PostList.image!) ??
+                                            URL(string: "https://static.thenounproject.com/png/741653-200.png")!)
+                                        .resizable()
+                                        .fade(duration: 0.5)
+                                        .aspectRatio(contentMode: .fill)
+                                        .frame(width : UIScreen.main.bounds.width * 0.33, height: UIScreen.main.bounds.height * 0.12)
+                                        .cornerRadius(10)
 
                                     VStack(alignment : .leading, spacing: 5) {
                                         Text(PostList.title)
@@ -175,16 +172,13 @@ struct SlideView : View {
                                 }
                                 .padding(5)
                                 .padding(.horizontal, 10)
-                                //.modifier(ItemCardStyle())
                             }
                             
                             Color.systemDefaultGray
                                 .frame(width : UIScreen.main.bounds.width * 0.9, height : 5)
                         }
                     }
-                }.onAppear {
-                    viewModel.getBoardPosts(token: viewModel.userInfo.token.accessToken)
-                }
+                }.onAppear { viewModel.getBoardPosts(token: viewModel.userInfo.token.accessToken) }
             }
         }.navigationTitle(Text(""))
         .edgesIgnoringSafeArea(.top)
@@ -205,16 +199,14 @@ struct SlideView : View {
                 }
                 
                 HStack(spacing : 20) {
-                    URLImage(URL(string: viewModel.memberInfo.profileImage)
-                             ?? URL(string : "https://static.thenounproject.com/png/741653-200.png")!
-                    ) { image in
-                        image
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                    }
-                    .frame(width : UIScreen.main.bounds.width * 0.2, height : UIScreen.main.bounds.width * 0.2)
-                    .clipShape(Circle())
-                    .shadow(radius: 5)
+                    KFImage(URL(string: viewModel.memberInfo.profileImage)
+                            ?? URL(string : "https://static.thenounproject.com/png/741653-200.png")!)
+                        .resizable()
+                        .fade(duration: 0.5)
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width : UIScreen.main.bounds.width * 0.2, height : UIScreen.main.bounds.width * 0.2)
+                        .clipShape(Circle())
+                        .shadow(radius: 5)
                     
                     VStack(alignment: .leading, spacing : 10) {
                         Text(viewModel.memberInfo.username)

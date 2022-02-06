@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import URLImage
+import Kingfisher
 
 struct ModifyUsedPostView: View {
     @Environment(\.presentationMode) var presentationMode
@@ -26,35 +26,32 @@ struct ModifyUsedPostView: View {
                     Text("No Images, Please add photo")
                 }
                 ForEach(viewModel.postImages, id : \.self) { postImage in
-                    URLImage(URL(string : postImage.image) ??
-                             URL(string: "https://static.thenounproject.com/png/741653-200.png")!
-                         ) { image in
-                            ZStack(alignment : .topTrailing) {
-                                 image
-                                     .resizable()
-                                     .aspectRatio(contentMode: .fill)
-                                     .frame(width : UIScreen.main.bounds.width, height: UIScreen.main.bounds.height / 3)
-                                     .clipped()
-                                
-                                    Button {
-                                        if let index = viewModel.postImages.firstIndex(of: postImage) {
-                                            viewModel.postImages.remove(at: index)
-                                        }
-                                        viewModel.removeImage.append(postImage.imageId)
-                                    } label : {
-                                        HStack {
-                                            Image(systemName : "x.circle")
-                                            Text("Delete")
-                                        }
-                                        .foregroundColor(.white)
-                                        .font(.system(size: 13, weight : .semibold))
-                                        .padding(5)
-                                        .background(Color.red.opacity(0.5))
-                                        .cornerRadius(5)
-                                        .padding()
-                                    }
+                    ZStack(alignment : .topTrailing) {
+                         KFImage(URL(string : postImage.image) ??
+                                 URL(string: "https://static.thenounproject.com/png/741653-200.png")!)
+                             .resizable()
+                             .aspectRatio(contentMode: .fill)
+                             .frame(width : UIScreen.main.bounds.width, height: UIScreen.main.bounds.height / 3)
+                             .clipped()
+                        
+                            Button {
+                                if let index = viewModel.postImages.firstIndex(of: postImage) {
+                                    viewModel.postImages.remove(at: index)
+                                }
+                                viewModel.removeImage.append(postImage.imageId)
+                            } label : {
+                                HStack {
+                                    Image(systemName : "x.circle")
+                                    Text("Delete")
+                                }
+                                .foregroundColor(.white)
+                                .font(.system(size: 13, weight : .semibold))
+                                .padding(5)
+                                .background(Color.red.opacity(0.5))
+                                .cornerRadius(5)
+                                .padding()
                             }
-                         }
+                    }
                 }
                 ForEach(viewModel.ImagesToAdd, id : \.self) { image in
                     ZStack(alignment : .topTrailing) {

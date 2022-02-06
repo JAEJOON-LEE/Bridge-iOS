@@ -6,8 +6,8 @@
 //
 
 import SwiftUI
-import URLImage
 import PhotosUI
+import Kingfisher
 
 struct WritingView : View {
     @Environment(\.presentationMode) var presentationMode
@@ -256,36 +256,28 @@ struct WritingView : View {
                             else if(viewModel.infoForModifying?.boardPostDetail.postImages != nil){
                                 HStack{
                                     ForEach(viewModel.infoForModifying?.boardPostDetail.postImages ?? [], id : \.self) { imageInfo in
-                                        URLImage(
-                                            URL(string : imageInfo.image) ??
-                                            URL(string: "https://static.thenounproject.com/png/741653-200.png")!
-                                        ) { image in
-                                            image
-                                                .resizable()
-                                                .foregroundColor(.black)
-                                                .frame(width : UIScreen.main.bounds.width * 0.2, height : UIScreen.main.bounds.width * 0.2, alignment: .center)
-                                                .cornerRadius(10)
-                                                .padding()
-                                        }
+                                        KFImage(URL(string : imageInfo.image) ??
+                                                URL(string: "https://static.thenounproject.com/png/741653-200.png")!)
+                                            .resizable()
+                                            .foregroundColor(.black)
+                                            .frame(width : UIScreen.main.bounds.width * 0.2, height : UIScreen.main.bounds.width * 0.2, alignment: .center)
+                                            .cornerRadius(10)
+                                            .padding()
                                     }
                                 }
-                            }else if(viewModel.infoForSecretModifying?.secretPostDetail.postImages != nil){
+                            } else if(viewModel.infoForSecretModifying?.secretPostDetail.postImages != nil){
                                 HStack{
                                     ForEach(viewModel.infoForSecretModifying?.secretPostDetail.postImages ?? [], id : \.self) { imageInfo in
-                                        URLImage(
-                                            URL(string : imageInfo.image) ??
-                                            URL(string: "https://static.thenounproject.com/png/741653-200.png")!
-                                        ) { image in
-                                            image
-                                                .resizable()
-                                                .foregroundColor(.black)
-                                                .frame(width : UIScreen.main.bounds.width * 0.2, height : UIScreen.main.bounds.width * 0.2, alignment: .center)
-                                                .cornerRadius(10)
-                                                .padding()
-                                        }
+                                        KFImage(URL(string : imageInfo.image) ??
+                                                URL(string: "https://static.thenounproject.com/png/741653-200.png")!)
+                                            .resizable()
+                                            .foregroundColor(.black)
+                                            .frame(width : UIScreen.main.bounds.width * 0.2, height : UIScreen.main.bounds.width * 0.2, alignment: .center)
+                                            .cornerRadius(10)
+                                            .padding()
                                     }
                                 }
-                            }else{
+                            } else {
                                 //                    Button {
                                 //                        viewModel.selectedImages.removeAll()
                                 //                        viewModel.showImagePicker.toggle()
@@ -310,7 +302,7 @@ struct WritingView : View {
                                 //                        )
                                 //                    }
                             }
-                        }else{
+                        } else {
                             if viewModel.selectedImages.isEmpty {
                                 //                    Button {
                                 //                        viewModel.selectedImages.removeAll()

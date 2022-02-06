@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import URLImage
+import Kingfisher
 
 struct ChatView: View {
     @StateObject private var viewModel : ChatViewModel
@@ -44,7 +44,6 @@ struct ChatView: View {
                     }, id : \.self
                     ) { chatroom in
                         if chatroom.message != nil { // chat room with no message
-                            
                             VStack {
                                 NavigationLink(destination :
                                                 ChatroomView(viewModel: ChatroomViewModel(chatroom.chatId,
@@ -57,24 +56,16 @@ struct ChatView: View {
                                                                                                 playgroundAlarm: false,
                                                                                                 usedAlarm: false)),
                                                              with : viewModel.chatWith(chatroom: chatroom)?.username ?? "Anonymous",
-                                                             withId : viewModel.chatWith(chatroom: chatroom)?.memberId ?? 0
-                                                            )
+                                                             withId : viewModel.chatWith(chatroom: chatroom)?.memberId ?? 0)
                                 ) {
                                     HStack {
                                         // 1. Profile Image
-                                        URLImage(
-                                            URL(string : viewModel.chatWith(chatroom: chatroom)?.profileImage ?? "https://www.gravatar.com/avatar/3b37be7c3ac00a1237fe8d4252fd4540.jpg?size=240&d=https%3A%2F%2Fwww.artstation.com%2Fassets%2Fdefault_avatar.jpg")!
-                                        ) { image in
-                                            image
-                                                .resizable()
-                                                .aspectRatio(contentMode: .fill)
-                                        }
-                                        .frame(
-                                            width : UIScreen.main.bounds.width * 0.16,
-                                            height: UIScreen.main.bounds.width * 0.16
-                                        )
-                                        .clipShape(Circle())
-                                        .padding(.horizontal, 5)
+                                        KFImage(URL(string : viewModel.chatWith(chatroom: chatroom)?.profileImage ?? "https://www.gravatar.com/avatar/3b37be7c3ac00a1237fe8d4252fd4540.jpg?size=240&d=https%3A%2F%2Fwww.artstation.com%2Fassets%2Fdefault_avatar.jpg")!)
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fill)
+                                            .frame(width : UIScreen.main.bounds.width * 0.16, height: UIScreen.main.bounds.width * 0.16 )
+                                            .clipShape(Circle())
+                                            .padding(.horizontal, 5)
                                         
                                         // 2. Text Area
                                         VStack(alignment : .leading, spacing : 5) {
@@ -99,18 +90,11 @@ struct ChatView: View {
                                         Spacer()
                                         
                                         // 3. PostImage
-                                        URLImage(
-                                            URL(string : chatroom.post.image)!
-                                        ) { image in
-                                            image
-                                                .resizable()
-                                                .aspectRatio(contentMode: .fill)
-                                        }
-                                        .frame(
-                                            width : UIScreen.main.bounds.width * 0.25,
-                                            height: UIScreen.main.bounds.width * 0.2
-                                        )
-                                        .cornerRadius(20)
+                                        KFImage(URL(string : chatroom.post.image)!)
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fill)
+                                            .frame(width : UIScreen.main.bounds.width * 0.25, height: UIScreen.main.bounds.width * 0.2 )
+                                            .cornerRadius(20)
                                     }
                                     .frame(width : UIScreen.main.bounds.width * 0.95)
                                     .padding(10)
@@ -126,8 +110,7 @@ struct ChatView: View {
                     Spacer().frame(height : UIScreen.main.bounds.height * 0.1)
                 } // LazyVStack
             } // ScrollView
-        }
-        .overlay(
+        }.overlay(
             VStack(spacing : 0) {
                 Spacer()
                 LinearGradient(colors: [.white.opacity(0), .white], startPoint: .top, endPoint: .bottom)
@@ -135,9 +118,6 @@ struct ChatView: View {
                 Color.white
                     .frame(height : UIScreen.main.bounds.height * 0.05)
             }.edgesIgnoringSafeArea(.bottom)
-        )
-        .onAppear {
-            viewModel.getChats()
-        }
+        ).onAppear { viewModel.getChats() }
     }
 }

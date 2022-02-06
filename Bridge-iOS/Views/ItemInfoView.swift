@@ -6,12 +6,12 @@
 //
 
 import SwiftUI
-import URLImage
+import Kingfisher
 
 struct ItemInfoView: View {
     @Environment(\.presentationMode) var presentationMode
     @StateObject private var viewModel : ItemInfoViewModel
-//    @StateObject var notificationManager = LocalNotificationManager()
+
     @State var isModifyDone : Bool = false
     @State private var offset = CGSize.zero
     @State private var ImageViewOffset = CGSize.zero
@@ -27,21 +27,14 @@ struct ItemInfoView: View {
                 ZStack(alignment : .bottom) {
                     TabView(selection : $viewModel.currentImageIndex) {
                         ForEach(viewModel.itemInfo?.usedPostDetail.postImages ?? [], id : \.self) { imageInfo in
-                            URLImage(
-                                URL(string : imageInfo.image) ??
-                                URL(string: "https://static.thenounproject.com/png/741653-200.png")!
-                            ) { image in
-                                image
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                            }
-                            .tag(imageInfo.imageId)
-                            .onTapGesture {
-                                viewModel.currentImageIndex = imageInfo.imageId
-                            }
+                            KFImage(URL(string : imageInfo.image) ??
+                                    URL(string: "https://static.thenounproject.com/png/741653-200.png")!)
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .tag(imageInfo.imageId)
+                                .onTapGesture { viewModel.currentImageIndex = imageInfo.imageId }
                         }
                     }.tabViewStyle(PageTabViewStyle())
-                    //.indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .never))
                     
                     TabView(selection : $viewModel.currentImageIndex) {
                         ForEach(viewModel.itemInfo?.usedPostDetail.postImages ?? [], id : \.self) {
@@ -52,28 +45,19 @@ struct ItemInfoView: View {
                     .tabViewStyle(PageTabViewStyle())
                     .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
                     .padding(.bottom, 40)
-                }
-                .frame(
-                    width : UIScreen.main.bounds.width,
-                    height: UIScreen.main.bounds.height * 0.38 + offset.height)
-                
+                }.frame(width : UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.38 + offset.height)
                 Spacer()
             }.blur(radius: viewModel.isMemberInfoClicked ? 5 : 0)
-            .onTapGesture {
-                viewModel.isImageTap.toggle() // 이미지 확대 보기 기능
-            }
+            .onTapGesture { viewModel.isImageTap.toggle() } // 이미지 확대 보기 기능
             .fullScreenCover(isPresented: $viewModel.isImageTap, content: {
                 ZStack(alignment : .topTrailing) {
                     TabView(selection : $viewModel.currentImageIndex) {
                         ForEach(viewModel.itemInfo?.usedPostDetail.postImages ?? [], id : \.self) { imageInfo in
-                            URLImage(
-                                URL(string : imageInfo.image) ??
-                                URL(string: "https://static.thenounproject.com/png/741653-200.png")!
-                            ) { image in
-                                image
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                            }.tag(imageInfo.imageId)
+                            KFImage(URL(string : imageInfo.image) ??
+                                    URL(string: "https://static.thenounproject.com/png/741653-200.png")!)
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .tag(imageInfo.imageId)
                         }
                     }.tabViewStyle(PageTabViewStyle())
                     .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
@@ -89,11 +73,7 @@ struct ItemInfoView: View {
                                     self.ImageViewOffset = .zero
                                 }
                             }
-                            .onEnded { _ in
-                                withAnimation {
-                                    self.ImageViewOffset = .zero
-                                }
-                            }
+                            .onEnded { _ in withAnimation { self.ImageViewOffset = .zero } }
                     )
                     
                     Button {
@@ -106,7 +86,6 @@ struct ItemInfoView: View {
                     }
                 }
             })
-
             
             // Text Area
             VStack {
@@ -142,19 +121,14 @@ struct ItemInfoView: View {
                         }.lineLimit(1)
                         .minimumScaleFactor(0.4)
                     }
-
                     
                     // User Area
                     HStack {
-                        URLImage(
-                            URL(string: viewModel.itemInfo?.member.profileImage ?? "https://static.thenounproject.com/png/741653-200.png")!
-                        ) { image in
-                            image
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                        }
-                        .frame(width: 50, height: 50)
-                        .cornerRadius(15)
+                        KFImage(URL(string: viewModel.itemInfo?.member.profileImage ?? "https://static.thenounproject.com/png/741653-200.png")!)
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: 50, height: 50)
+                            .cornerRadius(15)
                         
                         VStack(alignment : .leading, spacing: 5) {
                             Text(viewModel.itemInfo?.member.username ?? "Unknown")
@@ -237,12 +211,6 @@ struct ItemInfoView: View {
                             Spacer()
                             Button {
                                 viewModel.createChat()
-                                //viewModel.chatCreation = true
-                                
-                                //fcm test
-//                                if(viewModel.isMyPost == false){
-//                                    notificationManager.sendMessageTouser(to: viewModel.ReceiverFCMToken, title: "Bridge", body: "Somebody knocks you!")
-//                                }
                             } label : {
                                 HStack {
                                     Text("Knock Now!")
@@ -299,16 +267,12 @@ struct ItemInfoView: View {
                         }.padding()
                     }.frame(height: 50)
                     
-                    URLImage(
-                        URL(string : viewModel.itemInfo?.member.profileImage ?? "https://static.thenounproject.com/png/741653-200.png")!
-                    ) { image in
-                        image
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                    }
-                    .clipShape(Circle())
-                    .frame(width: UIScreen.main.bounds.width * 0.25, height: UIScreen.main.bounds.width * 0.25)
-                    .shadow(radius: 5)
+                    KFImage(URL(string : viewModel.itemInfo?.member.profileImage ?? "https://static.thenounproject.com/png/741653-200.png")!)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .clipShape(Circle())
+                        .frame(width: UIScreen.main.bounds.width * 0.25, height: UIScreen.main.bounds.width * 0.25)
+                        .shadow(radius: 5)
                     
                     Text(viewModel.itemInfo?.member.username ?? "Unknown UserName")
                         .font(.system(size : 20, weight : .bold))
@@ -340,28 +304,22 @@ struct ItemInfoView: View {
             }
         }
         .onAppear{ viewModel.getItemInfo() }
-        .onChange(of: self.isModifyDone, perform: { _ in
-            self.presentationMode.wrappedValue.dismiss()
-        })
+        .onChange(of: self.isModifyDone) { _ in self.presentationMode.wrappedValue.dismiss() }
         .navigationBarTitle(Text(viewModel.itemInfo?.usedPostDetail.title ?? ""))
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarItems(trailing:
-                Button {
-                    if viewModel.isLiked ?? false {
-                        viewModel.itemInfo?.usedPostDetail.likeCount -= 1
-                    } else {
-                        viewModel.itemInfo?.usedPostDetail.likeCount += 1
-//                        notificationManager.sendMessageTouser(to: viewModel.ReceiverFCMToken, title: "Bridge", body: "Somebody likes your item!")
-                    }
-                    viewModel.isLiked?.toggle()
-                    viewModel.likePost(isliked: !(viewModel.isLiked ?? false))
-                } label: {
-                    if !viewModel.isMyPost {
-                        Image(systemName: (viewModel.isLiked ?? true) ? "heart.fill" : "heart")
-                            .font(.system(size : 15, weight : .bold))
-                            .foregroundColor((viewModel.isLiked ?? true) ? .pink : .black)
-                    }
+            Button {
+                if viewModel.isLiked ?? false { viewModel.itemInfo?.usedPostDetail.likeCount -= 1 }
+                else { viewModel.itemInfo?.usedPostDetail.likeCount += 1 }
+                viewModel.isLiked?.toggle()
+                viewModel.likePost(isliked: !(viewModel.isLiked ?? false))
+            } label: {
+                if !viewModel.isMyPost {
+                    Image(systemName: (viewModel.isLiked ?? true) ? "heart.fill" : "heart")
+                        .font(.system(size : 15, weight : .bold))
+                        .foregroundColor((viewModel.isLiked ?? true) ? .pink : .black)
                 }
+            }
         )
         .actionSheet(isPresented: $viewModel.showAction) {
             if viewModel.actionSheetType == 1 {
@@ -399,7 +357,6 @@ struct ItemInfoView: View {
                 }),
                 secondaryButton: .cancel(Text("No")))
         }
-        //.fullScreenCover(isPresented: $viewModel.showPostModify, content: {
         .sheet(isPresented: $viewModel.showPostModify, content: {
             NavigationView {
                 ModifyUsedPostView(viewModel:

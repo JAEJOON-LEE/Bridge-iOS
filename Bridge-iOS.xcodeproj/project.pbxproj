@@ -26,6 +26,7 @@
 		1A74AEBC2791960D00F97046 /* Coupon+ResponseData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A74AEBB2791960D00F97046 /* Coupon+ResponseData.swift */; };
 		1A74AEBE2791C72100F97046 /* CouponInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A74AEBD2791C72100F97046 /* CouponInfoView.swift */; };
 		1A74AEC02791C78600F97046 /* CouponInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A74AEBF2791C78600F97046 /* CouponInfoViewModel.swift */; };
+		1A80360E27B0088300EA256D /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 1A80360D27B0088300EA256D /* Kingfisher */; };
 		1A936DC5271877C300750DE6 /* ModifyUsedPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A936DC4271877C300750DE6 /* ModifyUsedPostView.swift */; };
 		1A936DC7271878A600750DE6 /* ModifyUsedPostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A936DC6271878A500750DE6 /* ModifyUsedPostViewModel.swift */; };
 		1A976EA827412EF600B743CE /* UsedSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A976EA727412EF600B743CE /* UsedSearchView.swift */; };
@@ -66,8 +67,6 @@
 		1ADD9DE4270325CC008342A7 /* SignIn+ResponseData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADD9DE3270325CC008342A7 /* SignIn+ResponseData.swift */; };
 		1ADD9DE627034B8A008342A7 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADD9DE527034B8A008342A7 /* HomeViewModel.swift */; };
 		1ADD9DE827034C63008342A7 /* Home+ResponseData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADD9DE727034C63008342A7 /* Home+ResponseData.swift */; };
-		1ADD9DEB270363A1008342A7 /* URLImage in Frameworks */ = {isa = PBXBuildFile; productRef = 1ADD9DEA270363A1008342A7 /* URLImage */; };
-		1ADD9DED270363A1008342A7 /* URLImageStore in Frameworks */ = {isa = PBXBuildFile; productRef = 1ADD9DEC270363A1008342A7 /* URLImageStore */; };
 		1ADD9DEF27036BA6008342A7 /* ItemCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADD9DEE27036BA6008342A7 /* ItemCardViewModel.swift */; };
 		6D2B89D22713476A00319907 /* Board+ResponseData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2B89D12713476A00319907 /* Board+ResponseData.swift */; };
 		6D2B89D42713477100319907 /* Secret+ResponseData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2B89D32713477100319907 /* Secret+ResponseData.swift */; };
@@ -227,10 +226,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1ADD9DEB270363A1008342A7 /* URLImage in Frameworks */,
-				1ADD9DED270363A1008342A7 /* URLImageStore in Frameworks */,
 				1ADA2869279AC2540069FB69 /* SwiftUIPullToRefresh in Frameworks */,
 				6DE69904278A98B00048EB76 /* FirebaseMessaging in Frameworks */,
+				1A80360E27B0088300EA256D /* Kingfisher in Frameworks */,
 				6DE69902278A98B00048EB76 /* FirebaseAnalytics in Frameworks */,
 				1ADD9DDF27032237008342A7 /* Alamofire in Frameworks */,
 				1468E06FA175296F4F57C397 /* Pods_Bridge_iOS.framework in Frameworks */,
@@ -475,11 +473,10 @@
 			name = "Bridge-iOS";
 			packageProductDependencies = (
 				1ADD9DDE27032237008342A7 /* Alamofire */,
-				1ADD9DEA270363A1008342A7 /* URLImage */,
-				1ADD9DEC270363A1008342A7 /* URLImageStore */,
 				6DE69901278A98B00048EB76 /* FirebaseAnalytics */,
 				6DE69903278A98B00048EB76 /* FirebaseMessaging */,
 				1ADA2868279AC2540069FB69 /* SwiftUIPullToRefresh */,
+				1A80360D27B0088300EA256D /* Kingfisher */,
 			);
 			productName = "Bridge-iOS";
 			productReference = 1AA8B40926F32AF500C28E02 /* Bridge-iOS.app */;
@@ -510,9 +507,9 @@
 			mainGroup = 1AA8B40026F32AF500C28E02;
 			packageReferences = (
 				1ADD9DDD27032237008342A7 /* XCRemoteSwiftPackageReference "Alamofire" */,
-				1ADD9DE9270363A0008342A7 /* XCRemoteSwiftPackageReference "url-image" */,
 				6DE69900278A98B00048EB76 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				1ADA2867279AC2530069FB69 /* XCRemoteSwiftPackageReference "swiftui-pull-to-refresh" */,
+				1A80360C27B0088300EA256D /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			productRefGroup = 1AA8B40A26F32AF500C28E02 /* Products */;
 			projectDirPath = "";
@@ -879,6 +876,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		1A80360C27B0088300EA256D /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.0.0;
+			};
+		};
 		1ADA2867279AC2530069FB69 /* XCRemoteSwiftPackageReference "swiftui-pull-to-refresh" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/globulus/swiftui-pull-to-refresh";
@@ -895,14 +900,6 @@
 				version = 5.4.4;
 			};
 		};
-		1ADD9DE9270363A0008342A7 /* XCRemoteSwiftPackageReference "url-image" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/dmytro-anokhin/url-image";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 3.0.0;
-			};
-		};
 		6DE69900278A98B00048EB76 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -914,6 +911,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		1A80360D27B0088300EA256D /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1A80360C27B0088300EA256D /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
 		1ADA2868279AC2540069FB69 /* SwiftUIPullToRefresh */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 1ADA2867279AC2530069FB69 /* XCRemoteSwiftPackageReference "swiftui-pull-to-refresh" */;
@@ -923,16 +925,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 1ADD9DDD27032237008342A7 /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
-		};
-		1ADD9DEA270363A1008342A7 /* URLImage */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1ADD9DE9270363A0008342A7 /* XCRemoteSwiftPackageReference "url-image" */;
-			productName = URLImage;
-		};
-		1ADD9DEC270363A1008342A7 /* URLImageStore */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1ADD9DE9270363A0008342A7 /* XCRemoteSwiftPackageReference "url-image" */;
-			productName = URLImageStore;
 		};
 		6DE69901278A98B00048EB76 /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import URLImage
+import Kingfisher
 
 struct ChatroomView: View {
     @Environment(\.presentationMode) var presentationMode
@@ -73,17 +73,13 @@ struct ChatroomView: View {
                             .padding(.bottom, viewModel.checkChatTime(index: index) ? 5 : -5)
                         } // ForEach
                     } // LazyVStack
-                    .sheet(isPresented: $viewModel.showImagePicker) {
-                        ImagePicker(image: $viewModel.selectedImage)
-                    }
+                    .sheet(isPresented: $viewModel.showImagePicker) { ImagePicker(image: $viewModel.selectedImage) }
                     .onAppear {
                         //viewModel.getChatContents(viewModel.chatId)
                         proxy.scrollTo(viewModel.lastMessageId)
                     }
                     .onChange(of: viewModel.lastMessageId) { _ in
-                        withAnimation {
-                            proxy.scrollTo(viewModel.lastMessageId)
-                        }
+                        withAnimation { proxy.scrollTo(viewModel.lastMessageId) }
                     }
                 } // ScrollViewReader
             } // ScrollView
@@ -294,14 +290,11 @@ struct MessageBox : View {
                     }
                     // -- message w/ image
                     if message.image != "null" {
-                        URLImage(
-                            URL(string : message.image)!
-                        ) { image in
-                            image
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(maxWidth : UIScreen.main.bounds.width * 0.6)
-                        }.cornerRadius(10)
+                        KFImage(URL(string : message.image)!)
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(maxWidth : UIScreen.main.bounds.width * 0.6)
+                            .cornerRadius(10)
                     }
 //                    내가 보낸 이미지 메시지 처리 방식 !!
 //                    else if message.image == "localImage" {
