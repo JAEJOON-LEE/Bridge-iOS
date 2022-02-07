@@ -403,7 +403,7 @@ struct PostInfoView: View { // 게시글 상세 페이지
                                                         commentArea.scrollTo("COMMENT_AREA", anchor: .bottom)
                         //                                viewModel.getBoardPostDetail()
                         //                                viewModel.getComment()
-                        //                                commentArea.scrollTo(viewModel.commentLists.count, anchor: .bottom)
+                                                        commentArea.scrollTo(viewModel.commentLists.count, anchor: .bottom)
                                                     }
 
                         //                            if(viewModel.isMyPost == false){
@@ -626,14 +626,36 @@ struct PostInfoView: View { // 게시글 상세 페이지
                     viewModel.commentInput = ""
                     viewModel.getBoardPostDetail()
                     viewModel.getComment()
+//                    viewModel.isMenuClicked = false
+//                    viewModel.isMyComment = false
                 }else{
                     viewModel.contentForViewing = "Write a comment."
                     viewModel.contentForPatch = ""
                     viewModel.commentInput = ""
                     viewModel.getSecretPostDetail()
                     viewModel.getSecretComment()
+//                    viewModel.isMenuClicked = false
+//                    viewModel.isMyComment = false
                 }
         })
+//        .onChange(of: viewModel.isLiked, perform: { _ in
+//            viewModel.showAction3 = false
+//            viewModel.getBoardPostDetail()
+//        })
+//        .onChange(of: viewModel.isLiked, perform: { _ in
+//
+//            if(viewModel.isSecret == false){
+//                viewModel.likePost(isliked: (viewModel.isLiked))
+//                viewModel.getBoardPostDetail()
+//
+////                viewModel.isLiked = viewModel.totalBoardPostDetail!.boardPostDetail.like
+//            }else{
+//                viewModel.getSecretPostDetail()
+//                viewModel.likeSecretPost(isliked: (viewModel.isLiked))
+//
+////                viewModel.isLiked = viewModel.totalBoardPostDetail!.boardPostDetail.like
+//            }
+//        })
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .principal) {
@@ -814,6 +836,11 @@ struct PostInfoView: View { // 게시글 상세 페이지
 
 extension PostInfoView {
     var commentView : some View {
+
+        ///
+        ///
+        ///
+        ScrollViewReader{ proxyReader in
         ForEach(viewModel.commentLists, id : \.self) { Comment in
 
             VStack(alignment: .leading){
@@ -862,10 +889,16 @@ extension PostInfoView {
                         }else{
                             viewModel.getSecretComment()
                         }
+
+//                        if(Comment.like == false){
+//                            notificationManager.sendMessageTouser(to: notificationManager.ReceiverFCMToken, title: "Bridge", body: "Somebody likes your comment!")
+//                        }
                     } label : {
                         Image((Comment.like) ? "like" : "like_border")
                             .foregroundColor(.mainTheme)
                             .font(.system(size : 10))
+//                        Image(systemName: (viewModel.isLiked ?? true) ? "hand.thumbsup.fill" : "hand.thumbsup")
+//                            .foregroundColor(.mainTheme)
                     }
                     Text(String((Comment.likeCount)))
                         .padding(.trailing)
@@ -886,58 +919,58 @@ extension PostInfoView {
                 .font(.system(size: 13))
 
                 // 대댓글
-//                ForEach(Comment.comments!, id : \.self) { Coc in
-//
-//                    HStack{
-//                        Spacer()
-//
-//                        VStack(alignment: .leading){
-//                            HStack{
-//                                KFImage(
-//                                    URL(string : (Coc.member?.profileImage) ?? "https://static.thenounproject.com/png/741653-200.png") ??
-//                                    URL(string: "https://static.thenounproject.com/png/741653-200.png")!)
-//                                    .resizable()
-//                                    .aspectRatio(contentMode: .fill)
-//                                    .frame(width : 30, height: 30)
-//                                    .cornerRadius(9)
-//
-//                                VStack(alignment: .leading){
-//
-//                                    Text(Coc.member?.username! ?? "Anonymous" )
-//                                        .font(.system(size: 15, weight : .medium))
-//
-//                                    Text(viewModel.convertReturnedDateString(Coc.createdAt ?? "2021-10-01 00:00:00"))
-//                                        .font(.system(size: 11))
-//
-//                                }
-//                                .foregroundColor(.gray)
-//
-//                                Spacer()
-//
-//                                    Button { // menu button
-//                                            viewModel.isMenuClicked = true
-//                                            viewModel.showAction = true
-//                                            viewModel.isMyComment = true
-//                                            viewModel.commentId = Coc.commentId
-//                                            viewModel.contentForPatch = Coc.content
-//
-//                                            //menu toggle
-//                                    } label: {
-//                                        if (Coc.modifiable) {
-//                                            Image(systemName : "ellipsis")
-//                                                .foregroundColor(.black)
-//                                                .font(.system(size : 15, weight : .bold))
-//                                        }
-//                                    }
-//                            }
-//                            .frame(alignment: .leading)
-//
-//                            Text(Coc.content)
-//                                .padding(.leading, 40)
-//
-//                            HStack{
-//                                Spacer()
-//
+                ForEach(Comment.comments!, id : \.self) { Coc in
+
+                    HStack{
+                        Spacer()
+
+                        VStack(alignment: .leading){
+                            HStack{
+                                KFImage(URL(string : viewModel.totalBoardPostDetail?.member?.profileImage!
+                                            ?? "https://static.thenounproject.com/png/741653-200.png" )
+                                        ?? URL(string: "https://static.thenounproject.com/png/741653-200.png")!)
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fill)
+                                        .frame(width : 30, height: 30)
+                                        .cornerRadius(9)
+
+                                VStack(alignment: .leading){
+
+                                    Text(Coc.member?.username! ?? "Anonymous" )
+                                        .font(.system(size: 15, weight : .medium))
+
+                                    Text(viewModel.convertReturnedDateString(Coc.createdAt ?? "2021-10-01 00:00:00"))
+                                        .font(.system(size: 11))
+
+                                }
+                                .foregroundColor(.gray)
+
+                                Spacer()
+
+                                    Button { // menu button
+                                            viewModel.isMenuClicked = true
+                                            viewModel.showAction = true
+                                            viewModel.isMyComment = true
+                                            viewModel.commentId = Coc.commentId
+                                            viewModel.contentForPatch = Coc.content
+
+                                            //menu toggle
+                                    } label: {
+                                        if (Coc.modifiable) {
+                                            Image(systemName : "ellipsis")
+                                                .foregroundColor(.black)
+                                                .font(.system(size : 15, weight : .bold))
+                                        }
+                                    }
+                            }
+                            .frame(alignment: .leading)
+
+                            Text(Coc.content)
+                                .padding(.leading, 40)
+
+                            HStack{
+                                Spacer()
+
 //                                Button{
 //                                    //댓글 라이크 버튼 클릭
 //
@@ -969,50 +1002,54 @@ extension PostInfoView {
 //                                        .foregroundColor(.black)
 //                                        .padding(.bottom, 2)
 //                                }
-//                            }
+                            }
+                        }
+                        .font(.system(size: 11))
+                        .padding()
+                        .frame(width : 250, alignment: .trailing)
+                        .background(Color.systemDefaultGray)
+                        .cornerRadius(20)
+                    }
+                    .frame(alignment : .leading)
+                }
+                    Divider()
+                    .frame(height : 2)
+                }
+                .modifier(CommentStyle())
+                .overlay(
+                    Button { // menu button
+                        withAnimation {
+                            if (Comment.modifiable) {
+                                viewModel.isMenuClicked = true
+                                viewModel.showAction = true
+                                viewModel.isMyComment = true
+                                viewModel.isNotMyComment = false
+                                viewModel.commentId = Comment.commentId
+                                viewModel.contentForPatch = Comment.content
+                            }else{
+                                viewModel.isMyComment = false
+                                viewModel.isMenuClicked = true
+                                viewModel.showAction = true
+                                viewModel.commentId = Comment.commentId
+                                viewModel.isNotMyComment = true
+                                viewModel.isPostReport = false
+                            }
+                        }
+                            //menu toggle
+                    } label: {
+//                        if (Comment.modifiable) {
+                            Image(systemName : "ellipsis")
+                                .foregroundColor(.black)
+                                .font(.system(size : 15, weight : .bold))
 //                        }
-//                        .font(.system(size: 11))
-//                        .padding()
-//                        .frame(width : 250, alignment: .trailing)
-//                        .background(Color.systemDefaultGray)
-//                        .cornerRadius(20)
-//                    }
-//                    .frame(alignment : .leading)
-////                }
-//                    Divider()
-//                    .frame(height : 2)
-//                }
-//                .modifier(CommentStyle())
-//                .overlay(
-//                    Button { // menu button
-//                        withAnimation {
-//                            if (Comment.modifiable) {
-//                                viewModel.isMenuClicked = true
-//                                viewModel.showAction = true
-//                                viewModel.isMyComment = true
-//                                viewModel.isNotMyComment = false
-//                                viewModel.commentId = Comment.commentId
-//                                viewModel.contentForPatch = Comment.content
-//                            }else{
-//                                viewModel.isMyComment = false
-//                                viewModel.isMenuClicked = true
-//                                viewModel.showAction = true
-//                                viewModel.commentId = Comment.commentId
-//                                viewModel.isNotMyComment = true
-//                                viewModel.isPostReport = false
-//                            }
-//                        }
-//                            //menu toggle
-//                    } label: {
-////                        if (Comment.modifiable) {
-//                            Image(systemName : "ellipsis")
-//                                .foregroundColor(.black)
-//                                .font(.system(size : 15, weight : .bold))
-////                        }
-//                    }
-//                    , alignment : .topTrailing
-//                )
-        }.id("SCROLL_TO_BOTTOM")
+                    }
+                    , alignment : .topTrailing
+                )
         }
+        .id("SCROLL_TO_BOTTOM")
+        }
+        ///
+        ///
+        ///
     }
 }
