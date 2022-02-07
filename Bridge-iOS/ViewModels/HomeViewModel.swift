@@ -36,7 +36,7 @@ final class HomeViewModel : ObservableObject {
     }
     
     func getPosts() {
-        let url = "http://3.36.233.180:8080/used-posts?"
+        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/used-posts?"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN": SignInViewModel.accessToken ]
         
         AF.request(url,
@@ -73,7 +73,7 @@ final class HomeViewModel : ObservableObject {
     }
     
     func getUserInfo() {
-        let url = "http://3.36.233.180:8080/members/\(memberId)"
+        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/members/\(memberId)"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN": SignInViewModel.accessToken ]
         
         AF.request(url,

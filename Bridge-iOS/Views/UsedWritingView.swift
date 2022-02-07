@@ -237,17 +237,17 @@ struct UsedWritingView: View {
                             HStack {
                                 Text(camp)
                                 Spacer()
-                                if viewModel.selectedCamps.contains(viewModel.campToNum[camp]!) {
+                                if viewModel.selectedCamps.contains(CampEncoding[camp]!) {
                                     Image(systemName : "checkmark.circle.fill")
                                         .foregroundColor(.mainTheme)
                                 }
                             }
                             .onTapGesture {
-                                if viewModel.selectedCamps.contains(viewModel.campToNum[camp]!) {
+                                if viewModel.selectedCamps.contains(CampEncoding[camp]!) {
                                     viewModel.selectedCamps
-                                        .remove(at: viewModel.selectedCamps.firstIndex(of: viewModel.campToNum[camp]!)!)
+                                        .remove(at: viewModel.selectedCamps.firstIndex(of: CampEncoding[camp]!)!)
                                 } else {
-                                    viewModel.selectedCamps.append(viewModel.campToNum[camp]!)
+                                    viewModel.selectedCamps.append(CampEncoding[camp]!)
                                 }
                                 print(viewModel.selectedCamps)
                             }

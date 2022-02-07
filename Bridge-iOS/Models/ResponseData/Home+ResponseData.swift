@@ -8,8 +8,8 @@
 import Foundation
 
 struct Element : Codable {
-//    var campLast : Int
-//    var areaLast : Int
+    var campLast : Int
+    var areaLast : Int
     var postList : [Post]
 }
 struct Element_Selling : Codable {

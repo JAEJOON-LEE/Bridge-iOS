@@ -73,7 +73,7 @@ final class CouponInfoViewModel : ObservableObject {
     }
     
     func getStoreInfo() {
-        let url = "http://3.36.233.180:8080/shops/\(shopId)"
+        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/shops/\(shopId)"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : SignInViewModel.accessToken ]
         
         AF.request(url,
@@ -122,7 +122,7 @@ final class CouponInfoViewModel : ObservableObject {
         }
     
     func getReview() {
-        let url = "http://3.36.233.180:8080/shops/\(shopId)/reviews"
+        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/shops/\(shopId)/reviews"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : SignInViewModel.accessToken ]
         
         AF.request(url,
@@ -156,7 +156,7 @@ final class CouponInfoViewModel : ObservableObject {
     }
     
     func addReview() {
-        let url = "http://3.36.233.180:8080/shops/\(shopId)/reviews"
+        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/shops/\(shopId)/reviews"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : SignInViewModel.accessToken ]
         
         AF.request(url,
@@ -179,7 +179,7 @@ final class CouponInfoViewModel : ObservableObject {
     }
     
     func modifyReview() {
-        let url = "http://3.36.233.180:8080/shops/\(shopId)/reviews/\(selectedReview)"
+        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/shops/\(shopId)/reviews/\(selectedReview)"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : SignInViewModel.accessToken ]
         
         AF.request(url,
@@ -201,7 +201,7 @@ final class CouponInfoViewModel : ObservableObject {
     }
     
     func deleteReview() {
-        let url = "http://3.36.233.180:8080/shops/\(shopId)/reviews/\(selectedReview)"
+        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/shops/\(shopId)/reviews/\(selectedReview)"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : SignInViewModel.accessToken ]
         
         AF.request(url,

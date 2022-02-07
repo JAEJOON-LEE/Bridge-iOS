@@ -68,7 +68,7 @@ class WritingViewModel : ObservableObject {
             }
 //        }
     }
-//    let url : String = "http://3.36.233.180:8080/board-posts"
+//    let url : String = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/board-posts"
     
     private var subscription = Set<AnyCancellable>()
     
@@ -100,7 +100,7 @@ class WritingViewModel : ObservableObject {
                                         withName : "files", fileName: "payloadImage.jpg", mimeType: "image/jpeg")
                         }
                         
-                    }, to:"http://3.36.233.180:8080/board-posts",
+                    }, to:"http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/board-posts",
                     method: .post,
                     headers: header)
             .responseString{ (response) in
@@ -136,7 +136,7 @@ class WritingViewModel : ObservableObject {
                                         withName : "files", fileName: "payloadImage.jpg", mimeType: "image/jpeg")
                         }
                         
-                    }, to:"http://3.36.233.180:8080/secret-posts",
+                    }, to:"http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/secret-posts",
                     method: .post,
                     headers: header)
             .responseString{ (response) in
@@ -156,7 +156,7 @@ class WritingViewModel : ObservableObject {
     
     func getBoardPostDetail() {
         
-        let url = "http://3.36.233.180:8080/board-posts/\(postId)"
+        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/board-posts/\(postId)"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
         
         AF.request(url,
@@ -182,7 +182,7 @@ class WritingViewModel : ObservableObject {
     
     func getSecretPostDetail() {
         
-        let url = "http://3.36.233.180:8080/secret-posts/\(postId)"
+        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/secret-posts/\(postId)"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
         
         AF.request(url,
@@ -275,7 +275,7 @@ class WritingViewModel : ObservableObject {
             }
             
                         
-                    }, to:"http://3.36.233.180:8080/board-posts/\(postId)",
+                    }, to:"http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/board-posts/\(postId)",
                     method: .post,
                     headers: header)
             .responseString{ (response) in
@@ -361,7 +361,7 @@ class WritingViewModel : ObservableObject {
                             withName : "files", fileName: "payloadImage.jpg", mimeType: "image/jpeg")
             }
                         
-                    }, to:"http://3.36.233.180:8080/secret-posts/\(postId)",
+                    }, to:"http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/secret-posts/\(postId)",
                     method: .post,
                     headers: header)
             .responseString{ (response) in

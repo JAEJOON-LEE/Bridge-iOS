@@ -136,7 +136,7 @@ final class SignUpViewModel : ObservableObject {
 //        var checkDup = 0
         
         //유저네임 중복 확인
-        AF.request("http://3.36.233.180:8080/members/usernames/\(name)",
+        AF.request("http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/members/usernames/\(name)",
                    method: .get,
                    encoding: URLEncoding.default)
             .responseString{ (response) in
@@ -157,7 +157,7 @@ final class SignUpViewModel : ObservableObject {
 //                checkDup = 1
 //                self.check = 0
                 //이메일 중복 확인
-                AF.request("http://3.36.233.180:8080/members/emails/\(email)",
+                AF.request("http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/members/emails/\(email)",
                            method: .get,
                            encoding: URLEncoding.default)
                     .responseString{ (response) in
@@ -223,7 +223,7 @@ final class SignUpViewModel : ObservableObject {
         
         
         //인증 메일 전송
-        AF.request("http://3.36.233.180:8080/email-auth/sign-up",
+        AF.request("http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/email-auth/sign-up",
                    method: .post,
                    parameters: ["email" : email],
                    encoder: JSONParameterEncoder.prettyPrinted
@@ -246,7 +246,7 @@ final class SignUpViewModel : ObservableObject {
         self.showSignUpFailAlert = false
         self.isLinkActive = false
         
-        AF.request("http://3.36.233.180:8080/email-auth/sign-up/confirm",
+        AF.request("http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/email-auth/sign-up/confirm",
                    method: .post,
                    parameters: ["email" : email, "key" : verifyCode],
                    encoder: JSONParameterEncoder.prettyPrinted
@@ -306,7 +306,7 @@ final class SignUpViewModel : ObservableObject {
                             multipartFormData.append(profileImage!.jpegData(compressionQuality: 1)!, withName: "profileImage", fileName: "From_iOS", mimeType: "image/jpg")
                         }
                         
-                    }, to:"http://3.36.233.180:8080/sign-up",
+                    }, to:"http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/sign-up",
                     method: .post,
                     headers: header)
             .responseString{ (response) in

@@ -23,8 +23,8 @@ final class SignInViewModel : ObservableObject {
     @Published var showSignInFailAlert : Bool = false
     @Published var showPrgoressView : Bool = false
     
-    private let signInUrl : String = "http://3.36.233.180:8080/sign-in"
-    private let refreshUrl : String = "http://3.36.233.180:8080/token"
+    private let signInUrl : String = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/sign-in"
+    private let refreshUrl : String = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/token"
     
     private var subscription = Set<AnyCancellable>()
     

@@ -26,7 +26,7 @@ final class CouponViewModel : ObservableObject {
     let locations = ["Casey/Hovey", "USAG Yongsan", "K-16", "Suwon A/B", "Osan A/B", "Camp Humperys", "Camp Carroll", "Henry/Walker", "Gunsan A/B"]
 
     func getStore() {
-        let url = "http://3.36.233.180:8080/shops?"
+        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/shops?"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN": SignInViewModel.accessToken ]
         var shopType : String {
             if selectedCategory == 1 {
@@ -65,13 +65,13 @@ final class CouponViewModel : ObservableObject {
                     print("Get Stores Finished")
                 }
             } receiveValue: { [weak self] (recievedValue : [Shop]) in
-                //print(recievedValue)
+                print(recievedValue)
                 self?.shops = recievedValue
             }.store(in: &subscription)
         }
     
     func getRandomStore() {
-        let url = "http://3.36.233.180:8080/shops?"
+        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/shops?"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN": SignInViewModel.accessToken ]
         
         AF.request(url,
@@ -101,7 +101,7 @@ final class CouponViewModel : ObservableObject {
                     print("Get Random Stores Finished")
                 }
             } receiveValue: { [weak self] (recievedValue : [Shop]) in
-                //print(recievedValue)
+                print(recievedValue)
                 self?.shopsRandom = recievedValue
             }.store(in: &subscription)
         }

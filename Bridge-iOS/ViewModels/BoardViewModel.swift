@@ -33,7 +33,7 @@ final class BoardViewModel : ObservableObject {
     }
     
     func getBoardPosts(token : String) {
-        let url = "http://3.36.233.180:8080/board-posts?"
+        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/board-posts?"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN": token ]
         
         AF.request(url,
@@ -64,7 +64,7 @@ final class BoardViewModel : ObservableObject {
     }
     
     func searchPosts(token : String, query : String) {
-        let url = "http://3.36.233.180:8080/board-posts?"
+        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/board-posts?"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN": token ]
         
         AF.request(url,
@@ -95,7 +95,7 @@ final class BoardViewModel : ObservableObject {
     }
     
     func getHotPosts(token : String) {
-        let url = "http://3.36.233.180:8080/board-posts?"
+        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/board-posts?"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN": token ]
         
         AF.request(url,
@@ -130,7 +130,7 @@ final class BoardViewModel : ObservableObject {
     }
     
     func getSecretPosts(token : String) {
-        let url = "http://3.36.233.180:8080/secret-posts?"
+        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/secret-posts?"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN": token ]
 
         AF.request(url,

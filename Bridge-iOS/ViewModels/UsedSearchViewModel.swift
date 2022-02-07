@@ -23,7 +23,7 @@ final class UsedSearchViewModel : ObservableObject {
     @Published var isSearchResultEmpty : Bool = false
     @Published var isCategoryResultEmpty : Bool = false
     
-    private let url = "http://3.36.233.180:8080/used-posts?"
+    private let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/used-posts?"
     private var subscription = Set<AnyCancellable>()
 
     let memberId : Int

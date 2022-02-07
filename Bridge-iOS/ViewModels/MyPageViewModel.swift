@@ -29,7 +29,7 @@ final class MyPageViewModel : ObservableObject {
     }
     
     func updateProfile() {
-        let url = "http://3.36.233.180:8080/members/\(userInfo.memberId)"
+        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/members/\(userInfo.memberId)"
         let header : HTTPHeaders = [
             "Content-Type": "multipart/form-data",
             "X-AUTH-TOKEN": SignInViewModel.accessToken

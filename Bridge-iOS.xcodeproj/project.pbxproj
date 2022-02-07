@@ -57,7 +57,6 @@
 		1AA8B43726F370CF00C28E02 /* NotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA8B43626F370CF00C28E02 /* NotificationView.swift */; };
 		1AB18536278C016E00764165 /* InviteFriendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB18535278C016E00764165 /* InviteFriendsView.swift */; };
 		1AB18538278C7C4C00764165 /* Member+ResponseData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB18537278C7C4B00764165 /* Member+ResponseData.swift */; };
-		1AB1853D278DB5C100764165 /* StompManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB1853C278DB5C100764165 /* StompManager.swift */; };
 		1ABDEA5326F3B9310031DF0B /* SubmitButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ABDEA5226F3B9310031DF0B /* SubmitButtonStyle.swift */; };
 		1AD008652711F50B00CAAE5B /* UsedWritingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD008642711F50B00CAAE5B /* UsedWritingView.swift */; };
 		1AD9CC4D273EFD9B006C2FB7 /* View+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD9CC4C273EFD9B006C2FB7 /* View+Extension.swift */; };
@@ -83,7 +82,6 @@
 		6D2B89EB271349B200319907 /* SecretViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2B89E5271349B200319907 /* SecretViewModel.swift */; };
 		6D2B89EC271349B200319907 /* BoardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2B89E6271349B200319907 /* BoardViewModel.swift */; };
 		6D2B89EE2714038C00319907 /* SecretInfo+ResponseData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2B89ED2714038C00319907 /* SecretInfo+ResponseData.swift */; };
-		6D2B89F0271405CD00319907 /* SecretInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2B89EF271405CD00319907 /* SecretInfoView.swift */; };
 		6D6BA4ED26F57BB10008B25E /* ItemCardStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6BA4EC26F57BB10008B25E /* ItemCardStyle.swift */; };
 		6D6BA4EF26F590F90008B25E /* ListHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6BA4EE26F590F90008B25E /* ListHeader.swift */; };
 		6D6BA4F126F5A13A0008B25E /* SlideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6BA4F026F5A13A0008B25E /* SlideView.swift */; };
@@ -165,7 +163,6 @@
 		1AA8B43626F370CF00C28E02 /* NotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
 		1AB18535278C016E00764165 /* InviteFriendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteFriendsView.swift; sourceTree = "<group>"; };
 		1AB18537278C7C4B00764165 /* Member+ResponseData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Member+ResponseData.swift"; sourceTree = "<group>"; };
-		1AB1853C278DB5C100764165 /* StompManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StompManager.swift; sourceTree = "<group>"; };
 		1ABDEA5226F3B9310031DF0B /* SubmitButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmitButtonStyle.swift; sourceTree = "<group>"; };
 		1AD008642711F50B00CAAE5B /* UsedWritingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsedWritingView.swift; sourceTree = "<group>"; };
 		1AD9CC4C273EFD9B006C2FB7 /* View+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extension.swift"; sourceTree = "<group>"; };
@@ -189,7 +186,6 @@
 		6D2B89E5271349B200319907 /* SecretViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecretViewModel.swift; sourceTree = "<group>"; };
 		6D2B89E6271349B200319907 /* BoardViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoardViewModel.swift; sourceTree = "<group>"; };
 		6D2B89ED2714038C00319907 /* SecretInfo+ResponseData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SecretInfo+ResponseData.swift"; sourceTree = "<group>"; };
-		6D2B89EF271405CD00319907 /* SecretInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecretInfoView.swift; sourceTree = "<group>"; };
 		6D6BA4EC26F57BB10008B25E /* ItemCardStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemCardStyle.swift; sourceTree = "<group>"; };
 		6D6BA4EE26F590F90008B25E /* ListHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListHeader.swift; sourceTree = "<group>"; };
 		6D6BA4F026F5A13A0008B25E /* SlideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideView.swift; sourceTree = "<group>"; };
@@ -323,7 +319,6 @@
 				6DBAAC9D274AB64500FCE93A /* HotBoardView.swift */,
 				6D2B89DF2713493200319907 /* PostInfoView.swift */,
 				6DBAAC99274AB4F700FCE93A /* PostSearchView.swift */,
-				6D2B89EF271405CD00319907 /* SecretInfoView.swift */,
 				6D6BA4F026F5A13A0008B25E /* SlideView.swift */,
 				1A43898827AC1B52003538CF /* UserSuggestionView.swift */,
 				1AA6D2EB2786C717008357BE /* SettingsView.swift */,
@@ -407,7 +402,6 @@
 			isa = PBXGroup;
 			children = (
 				6DE698FB278A97FD0048EB76 /* LocalNotificationManager.swift */,
-				1AB1853C278DB5C100764165 /* StompManager.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -624,14 +618,12 @@
 				1A936DC7271878A600750DE6 /* ModifyUsedPostViewModel.swift in Sources */,
 				1AA8B42E26F3598600C28E02 /* SignViewTextFieldStyle.swift in Sources */,
 				1ADD9DE827034C63008342A7 /* Home+ResponseData.swift in Sources */,
-				1AB1853D278DB5C100764165 /* StompManager.swift in Sources */,
 				6DBAAC9E274AB64500FCE93A /* HotBoardView.swift in Sources */,
 				1AA6D2E427856A9F008357BE /* Chat+ResponseData.swift in Sources */,
 				6D2B89D42713477100319907 /* Secret+ResponseData.swift in Sources */,
 				6D2B89E8271349B200319907 /* CommentViewModel.swift in Sources */,
 				1AB18536278C016E00764165 /* InviteFriendsView.swift in Sources */,
 				1AA6D2F22787241B008357BE /* MyPageView.swift in Sources */,
-				6D2B89F0271405CD00319907 /* SecretInfoView.swift in Sources */,
 				6D8D23AB271728160020B5B0 /* String+Extension.swift in Sources */,
 				6D6C6AE6279D82BB00AF41DF /* SignUpView.swift in Sources */,
 				6D6BA4ED26F57BB10008B25E /* ItemCardStyle.swift in Sources */,

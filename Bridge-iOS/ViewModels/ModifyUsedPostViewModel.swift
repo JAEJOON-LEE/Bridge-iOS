@@ -14,8 +14,8 @@ final class ModifyUsedPostViewModel : ObservableObject {
     @Published var price : String = ""
     @Published var description : String = ""
     @Published var postImages : [postImages] = []
-    @Published var previousSelectedCamps : [Int] = []
-    @Published var selectedCamps : [Int] = []
+    @Published var previousSelectedCamps : [String] = []
+    @Published var selectedCamps : [String] = []
     @Published var selectedCategory = ""
     @Published var ImagesToAdd : [UIImage] = []
 
@@ -72,8 +72,8 @@ final class ModifyUsedPostViewModel : ObservableObject {
         return configuration
     }
     
-    var addList : [Int] = []
-    var removeList : [Int] = []
+    var addList : [String] = []
+    var removeList : [String] = []
     var removeImage : [Int] = []
     
     init(postId : Int, contents : UsedPostDetail) {
@@ -84,12 +84,12 @@ final class ModifyUsedPostViewModel : ObservableObject {
         self.description = contents.description
         self.postImages = contents.postImages
         self.selectedCategory = contents.category
-        self.previousSelectedCamps = contents.camps.map{ self.campToNum[$0]! }
-        self.selectedCamps = contents.camps.map{ self.campToNum[$0]! }
+        self.previousSelectedCamps = contents.camps.map{ CampEncoding[$0]! }
+        self.selectedCamps = contents.camps.map{ CampEncoding[$0]! }
     }
     
     func upload() { //(with payload : PostPayload)
-        let url = "http://3.36.233.180:8080/used-posts/\(postId)"
+        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/used-posts/\(postId)"
         let header : HTTPHeaders = [
             "Content-Type": "multipart/form-data",
             "X-AUTH-TOKEN": SignInViewModel.accessToken
@@ -101,6 +101,9 @@ final class ModifyUsedPostViewModel : ObservableObject {
         for c in previousSelectedCamps {
             if !selectedCamps.contains(c) { removeList.append(c) }
         }
+        print(selectedCamps)
+        print(addList)
+        print(removeList)
         
 //        let editedCamps : [String : [Int]] = [
 //            "addList" : addList,
@@ -130,8 +133,21 @@ final class ModifyUsedPostViewModel : ObservableObject {
                 "removeImage" : \(removeImage)
             }
         """.data(using: .nonLossyASCII)!
+        
         let payloadEncoded = String(data : payload, encoding : .utf8) ?? ""
-        print(payload)
+        print("""
+            {
+                "title" : \"\(title)\",
+                "price" : \"\(price)\",
+                "description" : \"\(description)\",
+                "category" : \"\(selectedCategory)\",
+                "camps" : {
+                    "addList" : \(addList),
+                    "removeList" : \(removeList)
+                },
+                "removeImage" : \(removeImage)
+            }
+        """)
         
         AF.upload(multipartFormData: { (multipartFormData) in
             //guard let self = self else { return }

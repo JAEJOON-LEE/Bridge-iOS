@@ -626,36 +626,14 @@ struct PostInfoView: View { // 게시글 상세 페이지
                     viewModel.commentInput = ""
                     viewModel.getBoardPostDetail()
                     viewModel.getComment()
-//                    viewModel.isMenuClicked = false
-//                    viewModel.isMyComment = false
                 }else{
                     viewModel.contentForViewing = "Write a comment."
                     viewModel.contentForPatch = ""
                     viewModel.commentInput = ""
                     viewModel.getSecretPostDetail()
                     viewModel.getSecretComment()
-//                    viewModel.isMenuClicked = false
-//                    viewModel.isMyComment = false
                 }
         })
-//        .onChange(of: viewModel.isLiked, perform: { _ in
-//            viewModel.showAction3 = false
-//            viewModel.getBoardPostDetail()
-//        })
-//        .onChange(of: viewModel.isLiked, perform: { _ in
-//
-//            if(viewModel.isSecret == false){
-//                viewModel.likePost(isliked: (viewModel.isLiked))
-//                viewModel.getBoardPostDetail()
-//
-////                viewModel.isLiked = viewModel.totalBoardPostDetail!.boardPostDetail.like
-//            }else{
-//                viewModel.getSecretPostDetail()
-//                viewModel.likeSecretPost(isliked: (viewModel.isLiked))
-//
-////                viewModel.isLiked = viewModel.totalBoardPostDetail!.boardPostDetail.like
-//            }
-//        })
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .principal) {
@@ -836,11 +814,6 @@ struct PostInfoView: View { // 게시글 상세 페이지
 
 extension PostInfoView {
     var commentView : some View {
-
-        ///
-        ///
-        ///
-        ScrollViewReader{ proxyReader in
         ForEach(viewModel.commentLists, id : \.self) { Comment in
 
             VStack(alignment: .leading){
@@ -889,16 +862,10 @@ extension PostInfoView {
                         }else{
                             viewModel.getSecretComment()
                         }
-
-//                        if(Comment.like == false){
-//                            notificationManager.sendMessageTouser(to: notificationManager.ReceiverFCMToken, title: "Bridge", body: "Somebody likes your comment!")
-//                        }
                     } label : {
                         Image((Comment.like) ? "like" : "like_border")
                             .foregroundColor(.mainTheme)
                             .font(.system(size : 10))
-//                        Image(systemName: (viewModel.isLiked ?? true) ? "hand.thumbsup.fill" : "hand.thumbsup")
-//                            .foregroundColor(.mainTheme)
                     }
                     Text(String((Comment.likeCount)))
                         .padding(.trailing)
@@ -926,17 +893,13 @@ extension PostInfoView {
 //
 //                        VStack(alignment: .leading){
 //                            HStack{
-//                                URLImage( //프로필 이미지
+//                                KFImage(
 //                                    URL(string : (Coc.member?.profileImage) ?? "https://static.thenounproject.com/png/741653-200.png") ??
-//                                    URL(string: "https://static.thenounproject.com/png/741653-200.png")!
-//                                ) { image in
-//                                    image
-//                                        .resizable()
-//                                        .aspectRatio(contentMode: .fill)
-//                                }
-//                                .frame(width : 30,
-//                                       height: 30)
-//                                .cornerRadius(9)
+//                                    URL(string: "https://static.thenounproject.com/png/741653-200.png")!)
+//                                    .resizable()
+//                                    .aspectRatio(contentMode: .fill)
+//                                    .frame(width : 30, height: 30)
+//                                    .cornerRadius(9)
 //
 //                                VStack(alignment: .leading){
 //
@@ -1015,45 +978,41 @@ extension PostInfoView {
 //                        .cornerRadius(20)
 //                    }
 //                    .frame(alignment : .leading)
+////                }
+//                    Divider()
+//                    .frame(height : 2)
 //                }
-                    Divider()
-                    .frame(height : 2)
-                }
-                .modifier(CommentStyle())
-                .overlay(
-                    Button { // menu button
-                        withAnimation {
-                            if (Comment.modifiable) {
-                                viewModel.isMenuClicked = true
-                                viewModel.showAction = true
-                                viewModel.isMyComment = true
-                                viewModel.isNotMyComment = false
-                                viewModel.commentId = Comment.commentId
-                                viewModel.contentForPatch = Comment.content
-                            }else{
-                                viewModel.isMyComment = false
-                                viewModel.isMenuClicked = true
-                                viewModel.showAction = true
-                                viewModel.commentId = Comment.commentId
-                                viewModel.isNotMyComment = true
-                                viewModel.isPostReport = false
-                            }
-                        }
-                            //menu toggle
-                    } label: {
-//                        if (Comment.modifiable) {
-                            Image(systemName : "ellipsis")
-                                .foregroundColor(.black)
-                                .font(.system(size : 15, weight : .bold))
+//                .modifier(CommentStyle())
+//                .overlay(
+//                    Button { // menu button
+//                        withAnimation {
+//                            if (Comment.modifiable) {
+//                                viewModel.isMenuClicked = true
+//                                viewModel.showAction = true
+//                                viewModel.isMyComment = true
+//                                viewModel.isNotMyComment = false
+//                                viewModel.commentId = Comment.commentId
+//                                viewModel.contentForPatch = Comment.content
+//                            }else{
+//                                viewModel.isMyComment = false
+//                                viewModel.isMenuClicked = true
+//                                viewModel.showAction = true
+//                                viewModel.commentId = Comment.commentId
+//                                viewModel.isNotMyComment = true
+//                                viewModel.isPostReport = false
+//                            }
 //                        }
-                    }
-                    , alignment : .topTrailing
-                )
+//                            //menu toggle
+//                    } label: {
+////                        if (Comment.modifiable) {
+//                            Image(systemName : "ellipsis")
+//                                .foregroundColor(.black)
+//                                .font(.system(size : 15, weight : .bold))
+////                        }
+//                    }
+//                    , alignment : .topTrailing
+//                )
+        }.id("SCROLL_TO_BOTTOM")
         }
-        .id("SCROLL_TO_BOTTOM")
-        }
-        ///
-        ///
-        ///
     }
 }

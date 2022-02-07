@@ -62,7 +62,7 @@ final class ItemInfoViewModel : ObservableObject {
     }
     
     func getItemInfo() {
-        let url = "http://3.36.233.180:8080/used-posts/\(postId)"
+        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/used-posts/\(postId)"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : SignInViewModel.accessToken ]
         
         AF.request(url,
@@ -89,7 +89,7 @@ final class ItemInfoViewModel : ObservableObject {
     }
     
     func likePost(isliked : Bool) {
-        let url = "http://3.36.233.180:8080/used-posts/\(postId)/likes"
+        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/used-posts/\(postId)/likes"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : SignInViewModel.accessToken ]
         let method : HTTPMethod = isliked ? .delete : .post
         
@@ -101,7 +101,7 @@ final class ItemInfoViewModel : ObservableObject {
     }
     
     func deletePost() {
-        let url = "http://3.36.233.180:8080/used-posts/\(postId)"
+        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/used-posts/\(postId)"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : SignInViewModel.accessToken ]
         
         AF.request(url,
@@ -112,7 +112,7 @@ final class ItemInfoViewModel : ObservableObject {
     }
 
     func createChat() {
-        let url = "http://3.36.233.180:8080/chats"
+        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/chats"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : SignInViewModel.accessToken ]
 
         AF.request(url,
@@ -138,7 +138,7 @@ final class ItemInfoViewModel : ObservableObject {
     }
     
     func blockUser() {
-        let url = "http://3.36.233.180:8080/members/\(userInfo.memberId)/blocks"
+        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/members/\(userInfo.memberId)/blocks"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : SignInViewModel.accessToken ]
 
         guard let memberToBlock = itemInfo?.member.memberId else { return }

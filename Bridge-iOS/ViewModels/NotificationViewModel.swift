@@ -23,7 +23,7 @@ final class NotificationViewModel : ObservableObject {
     }
     
     func getNotifications(token : String) {
-        let url = "http://3.36.233.180:8080/members/\(memberId)/alarms?lastAlarmId=0"
+        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/members/\(memberId)/alarms?lastAlarmId=0"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN": token ]
         
         AF.request(url,

@@ -21,7 +21,8 @@ final class UsedWritingViewModel : ObservableObject {
     @Published var showCategoryPicker : Bool = false
     @Published var showMessage : Bool = false
     
-    @Published var selectedCamps : [Int] = []
+    //@Published var selectedCamps : [Int] = []
+    @Published var selectedCamps : [String] = []
     @Published var selectedCategory = ""
     
     @Published var isUploadDone : Bool = false
@@ -29,7 +30,7 @@ final class UsedWritingViewModel : ObservableObject {
     
     @Published var isImageTap : Bool = false
     
-    private let url = "http://3.36.233.180:8080/used-posts"
+    private let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/used-posts"
 
     let message = "Please fill all field!"
     

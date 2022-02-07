@@ -31,7 +31,7 @@ class ChatroomViewModel : ObservableObject {
     var socketClient = StompClientLib()
 
     // Socket Connection URL
-    private let url = URL(string: "ws://3.36.233.180:8080/stomp/chat/websocket")!
+    private let url = URL(string: "ws://http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/stomp/chat/websocket")!
 
     let chatId : Int
     let userInfo : MemeberInformation //SignInResponse
@@ -111,7 +111,7 @@ class ChatroomViewModel : ObservableObject {
     
     func getChatContents(_ chatId : Int) {
         let header : HTTPHeaders = [ "X-AUTH-TOKEN" : SignInViewModel.accessToken ]
-        let url = "http://3.36.233.180:8080/chats/\(chatId)/messages?lastMessageId=\(idForLoadMore)"
+        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/chats/\(chatId)/messages?lastMessageId=\(idForLoadMore)"
         
         AF.request(url,
                    method: .get,
@@ -157,7 +157,7 @@ class ChatroomViewModel : ObservableObject {
     }
     
     func blockUser(_ memberToBlock : Int) {
-        let url = "http://3.36.233.180:8080/members/\(userInfo.memberId)/blocks"
+        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/members/\(userInfo.memberId)/blocks"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : SignInViewModel.accessToken ]
         
         AF.request(url,
@@ -169,7 +169,7 @@ class ChatroomViewModel : ObservableObject {
     }
     
     func exitChat() {
-        let url = "http://3.36.233.180:8080/chats/\(chatId)"
+        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/chats/\(chatId)"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : SignInViewModel.accessToken ]
         
         AF.request(url,
