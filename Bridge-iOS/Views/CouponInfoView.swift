@@ -24,7 +24,9 @@ struct CouponInfoView: View {
             ForEach(viewModel.shopInfo.images, id : \.self) { imageInfo in
                 KFImage(URL(string : imageInfo.image) ??
                         URL(string: "https://static.thenounproject.com/png/741653-200.png")!
-                ).resizable()
+                )
+                .placeholder { ImagePlaceHolder() }
+                .resizable()
                 .fade(duration: 0.5)
                 .aspectRatio(contentMode: .fill)
                 .tag(imageInfo.imageId)
@@ -40,7 +42,9 @@ struct CouponInfoView: View {
                     ForEach(viewModel.shopInfo.images, id : \.self) { imageInfo in
                         KFImage(URL(string : imageInfo.image) ??
                                 URL(string: "https://static.thenounproject.com/png/741653-200.png")!
-                        ).resizable()
+                        )
+                        .placeholder { ImagePlaceHolder() }
+                        .resizable()
                         .fade(duration: 0.5)
                         .aspectRatio(contentMode: .fit)
                         .tag(imageInfo.imageId)
@@ -216,7 +220,10 @@ struct CouponInfoView: View {
                 HStack(spacing : 10) {
                     KFImage(URL(string : review.member.profileImage) ??
                             URL(string: "https://static.thenounproject.com/png/741653-200.png")!
-                    ).resizable()
+                    )
+                    .placeholder { ImagePlaceHolder() }
+                    .resizable()
+                    .fade(duration: 0.5)
                     .aspectRatio(contentMode: .fill)
                     .frame(width: UIScreen.main.bounds.width * 0.12, height: UIScreen.main.bounds.width * 0.12)
                     .cornerRadius(10)

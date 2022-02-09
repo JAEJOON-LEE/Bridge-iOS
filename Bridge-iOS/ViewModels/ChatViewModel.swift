@@ -15,7 +15,7 @@ final class ChatViewModel : ObservableObject {
     
     private var subscription = Set<AnyCancellable>()
     
-    private let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/chats"
+    private let url = baseURL + "/chats"
     let userInfo : SignInResponse
     let userId : Int
     

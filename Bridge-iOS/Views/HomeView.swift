@@ -35,6 +35,7 @@ struct HomeView : View {
 
                 KFImage(URL(string : viewModel.memberInfo.profileImage)
                         ?? URL(string : "https://static.thenounproject.com/png/741653-200.png")!)
+                    .placeholder { ProgressView() }
                     .resizable()
                     .fade(duration: 0.5)
                     .aspectRatio(contentMode: .fill)
@@ -115,16 +116,14 @@ struct HomeView : View {
                         ForEach(viewModel.Posts, id : \.self) { Post in
                             VStack {
                                 NavigationLink(
-                                    destination:
+                                    destination://Text("Info")
                                         ItemInfoView(viewModel:
                                                         ItemInfoViewModel(
                                                             postId : Post.postId,
-                                                            isMyPost : (viewModel.memberId == Post.memberId), userInfo: viewModel.memberInfo
+                                                            isMyPost : (viewModel.memberId == Post.memberId),
+                                                            userInfo: viewModel.memberInfo
                                                         )
-                                        )/*.onDisappear(perform: {
-                                            // 일반 작업시에는 필요없는데, 삭제 작업 즉시 반영을 위해서 필요함
-                                            viewModel.getPosts(token: viewModel.token)
-                                        })*/
+                                        ).onDisappear{ viewModel.getPosts() }
                                 ) {
                                     ItemCard(viewModel : ItemCardViewModel(post: Post), isMyPost : (viewModel.memberId == Post.memberId))
                                 }

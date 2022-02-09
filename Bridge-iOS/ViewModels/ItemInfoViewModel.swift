@@ -16,6 +16,7 @@ final class ItemInfoViewModel : ObservableObject {
     var badgeCnt = 0
 
     @Published var itemInfo : ItemInfo?
+    @Published var isItemInfoFetchDone : Bool = false
     @Published var isMemberInfoClicked : Bool = false
     @Published var isLiked : Bool?
     @Published var isImageTap : Bool = false
@@ -43,7 +44,7 @@ final class ItemInfoViewModel : ObservableObject {
         self.postId = postId
         self.isMyPost = isMyPost
         self.userInfo = userInfo
-        getItemInfo()
+        //getItemInfo()
     }
     
     var formattedPrice : String {
@@ -57,12 +58,12 @@ final class ItemInfoViewModel : ObservableObject {
             count += 1
             len += 1
         }
-        
+
         return src
     }
     
     func getItemInfo() {
-        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/used-posts/\(postId)"
+        let url = baseURL + "/used-posts/\(postId)"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : SignInViewModel.accessToken ]
         
         AF.request(url,
@@ -84,12 +85,14 @@ final class ItemInfoViewModel : ObservableObject {
                 self?.itemInfo = recievedValue
                 self?.isLiked = recievedValue.usedPostDetail.like
                 self?.previousLikeStatus = recievedValue.usedPostDetail.like
+                
+                self?.isItemInfoFetchDone = true
                 //print(self?.itemInfo as Any)
             }.store(in: &subscription)
     }
     
     func likePost(isliked : Bool) {
-        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/used-posts/\(postId)/likes"
+        let url = baseURL + "/used-posts/\(postId)/likes"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : SignInViewModel.accessToken ]
         let method : HTTPMethod = isliked ? .delete : .post
         
@@ -101,7 +104,7 @@ final class ItemInfoViewModel : ObservableObject {
     }
     
     func deletePost() {
-        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/used-posts/\(postId)"
+        let url = baseURL + "/used-posts/\(postId)"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : SignInViewModel.accessToken ]
         
         AF.request(url,
@@ -112,7 +115,7 @@ final class ItemInfoViewModel : ObservableObject {
     }
 
     func createChat() {
-        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/chats"
+        let url = baseURL + "/chats"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : SignInViewModel.accessToken ]
 
         AF.request(url,
@@ -138,7 +141,7 @@ final class ItemInfoViewModel : ObservableObject {
     }
     
     func blockUser() {
-        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/members/\(userInfo.memberId)/blocks"
+        let url = baseURL + "/members/\(userInfo.memberId)/blocks"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : SignInViewModel.accessToken ]
 
         guard let memberToBlock = itemInfo?.member.memberId else { return }

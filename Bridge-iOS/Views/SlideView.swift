@@ -134,6 +134,7 @@ struct SlideView : View {
                                 HStack(spacing : 13) {
                                     KFImage(URL(string : PostList.image!) ??
                                             URL(string: "https://static.thenounproject.com/png/741653-200.png")!)
+                                        .placeholder { ProgressView() }
                                         .resizable()
                                         .fade(duration: 0.5)
                                         .aspectRatio(contentMode: .fill)

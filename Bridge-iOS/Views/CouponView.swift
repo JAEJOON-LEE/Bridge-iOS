@@ -33,6 +33,7 @@ struct CouponView: View {
                 }
                 KFImage(URL(string : viewModel.memberInfo.profileImage)
                         ?? URL(string : "https://static.thenounproject.com/png/741653-200.png")!)
+                    .placeholder { ProgressView() }
                     .resizable()
                     .fade(duration: 0.5)
                     .aspectRatio(contentMode: .fill)

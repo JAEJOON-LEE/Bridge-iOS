@@ -29,7 +29,9 @@ struct ModifyUsedPostView: View {
                     ZStack(alignment : .topTrailing) {
                          KFImage(URL(string : postImage.image) ??
                                  URL(string: "https://static.thenounproject.com/png/741653-200.png")!)
-                             .resizable()
+                            .placeholder { ImagePlaceHolder() }
+                            .resizable()
+                            .fade(duration: 0.5)
                              .aspectRatio(contentMode: .fill)
                              .frame(width : UIScreen.main.bounds.width, height: UIScreen.main.bounds.height / 3)
                              .clipped()
