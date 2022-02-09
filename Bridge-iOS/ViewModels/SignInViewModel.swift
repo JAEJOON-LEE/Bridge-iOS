@@ -23,17 +23,21 @@ final class SignInViewModel : ObservableObject {
     @Published var showSignInFailAlert : Bool = false
     @Published var showPrgoressView : Bool = false
     
-    private let signInUrl : String = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/sign-in"
-    private let refreshUrl : String = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/token"
+    //private let baseURL = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com"
+    //private let signInUrl : String = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/sign-in"
+    //private let refreshUrl : String = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/token"
     
     private var subscription = Set<AnyCancellable>()
     
     
     func SignIn(email : String, password : String) {
+        let url = baseURL + "/sign-in"
         
-        AF.request(signInUrl,
+        AF.request(url,
                    method: .post,
-                   parameters: ["email" : email, "password" : password, "deviceCode" : String(UIDevice.current.identifierForVendor!.uuidString),
+                   parameters: ["email" : email,
+                                "password" : password,
+                                "deviceCode" : String(UIDevice.current.identifierForVendor!.uuidString),
                                 "fcmToken" : AppDelegate().fcmToken],
                    encoder: JSONParameterEncoder.prettyPrinted
         )
@@ -83,10 +87,12 @@ final class SignInViewModel : ObservableObject {
     }
     
     func refreshToken() {
-        AF.request(refreshUrl,
+        let url = baseURL + "/token"
+        AF.request(url,
                    method: .post,
                    parameters: ["refreshToken" : signInResponse?.token.refreshToken,
-                                "accessToken" : signInResponse?.token.accessToken],
+                                "accessToken" : signInResponse?.token.accessToken,
+                                "deviceCode" : String(UIDevice.current.identifierForVendor!.uuidString)],
                    encoder: JSONParameterEncoder.prettyPrinted
         )
             .responseJSON { [weak self] response in

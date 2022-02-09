@@ -73,7 +73,7 @@ struct ChatroomView: View {
                             .padding(.bottom, viewModel.checkChatTime(index: index) ? 5 : -5)
                         } // ForEach
                     } // LazyVStack
-                    .sheet(isPresented: $viewModel.showImagePicker) { ImagePicker(image: $viewModel.selectedImage) }
+                    .sheet(isPresented: $viewModel.showImagePicker) { ImagePicker(image: $viewModel.selectedImage).edgesIgnoringSafeArea(.bottom) }
                     .onAppear {
                         //viewModel.getChatContents(viewModel.chatId)
                         proxy.scrollTo(viewModel.lastMessageId)

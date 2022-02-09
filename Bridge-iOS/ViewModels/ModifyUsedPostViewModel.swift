@@ -31,37 +31,6 @@ final class ModifyUsedPostViewModel : ObservableObject {
     let categories = ["Digital", "Interior", "Fashion", "Life", "Beauty", "Etc"]
     //["digital", "furniture", "food", "clothes", "beauty", "etc."]
     
-    let campToNum : [String : Int] = [
-        //"Camp Casey" : 1,
-        //"Camp Hovey" : 2,
-        "Casey/Hovey" : 1,
-        "USAG Yongsan" : 3,
-        "K-16" : 4,
-        "Suwon A/B" : 5,
-        "Osan A/B" : 6,
-        "Camp Humperys" : 7,
-        "Camp Carroll" : 8,
-        //"Camp Henry" : 9,
-        //"Camp Walker" : 10,
-        "Henry/Walker" : 9,
-        "Gunsan A/B" : 11
-    ]
-    let campToInt : [Int : String] = [
-        //1 : "Camp Casey",
-        //2 : "Camp Hovey",
-        1 : "Casey/Hovey",
-        3 : "USAG Yongsan",
-        4 : "K-16",
-        5 : "Suwon A/B",
-        6 : "Osan A/B",
-        7 : "Camp Humperys",
-        8 : "Camp Carroll",
-        9 : "Henry/Walker",
-        //9 : "Camp Henry",
-        //10 : "Camp Walker",
-        11 : "Gunsan A/B"
-    ]
-    
     private let postId : Int
 
     var configuration : PHPickerConfiguration {
@@ -89,7 +58,7 @@ final class ModifyUsedPostViewModel : ObservableObject {
     }
     
     func upload() { //(with payload : PostPayload)
-        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/used-posts/\(postId)"
+        let url = baseURL + "/used-posts/\(postId)"
         let header : HTTPHeaders = [
             "Content-Type": "multipart/form-data",
             "X-AUTH-TOKEN": SignInViewModel.accessToken

@@ -29,27 +29,12 @@ final class UsedWritingViewModel : ObservableObject {
     @Published var isProgressShow : Bool = false
     
     @Published var isImageTap : Bool = false
-    
-    private let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/used-posts"
 
-    let message = "Please fill all field!"
-    
-    let campToNum : [String : Int] = [
-        //"Camp Casey" : 1,
-        //"Camp Hovey" : 2,
-        "Casey/Hovey" : 1,
-        "USAG Yongsan" : 3,
-        "K-16" : 4,
-        "Suwon A/B" : 5,
-        "Osan A/B" : 6,
-        "Camp Humperys" : 7,
-        "Camp Carroll" : 8,
-        //"Camp Henry" : 9,
-        //"Camp Walker" : 10,
-        "Henry/Walker" : 9,
-        "Gunsan A/B" : 11
-    ]
-    
+    var message : String {
+        if price.contains(".") { return "Please submit valid price!" }
+        else { return "Please fill all field!" }
+    }
+
     let camps = ["Casey/Hovey", "USAG Yongsan", "K-16", "Suwon A/B", "Osan A/B", "Camp Humperys", "Camp Carroll", "Henry/Walker", "Gunsan A/B"]
     //["Camp Casey", "Camp Hovey", "USAG Yongsan", "K-16", "Suwon A/B", "Osan A/B", "Camp Humperys", "Camp Carroll", "Camp Henry", "Camp Walker", "Gunsan A/B"]
     
@@ -84,7 +69,8 @@ final class UsedWritingViewModel : ObservableObject {
         return html
     }
 
-    func upload() { //(with payload : PostPayload)
+    func upload() {
+        let url = baseURL + "/used-posts"
         let header : HTTPHeaders = [
             "Content-Type": "multipart/form-data",
             "X-AUTH-TOKEN": SignInViewModel.accessToken

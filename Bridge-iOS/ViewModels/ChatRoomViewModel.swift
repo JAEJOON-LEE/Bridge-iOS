@@ -99,9 +99,7 @@ class ChatroomViewModel : ObservableObject {
 //            "accessToken" : SignInViewModel.accessToken
 //        ]
 
-        socketClient.sendJSONForDict(
-                        dict: payloadObject as AnyObject,
-                        toDestination: "/pub/chat/message")
+        socketClient.sendJSONForDict(dict: payloadObject as AnyObject, toDestination: "/pub/chat/message")
     }
     
     // Unsubscribe
