@@ -300,13 +300,15 @@ final class SignUpViewModel : ObservableObject {
         
         AF.upload(multipartFormData: { multipartFormData in
             
-                        multipartFormData.append("{ \"name\" : \"\(name)\", \"email\" : \"\(email)\", \"password\" : \"\(password)\", \"role\" : \"\(role)\", \"description\" : \"\(description)\", \"username\" : \"\(nickname)\"}".data(using: .utf8)!, withName: "memberInfo", mimeType: "application/json")
-                        
-                        if(profileImage != nil){
-                            multipartFormData.append(profileImage!.jpegData(compressionQuality: 1)!, withName: "profileImage", fileName: "From_iOS", mimeType: "image/jpg")
-                        }
-                        
-                    }, to:"http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/sign-up",
+            let payloadEncoded = String(data : "{ \"name\" : \"\(name)\", \"email\" : \"\(email)\", \"password\" : \"\(password)\", \"role\" : \"\(role)\", \"description\" : \"\(description)\", \"username\" : \"\(nickname)\"}".data(using: .nonLossyASCII)!, encoding : .utf8) ?? ""
+            
+            multipartFormData.append(payloadEncoded.data(using: .utf8)!, withName: "memberInfo", mimeType: "application/json")
+            
+            if(profileImage != nil){
+                multipartFormData.append(profileImage!.jpegData(compressionQuality: 1)!, withName: "profileImage", fileName: "From_iOS", mimeType: "image/jpg")
+            }
+            
+        }, to:"http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/sign-up",
                     method: .post,
                     headers: header)
             .responseString{ (response) in
