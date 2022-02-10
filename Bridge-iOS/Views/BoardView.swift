@@ -37,9 +37,11 @@ struct BoardView : View {
                                 .fontWeight(.semibold)
                                 .foregroundColor(.mainTheme)
                             Spacer()
-                            Text("MORE >          ")
+                            Text("More            ")
                                 .foregroundColor(.gray)
-                                .fontWeight(.light)
+                                .font(.system(size: 13))
+                                .fontWeight(.medium)
+                                .padding()
                         }
                         .padding(.vertical, 10)
                         .frame(height: UIScreen.main.bounds.height * 0.06)
@@ -82,7 +84,7 @@ struct BoardView : View {
                             Text("ALL ANONYMOUS!")
                                 .padding()
                         }
-                        .font(.system(size: 12, weight : .bold))
+                        .font(.system(size: 10, weight : .bold))
                         .frame(width : UIScreen.main.bounds.width * 0.83, height : UIScreen.main.bounds.height * 0.02)
                         .padding()
                         .foregroundColor(.white)
@@ -245,17 +247,20 @@ struct GeneralPost : View {
                         URL(string: "https://static.thenounproject.com/png/741653-200.png")!)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-                    .frame(width : 40, height: 40)
-                    .cornerRadius(20)
+                    .frame(width : 30, height: 30)
+                    .cornerRadius(15)
                 
                 VStack(alignment : .leading){
                     Text(viewModel.userName)
-                        .font(.system(size: 20, weight : .medium))
+                        .font(.system(size: 15, weight : .bold))
+                        .foregroundColor(Color.gray)
                     
                     //Text(viewModel.convertReturnedDateString(viewModel.createdAt ?? "2021-10-01 00:00:00"))
                     Text(convertReturnedDateString(viewModel.createdAt))
-                        .font(.system(size: 10))
+                        .font(.system(size: 7))
+                        .foregroundColor(Color.gray)
                 }
+                
             }
             .foregroundColor(.black)
             .padding(.bottom, 2)
@@ -265,18 +270,20 @@ struct GeneralPost : View {
                         URL(string: "https://static.thenounproject.com/png/741653-200.png")!)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-                    .frame(width : UIScreen.main.bounds.width * 0.83, height: UIScreen.main.bounds.height * 0.15)
+                    .frame(width : UIScreen.main.bounds.width * 0.83, height: UIScreen.main.bounds.height * 0.22)
                     .cornerRadius(10)
             }
             
             HStack(alignment: .bottom){
                 VStack(alignment: .leading){
                     Text(viewModel.postTitle)
-                        .font(.system(size: 17, weight : .medium))
+                        .font(.system(size: 13, weight : .medium))
+                        .foregroundColor(Color.black)
                     
                     if(viewModel.imageUrl == "null"){
                         Text(viewModel.description)
-                            .font(.system(size: 13))
+                            .font(.system(size: 10))
+                            .foregroundColor(Color.gray)
                     }
                 }
                 
