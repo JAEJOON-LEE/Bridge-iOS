@@ -30,6 +30,8 @@ struct SignUpAppendixView: View {
             if(imageSelected){
                 Image(uiImage: viewModel.profileImage!)
                     .resizable()
+//                    .fade(duration: 0.5)
+                    .aspectRatio(contentMode: .fill)
                     .shadow(radius: 1, x: 0, y: -1)
             }
             else{
