@@ -61,11 +61,13 @@ struct PostInfoView: View { // 게시글 상세 페이지
                                     .fontWeight(.bold)
 
                                 Text(viewModel.convertReturnedDateString(viewModel.totalBoardPostDetail?.boardPostDetail.createdAt ?? "2021-10-01 00:00:00"))
+                                    .font(.system(size: 13))
                             }else{
                                 Text("Anonymous")
                                     .fontWeight(.bold)
 
                                 Text(viewModel.convertReturnedDateString(viewModel.totalSecretPostDetail?.secretPostDetail.createdAt ?? "2021-10-01 00:00:00"))
+                                    .font(.system(size: 13))
                             }
                         }
                         Spacer()
