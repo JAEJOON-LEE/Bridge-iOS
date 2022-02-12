@@ -249,7 +249,7 @@ struct PostInfoView: View { // 게시글 상세 페이지
                                     viewModel.isLiked = viewModel.totalSecretPostDetail!.secretPostDetail.like
                                     viewModel.likeSecretPost(isliked: (viewModel.totalSecretPostDetail!.secretPostDetail.like))
                                 }
-                                usleep(500000) // server is fuckin slow
+                                
                                 if(viewModel.isSecret == false){
                                     viewModel.getBoardPostDetail()
                                 }else{
