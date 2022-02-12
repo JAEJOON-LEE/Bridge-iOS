@@ -26,7 +26,7 @@ final class CouponViewModel : ObservableObject {
     let locations = ["Casey/Hovey", "USAG Yongsan", "K-16", "Suwon A/B", "Osan A/B", "Camp Humperys", "Camp Carroll", "Henry/Walker", "Gunsan A/B"]
 
     func getStore() {
-        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/shops?"
+        let url = baseURL + "/shops?"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN": SignInViewModel.accessToken ]
         var shopType : String {
             if selectedCategory == 1 {
@@ -71,7 +71,7 @@ final class CouponViewModel : ObservableObject {
         }
     
     func getRandomStore() {
-        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/shops?"
+        let url = baseURL + "/shops?"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN": SignInViewModel.accessToken ]
         
         AF.request(url,

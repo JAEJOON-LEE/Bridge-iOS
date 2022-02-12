@@ -23,12 +23,7 @@ final class SignInViewModel : ObservableObject {
     @Published var showSignInFailAlert : Bool = false
     @Published var showPrgoressView : Bool = false
     
-    //private let baseURL = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com"
-    //private let signInUrl : String = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/sign-in"
-    //private let refreshUrl : String = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/token"
-    
     private var subscription = Set<AnyCancellable>()
-    
     
     func SignIn(email : String, password : String) {
         let url = baseURL + "/sign-in"

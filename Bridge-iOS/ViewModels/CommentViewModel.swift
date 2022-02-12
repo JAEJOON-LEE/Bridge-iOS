@@ -44,7 +44,7 @@ final class CommentViewModel : ObservableObject {
     
     
     func deleteComment() {
-        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/board-posts/\(postId)/comments/\(commentId)"
+        let url = baseURL + "/board-posts/\(postId)/comments/\(commentId)"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
         
         AF.request(url,
@@ -57,7 +57,7 @@ final class CommentViewModel : ObservableObject {
     }
     
     func likeComment(isliked : Bool) {
-        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/comments/\(commentId)/likes"
+        let url = baseURL + "/comments/\(commentId)/likes"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
         let method : HTTPMethod = isliked ? .delete : .post
         
@@ -71,7 +71,7 @@ final class CommentViewModel : ObservableObject {
     }
     
     func likeCommentOfComment(isliked : Bool, cocId : Int) {
-        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/comments/\(cocId)/likes"
+        let url = baseURL + "/comments/\(cocId)/likes"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
         let method : HTTPMethod = isliked ? .delete : .post
         

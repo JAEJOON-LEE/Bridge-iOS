@@ -85,7 +85,7 @@ final class FindPasswordViewModel : ObservableObject {
     // APIs
     // API #45, params : email
     func findingPassword_sendMail() {
-        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/email-auth/password"
+        let url = baseURL + "/email-auth/password"
         
         AF.request(url,
                    method: .post,
@@ -107,7 +107,7 @@ final class FindPasswordViewModel : ObservableObject {
     
     // API #46, params : email, key
     func findingPassword_confirmCode() {
-        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/email-auth/password/confirm"
+        let url = baseURL + "/email-auth/password/confirm"
         
         AF.request(url,
                    method: .post,
@@ -134,7 +134,7 @@ final class FindPasswordViewModel : ObservableObject {
     
     // API #42, params : password(new) with token
     func findingPassword_chagePassword() {
-        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/password"
+        let url = baseURL + "/password"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : receivedToken ]
 
         AF.request(url,

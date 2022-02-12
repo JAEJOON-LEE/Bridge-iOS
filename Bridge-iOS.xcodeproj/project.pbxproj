@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1468E06FA175296F4F57C397 /* Pods_Bridge_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D097FF2E6596B5A2F6555096 /* Pods_Bridge_iOS.framework */; };
 		1A02A4D227B36E74003D80CC /* Service+Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A02A4D127B36E74003D80CC /* Service+Data.swift */; };
 		1A02A4D427B3B309003D80CC /* ImagePlaceHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A02A4D327B3B309003D80CC /* ImagePlaceHolder.swift */; };
 		1A318F9127131A4D00ADF60E /* UsedWritingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A318F9027131A4C00ADF60E /* UsedWritingViewModel.swift */; };
@@ -69,6 +68,8 @@
 		1ADD9DE627034B8A008342A7 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADD9DE527034B8A008342A7 /* HomeViewModel.swift */; };
 		1ADD9DE827034C63008342A7 /* Home+ResponseData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADD9DE727034C63008342A7 /* Home+ResponseData.swift */; };
 		1ADD9DEF27036BA6008342A7 /* ItemCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADD9DEE27036BA6008342A7 /* ItemCardViewModel.swift */; };
+		1AED76BC27B7B63D000070DD /* Data+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AED76BB27B7B63D000070DD /* Data+Extension.swift */; };
+		1AED76BD27B7B86F000070DD /* Pods_Bridge_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D097FF2E6596B5A2F6555096 /* Pods_Bridge_iOS.framework */; };
 		6D2B89D22713476A00319907 /* Board+ResponseData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2B89D12713476A00319907 /* Board+ResponseData.swift */; };
 		6D2B89D42713477100319907 /* Secret+ResponseData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2B89D32713477100319907 /* Secret+ResponseData.swift */; };
 		6D2B89D62713477700319907 /* Comment+ResponseData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2B89D52713477700319907 /* Comment+ResponseData.swift */; };
@@ -175,6 +176,7 @@
 		1ADD9DE527034B8A008342A7 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		1ADD9DE727034C63008342A7 /* Home+ResponseData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Home+ResponseData.swift"; sourceTree = "<group>"; };
 		1ADD9DEE27036BA6008342A7 /* ItemCardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemCardViewModel.swift; sourceTree = "<group>"; };
+		1AED76BB27B7B63D000070DD /* Data+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Extension.swift"; sourceTree = "<group>"; };
 		6D2B89D12713476A00319907 /* Board+ResponseData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Board+ResponseData.swift"; sourceTree = "<group>"; };
 		6D2B89D32713477100319907 /* Secret+ResponseData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Secret+ResponseData.swift"; sourceTree = "<group>"; };
 		6D2B89D52713477700319907 /* Comment+ResponseData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Comment+ResponseData.swift"; sourceTree = "<group>"; };
@@ -231,7 +233,7 @@
 				1A80360E27B0088300EA256D /* Kingfisher in Frameworks */,
 				6DE69902278A98B00048EB76 /* FirebaseAnalytics in Frameworks */,
 				1ADD9DDF27032237008342A7 /* Alamofire in Frameworks */,
-				1468E06FA175296F4F57C397 /* Pods_Bridge_iOS.framework in Frameworks */,
+				1AED76BD27B7B86F000070DD /* Pods_Bridge_iOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -341,6 +343,7 @@
 				6D8D23AA271728160020B5B0 /* String+Extension.swift */,
 				1AD9CC4C273EFD9B006C2FB7 /* View+Extension.swift */,
 				1A43898627ABEFF0003538CF /* UIDevice+Extension.swift */,
+				1AED76BB27B7B63D000070DD /* Data+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -597,6 +600,7 @@
 				6D2B89DD271347D700319907 /* CommentStyle.swift in Sources */,
 				1AA6D2EE27870DBA008357BE /* SettingsViewModel.swift in Sources */,
 				1AA6D2E227856A6B008357BE /* ChatView.swift in Sources */,
+				1AED76BC27B7B63D000070DD /* Data+Extension.swift in Sources */,
 				6D6C6AEA279D82BB00AF41DF /* SignUpCheckUserTypeView.swift in Sources */,
 				1AA6D2E6278571A7008357BE /* ChatViewModel.swift in Sources */,
 				1AB18538278C7C4C00764165 /* Member+ResponseData.swift in Sources */,

@@ -60,7 +60,7 @@ final class SettingsViewModel : ObservableObject {
     
     func getBlockedUsers() {
         let header: HTTPHeaders = [ "X-AUTH-TOKEN": SignInViewModel.accessToken ]
-        let requestURL : String = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/members/\(userInfo.memberId)/blocks"
+        let requestURL : String = baseURL + "/members/\(userInfo.memberId)/blocks"
         
         AF.request(requestURL,
                    method: .get,
@@ -84,7 +84,7 @@ final class SettingsViewModel : ObservableObject {
     
     func UnblockUser(blockId : Int) {
         let header: HTTPHeaders = [ "X-AUTH-TOKEN": SignInViewModel.accessToken ]
-        let requestURL : String = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/members/\(userInfo.memberId)/blocks/\(blockId)"
+        let requestURL : String = baseURL + "/members/\(userInfo.memberId)/blocks/\(blockId)"
         
         AF.request(requestURL,
                    method: .patch,
@@ -94,7 +94,7 @@ final class SettingsViewModel : ObservableObject {
     }
     
     func changePassword() {
-        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/password"
+        let url = baseURL + "/password"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : SignInViewModel.accessToken ]
         
         AF.request(url,
@@ -116,7 +116,7 @@ final class SettingsViewModel : ObservableObject {
     }
     
     func deleteAccount() {
-        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/members/\(userInfo.memberId)"
+        let url = baseURL + "/members/\(userInfo.memberId)"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : SignInViewModel.accessToken ]
         
         AF.request(url,

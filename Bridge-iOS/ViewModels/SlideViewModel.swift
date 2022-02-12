@@ -35,7 +35,7 @@ final class SlideViewModel : ObservableObject {
     }
     
     func getUserInfo() {
-        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/members/\(userInfo.memberId)"
+        let url = baseURL + "/members/\(userInfo.memberId)"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN": SignInViewModel.accessToken ]
         
         AF.request(url,
@@ -60,8 +60,7 @@ final class SlideViewModel : ObservableObject {
     
     func getSellingList() {
         let header: HTTPHeaders = [ "X-AUTH-TOKEN": SignInViewModel.accessToken ]
-        let requestURL : String
-        = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/members/\(userInfo.memberId)/used-posts?lastPostId=0"
+        let requestURL : String = baseURL + "/members/\(userInfo.memberId)/used-posts?lastPostId=0"
 
         AF.request(requestURL,
                    method: .get,
@@ -84,8 +83,7 @@ final class SlideViewModel : ObservableObject {
     }
     func getLikedList() {
         let header: HTTPHeaders = [ "X-AUTH-TOKEN": SignInViewModel.accessToken ]
-        let requestURL : String
-        = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/members/\(userInfo.memberId)/liked-used-posts?lastPostId=0"
+        let requestURL : String = baseURL + "/members/\(userInfo.memberId)/liked-used-posts?lastPostId=0"
 
         AF.request(requestURL,
                    method: .get,
@@ -108,7 +106,7 @@ final class SlideViewModel : ObservableObject {
     }
     
     func getBoardPosts(token : String) {
-        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/members/\(userInfo.memberId)/playground?lastPostId=0"
+        let url = baseURL + "/members/\(userInfo.memberId)/playground?lastPostId=0"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN": token ]
         
         AF.request(url,
@@ -139,7 +137,7 @@ final class SlideViewModel : ObservableObject {
     
     func signOut() {
         let header: HTTPHeaders = [ "X-AUTH-TOKEN": SignInViewModel.accessToken ]
-        let requestURL : String = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/sign-out"
+        let requestURL : String = baseURL + "/sign-out"
         
         AF.request(requestURL,
                    method: .post,

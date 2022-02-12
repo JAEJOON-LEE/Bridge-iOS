@@ -23,7 +23,7 @@ final class UserSuggestionViewModel : ObservableObject {
     @Published var isSendingDone : Bool = false
     
     func uploadUserSuggestion() {
-        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/contacts"
+        let url = baseURL + "/contacts"
         let header: HTTPHeaders = [ "Content-Type": "multipart/form-data", "X-AUTH-TOKEN" : SignInViewModel.accessToken ]
         var category : String {
             switch selectedCategory {

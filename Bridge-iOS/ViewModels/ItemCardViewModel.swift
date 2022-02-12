@@ -38,7 +38,7 @@ final class ItemCardViewModel : ObservableObject {
     var viewCount : Int { post.viewCount }
     
     func likePost() {
-        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/used-posts/\(post.postId)/likes"
+        let url = baseURL + "/used-posts/\(post.postId)/likes"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : SignInViewModel.accessToken ]
         let method : HTTPMethod = isLiked ? .post : .delete
         

@@ -101,7 +101,7 @@ class WritingViewModel : ObservableObject {
                                         withName : "files", fileName: "payloadImage.jpg", mimeType: "image/jpeg")
                         }
                         
-                    }, to:"http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/board-posts",
+                    }, to: baseURL + "/board-posts",
                     method: .post,
                     headers: header)
             .responseString{ (response) in
@@ -137,7 +137,7 @@ class WritingViewModel : ObservableObject {
                                         withName : "files", fileName: "payloadImage.jpg", mimeType: "image/jpeg")
                         }
                         
-                    }, to:"http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/secret-posts",
+                    }, to: baseURL + "/secret-posts",
                     method: .post,
                     headers: header)
             .responseString{ (response) in
@@ -157,7 +157,7 @@ class WritingViewModel : ObservableObject {
     
     func getBoardPostDetail() {
         
-        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/board-posts/\(postId)"
+        let url = baseURL + "/board-posts/\(postId)"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
         
         AF.request(url,
@@ -183,7 +183,7 @@ class WritingViewModel : ObservableObject {
     
     func getSecretPostDetail() {
         
-        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/secret-posts/\(postId)"
+        let url = baseURL + "/secret-posts/\(postId)"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
         
         AF.request(url,
@@ -276,7 +276,7 @@ class WritingViewModel : ObservableObject {
             }
             
                         
-                    }, to:"http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/board-posts/\(postId)",
+                    }, to: baseURL + "/board-posts/\(postId)",
                     method: .post,
                     headers: header)
             .responseString{ (response) in
@@ -362,7 +362,7 @@ class WritingViewModel : ObservableObject {
                             withName : "files", fileName: "payloadImage.jpg", mimeType: "image/jpeg")
             }
                         
-                    }, to:"http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/secret-posts/\(postId)",
+                    }, to: baseURL + "/secret-posts/\(postId)",
                     method: .post,
                     headers: header)
             .responseString{ (response) in

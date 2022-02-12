@@ -80,7 +80,7 @@ final class PostInfoViewModel : ObservableObject {
     
     func getBoardPostDetail() {
         
-        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/board-posts/\(postId)"
+        let url = baseURL + "/board-posts/\(postId)"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
         
         AF.request(url,
@@ -106,7 +106,7 @@ final class PostInfoViewModel : ObservableObject {
     }
     
     func likePost(isliked : Bool) {
-        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/board-posts/\(postId)/likes"
+        let url = baseURL + "/board-posts/\(postId)/likes"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
         let method : HTTPMethod = isliked ? .delete : .post
         
@@ -120,7 +120,7 @@ final class PostInfoViewModel : ObservableObject {
     }
     
     func deletePost() {
-        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/board-posts/\(postId)"
+        let url = baseURL + "/board-posts/\(postId)"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
         
         AF.request(url,
@@ -134,7 +134,7 @@ final class PostInfoViewModel : ObservableObject {
     
     func sendComment(content : String, anonymous : String) {
         
-        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/board-posts/\(postId)/comments"
+        let url = baseURL + "/board-posts/\(postId)/comments"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
         
         AF.request(url,
@@ -159,7 +159,7 @@ final class PostInfoViewModel : ObservableObject {
     
     func sendCommentOfComment(content : String, anonymous : String, cocId : Int) {
         
-        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/board-posts/\(postId)/comments"
+        let url = baseURL + "/board-posts/\(postId)/comments"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
         
         AF.request(url,
@@ -183,7 +183,7 @@ final class PostInfoViewModel : ObservableObject {
 
     func getComment() {
         
-        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/board-posts/\(postId)/comments?"
+        let url = baseURL + "/board-posts/\(postId)/comments?"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
         
         AF.request(url,
@@ -210,7 +210,7 @@ final class PostInfoViewModel : ObservableObject {
     }
     
     func deleteComment() {
-        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/board-posts/\(postId)/comments/\(commentId!)"
+        let url = baseURL + "/board-posts/\(postId)/comments/\(commentId!)"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
         
         AF.request(url,
@@ -224,7 +224,7 @@ final class PostInfoViewModel : ObservableObject {
     
     func patchComment(content : String) {
         
-        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/board-posts/\(postId)/comments/\(commentId!)"
+        let url = baseURL + "/board-posts/\(postId)/comments/\(commentId!)"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
         
         AF.request(url,
@@ -250,7 +250,7 @@ final class PostInfoViewModel : ObservableObject {
     
     func getSecretPostDetail() {
         
-        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/secret-posts/\(postId)"
+        let url = baseURL + "/secret-posts/\(postId)"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
         
         AF.request(url,
@@ -276,7 +276,7 @@ final class PostInfoViewModel : ObservableObject {
     }
     
     func likeSecretPost(isliked : Bool) {
-        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/secret-posts/\(postId)/likes"
+        let url = baseURL + "/secret-posts/\(postId)/likes"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
         let method : HTTPMethod = isliked ? .delete : .post
         
@@ -290,7 +290,7 @@ final class PostInfoViewModel : ObservableObject {
     }
     
     func deleteSecretPost() {
-        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/secret-posts/\(postId)"
+        let url = baseURL + "/secret-posts/\(postId)"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
         
         AF.request(url,
@@ -304,7 +304,7 @@ final class PostInfoViewModel : ObservableObject {
     
     func sendSecretComment(content : String, anonymous : String) {
         
-        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/secret-posts/\(postId)/comments"
+        let url = baseURL + "/secret-posts/\(postId)/comments"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
         
         AF.request(url,
@@ -328,7 +328,7 @@ final class PostInfoViewModel : ObservableObject {
     
     func sendSecretCommentOfComment(content : String, anonymous : String, cocId : Int) {
         
-        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/secret-posts/\(postId)/comments"
+        let url = baseURL + "/secret-posts/\(postId)/comments"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
         
         AF.request(url,
@@ -352,7 +352,7 @@ final class PostInfoViewModel : ObservableObject {
 
     func getSecretComment() {
         
-        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/secret-posts/\(postId)/comments?"
+        let url = baseURL + "/secret-posts/\(postId)/comments?"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
         
         AF.request(url,
@@ -380,7 +380,7 @@ final class PostInfoViewModel : ObservableObject {
     }
     
     func deleteSecretComment() {
-        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/secret-posts/\(postId)/comments/\(commentId!)"
+        let url = baseURL + "/secret-posts/\(postId)/comments/\(commentId!)"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
         
         AF.request(url,
@@ -403,7 +403,7 @@ final class PostInfoViewModel : ObservableObject {
     
     func patchSecretComment(content : String) {
         
-        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/secret-posts/\(postId)/comments/\(commentId!)"
+        let url = baseURL + "/secret-posts/\(postId)/comments/\(commentId!)"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
         
         AF.request(url,
@@ -426,7 +426,7 @@ final class PostInfoViewModel : ObservableObject {
     }
     
     func likeComment(isCommentliked : Bool) {
-        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/comments/\(commentId!)/likes"
+        let url = baseURL + "/comments/\(commentId!)/likes"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
         let method : HTTPMethod = isCommentliked ? .delete : .post
         
@@ -441,7 +441,7 @@ final class PostInfoViewModel : ObservableObject {
     }
     
     func likeCommentOfComment(isliked : Bool, cocId : Int) {
-        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/comments/\(cocId)/likes"
+        let url = baseURL + "/comments/\(cocId)/likes"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
         let method : HTTPMethod = isliked ? .delete : .post
         
@@ -455,7 +455,7 @@ final class PostInfoViewModel : ObservableObject {
     }
     
     func reportPost() {
-        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/posts/\(postId)/postReports"
+        let url = baseURL + "/posts/\(postId)/postReports"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
         let method : HTTPMethod = .post
         
@@ -470,7 +470,7 @@ final class PostInfoViewModel : ObservableObject {
     }
     
     func reportComment() {
-        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/comments/\(commentId!)/commentReports"
+        let url = baseURL + "/comments/\(commentId!)/commentReports"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : token ]
         let method : HTTPMethod = .post
         
@@ -485,7 +485,7 @@ final class PostInfoViewModel : ObservableObject {
     }
     
     func blockUser() {
-        let url = "http://ALB-PRD-BRIDGE-BRIDGE-898468050.ap-northeast-2.elb.amazonaws.com/members/\(memberId)/blocks"
+        let url = baseURL + "/members/\(memberId)/blocks"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN" : SignInViewModel.accessToken ]
 
 //        guard let memberToBlock = memberId else { return }
