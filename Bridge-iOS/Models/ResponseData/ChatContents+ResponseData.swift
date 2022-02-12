@@ -25,7 +25,7 @@ struct Sender : Codable, Hashable {
 
 struct MessageContents : Codable, Hashable {
     var messageId : Int64
-    var message : String
-    var image : String
+    var message : String?
+    var image : String?
     var createdAt : String
 }

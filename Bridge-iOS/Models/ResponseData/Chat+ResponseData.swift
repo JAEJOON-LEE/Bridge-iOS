@@ -32,7 +32,7 @@ struct ChatMember : Codable, Hashable {
 
 struct ChatLast : Codable, Hashable {
     var messageId : Int
-    var message : String
+    var message : String?
     var image : String
     var createdAt : String
 }

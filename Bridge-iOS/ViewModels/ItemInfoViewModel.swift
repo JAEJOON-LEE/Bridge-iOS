@@ -15,8 +15,8 @@ final class ItemInfoViewModel : ObservableObject {
     let legacyServerKey = "" //서버 token (변경 x)
     var badgeCnt = 0
 
-    @Published var itemInfo : ItemInfo?
-    @Published var isItemInfoFetchDone : Bool = false
+    var itemInfo : ItemInfo?
+    var isItemInfoFetchDone : Bool = false
     @Published var isMemberInfoClicked : Bool = false
     @Published var isLiked : Bool?
     @Published var isImageTap : Bool = false
@@ -29,7 +29,7 @@ final class ItemInfoViewModel : ObservableObject {
     
     @Published var currentImageIndex : Int = 0
     @Published var chatCreation : Bool = false
-    @Published var createdChatId : Int = 0
+    var createdChatId : Int = 0
     
     
     private var subscription = Set<AnyCancellable>()

@@ -17,10 +17,12 @@ struct ChatroomView: View {
     
     let userWith : String
     let userIdWith : Int
+    let isModal : Bool
     
-    init(viewModel : ChatroomViewModel, with user : String, withId : Int) {
+    init(viewModel : ChatroomViewModel, with user : String, withId : Int, isModal : Bool = false) {
         userWith = user
         userIdWith = withId
+        self.isModal = isModal
         self._viewModel = StateObject(wrappedValue: viewModel)
     }
     
@@ -162,12 +164,23 @@ struct ChatroomView: View {
         .onDisappear { viewModel.disconnect() }
         .navigationTitle(Text(userWith))
         .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(isModal ? true : false)
         .navigationBarItems(
             trailing:
-                Button {
-                    viewModel.toolbarButtonClicked = true
-                } label : {
-                    Image(systemName: "ellipsis")
+                HStack {
+                if isModal {
+                    Button {
+                        presentationMode.wrappedValue.dismiss()
+                    } label : {
+                        Image(systemName : "chevron.down")
+                    }
+                } else {
+                    Button {
+                        viewModel.toolbarButtonClicked = true
+                    } label : {
+                        Image(systemName: "ellipsis")
+                    }
+                }
                 }
         )
         .actionSheet(isPresented: $viewModel.toolbarButtonClicked) {
@@ -285,12 +298,12 @@ struct MessageBox : View {
                 
                 VStack(alignment : .trailing) {
                     // -- message w/o image
-                    if message.message != "" {
-                        Text(message.message)
+                    if let message = message.message {
+                        Text(message)
                     }
                     // -- message w/ image
                     if message.image != "null" {
-                        KFImage(URL(string : message.image)!)
+                        KFImage(URL(string : message.image ?? "https://icons.veryicon.com/png/o/education-technology/alibaba-big-data-oneui/image-loading-failed-02.png")!)
                             .resizable()
                             .aspectRatio(contentMode: .fill)
                             .frame(maxWidth : UIScreen.main.bounds.width * 0.6)

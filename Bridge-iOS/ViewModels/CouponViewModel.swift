@@ -24,10 +24,11 @@ final class CouponViewModel : ObservableObject {
     }
     
     let locations = ["Casey/Hovey", "USAG Yongsan", "K-16", "Suwon A/B", "Osan A/B", "Camp Humperys", "Camp Carroll", "Henry/Walker", "Gunsan A/B"]
-
+    
     func getStore() {
-        let url = baseURL + "/shops?"
+        let url = baseURL + "/shops"
         let header: HTTPHeaders = [ "X-AUTH-TOKEN": SignInViewModel.accessToken ]
+        let shopIdList : [Int] = []
         var shopType : String {
             if selectedCategory == 1 {
                 return "RESTAURANT"
@@ -37,22 +38,22 @@ final class CouponViewModel : ObservableObject {
                 return "B_SELECTION"
             }
         }
-        
+
         AF.request(url,
                    method: .get,
-                   parameters: ["lastShopId" : 0,
+                   parameters: ["shopIdList" : shopIdList,
                                 "shopType" : shopType,
                                 "camp" : CampEncoding[selectedCamp]! ],
                    encoding: URLEncoding.default,
                    headers: header)
-            .responseJSON { [weak self] (response) in
+            .responseJSON { response in
                 guard let statusCode = response.response?.statusCode else { return }
                 switch statusCode {
                     case 200 :
                         print("Get Stores Success : \(statusCode)")
                     default :
                         print("Get Stores Fail : \(statusCode)")
-                        self?.getStore()
+                        //self?.getStore()
                 }
             }.publishDecodable(type : ShopList.self)
             .compactMap { $0.value }

@@ -386,17 +386,28 @@ struct ItemInfoView: View {
                     )
                 }
             })
-            .background(
-                NavigationLink(destination :
+            .sheet(isPresented: $viewModel.chatCreation) {
+                NavigationView {
                     ChatroomView(viewModel:
                         ChatroomViewModel(viewModel.createdChatId,
                                           userInfo : viewModel.userInfo),
                             with: viewModel.itemInfo?.member.username ?? "Anonymous",
-                            withId: viewModel.itemInfo?.member.memberId ?? 0
-                        ),
-                    isActive : $viewModel.chatCreation
-                ) { }
-            )
+                            withId: viewModel.itemInfo?.member.memberId ?? 0,
+                             isModal: true
+                        )
+                }
+            }
+//            .background(
+//                NavigationLink(destination :
+//                    ChatroomView(viewModel:
+//                        ChatroomViewModel(viewModel.createdChatId,
+//                                          userInfo : viewModel.userInfo),
+//                            with: viewModel.itemInfo?.member.username ?? "Anonymous",
+//                            withId: viewModel.itemInfo?.member.memberId ?? 0
+//                        ),
+//                    isActive : $viewModel.chatCreation
+//                ) { }
+//            )
         }
     }
 }

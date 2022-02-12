@@ -31,7 +31,7 @@ class ChatroomViewModel : ObservableObject {
     var socketClient = StompClientLib()
 
     // Socket Connection URL // http://3.36.233.180
-    private let url = URL(string: "ws://" + baseURL + "/stomp/chat/websocket")!
+    private let url = URL(string: "ws://13.209.189.14/stomp/chat/websocket")!
 
     let chatId : Int
     let userInfo : MemeberInformation //SignInResponse
@@ -52,6 +52,14 @@ class ChatroomViewModel : ObservableObject {
             connectionHeaders: [ "X-AUTH-TOKEN" : SignInViewModel.accessToken ]
                             // , "heart-beat": "0,10000" ]
         )
+        
+        // Reconnect after 4 sec
+//        socketClient.reconnect(
+//            request: NSURLRequest(url: url as URL),
+//            delegate: self as StompClientLibDelegate,
+//            connectionHeaders: [ "X-AUTH-TOKEN" : SignInViewModel.accessToken ],
+//            time: 50
+//        )
     }
     
     // Subscribe
@@ -245,7 +253,7 @@ extension ChatroomViewModel : StompClientLibDelegate {
     // Subscribe Topic
     func stompClientDidConnect(client: StompClientLib!) {
         print("Stomp socket \(chatId) is connected")
-    
+        
         subscribe()
     }
     

@@ -74,7 +74,7 @@ struct ChatView: View {
                                                 .foregroundColor(.black)
                                             
                                             if let msg = chatroom.message {
-                                                Text(msg.message.isEmpty ? "📷 Image" : msg.message)
+                                                Text(((msg.message?.isEmpty ?? false) ? "📷 Image" : msg.message) ?? "")
                                                     .lineLimit(1)
                                                     .font(.system(size: 13, weight : .bold, design : .rounded))
                                                     .foregroundColor(.gray)
@@ -103,8 +103,7 @@ struct ChatView: View {
 
                                 Color.systemDefaultGray
                                     .frame(width : UIScreen.main.bounds.width * 0.9, height : 5)
-                            } // VStack
-                            
+                            } // VStack    
                         } // if
                     } // ForEach
                     Spacer().frame(height : UIScreen.main.bounds.height * 0.1)
