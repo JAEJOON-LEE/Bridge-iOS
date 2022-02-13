@@ -164,6 +164,7 @@ struct BoardView : View {
                                 GeneralPost(viewModel : GeneralPostViewModel(postList: PostList))
                             }
                         }
+                        Spacer(minLength: UIScreen.main.bounds.height * 0.1)
                     }
                 }
             }.listStyle(PlainListStyle()) // iOS 15 대응
