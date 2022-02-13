@@ -22,6 +22,8 @@ struct PostInfoView: View { // 게시글 상세 페이지
     @State private var activeAlert : ActiveAlert = .first
     @State private var offset = CGSize.zero
     @State private var ImageViewOffset = CGSize.zero
+    @State var scale: CGFloat = 0
+    
     //    @FocusState private var focusField: Field?
     //    enum Field: Hashable {
     //        case commentfield
@@ -116,6 +118,19 @@ struct PostInfoView: View { // 게시글 상세 페이지
                                                         .resizable()
                                                         .aspectRatio(contentMode: .fit)
                                                         .tag(postImage.imageId)
+                                                        .scaledToFit()
+                                                        .scaleEffect(1 + scale)
+                                                        .gesture(
+                                                            MagnificationGesture()
+                                                                .onChanged(){ value in
+                                                                    scale = value - 1
+                                                                }
+                                                                .onEnded{ value in
+                                                                    withAnimation(.spring()){
+                                                                        scale = 0
+                                                                    }
+                                                                }
+                                                        )
                                                 }
                                             }.tabViewStyle(PageTabViewStyle())
                                             .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
@@ -234,7 +249,8 @@ struct PostInfoView: View { // 게시글 상세 페이지
                     }
                     .padding(.leading)
                     .padding(.bottom)
-                    .frame(width : UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.1, alignment : .leading)
+//                    .frame(width : UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.1, alignment : .leading)
+                    .frame(width : UIScreen.main.bounds.width, alignment : .leading)
 
                     VStack(alignment: .trailing){
                         HStack{
@@ -243,11 +259,21 @@ struct PostInfoView: View { // 게시글 상세 페이지
                             Button{
                                 //라이크 버튼 클릭
                                 if(viewModel.isSecret == false){
-                                    viewModel.isLiked = viewModel.totalBoardPostDetail!.boardPostDetail.like
-                                    viewModel.likePost(isliked: (viewModel.totalBoardPostDetail!.boardPostDetail.like))
+//                                    viewModel.isLiked = viewModel.totalBoardPostDetail!.boardPostDetail.like
+//                                    viewModel.likePost(isliked: (viewModel.totalBoardPostDetail!.boardPostDetail.like))
+                                    
+                                    if(viewModel.isLiked == false){
+                                        viewModel.likePost(isliked: (viewModel.isLiked))
+                                        viewModel.likePost(isliked: (viewModel.isLiked))
+                                        usleep(10000)
+                                    }else{
+                                        viewModel.likePost(isliked: (viewModel.isLiked))
+                                    }
+                                    viewModel.getBoardPostDetail()
                                 }else{
-                                    viewModel.isLiked = viewModel.totalSecretPostDetail!.secretPostDetail.like
-                                    viewModel.likeSecretPost(isliked: (viewModel.totalSecretPostDetail!.secretPostDetail.like))
+//                                    viewModel.isLiked = viewModel.totalSecretPostDetail!.secretPostDetail.like
+//                                    viewModel.likeSecretPost(isliked: (viewModel.totalSecretPostDetail!.secretPostDetail.like))
+                                    viewModel.likeSecretPost(isliked: (viewModel.isLiked))
                                 }
                                 
                                 if(viewModel.isSecret == false){
@@ -262,19 +288,19 @@ struct PostInfoView: View { // 게시글 상세 페이지
                             } label : {
 
                                 if(viewModel.isSecret == false){
-                                    Image((viewModel.totalBoardPostDetail?.boardPostDetail.like ?? true) ? "like" : "like_border")
+                                    Image((viewModel.isLiked) ? "like" : "like_border")
                                         .foregroundColor(.mainTheme)
                                         .font(.system(size : 10))
                                 }else{
-                                    Image((viewModel.totalSecretPostDetail?.secretPostDetail.like ?? true) ? "like" : "like_border")
+                                    Image((viewModel.isLiked) ? "like" : "like_border")
                                         .foregroundColor(.mainTheme)
                                         .font(.system(size : 10))
                                 }
                             }
                             if(viewModel.isSecret == false){
-                                Text(String((viewModel.totalBoardPostDetail?.boardPostDetail.likeCount ?? 0)) )
+                                Text(String((viewModel.likeCount)) )
                             }else{
-                                Text(String((viewModel.totalSecretPostDetail?.secretPostDetail.likeCount ?? 0)) )
+                                Text(String((viewModel.likeCount)) )
                             }
                         }
                         .padding()
@@ -641,7 +667,8 @@ struct PostInfoView: View { // 게시글 상세 페이지
                 }
         })
 //        .onChange(of: viewModel.isLiked, perform: { _ in
-//            viewModel.showAction3 = false
+////            viewModel.showAction3 = false
+////            usleep(300)
 //            viewModel.getBoardPostDetail()
 //        })
 //        .onChange(of: viewModel.isLiked, perform: { _ in
