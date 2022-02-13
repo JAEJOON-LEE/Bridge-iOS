@@ -24,6 +24,8 @@ final class BoardViewModel : ObservableObject {
     let token : String
     let memberId : Int
     
+    @Published var postFetchDone : Bool = false
+    
     init(accessToken : String, memberId : Int) {
         self.token = accessToken
         self.memberId = memberId
@@ -55,6 +57,7 @@ final class BoardViewModel : ObservableObject {
                     print(error.localizedDescription)
                 case .finished :
                     print("finished boardView")
+                    self.postFetchDone = true
                 }
             } receiveValue: { [weak self] (recievedValue : [PostList]) in
                 self?.postLists = recievedValue

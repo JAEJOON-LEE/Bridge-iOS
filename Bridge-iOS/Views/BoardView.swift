@@ -142,16 +142,27 @@ struct BoardView : View {
                     
                     //General Posts
                     //            List {
-                    ForEach(viewModel.postLists, id : \.self) { PostList in
-                        NavigationLink(
-                            destination:
-                                PostInfoView(viewModel: PostInfoViewModel(
-                                    token: viewModel.token,
-                                    postId : PostList.postInfo.postId,
-                                    memberId : viewModel.memberId,
-                                    isMyPost : (viewModel.memberId == PostList.member?.memberId)))
-                        ){
-                            GeneralPost(viewModel : GeneralPostViewModel(postList: PostList))
+                    
+                    if !viewModel.postFetchDone {
+                        Spacer(minLength: UIScreen.main.bounds.height * 0.3)
+                        ProgressView()
+                            .padding()
+                        Text("Loading..")
+                            .foregroundColor(.gray)
+                            .fontWeight(.semibold)
+//                        Spacer()
+                    }else{
+                        ForEach(viewModel.postLists, id : \.self) { PostList in
+                            NavigationLink(
+                                destination:
+                                    PostInfoView(viewModel: PostInfoViewModel(
+                                        token: viewModel.token,
+                                        postId : PostList.postInfo.postId,
+                                        memberId : viewModel.memberId,
+                                        isMyPost : (viewModel.memberId == PostList.member?.memberId)))
+                            ){
+                                GeneralPost(viewModel : GeneralPostViewModel(postList: PostList))
+                            }
                         }
                     }
                 }
